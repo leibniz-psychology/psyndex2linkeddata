@@ -1,0 +1,1029 @@
+@prefix schema1: <http://schema.org/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+
+works:0394673 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394674 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394675 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394676 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394677 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394678 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394679 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394680 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394681 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394682 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394683 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394684 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394685 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394686 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394687 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394688 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394689 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394690 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394691 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394692 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394693 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394694 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394695 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394696 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394697 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394698 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394699 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394700 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394701 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394702 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394703 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394704 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394705 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394706 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394707 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394708 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394709 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394710 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394711 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394712 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394713 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394714 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394715 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394716 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394717 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394718 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394719 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394720 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394721 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0394722 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395304 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395305 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395306 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395307 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395308 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395309 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395421 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395430 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395434 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395440 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395444 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395452 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395456 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395457 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395463 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395464 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395475 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395495 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395502 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395505 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395506 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395507 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395517 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395527 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395852 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395853 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395854 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395855 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395856 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395857 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395858 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395859 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395860 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395861 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395862 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395863 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395864 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395865 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395869 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395870 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395871 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395872 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395873 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0395874 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396332 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396333 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396334 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396335 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396336 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396337 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396338 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396339 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396340 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396341 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396342 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396346 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396348 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396483 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396484 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396663 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396664 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396665 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396666 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396667 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396668 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396669 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396670 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396671 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396672 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396673 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396674 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396675 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396676 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396677 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396678 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396679 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396680 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396681 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396682 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396684 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396685 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396687 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396688 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396689 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396690 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396691 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396694 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396695 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396696 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396697 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396698 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396699 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396700 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396702 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396703 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396704 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396705 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396706 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396707 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396708 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396709 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396710 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396711 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396712 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396713 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396714 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396715 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396728 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396729 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396740 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396741 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396742 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396747 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396748 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396750 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396752 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396755 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396756 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396757 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396758 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396759 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396760 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396766 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396767 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396768 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396769 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396770 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396772 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396773 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396774 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396776 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396777 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396778 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396779 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396780 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396781 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396782 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396783 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396784 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396785 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396786 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396787 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396788 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396789 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396790 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396791 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396792 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396793 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396794 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396795 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396796 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396797 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396798 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396799 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396800 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396801 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396802 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396803 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396804 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396805 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396806 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396807 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396808 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396809 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396810 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396811 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396812 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396813 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396815 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396817 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396818 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396819 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396821 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396822 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396823 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396824 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396825 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396826 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396827 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396828 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396829 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396830 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396849 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396850 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396851 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396852 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396853 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396854 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396873 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396874 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396875 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396876 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396878 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396879 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396880 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396881 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396882 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396883 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396884 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396885 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396886 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396887 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396888 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396889 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396890 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396891 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396892 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396893 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396937 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396938 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396939 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0396940 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396941 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396942 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396943 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396944 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396946 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396947 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396948 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396949 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396950 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396951 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396952 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396953 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396954 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0396955 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397038 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397047 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397048 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397049 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397050 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397051 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397052 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397053 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397054 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397055 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397056 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397057 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397058 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397059 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397060 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397061 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397062 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397063 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397064 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397065 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397066 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397067 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397068 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397069 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397072 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397074 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397075 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397078 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397079 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397080 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397081 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397082 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397083 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397084 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397085 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397086 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397087 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397088 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397089 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397090 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397091 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397092 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397093 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397094 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397095 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397096 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397097 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397098 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397106 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397109 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397114 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397115 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397116 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397117 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397118 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397119 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397120 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397121 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397122 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397123 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397124 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397125 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397126 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397129 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
+works:0397130 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/ger> .
+
+works:0397131 a schema1:CreativeWork ;
+    schema1:inLanguage <http://id.loc.gov/vocabulary/iso639-2/eng> .
+
