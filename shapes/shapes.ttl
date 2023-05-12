@@ -1,8 +1,8 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
 @prefix pxs: <https://w3id.org/zpid/shapes/> .
-@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
-@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix pxc: <http://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <http://w3id.org/zpid/ontology/properties/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -20,23 +20,20 @@ pxs:WorkShape
         sh:path bf:identifiedBy ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:node pxs:DFKShape ;
-       # sh:type sh:BlankNode ;
-       # sh:targetClass pxc:DFK ;
+        sh:node pxc:DFKShape ;
     ] .
 
-pxs:DFKShape
+pxc:DFKShape
     a sh:NodeShape ;
     sh:targetClass pxc:DFK ;
     # additional constraints on pxc:DFK can be added here
     # the shape must be a bnode:
-    sh:nodeKind sh:IRI ; 
+    sh:nodeKind sh:BlankNode ; 
     # the node must have class pxc:DFK:
-    #sh:class pxc:DFK ;
-    # sh:property [
-    #     sh:path rdf:type ;
-    #     sh:hasValue pxc:DFK ;
-    # ] ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue pxc:DFK ;
+    ] ;
      # it must have a rdf:value property with exactly one value: a Literal with datatype xsd:string that has exactly 7 digits:
     sh:property [
         sh:path rdf:value ;
@@ -45,21 +42,6 @@ pxs:DFKShape
         sh:maxCount 1 ;
         sh:pattern "^[0-9]{7}$" ;
     ] .
-    
-# pxc:DFKSourceShape a sh:NodeShape ;
-# # it must be a bnode:
-#     sh:targetClass bf:Source ; 
-#     sh:nodeKind sh:BlankNode ;
-#     # it must have a bf:code property with exactly one value: a Literal with datatype xsd:string that has exactly the value "ZPID.PSYNDEX":
-#     sh:property [
-#         sh:path bf:code ;
-#         sh:nodeKind sh:Literal ;
-#         sh:hasValue "ZPID.PSYNDEX" ;
-#         sh:datatype xsd:string ;
-#         sh:minCount 1 ;
-#         sh:maxCount 1 ;
-#         sh:pattern "^ZPID.PSYNDEX$" ;
-#     ] .
 
 # # add new property path bf:title to InstanceShape:
 # pxs:InstanceShape
