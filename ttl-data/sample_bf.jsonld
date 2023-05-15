@@ -1,0 +1,236 @@
+[
+    {
+        "@id": "_:b0",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/Local",
+            "https://w3id.org/zpid/ontology/classes/DFK"
+        ],
+        "http://id.loc.gov/ontologies/bibframe/source": [
+            {
+                "@id": "_:b3"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#value": [
+            {
+                "@value": "0397056"
+            }
+        ]
+    },
+    {
+        "@id": "_:b1",
+        "@type": [
+            "https://w3id.org/zpid/ontology/classes/Abstract"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Welche Rolle spielt \"Wohlbefinden\" als Therapieziel in der systemischen (Familien-)Therapie und wie wird es erreicht? Zunächst werden zentrale Entwicklungsstränge der systemischen Therapie aufgezeigt und die Tradition des Themas abgeleitet. Wohlbefinden ist nicht nur für Therapiekunden ein zentrales Anliegen, sondern auch für Therapeuten eine handlungsleitende Strategie zur Lösung von problematischen Verhaltens- und Erlebensweisen. Veranschaulicht wird dieser Gedanke anhand der Erläuterung spezifischer Vorgehensweisen innerhalb der systemischen (Familien-)Therapie und ausgewählter Beispiele aus der Arbeit mit Klienten bzw. Kunden. Dabei wird der Fokus insbesondere auf Ressourcenorientierung gelegt und Wohlbefinden nicht nur als Therapieziel, sondern bereits als Veränderungsmotor beschrieben. (c) Der/die Autor(en), exklusiv lizenziert durch Springer-Verlag GmbH, DE, ein Teil von Springer Nature",
+                "@language": "de"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/adminMetadata": [
+            {
+                "@id": "_:b4"
+            }
+        ]
+    },
+    {
+        "@id": "_:b2",
+        "@type": [
+            "https://w3id.org/zpid/ontology/classes/Abstract",
+            "https://w3id.org/zpid/ontology/classes/SecondaryAbstract"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "What role does \"well-being\" play as a therapeutic goal in systemic (family) therapy and how is it achieved? First, central developmental strands of systemic therapy are pointed out and the tradition of the topic is derived. Well-being is not only a central concern for therapy clients, but also an action-guiding strategy for therapists to solve problematic behaviors and experiences. This idea is illustrated by explaining specific approaches within systemic (family) therapy and selected examples from work with clients or customers. In particular, the focus is placed on resource orientation and well-being is described not only as a therapy goal, but already as a driver of change. (translated by DeepL)",
+                "@language": "en"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/adminMetadata": [
+            {
+                "@id": "_:b5"
+            }
+        ]
+    },
+    {
+        "@id": "_:b3",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/Source"
+        ],
+        "http://id.loc.gov/ontologies/bibframe/code": [
+            {
+                "@value": "ZPID.PSYNDEX.DFK"
+            }
+        ]
+    },
+    {
+        "@id": "_:b4",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/AdminMetadata"
+        ],
+        "http://id.loc.gov/ontologies/bflc/metadataLicensor": [
+            {
+                "@value": "Original"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/descriptionModifier": [
+            {
+                "@value": "ZPID"
+            }
+        ]
+    },
+    {
+        "@id": "_:b5",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/AdminMetadata"
+        ],
+        "http://id.loc.gov/ontologies/bflc/metadataLicensor": [
+            {
+                "@value": "DeepL"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/descriptionModifier": [
+            {
+                "@value": "ZPID"
+            }
+        ]
+    },
+    {
+        "@id": "_:b6",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/Title"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden: Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie",
+                "@language": "de"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/mainTitle": [
+            {
+                "@value": "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden",
+                "@language": "de"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/subtitle": [
+            {
+                "@value": "Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie",
+                "@language": "de"
+            }
+        ]
+    },
+    {
+        "@id": "_:b7",
+        "@type": [
+            "https://w3id.org/zpid/ontology/classes/TranslatedTitle"
+        ],
+        "http://id.loc.gov/ontologies/bibframe/mainTitle": [
+            {
+                "@value": "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy",
+                "@language": "en"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/adminMetadata": [
+            {
+                "@id": "_:b8"
+            }
+        ]
+    },
+    {
+        "@id": "_:b8",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/AdminMetadata"
+        ],
+        "http://id.loc.gov/ontologies/bflc/metadataLicensor": [
+            {
+                "@value": "DeepL"
+            }
+        ]
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/AdminMetadata"
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/Instance"
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/Local"
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/Source"
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/Title"
+    },
+    {
+        "@id": "http://id.loc.gov/ontologies/bibframe/Work"
+    },
+    {
+        "@id": "http://id.loc.gov/vocabulary/iso639-2/ger"
+    },
+    {
+        "@id": "https://w3id.org/zpid/ontology/classes/Abstract"
+    },
+    {
+        "@id": "https://w3id.org/zpid/ontology/classes/DFK"
+    },
+    {
+        "@id": "https://w3id.org/zpid/ontology/classes/SecondaryAbstract"
+    },
+    {
+        "@id": "https://w3id.org/zpid/ontology/classes/TranslatedTitle"
+    },
+    {
+        "@id": "https://w3id.org/zpid/resources/instances/0397056",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/Instance"
+        ],
+        "http://id.loc.gov/ontologies/bibframe/instanceOf": [
+            {
+                "@id": "https://w3id.org/zpid/resources/works/0397056"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/title": [
+            {
+                "@id": "_:b6"
+            },
+            {
+                "@id": "_:b7"
+            }
+        ]
+    },
+    {
+        "@id": "https://w3id.org/zpid/resources/works/0397056",
+        "@type": [
+            "http://id.loc.gov/ontologies/bibframe/Work"
+        ],
+        "http://id.loc.gov/ontologies/bibframe/hasInstance": [
+            {
+                "@id": "https://w3id.org/zpid/resources/instances/0397056"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/identifiedBy": [
+            {
+                "@id": "_:b0"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/language": [
+            {
+                "@id": "http://id.loc.gov/vocabulary/iso639-2/ger"
+            }
+        ],
+        "http://id.loc.gov/ontologies/bibframe/summary": [
+            {
+                "@id": "_:b1"
+            },
+            {
+                "@id": "_:b2"
+            }
+        ]
+    }
+]

@@ -2,6 +2,16 @@
 # a source for the 
 # and a secondary abstract bnode in its Work.
 
+# prefixes and namespaces:
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix instances: <https://w3id.org/zpid/resources/instances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+
 ## --- The Work ----
 works:0397056 a bf:Work ;
     bf:hasInstance instances:0397056 ; # link to instance uri
@@ -32,10 +42,11 @@ instances:0397056 a bf:Instance ;
     bf:title [ a bf:Title ; # the original title, can be just a maintitle, or maintitle and subtitle. Always has a concatenated version of both in rdfs:label.
             rdfs:label "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden: Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie"@de ;
             bf:mainTitle "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden"@de ;
-            bf:subtitle "Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie"@de ] ;
+            bf:subtitle "Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie"@de ] ,
             [ a pxc:TranslatedTitle ; # the translated title, always just a mainTitle, never a subtitle. Always has a duplicate rdfs:label.
-            bf:mainTitle "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy"@en ],
+            bf:mainTitle "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy"@en  ;
             rdfs:label "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy"@en ;
             bf:adminMetadata [ a bf:AdminMetadata ;
                     bflc:metadataLicensor "DeepL" ] ; # source of translation
+            ] ;
          .
