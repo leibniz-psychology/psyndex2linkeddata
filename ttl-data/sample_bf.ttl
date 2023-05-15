@@ -1,0 +1,41 @@
+# one work and instance pair that has both a subtitle in its Instances' Title blank node,
+# a source for the 
+# and a secondary abstract bnode in its Work.
+
+## --- The Work ----
+works:0397056 a bf:Work ;
+    bf:hasInstance instances:0397056 ; # link to instance uri
+    bf:identifiedBy [ a bf:Local, # DFK identifier blank node
+                pxc:DFK ;
+            bf:source [ a bf:Source ; # blank node grouping all source information
+                    bf:code "ZPID.PSYNDEX.DFK" ] ; # code that says where id comes from/what it means
+            rdf:value "0397056" ] ; # actual identifier string, always 7 digits
+    bf:language lang:ger ; # language (see prefix for full uri: http://id.loc.gov/vocabulary/iso639-2/ger)
+    bf:summary [ a pxc:Abstract ; # main abstract blank node
+            rdfs:label "Welche Rolle spielt \"Wohlbefinden\" als Therapieziel in der systemischen (Familien-)Therapie und wie wird es erreicht? Zunächst werden zentrale Entwicklungsstränge der systemischen Therapie aufgezeigt und die Tradition des Themas abgeleitet. Wohlbefinden ist nicht nur für Therapiekunden ein zentrales Anliegen, sondern auch für Therapeuten eine handlungsleitende Strategie zur Lösung von problematischen Verhaltens- und Erlebensweisen. Veranschaulicht wird dieser Gedanke anhand der Erläuterung spezifischer Vorgehensweisen innerhalb der systemischen (Familien-)Therapie und ausgewählter Beispiele aus der Arbeit mit Klienten bzw. Kunden. Dabei wird der Fokus insbesondere auf Ressourcenorientierung gelegt und Wohlbefinden nicht nur als Therapieziel, sondern bereits als Veränderungsmotor beschrieben. (c) Der/die Autor(en), exklusiv lizenziert durch Springer-Verlag GmbH, DE, ein Teil von Springer Nature"@de ;
+            bf:adminMetadata [ a bf:AdminMetadata ; # blank node grouping all source and editor information
+                    bflc:metadataLicensor "Original" ; # source of abstract (string literal)
+                    bf:descriptionModifier "ZPID" ] # editor of abstract, optional (string literal)
+            ], 
+        [ a pxc:Abstract,
+                pxc:SecondaryAbstract ; # secondary abstract (usually translation of original abstract; blank node with string literals)
+            rdfs:label "What role does \"well-being\" play as a therapeutic goal in systemic (family) therapy and how is it achieved? First, central developmental strands of systemic therapy are pointed out and the tradition of the topic is derived. Well-being is not only a central concern for therapy clients, but also an action-guiding strategy for therapists to solve problematic behaviors and experiences. This idea is illustrated by explaining specific approaches within systemic (family) therapy and selected examples from work with clients or customers. In particular, the focus is placed on resource orientation and well-being is described not only as a therapy goal, but already as a driver of change. (translated by DeepL)"@en ;
+            bf:adminMetadata [ a bf:AdminMetadata ; # blank node grouping all source and editor information
+                    bflc:metadataLicensor "DeepL"  ;# source of abstract (translation)
+                    bf:descriptionModifier "ZPID" ] # editor of abstract (translation), optional
+            ] . 
+
+## --- The Instance: ----              
+
+instances:0397056 a bf:Instance ;
+    bf:instanceOf works:0397056 ; # link back to work uri
+    bf:title [ a bf:Title ; # the original title, can be just a maintitle, or maintitle and subtitle. Always has a concatenated version of both in rdfs:label.
+            rdfs:label "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden: Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie"@de ;
+            bf:mainTitle "Wohlbefinden in der systemischen Therapie: Vom gemeinsamen Suchen und Finden"@de ;
+            bf:subtitle "Therapieziel \"Wohlbefinden\" in der systemischen (Familien-)Therapie"@de ] ;
+            [ a pxc:TranslatedTitle ; # the translated title, always just a mainTitle, never a subtitle. Always has a duplicate rdfs:label.
+            bf:mainTitle "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy"@en ],
+            rdfs:label "Well-being in systemic therapy: From searching and finding together. The therapeutic goal \"well-being\" in systemic (family) therapy"@en ;
+            bf:adminMetadata [ a bf:AdminMetadata ;
+                    bflc:metadataLicensor "DeepL" ] ; # source of translation
+         .
