@@ -227,3 +227,26 @@ The XML version (`ttl-data/bibframe-records.xml`) contains all the properties an
     </bf:summary>
 </bf:Work>
 ```
+
+# Other things a Work may have (not strictly neccessary for first test migration)
+... and subject to change:
+
+Works may also have 0 or more linked preregistration works, which are attached via `bflc:relationship > bflc:Relationship > bf:supplement > bf:Work` and have a `bf:genreForm <https://w3id.org/zpid/vocabs/genres/preregistration>` (a skos:Concept uri) and a `bf:hasInstance > bf:Instance` blank node with a `bf:electronicLocator` Literal that contains the url of the preregistration as a string (e.g. "https://aspredicted.org/3g8sd.pdf") and/or a DOI, attached as a blank node with a string value via `bf:identifiedBy > bf:Doi > rdf:value`. The relationship itself is a blank node with a `bflc:relation <https://w3id.org/zpid/vocabs/relations/hasPreregistration>` (a skos:Concept) that states the type of relation, "has Preregistration".
+
+```xml
+<bflc:relationship>
+      <bflc:Relationship rdf:nodeID="N4e069a2115fc43c0a9ce076865011ba9">
+        <bf:supplement>
+          <bf:Work rdf:nodeID="N4c7b0550ad484894be315e364789f0c5">
+            <bf:genreForm rdf:resource="https://w3id.org/zpid/vocabs/genres/preregistration"/>
+            <bf:hasInstance>
+              <bf:Instance rdf:nodeID="N36db3d8809364de8a4ee7f438d77cba3">
+                <bf:electronicLocator rdf:resource="https://aspredicted.org/3g8sd.pdf"/>
+              </bf:Instance>
+            </bf:hasInstance>
+          </bf:Work>
+        </bf:supplement>
+        <bflc:relation rdf:resource="https://w3id.org/zpid/vocabs/relations/hasPreregistration"/>
+      </bflc:Relationship>
+    </bflc:relationship>
+```
