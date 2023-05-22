@@ -19,8 +19,8 @@ Each Work
         - has 1 full name in `rdfs:label` (e.g. "Döring, Nicola")
         - has 1 first name in `schema:givenName` (e.g. "Nicola")
         - has 1 last name in `schema:familyName` (e.g. "Döring")
-        - may have at most one (1) local identifier (**psychauthors id**) blank node attached via `bf:identifiedBy > bf:Identifier, bf:Local, pxc:PsychAuthorsID` with an `rdf:value` Literal that contains the psychauthors id of the person as a string (e.g. "p00935UR") - there is also a convenient, clickable link to the psychauthors page in `schema:mainEntityOfPage` such as https://www.psychauthors.de/psychauthors/index.php?wahl=forschung&amp;uwahl=psychauthors&amp;uuwahl=p00935UR (for testing, not needed for migration)
-        - may have at most one (1) ORCID identifier blank node attached via `bf:identifiedBy > bf:Identifier, "http://id.loc.gov/vocabulary/identifiers/orcid"` with an `rdf:value` Literal that contains the ORCID id of the person as a string (e.g. "0000-0002-1927-4156")	
+        - may have at most one (1) **psychauthors id** (a local identifier) blank node attached via `bf:identifiedBy > bf:Identifier, bf:Local, pxc:PsychAuthorsID` with an `rdf:value` Literal that contains the psychauthors id of the person as a string (e.g. "p00935UR") - there is also a convenient, clickable link to the psychauthors page in `schema:mainEntityOfPage` such as https://www.psychauthors.de/psychauthors/index.php?wahl=forschung&amp;uwahl=psychauthors&amp;uuwahl=p00935UR (for testing, not needed for migration)
+        - may have at most one (1) ORCID identifier blank node attached via `bf:identifiedBy > bf:Identifier, "http://id.loc.gov/vocabulary/identifiers/orcid"` with an `rdf:value` Literal that contains the ORCID id of the person as a string (e.g. "0000-0002-1927-4156")	(for convenvience, there is also a schema:sameAs with a clickable ORCID link - not needed for migration)
 - has one abstract `bf:summary > pxc:Abstract` with:
     - always one (1) `rdfs:label` with the abstract text as a string (language tagged)
     - one optional adminMetadata blank node for origin and possible editor of the abstract: `bf:adminMetadata > bf:AdminMetadata` with
@@ -40,8 +40,8 @@ Each Instance
 - has exactly one (1) **DFK identifier** blank node: `bf:identifiedBy > bf:Local, pxc:DFK` which has
     - one `bf:source > bf:Source` blank node with exactly one `bf:code` Literal with value "ZPID.PSYNDEX" (unimportant for migration)
     - one `rdf:value` Literal with exactly 7 digits: this is **the actual DFK string**.
-- has exactly one (1) **original title** (`bf:title > bf:Title`) which is a blank node with a `bf:mainTitle` Literal and one optional `bf:subtitle Literal` (there is also always a concatenated version of both in rdfs:label for easier querying)
-- _may_ have at most 1 translated title in `bf:title > pxc:TranslatedTitle` which is a blank node with only a `bf:mainTitle` Literal (Translated Title has NO bf:subtitle Literal) (There is also always a "generic" copy of the translated title in rdfs:label for easier querying)
+- has exactly one (1) **original title** (`bf:title > bf:Title`) which is a blank node with a `bf:mainTitle` Literal (language tagged) and one optional `bf:subtitle Literal` (language tagged)(there is also always a concatenated version of both in rdfs:label for easier querying, not needed for migration!)
+- _may_ have at most 1 translated title in `bf:title > pxc:TranslatedTitle` which is a blank node with only a `bf:mainTitle` Literal, language tagged. (Translated Title has NO bf:subtitle Literal) (There is also always a "generic" copy of the translated title in rdfs:label for easier querying)
     - the translated title node also has one (1) source bnode: `bf:adminMetadata > bf:AdminMetadata` with a `bflc:metadataLicensor` Literal (string) that is the actual source/origin string of the translation (e.g. "DeepL" or "ZPID")
 - 
 ## RDF-XML
@@ -232,21 +232,35 @@ The XML version (`ttl-data/bibframe-records.xml`) contains all the properties an
 ... and subject to change:
 
 Works may also have 0 or more linked preregistration works, which are attached via `bflc:relationship > bflc:Relationship > bf:supplement > bf:Work` and have a `bf:genreForm <https://w3id.org/zpid/vocabs/genres/preregistration>` (a skos:Concept uri) and a `bf:hasInstance > bf:Instance` blank node with a `bf:electronicLocator` Literal that contains the url of the preregistration as a string (e.g. "https://aspredicted.org/3g8sd.pdf") and/or a DOI, attached as a blank node with a string value via `bf:identifiedBy > bf:Doi > rdf:value`. The relationship itself is a blank node with a `bflc:relation <https://w3id.org/zpid/vocabs/relations/hasPreregistration>` (a skos:Concept) that states the type of relation, "has Preregistration".
+The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:label`with a string Literal that gives additional information about the preregistration (e.g. "Preregistration of Study 1 of the article").
 
 ```xml
-<bflc:relationship>
-      <bflc:Relationship rdf:nodeID="N4e069a2115fc43c0a9ce076865011ba9">
+<bf:Work>
+    <bflc:relationship>
+      <bflc:Relationship rdf:nodeID="N5971d2a0ea524f639421f23529614865">
         <bf:supplement>
-          <bf:Work rdf:nodeID="N4c7b0550ad484894be315e364789f0c5">
+          <bf:Work rdf:nodeID="Nb8c7839548ad44478002810874524982">
             <bf:genreForm rdf:resource="https://w3id.org/zpid/vocabs/genres/preregistration"/>
             <bf:hasInstance>
-              <bf:Instance rdf:nodeID="N36db3d8809364de8a4ee7f438d77cba3">
-                <bf:electronicLocator rdf:resource="https://aspredicted.org/3g8sd.pdf"/>
+              <bf:Instance rdf:nodeID="N91a7711ca2f74ddcbe8a2b67b8531310">
+                <bf:electronicLocator rdf:resource="https://cordis.europa.eu/project/id/646696"/>
+                <bf:identifiedBy>
+                  <bf:Identifier rdf:nodeID="Na55fe0fbd3134402bbdc5889c9903df9">
+                    <rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Doi"/>
+                    <rdf:value>10.3030/646696</rdf:value>
+                  </bf:Identifier>
+                </bf:identifiedBy>
               </bf:Instance>
             </bf:hasInstance>
           </bf:Work>
         </bf:supplement>
         <bflc:relation rdf:resource="https://w3id.org/zpid/vocabs/relations/hasPreregistration"/>
+        <bf:note>
+          <bf:Note rdf:nodeID="N82962e3169a149a6b07695d34ab6be25">
+            <rdfs:label>Study 2</rdfs:label>
+          </bf:Note>
+        </bf:note>
       </bflc:Relationship>
     </bflc:relationship>
+</bf:Work>
 ```
