@@ -3,46 +3,47 @@ import re
 
 # mapping = {"^DDS": "-", "^DD": "Also True that!", "^D>": ""}  # ​DDS  # ​DD
 
-# code_weirdnesses = [
-#     ("&amp;", "&"),
-#     ("&lt;", "<"),
-#     ("&gt;", ">"),
-#     ("^D*b", "β"),  # kleines beta
-#     ("^D*V", "Ψ"),  # großes Psi
-#     ("^D*D", "Δ"),  # großes Delta
-#     ("^D*a", "α"),  # kleines alpha
-#     ("^D*g", "γ"),  # kleines gamma
-#     ("^D*e", "σ"),  # kleines sigma
-#     ("^D*A", "Α"),  # großes Alpha
-#     ("^D*G", "Γ"),  # großes Gamma
-#     ("^D*E", "Σ"),  # großes Sigma
-#     ("^D*Z", "Ω"),  # großes Omega
-#     ("^D*O", "Θ"),  # großes Theta
-#     ("^D*P", "Π"),  # großes Pi
-#     ("^D*F", "Φ"),  # großes Phi
-#     ("^D*v", "ψ"),  # kleines psi
-#     ("^D:I", "İ"),
-#     ("^D:e", "ė"),
-#     ("^D%S", "Š"),
-#     ("^D%s", "š"),
-#     ("^D%Z", "Ž"),
-#     ("^D%c", "č"),
-#     ("^D:c", "ć"),
-#     ("^D:Z", "Ż"),
-#     ("^D%z", "???"),
-#     ("^D:", "???"),
-#     ("^D:", "???"),
-#     ("^D:%", "???"),
-#     ("^D,", "ş")("^D$e", "€"),  # Euro
-#     ("^D#&gt;", "≥"),  # greater than or equal to
-#     ("^DEL", "…"),  # ellipsis/Auslassungspunkte
-#     ("^DIF", "∞"),  # infinity
-#     ("^D#=D", "≠"),  # not equal to
-#     ("^DDS", "–"),  # n-dash/Halbgeviertstrich;
-#     ("^DDL", "—"),  # em-dash
-#     # ("^D>", "??")
-#     # lots more where this came from...
-# ]
+dd_codes = [
+    ("&amp;", "&"),
+    ("&lt;", "<"),
+    ("&gt;", ">"),
+    ("^D*b", "β"),  # kleines beta
+    ("^D*V", "Ψ"),  # großes Psi
+    ("^D*D", "Δ"),  # großes Delta
+    ("^D*a", "α"),  # kleines alpha
+    ("^D*g", "γ"),  # kleines gamma
+    ("^D*e", "σ"),  # kleines sigma
+    ("^D*A", "Α"),  # großes Alpha
+    ("^D*G", "Γ"),  # großes Gamma
+    ("^D*E", "Σ"),  # großes Sigma
+    ("^D*Z", "Ω"),  # großes Omega
+    ("^D*O", "Θ"),  # großes Theta
+    ("^D*P", "Π"),  # großes Pi
+    ("^D*F", "Φ"),  # großes Phi
+    ("^D*v", "ψ"),  # kleines psi
+    ("^D:I", "İ"),
+    ("^D:e", "ė"),
+    ("^D%S", "Š"),
+    ("^D%s", "š"),
+    ("^D%Z", "Ž"),
+    ("^D%c", "č"),
+    ("^D:c", "ć"),
+    ("^D:Z", "Ż"),
+    # ("^D%z", "???"),
+    # ("^D:", "???"),
+    # ("^D:", "???"),
+    # ("^D:%", "???"),
+    ("^D,", "ş"),
+    ("^D$e", "€"),  # Euro
+    ("^D#&gt;", "≥"),  # greater than or equal to
+    ("^DEL", "…"),  # ellipsis/Auslassungspunkte
+    ("^DIF", "∞"),  # infinity
+    ("^D#=D", "≠"),  # not equal to
+    ("^DDS", "–"),  # n-dash/Halbgeviertstrich;
+    ("^DDL", "—"),  # em-dash
+    # ("^D>", "??")
+    # lots more where this came from...
+]
 
 
 # A list of names/strings that should be replaced
