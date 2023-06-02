@@ -218,7 +218,7 @@ abstract_origin_zpid = [
     "G.B.",
     "I.D.",
     "K.Si",
-    "K.Si." "L.F.T.",
+    "K.Si.", "L.F.T.",
     "M.G.",
     "M.K.",
     "pe.k",
