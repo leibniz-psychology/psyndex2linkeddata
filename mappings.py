@@ -1,48 +1,160 @@
-import re
-
-
-# mapping = {"^DDS": "-", "^DD": "Also True that!", "^D>": ""}  # ​DDS  # ​DD
-
+# use this on affiliation strings, person names (both in AUP, AUK)
+# and on Abstract and title, other text fields, like SH and UTG/UTE, KP...
 dd_codes = [
-    ("&amp;", "&"),
-    ("&lt;", "<"),
-    ("&gt;", ">"),
-    ("^D*b", "β"),  # kleines beta
-    ("^D*V", "Ψ"),  # großes Psi
-    ("^D*D", "Δ"),  # großes Delta
+    ("", "š"),
+    # ('^D&lt;"', '"'),
+    # ("^D&lt;,", '"'),
+    # ("^D&lt;'", "'"),
+    # ("^D&lt;; ", '"'),
+    # ("^D&gt;", ""),
+    # ('^D&gt;"', '"'),
+    ('^D<"', '"'),
+    ("^D<,", '"'),
+    ("^D<'", "'"),
+    ("^D<; ", '"'),
+    ('^D>"', '"'),
+    ("^D>'", "'"),
+    ("^Dff", "ff"),
+    # ("^D&amp;a", "ă"),
+    ("^D&a", "ă"),
+    # ("^D&amp;i", "ĭ"),
+    ("^D&i", "ĭ"),
+    # ('a^D"&amp;', "ä"),
+    ('a^D"&', "ä"),
+    # ('A^D"&amp;', "Ä"),
+    ('A^D"&', "Ä"),
+    # ('u^D"&amp;', "ü"),
+    ('u^D"&', "ü"),
+    # ('U^D"&amp;', "Ü"),
+    ('U^D"&', "Ü"),
+    # ('o^D"&amp;', "ö"),
+    ('o^D"&', "ö"),
     ("^D*a", "α"),  # kleines alpha
-    ("^D*g", "γ"),  # kleines gamma
-    ("^D*e", "σ"),  # kleines sigma
     ("^D*A", "Α"),  # großes Alpha
+    ("^D*c", "θ"),  # kleines theta
+    ("^D*C", "Θ"),  # großes Theta
+    ("^D*b", "β"),  # kleines beta
+    ("^D*B", "Β"),  # großes Beta
+    ("^D*g", "γ"),  # kleines gamma
     ("^D*G", "Γ"),  # großes Gamma
-    ("^D*E", "Σ"),  # großes Sigma
-    ("^D*Z", "Ω"),  # großes Omega
-    ("^D*O", "Θ"),  # großes Theta
+    ("^D*d", "δ"),  # kleines delta
+    ("^D*D", "Δ"),  # großes Delta
+    ("^D*e", "ε"),  # kleines epsilon
+    ("^D*E", "Ε"),  # großes Epsilon
+    ("^D*h", "η"),  # kleines eta
+    ("^D*H", "Η"),  # großes Eta
+    ("^D*i", "ι"),  # kleines iota
+    ("^D*I", "Ι"),  # großes Iota
+    ("^D*k", "κ"),  # kleines kappa
+    ("^D*K", "Κ"),  # großes Kappa
+    ("^D*l", "λ"),  # kleines lambda
+    ("^D*L", "Λ"),  # großes Lambda
+    ("^D*m", "μ"),  # kleines mu
+    ("^D*M", "Μ"),  # großes Mu
+    ("^D*n", "ν"),  # kleines nu
+    ("^D*N", "Ν"),  # großes Nu
+    # kommen nicht vor:
+    # ("^D*x", "ξ"),  # kleines xi
+    # ("^D*X", "Ξ"),  # großes Xi
+    # ("^D*o", "ο"),  # kleines omikron
+    # ("^D*O", "Ο"),  # großes Omikron
+    # ("^D*u", "υ"),  # kleines ypsilon
+    # ("^D*U", "Υ"),  # großes Ypsilon
+    ("^D*p", "π"),  # kleines pi
     ("^D*P", "Π"),  # großes Pi
-    ("^D*F", "Φ"),  # großes Phi
+    ("^D*r", "ρ"),  # kleines rho
+    ("^D*R", "Ρ"),  # großes Rho
+    ("^D*s", "σ"),  # kleines sigma
+    ("^D*S", "Σ"),  # großes Sigma
+    ("^D*t", "τ"),  # kleines tau
+    ("^D*y", "χ"),  # kleines chi
+    ("^D*Y", "Χ"),  # großes Chi
+    ("^D*T", "Τ"),  # großes Tau
     ("^D*v", "ψ"),  # kleines psi
+    ("^D*V", "Ψ"),  # großes Psi
+    ("^D*q", "φ"),  # kleines phi
+    ("^D*Q", "Φ"),  # großes Phi
+    ("^D*w", "ω"),  # kleines omega
+    ("^D*W", "Ω"),  # großes Omega
     ("^D:I", "İ"),
     ("^D:e", "ė"),
     ("^D%S", "Š"),
     ("^D%s", "š"),
     ("^D%Z", "Ž"),
+    ("^D%z", "ž"),
     ("^D%c", "č"),
+    ("^D%C", "Č"),
     ("^D:c", "ć"),
+    ("^D:z", "ż"),
     ("^D:Z", "Ż"),
-    # ("^D%z", "???"),
-    # ("^D:", "???"),
-    # ("^D:", "???"),
-    # ("^D:%", "???"),
-    ("^D,", "ş"),
+    ("^D/l", "ł"),
+    ("^D/L", "Ł"),
+    ("^D/d", "đ"),
+    ("^D/D", "Đ"),
+    ("^D,s", "ş"),
+    ("^D's", "ş"),
+    ("^D,S", "Ş"),
+    ("^D'S", "Ś"),
+    ("^D'n", "ń"),
+    ("^D'c", "ć"),
+    ("^D'C", "Ć"),
+    ("^D'z", "ź"),
+    # ("e^D'&amp;", "é"),
+    # ("E^D'&amp;", "É"),
+    ("e^D'&", "é"),
+    ("E^D'&", "É"),
+    ("^Dre", "ę"),
+    # ("^D&amp;g", "ğ"),
+    ("^D&g", "ğ"),
+    # n^D'&amp;
+    # K^Dr&amp;
+    ("^D[+", "₊"),
+    # ("^D[0", "₀")
+    ("^D[1", "₁"),
+    ("^D[2", "₂"),
+    ("^D[3", "₃"),
+    ("^D[4", "₄"),
+    ("^D[5", "₅"),
+    ("^D[6", "₆"),
+    ("^D[7", "₇"),
+    ("^D[8", "₈"),
+    ("^D[9", "₉"),
+    # gibt es nicht, obwohl im Testdatensatz erwähnt:
+    # ("^D]1", "₁"),
+    # ("^D]2", "₂"),
+    # ("^D]3", "₃"),
+    # ("^D]4", "₄"),
+    # ("^D]5", "₅"),
+    # ("^D]6", "₆"),
+    # ("^D]7", "₇"),
+    # ("^D]8", "₈"),
+    # ("^D]9", "₉"),
+    # ("^D]0", "₀"),
+    # ^D[ (^D[3 ^D[)
+    ("^DRT", "→"),  # right arrow
+    ("^D#=", "≠"),  # not equal to
+    ("^DTM", "™"),
     ("^D$e", "€"),  # Euro
-    ("^D#&gt;", "≥"),  # greater than or equal to
+    # ("^D#&gt;", "≥"),  # greater than or equal to
+    ("^D#>", "≥"),  # greater than or equal to
+    # ("^D#&lt;", "≤"),  # less than or equal to
+    ("^D#<", "≤"),  # less than or equal to
     ("^DEL", "…"),  # ellipsis/Auslassungspunkte
     ("^DIF", "∞"),  # infinity
-    ("^D#=D", "≠"),  # not equal to
     ("^DDS", "–"),  # n-dash/Halbgeviertstrich;
     ("^DDL", "—"),  # em-dash
-    # ("^D>", "??")
-    # lots more where this came from...
+    # remove html tags:
+    # ("&lt;b&gt;", ""),  # bold start
+    # ("&lt;/b&gt;", ""),  # bold end
+    # ("&lt;i&gt;", ""),  # italic start
+    # ("&lt;/i&gt;", ""),  # italic end
+    # paragraph start:
+    # ("&lt;p&gt;", ""),
+    # # paragraph end:
+    # ("&lt;/p&gt;", ""),
+    # (" &amp; ", " & "),
+    # (" &lt;", " < "),
+    # (" &gt; ", " > "),
 ]
 
 
@@ -154,7 +266,7 @@ abstract_origin_zpid = [
     "Lutz Gretenkord",
     "Manfred Fischer",
     "Manfred Opitz",
-    "Marco Lalli            ",
+    "Marco Lalli",
     "Oskar Mittag",
     "Paul Klein",
     "Peter Brezovsky",
@@ -401,7 +513,7 @@ geonames_countries = [
     ("Taiwan", "1668284", "TW"),
 ]
 
-# add another array or object for combos of mediatypes and DT/BE -> see SPARQL Anything version (VALUES)
+# add another array or object for combos of mediatypes and DT/BE -&gt; see SPARQL Anything version (VALUES)
 
 
 # VALUES (?dt ?dt2 ?mt ?work_type ?content_type ?instance_type ?media_type ?carrier_type ?mediacarrier ?issuancetype)
@@ -439,3 +551,16 @@ geonames_countries = [
 #   # anything without MT: - we just don't know!
 #   # ( UNDEF UNDEF UNDEF bf:Text bf:Print "unmediated" rdact:1049)
 # ]
+
+
+# 22797775,5:     &lt;AUP&gt;|i University of Heidelberg; Institute of Gerontology |c GERMANY&lt;/AUP&gt;
+# 21735290,5:     &lt;AUP&gt;|i Psychiatrische Universitätsklinik Zürich; Klinik für affektive Erkrankungen und Allgemeinpsychiatrie |c SWITZERLAND&lt;/AUP&gt;
+# 20378729,5:     &lt;AUP&gt;|i Universität Potsdam; Department Psychologie |c GERMANY&lt;/AUP&gt;
+# 19948633,5:     &lt;AUP&gt;|i Universität Osnabrück; Sportwissenschaften |c GERMANY&lt;/AUP&gt;
+# 29381181,5:     &lt;AUP&gt;Anonymus A |i |c &lt;/AUP&gt;
+# 29381182,5:     &lt;AUP&gt;Anonymus B |i |c &lt;/AUP&gt;
+# 29381183,5:     &lt;AUP&gt;Anonymus C |i |c &lt;/AUP&gt;
+# 29381184,5:     &lt;AUP&gt;Anonymus D |i |c &lt;/AUP&gt;
+
+# 24500320,5:     &lt;AUP&gt;NN&lt;/AUP&gt;
+# 24500475,5:     &lt;AUP&gt;NN&lt;/AUP&gt;
