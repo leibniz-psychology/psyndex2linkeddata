@@ -70,12 +70,29 @@ The following namespaces are used in this ontology:
 
 # Classes
 
+## Classes for Agents > Corporate Bodies/Organizations
+...
+
+## Classes for Agents > Persons
+
+...
+
 ## Classes for Publications (Works and Instances)
 
-### DFK
+### Identifiers in Publications
 
-A subclass of bf:Identifier > bf:Local to be used via the bf:identifiedBy property on a bf:Work.
-Every Work must have exactly one local Identifier of type pxc:DFK.
+All identifiers are subclasses of bf:Identifier and to be used with bf:identifiedBy on a bf:Work or bf:Instance.
+
+For DOI we reuse bf:Doi, for ISBN we reuse bf:Isbn, both on bf:Instance. (TODO: Add links to Shapes/examples describing this.)
+For ISSN we reuse bf:Issn on bf:Work (if used for describing a relationship from an article to it's journal, used on the bf:Work that is linked in the bflc:Relationship node). 
+
+The following are new subclasses of bf:Identifier for local identifiers that are used within PSYNDEX: legacy ones like DFK and PsychAuthorsID, as well as new ones like the ZPID-internal identifier for the Work and Instance and for authority agents like organizations/corporate bodies and people.
+
+
+#### DFK
+
+A subclass of bf:Identifier > bf:Local to be used via the bf:identifiedBy property on a bf:Instance.
+Every instance must have exactly one local Identifier of type pxc:DFK.
 Shacl shape: see pxc:DFKShape in shapes/shapes.md and shapes/shapes.ttl. 
 
 ```r
@@ -85,7 +102,21 @@ pxc:DFK a owl:Class;
     rdfs:comment "The DFK is the unique identifier of a publication in PSYNDEX. It is a string of 8 numbers."@en;
 ```
 
-### Translated Title
+#### PsychAuthorsID for Persons in bf:Contribution
+
+A subclass of bf:Identifier > bf:Local to be used via the bf:identifiedBy property on a bf:Person node that is part of a bf:Contribution via bf:agent.
+It is used for contributors that have a PsychAuthors profile to link the ID of that profile to the contributor.
+
+```r
+pxc:PsychAuthorsID a owl:Class;
+    rdfs:subClassOf bf:Local;
+    rdfs:label "PsychAuthors-Kennung"@de, "PsychAuthors ID"@en;
+    rdfs:comment "The PsychAuthors ID is the unique identifier of a person in our legacy psychauthors authority file of psychologists."@en;
+```
+
+### Publication Titles
+
+#### Translated Title
 
 This is a subclass of bf:VariantTitle (which is itself a subclass of bf:Title). 
 It is used for a translation of the publication's title provided by ZPID for PSYNDEX. 
@@ -105,7 +136,13 @@ pxc:TranslatedTitle a owl:Class;
 rdfs:description "Title as translated either by the creator, by a ZPID cataloger/indexer or some automated translation service like Deepl. Usually contains subtitle as well; Language is en if original work language is de; if work language is en, the translated title has language en." .
 ```
 
-### Abstract (Work)
+### Publication Summaries
+
+We defined some new Classes which are all subclasses of bf:Summary and should be used as blank nodes (or skolemized hash nodes) with bf:summary **on bf:Work**. Like bf:Summary, the actual summarizing text content is attached as a Literal to the property rdfs:label which will always have a language tag. 
+
+We have **Abstract** and **PlainLanguageSummary**. 
+
+#### Abstract (Work)
 
 A subclass of bf:Summary, used for the abstract of a work. 
 To be used via bf:summary property on a bf:Work.
@@ -118,7 +155,7 @@ pxc:Abstract a owl:Class;
 .
 ```
 
-### Plain Language Summary (Work)
+#### Plain Language Summary (Work)
 
 A subclass of bf:Summary, used for a short summary of a metaanalysis in plain language. 
 To be used via bf:summary property on a bf:Work.
@@ -130,9 +167,12 @@ pxc:PlainLanguageSummary a owl:Class;
 .
 ```
 
-## Classes for Topics and Classifications of the Work
+### Classes for Topics and Classifications of the Work
 
-### Weighted Topic
+Information about the content of a publication or the study inside the work is described by the following classes.
+We reuse bf:Topic for regular, non-weighted keywords. However, to say that one of the topics is more important, we added a classes subclass of bf:Topic called WeightedTopic.
+
+#### Weighted Topic
 
 For weighted vocabulary terms, that is, a topic that has more weight, is most salient than others for a work.
 Problem: we want to link the uri of the vocabulary term directly, not a bnode of either class bf:Topic or pxc:WeightedTopic, but then there is no way to say which class the thing is. 
@@ -148,13 +188,23 @@ pxc:WeightedTopic a owl:Class;
 .
 ```
 
-### subclasses of bf:Classification:
+#### Subclasses of bf:Classification
+
+##### Subject Heading
+
+A subclass of bf:Classification to be used via the bf:classification property on a bf:Work.
+
 ```r
 pxc:SubjectHeading a owl:Class;
     rdfs:subClassOf bf:Classification;
     rdfs:label "Psychological Subject Heading Classification"@en, "Psychologische Inhaltsklassifikation"@de;
 .
 ```
+
+##### Controlled Method
+
+A subclass of bf:Classification to be used via the bf:classification property on a bf:Work. It is used to describe the scientific study methodology used to create the study described within the work.
+TODO: Add link to and info about the cotrolled vocabulary of methods we use with it.
 
 ```r
 pxc:ControlledMethod a owl:Class;
@@ -164,7 +214,7 @@ pxc:ControlledMethod a owl:Class;
 .
 ```
 
-## Classes for describing a study population
+#### Classes for describing a study population - subclasses of bf:DemographicGroup and bf:GeographicCoverage
 
 Studies that are documented in scholarly works are described in PSYNDEX by their study population, that is, the group of people that were studied.
 The following classes are used to describe the study population of a work: Their age group and their location. 
@@ -214,19 +264,6 @@ pxp:contributionPosition
 #     rdfs:range bf:Organization;    
 # . 
 # removed: use mads:hasAffiliation instead! -->
-
-# Classes describing the relationship between a work and its creator(s):
-
-## PsychAuthors-ID
-
-```r
-pxc:PsychAuthorsID a owl:Class;   
-    rdfs:label "Psychauthors ID"@en, "PsychAuthors-Kennung";
-    rdfs:comment "Alphanumerical identifier of a psychologist within the PsychAuthors database."@en;
-    rdfs:subClassOf bf:Local; # and via this, grandchild of bf:Identifier
-.
-```
-
 
 
 ## Properties for Relationships:
@@ -300,10 +337,10 @@ pxp:PageCount a owl:Class;
 .
 ```
 
-# Properties describing is-ness:
+## Properties describing is-ness of Work and Instance:
 
 ```r
-pxp:IssuanceType a rdf:Property;
+pxp:issuanceType a rdf:Property;
     rdfs:label "Erscheinungsform"@de, "Issuance Type"@en;
     skos:altLabel "Publication type"@en, "Publikationstyp"@de;
     rdfs:comment "Describes the type of publication an instance was issued as, including its bibliographic level (former BE field in PSYNDEX) = whether it is a standalone thing or a dependent component part. Examples: Journal Article, Edited Book"@en;
@@ -315,7 +352,7 @@ pxp:IssuanceType a rdf:Property;
 ```r
 pxp:mediaCarrier a rdf:Property;
     rdfs:label "Medien-/Datenträgertyp"@de, "Media and Carrier Type"@en;
-    rdfs:comment "Describes an instance's combined medium and carrier type. Close approximation of former field in PSYNDEX"@en;
+    rdfs:comment "Describes an instance's combined medium and carrier type. Close approximation of former field MT and MT2 in PSYNDEX"@en;
     rdfs:domain bf:Instance;
     rdfs:range skos:Concept;
 . 

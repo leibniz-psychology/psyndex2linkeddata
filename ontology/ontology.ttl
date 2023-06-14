@@ -45,6 +45,14 @@
    dct:issued "2022-07-01" ;
    dct:modified "2022-11-28"^^xsd:date ;
    skos:historyNote "See the commit history for this vocabulary at https://github.com/." .
+pxc:DFK a owl:Class;
+    rdfs:subClassOf bf:Local;
+    rdfs:label "DFK"@de, "DFK"@en;
+    rdfs:comment "The DFK is the unique identifier of a publication in PSYNDEX. It is a string of 8 numbers."@en;
+pxc:PsychAuthorsID a owl:Class;
+    rdfs:subClassOf bf:Local;
+    rdfs:label "PsychAuthors-Kennung"@de, "PsychAuthors ID"@en;
+    rdfs:comment "The PsychAuthors ID is the unique identifier of a person in our legacy psychauthors authority file of psychologists."@en;
 pxc:TranslatedTitle a owl:Class;
     rdfs:subClassOf bf:VariantTitle;
     rdfs:label "Original title translated into English or German"@en;
@@ -87,11 +95,6 @@ pxp:contributionPosition
   rdfs:range xsd:integer;
   owl:equivalentProperty dblp:signatureOrdinal, <http://www.wikidata.org/entity/P478>; rdfs:subPropertyOf schema:position, bf:qualifier
 .
-pxc:PsychAuthorsID a owl:Class;   
-    rdfs:label "Psychauthors ID"@en, "PsychAuthors-Kennung";
-    rdfs:comment "Alphanumerical identifier of a psychologist within the PsychAuthors database."@en;
-    rdfs:subClassOf bf:Local; # and via this, grandchild of bf:Identifier
-.
 pxp:inIssue a rdf:Property;
   rdfs:label "published in journal issue"@en ;
   rdfs:comment "The issue of the journal in which the publication was published."@en ;
@@ -133,7 +136,7 @@ pxp:PageCount a owl:Class;
     rdfs:subClassOf bf:Extent;
  #owl:equivalentProperty <http://purl.org/spar/fabio/hasPageCount>.
 .
-pxp:IssuanceType a rdf:Property;
+pxp:issuanceType a rdf:Property;
     rdfs:label "Erscheinungsform"@de, "Issuance Type"@en;
     skos:altLabel "Publication type"@en, "Publikationstyp"@de;
     rdfs:comment "Describes the type of publication an instance was issued as, including its bibliographic level (former BE field in PSYNDEX) = whether it is a standalone thing or a dependent component part. Examples: Journal Article, Edited Book"@en;
@@ -142,7 +145,7 @@ pxp:IssuanceType a rdf:Property;
     . 
 pxp:mediaCarrier a rdf:Property;
     rdfs:label "Medien-/Datenträgertyp"@de, "Media and Carrier Type"@en;
-    rdfs:comment "Describes an instance's combined medium and carrier type. Close approximation of former field in PSYNDEX"@en;
+    rdfs:comment "Describes an instance's combined medium and carrier type. Close approximation of former field MT and MT2 in PSYNDEX"@en;
     rdfs:domain bf:Instance;
     rdfs:range skos:Concept;
 . 
