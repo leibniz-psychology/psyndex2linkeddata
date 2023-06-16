@@ -1,6 +1,6 @@
 # use this on affiliation strings, person names (both in AUP, AUK)
 # and on Abstract and title, other text fields, like SH and UTG/UTE, KP...
-dd_codes = [
+dd_codes = (
     ("", "š"),
     # ('^D&lt;"', '"'),
     # ("^D&lt;,", '"'),
@@ -155,13 +155,13 @@ dd_codes = [
     # (" &amp; ", " & "),
     # (" &lt;", " < "),
     # (" &gt; ", " > "),
-]
+)
 
 
 # A list of names/strings that should be replaced
 # with the string "Original" in any fields
 # that describe the origin of the abstract (ASH1, ASN1)
-abstract_origin_original = [
+abstract_origin_original = (
     "Original",
     "Journal",
     "Buch",
@@ -203,10 +203,10 @@ abstract_origin_original = [
     "Institut für Arbeitsmarkt- und Berufsforschung der Bundesagentur für Arbeit, Nürnberg",
     "Institut für Arbeitsmarkt- und Berufsforschung der Bundesanstalt für Arbeit, Nürnberg",
     "PROGRIS Rachel Gutmacher-Neveling, Berlin",
-]
+)
 
 # replace these with "ZPID" if found in ASH1, ASN1, ASH2, ASN2:
-abstract_origin_zpid = [
+abstract_origin_zpid = (
     "ZPID",
     "ZIPD",
     "zpid",
@@ -218,7 +218,8 @@ abstract_origin_zpid = [
     "G.B.",
     "I.D.",
     "K.Si",
-    "K.Si.", "L.F.T.",
+    "K.Si.",
+    "L.F.T.",
     "M.G.",
     "M.K.",
     "pe.k",
@@ -282,7 +283,7 @@ abstract_origin_zpid = [
     "Wilfried Echterhoff",
     "Wolfgang Rechtien",
     "Yrla M. Labouvie",
-]
+)
 
 
 # abstract_origin_iwf = [
@@ -291,25 +292,25 @@ abstract_origin_zpid = [
 #     "iwf",
 # ]
 
-abstract_origin_deepl = ["DeepL", "DeePL", "Deepl"]
+abstract_origin_deepl = ("DeepL", "DeePL", "Deepl")
 
-abstract_origin_krimz = ["Kriminologische Zentralstelle"]
+abstract_origin_krimz = "Kriminologische Zentralstelle"
 
 # DIPF??
-abstract_origin_fis_bildung = [
+abstract_origin_fis_bildung = (
     "FIS Bildung",
     "FIS Bildung Koordinierungsstelle im DIPF, Frankfurt",
-]
+)
 
 
 # replace these with "GESIS":
-abstract_origin_gesis = [
+abstract_origin_gesis = (
     "GESIS Fachinformation für die Sozialwissenschaften, Bonn",
     "GESIS-IZ Sozialwissenschaften, Bonn",
     "IZ",
     "IZ Sozialwissenschaften",
     "Informationszentrum Sozialwissenschaften, Bonn",
-]
+)
 
 
 # and what if "DeepL"???
@@ -320,7 +321,7 @@ abstract_origin_gesis = [
 # First few countries ordered first by DACHLUX, then by amount of publications from that country in openalex
 # based on openalex data (filter by institution)
 # for faster search
-geonames_countries = [
+geonames_countries = (
     ("Germany", "2921044", "DE"),
     ("Austria", "2782113", "AT"),
     ("Switzerland", "2658434", "CH"),
@@ -512,7 +513,7 @@ geonames_countries = [
     ("Czech Republic", "3077311", "CZ"),
     ("Czechia", "3077311", "CZ"),
     ("Taiwan", "1668284", "TW"),
-]
+)
 
 # add another array or object for combos of mediatypes and DT/BE -&gt; see SPARQL Anything version (VALUES)
 
