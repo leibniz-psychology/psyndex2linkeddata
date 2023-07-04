@@ -316,6 +316,23 @@ abstract_origin_gesis = (
 # and what if "DeepL"???
 # or "FIS Bildung", "GESIS Fachinformation für die Sozialwissenschaften, Bonn", "Kriminologische Zentralstelle",
 
+funder_names_replacelist = (
+    ("DFG", "Deutsche Forschungsgemeinschaft (DFG)"),
+    ("German Research Council", "Deutsche Forschungsgemeinschaft (DFG)"),
+    ("German Research Society (DFG)", "Deutsche Forschungsgemeinschaft (DFG)"),
+    (
+        "German Research Society (Deutsche Forschungsgemeinschaft, DFG)",
+        "Deutsche Forschungsgemeinschaft (DFG)",
+    ),
+    (
+        "German Research Society (Deutsche Forschungsgemeinschaft)",
+        "Deutsche Forschungsgemeinschaft (DFG)",
+    ),
+    ("Villigst e.V.", "Villigst")
+    # actually, anytime the name contains "Emmy Noether, copy the whole name into the note, then replace with DFG"
+    # also, anytime it ends in "grant", or "programme" or "program", remove that part- it may match better!
+)
+
 
 # list of country names, geonames ids, and 2-digit ISO-3166 alpha2 country codes
 # First few countries ordered first by DACHLUX, then by amount of publications from that country in openalex
