@@ -8,6 +8,11 @@ rdflib = "*"
 jupyterlab = "*"
 jupytext = "*"
 requests-cache = "*"
+langid = "*"
+reconciler = "*"
+pandas = "*"
+fuzzywuzzy = {extras = ["speedup"], version = "*"}
+rapidfuzz = "*"
 
 [dev-packages]
 
