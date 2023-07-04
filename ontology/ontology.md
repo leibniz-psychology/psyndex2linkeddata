@@ -357,3 +357,78 @@ pxp:mediaCarrier a rdf:Property;
     rdfs:range skos:Concept;
 . 
 ```
+
+---
+
+# Open Science Properties
+
+## Funding
+
+```r
+pxc:FundingReference a owl:Class;
+    rdfs:subClassOf bf:Contribution;
+    rdfs:label "Funding Reference Contribution"@en, "Förderer-Angaben"@de;
+    rdfs:comment "Type of contribution to a work that describes who the funder is (as bf:agent), and what grants were awarded - zero or several grants can be listed per Funder Reference, since the funder is the main grouping element."@en;
+.
+```
+
+```r
+pxp:grant a rdf:Property;
+    rdfs:label "Grant"@en, "Förderung"@de;
+    rdfs:comment "The grant that was awarded to the funder by the funding agency."@en;
+    rdfs:domain pxc:FundingReference;
+    rdfs:range pxc:Grant;
+.
+
+pxc:Grant a owl:Class;
+    rdfs:label "Grant"@en, "Förderung"@de;
+    rdfs:comment "The grant that was awarded to the funder by the funding agency."@en;
+.
+```
+
+```r
+# pxc:FunderID a owl:Class;
+#     rdfs:subClassOf bf:Local;
+#     rdfs:label "Local PsychPorta Funder Identifier"@en, "Förderer-Kennung bei PsychPorta"@de;
+#     rdfs:comment "Local Identifier for a funding agent or agency. Has the form of a UUID string attached via rdf:value."@en;
+# .
+
+pxc:FundRefDoi a owl:Class;
+    rdfs:subClassOf bf:Doi;
+    rdfs:label "Crossref Funder Registry Identifier (DOI)"@en, "Förderer-Kennung in der Crossref Funder Registry (DOI)"@de;
+    rdfs:comment "External Identifier for a funding agent or agency issued by Crossref in their funder registry. Has the form of a DOI."@en;
+.
+
+pxc:GrantId a owl:Class;
+    rdfs:subClassOf bf:Local;
+    rdfs:label "Grant Identifier/award number"@en, "Förderkennung/Projektnummer"@de;
+    rdfs:comment "A number or identifier for an awarded grant. Has the form of a string attached via rdf:value. Is usually specific to its funding agency and may have prefixes that indicate that."@en;" ;
+    # note: we may add a source property to this class, to say where the grant ID comes from, eg DFG, BMBF, EU, etc. - based on the funder name in the bf:Agent node.
+.
+```
+
+## Conference
+
+A work, usually a conference proceedings book (edited), can have a reference to the conference to which it refers.
+
+This is modelled as a contribution node attached with bf:contribution. We define a subclass pxc:ConferenceReference of bf:Contribution for this.
+
+```r
+pxc:ConferenceReference a owl:Class;
+    rdfs:subClassOf bf:Contribution;
+    rdfs:label "Conference Reference"@en, "Konferenz-Angabe"@de;
+    rdfs:comment "A reference to a conference that the work is based on. Usually used for conference proceedings."@en; 
+.
+```
+
+A conference agent (of class bf:Meeting) within a ConferenceReference contribution node may have a persistent identifier in the form of a Doi. We define a subclass pxc:ConferenceDoi of bf:Doi (a subclass of bf:Identifier) for this.
+
+(It may also have gnd identifier. TODO: Add this. Maybe reconcile with lobid?)
+
+```r
+pxc:ConferenceDoi a owl:Class;
+    rdfs:subClassOf bf:Doi;
+    rdfs:label "Conference DOI"@en, "Konferenz-DOI"@de;
+    rdfs:comment "A DOI for a conference. Used for contributions of class ConferenceReference in conference proceedings works."@en;
+
+```
