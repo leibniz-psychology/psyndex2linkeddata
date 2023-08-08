@@ -114,6 +114,24 @@ pxc:PsychAuthorsID a owl:Class;
     rdfs:comment "The PsychAuthors ID is the unique identifier of a person in our legacy psychauthors authority file of psychologists."@en;
 ```
 
+#### Trial number for Clinical Trials when linking a preregistration
+
+A subclass of bf:Identifier > bf:Local to be used via the bf:identifiedBy property. It is used for linking from a study's (publication) work to another work that is a registered clinical trial it reports on. 
+
+WorkofStudyPaper > bflc:relationship >> bflc:Relationship > 
+    bflc:relation >> relations:hasPregistration 
+    bf:accompaniedBy >> bf:Work (the trial registration) 
+        > bf:identifiedBy >> pxc:TrialNumber 
+            > rdf:value >> "DRKS00012345"
+            > bf:source trialregs:DRKS
+
+```r
+pxc:TrialNumber a owl:Class ;
+    rdfs:subClassOf bf:Local ;
+    rdfs:label "Trial Number"@en, "Studiennummer"@de ;
+    rdfs:comment "The identifier of a clinical trial at the registry it is registered at - usually with a prefix that gives a hint which registry it belongs to."@en ;
+```
+
 ### Publication Titles
 
 #### Translated Title

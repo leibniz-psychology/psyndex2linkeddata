@@ -53,6 +53,10 @@ pxc:PsychAuthorsID a owl:Class;
     rdfs:subClassOf bf:Local;
     rdfs:label "PsychAuthors-Kennung"@de, "PsychAuthors ID"@en;
     rdfs:comment "The PsychAuthors ID is the unique identifier of a person in our legacy psychauthors authority file of psychologists."@en;
+pxc:TrialNumber a owl:Class ;
+    rdfs:subClassOf bf:Local ;
+    rdfs:label "Trial Number"@en, "Studiennummer"@de ;
+    rdfs:comment "The identifier of a clinical trial at the registry it is registered at - usually with a prefix that gives a hint which registry it belongs to."@en ;
 pxc:TranslatedTitle a owl:Class;
     rdfs:subClassOf bf:VariantTitle;
     rdfs:label "Original title translated into English or German"@en;
@@ -149,3 +153,47 @@ pxp:mediaCarrier a rdf:Property;
     rdfs:domain bf:Instance;
     rdfs:range skos:Concept;
 . 
+pxc:FundingReference a owl:Class;
+    rdfs:subClassOf bf:Contribution;
+    rdfs:label "Funding Reference Contribution"@en, "Förderer-Angaben"@de;
+    rdfs:comment "Type of contribution to a work that describes who the funder is (as bf:agent), and what grants were awarded - zero or several grants can be listed per Funder Reference, since the funder is the main grouping element."@en;
+.
+pxp:grant a rdf:Property;
+    rdfs:label "Grant"@en, "Förderung"@de;
+    rdfs:comment "The grant that was awarded to the funder by the funding agency."@en;
+    rdfs:domain pxc:FundingReference;
+    rdfs:range pxc:Grant;
+.
+
+pxc:Grant a owl:Class;
+    rdfs:label "Grant"@en, "Förderung"@de;
+    rdfs:comment "The grant that was awarded to the funder by the funding agency."@en;
+.
+# pxc:FunderID a owl:Class;
+#     rdfs:subClassOf bf:Local;
+#     rdfs:label "Local PsychPorta Funder Identifier"@en, "Förderer-Kennung bei PsychPorta"@de;
+#     rdfs:comment "Local Identifier for a funding agent or agency. Has the form of a UUID string attached via rdf:value."@en;
+# .
+
+pxc:FundRefDoi a owl:Class;
+    rdfs:subClassOf bf:Doi;
+    rdfs:label "Crossref Funder Registry Identifier (DOI)"@en, "Förderer-Kennung in der Crossref Funder Registry (DOI)"@de;
+    rdfs:comment "External Identifier for a funding agent or agency issued by Crossref in their funder registry. Has the form of a DOI."@en;
+.
+
+pxc:GrantId a owl:Class;
+    rdfs:subClassOf bf:Local;
+    rdfs:label "Grant Identifier/award number"@en, "Förderkennung/Projektnummer"@de;
+    rdfs:comment "A number or identifier for an awarded grant. Has the form of a string attached via rdf:value. Is usually specific to its funding agency and may have prefixes that indicate that."@en;" ;
+    # note: we may add a source property to this class, to say where the grant ID comes from, eg DFG, BMBF, EU, etc. - based on the funder name in the bf:Agent node.
+.
+pxc:ConferenceReference a owl:Class;
+    rdfs:subClassOf bf:Contribution;
+    rdfs:label "Conference Reference"@en, "Konferenz-Angabe"@de;
+    rdfs:comment "A reference to a conference that the work is based on. Usually used for conference proceedings."@en; 
+.
+pxc:ConferenceDoi a owl:Class;
+    rdfs:subClassOf bf:Doi;
+    rdfs:label "Conference DOI"@en, "Konferenz-DOI"@de;
+    rdfs:comment "A DOI for a conference. Used for contributions of class ConferenceReference in conference proceedings works."@en;
+
