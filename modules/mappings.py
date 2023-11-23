@@ -582,6 +582,16 @@ geonames_countries = (
     ("Taiwan", "1668284", "TW"),
 )
 
+copr_publ = (
+)
+    
+copr_auth = ()
+
+copr_pdm = ()
+
+copr_cc0 = ()
+
+
 # add another array or object for combos of mediatypes and DT/BE -&gt; see SPARQL Anything version (VALUES)
 
 
