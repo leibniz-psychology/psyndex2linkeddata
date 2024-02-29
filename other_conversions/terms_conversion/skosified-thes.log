@@ -1,0 +1,787 @@
+INFO: Don't know what to do with literal http://purl.org/dc/terms/created
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/00070 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/00470 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/02370 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/02420 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/02880 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/03480 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/04500 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/05670 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/07110 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/08555 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/09560 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/10130 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/12195 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/13110 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/13680 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/13990 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/14450 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/14520 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/14560 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/14900 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/15440 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/16000 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/16960 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/17570 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/18060 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/18260 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/18510 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/18650 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/19022 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/19300 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/19460 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/22390 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/23450 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/23490 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/23535 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/23540 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/27740 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/28030 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/28110 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/28450 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/29142 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/29420 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/29670 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/30200 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/30570 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/31287 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/32210 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/32310 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/32947 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/35110 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/35230 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/35780 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/36065 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/36480 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/36970 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/37350 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/37870 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/37980 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39075 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39278 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39450 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39530 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39850 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/39940 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/40290 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/40385 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/40500 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/40680 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/40785 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/41925 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/43400 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/43630 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/44870 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/45120 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/45290 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/45825 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/47510 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/48250 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/48275 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/48310 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/48330 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/48500 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/49850 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/50170 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/50340 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/50850 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/51270 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/51700 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/51805 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/52590 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/53020 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/53210 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/53770 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/54040 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/54190 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/56525 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/60092 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/60554 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/60774 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+INFO: Marking loose concept https://w3id.org/zpid/vocabs/terms/72200 as top concept of scheme https://w3id.org/zpid/vocabs/terms/
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/00340 and https://w3id.org/zpid/vocabs/terms/45120 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/00350 and https://w3id.org/zpid/vocabs/terms/45120 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/00376 and https://w3id.org/zpid/vocabs/terms/14366 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/00550 and https://w3id.org/zpid/vocabs/terms/15440 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/00960 and https://w3id.org/zpid/vocabs/terms/00970 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/01595 and https://w3id.org/zpid/vocabs/terms/51140 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/02034 and https://w3id.org/zpid/vocabs/terms/40760 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/02350 and https://w3id.org/zpid/vocabs/terms/02370 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/02360 and https://w3id.org/zpid/vocabs/terms/02370 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/02415 and https://w3id.org/zpid/vocabs/terms/08777 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/02863 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/03220 and https://w3id.org/zpid/vocabs/terms/40070 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/03465 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/03650 and https://w3id.org/zpid/vocabs/terms/27190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/03970 and https://w3id.org/zpid/vocabs/terms/43740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04165 and https://w3id.org/zpid/vocabs/terms/02790 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04165 and https://w3id.org/zpid/vocabs/terms/41890 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04412 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04413 and https://w3id.org/zpid/vocabs/terms/04410 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04414 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/04975 and https://w3id.org/zpid/vocabs/terms/03895 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05050 and https://w3id.org/zpid/vocabs/terms/37570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05090 and https://w3id.org/zpid/vocabs/terms/13990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05624 and https://w3id.org/zpid/vocabs/terms/05660 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05674 and https://w3id.org/zpid/vocabs/terms/05670 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05910 and https://w3id.org/zpid/vocabs/terms/27740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/05935 and https://w3id.org/zpid/vocabs/terms/38070 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06030 and https://w3id.org/zpid/vocabs/terms/06010 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06050 and https://w3id.org/zpid/vocabs/terms/40050 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06050 and https://w3id.org/zpid/vocabs/terms/47090 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06087 and https://w3id.org/zpid/vocabs/terms/39530 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06105 and https://w3id.org/zpid/vocabs/terms/60118 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06175 and https://w3id.org/zpid/vocabs/terms/44345 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/06780 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/07085 and https://w3id.org/zpid/vocabs/terms/50170 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/07672 and https://w3id.org/zpid/vocabs/terms/29420 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/08045 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/08086 and https://w3id.org/zpid/vocabs/terms/48275 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/08180 and https://w3id.org/zpid/vocabs/terms/06870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09203 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09288 and https://w3id.org/zpid/vocabs/terms/48275 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09430 and https://w3id.org/zpid/vocabs/terms/00230 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09527 and https://w3id.org/zpid/vocabs/terms/09560 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09558 and https://w3id.org/zpid/vocabs/terms/09560 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/09985 and https://w3id.org/zpid/vocabs/terms/26250 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10140 and https://w3id.org/zpid/vocabs/terms/37870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10270 and https://w3id.org/zpid/vocabs/terms/49370 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10533 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10533 and https://w3id.org/zpid/vocabs/terms/38493 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10945 and https://w3id.org/zpid/vocabs/terms/10970 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10945 and https://w3id.org/zpid/vocabs/terms/23415 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10960 and https://w3id.org/zpid/vocabs/terms/51270 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10970 and https://w3id.org/zpid/vocabs/terms/51270 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10970 and https://w3id.org/zpid/vocabs/terms/60037 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/10977 and https://w3id.org/zpid/vocabs/terms/04410 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/11185 and https://w3id.org/zpid/vocabs/terms/06060 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/11185 and https://w3id.org/zpid/vocabs/terms/19230 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/11435 and https://w3id.org/zpid/vocabs/terms/05640 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/12047 and https://w3id.org/zpid/vocabs/terms/42110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/12090 and https://w3id.org/zpid/vocabs/terms/12170 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/12728 and https://w3id.org/zpid/vocabs/terms/48500 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/12860 and https://w3id.org/zpid/vocabs/terms/60069 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/13193 and https://w3id.org/zpid/vocabs/terms/03895 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/13298 and https://w3id.org/zpid/vocabs/terms/28030 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/13988 and https://w3id.org/zpid/vocabs/terms/41600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14253 and https://w3id.org/zpid/vocabs/terms/51805 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14367 and https://w3id.org/zpid/vocabs/terms/14366 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14370 and https://w3id.org/zpid/vocabs/terms/48520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14425 and https://w3id.org/zpid/vocabs/terms/28450 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14470 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14592 and https://w3id.org/zpid/vocabs/terms/11390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14767 and https://w3id.org/zpid/vocabs/terms/35110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14790 and https://w3id.org/zpid/vocabs/terms/29650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/14955 and https://w3id.org/zpid/vocabs/terms/31000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/15070 and https://w3id.org/zpid/vocabs/terms/47820 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/15190 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/15335 and https://w3id.org/zpid/vocabs/terms/15380 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/15793 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/16165 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/16297 and https://w3id.org/zpid/vocabs/terms/37750 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/16300 and https://w3id.org/zpid/vocabs/terms/37870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/16555 and https://w3id.org/zpid/vocabs/terms/51805 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/16558 and https://w3id.org/zpid/vocabs/terms/29670 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17010 and https://w3id.org/zpid/vocabs/terms/37980 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17140 and https://w3id.org/zpid/vocabs/terms/37980 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17174 and https://w3id.org/zpid/vocabs/terms/35110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17205 and https://w3id.org/zpid/vocabs/terms/19300 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17210 and https://w3id.org/zpid/vocabs/terms/25160 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17240 and https://w3id.org/zpid/vocabs/terms/25160 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17450 and https://w3id.org/zpid/vocabs/terms/27740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17475 and https://w3id.org/zpid/vocabs/terms/37330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/17784 and https://w3id.org/zpid/vocabs/terms/48330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18190 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18255 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18564 and https://w3id.org/zpid/vocabs/terms/46145 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18580 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18640 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18670 and https://w3id.org/zpid/vocabs/terms/18680 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/18820 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/19090 and https://w3id.org/zpid/vocabs/terms/39515 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/19290 and https://w3id.org/zpid/vocabs/terms/12080 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/19450 and https://w3id.org/zpid/vocabs/terms/22394 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/19450 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/19974 and https://w3id.org/zpid/vocabs/terms/09860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20310 and https://w3id.org/zpid/vocabs/terms/13190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20726 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20820 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20847 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20850 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/20920 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/21237 and https://w3id.org/zpid/vocabs/terms/32210 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/21767 and https://w3id.org/zpid/vocabs/terms/10640 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/21892 and https://w3id.org/zpid/vocabs/terms/51805 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/21933 and https://w3id.org/zpid/vocabs/terms/50150 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22325 and https://w3id.org/zpid/vocabs/terms/45120 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22393 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22393 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22394 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22402 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22420 and https://w3id.org/zpid/vocabs/terms/22393 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22425 and https://w3id.org/zpid/vocabs/terms/22393 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22425 and https://w3id.org/zpid/vocabs/terms/22394 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22425 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22795 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/22800 and https://w3id.org/zpid/vocabs/terms/17350 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/23146 and https://w3id.org/zpid/vocabs/terms/57420 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/23165 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/23487 and https://w3id.org/zpid/vocabs/terms/51270 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/23600 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/23700 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/24636 and https://w3id.org/zpid/vocabs/terms/48080 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/25230 and https://w3id.org/zpid/vocabs/terms/38330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/25285 and https://w3id.org/zpid/vocabs/terms/60069 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/26168 and https://w3id.org/zpid/vocabs/terms/13990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/26168 and https://w3id.org/zpid/vocabs/terms/41600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/26185 and https://w3id.org/zpid/vocabs/terms/25345 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/26350 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/26373 and https://w3id.org/zpid/vocabs/terms/74650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/27580 and https://w3id.org/zpid/vocabs/terms/29420 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/27945 and https://w3id.org/zpid/vocabs/terms/16900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/27990 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28013 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28073 and https://w3id.org/zpid/vocabs/terms/06750 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28200 and https://w3id.org/zpid/vocabs/terms/50790 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28314 and https://w3id.org/zpid/vocabs/terms/40765 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28352 and https://w3id.org/zpid/vocabs/terms/01413 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28352 and https://w3id.org/zpid/vocabs/terms/23430 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28361 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28365 and https://w3id.org/zpid/vocabs/terms/13830 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28633 and https://w3id.org/zpid/vocabs/terms/23150 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/28893 and https://w3id.org/zpid/vocabs/terms/47820 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/29145 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/29145 and https://w3id.org/zpid/vocabs/terms/48930 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/29345 and https://w3id.org/zpid/vocabs/terms/30330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/29365 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/29730 and https://w3id.org/zpid/vocabs/terms/53725 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/30590 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/30820 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/30990 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/31774 and https://w3id.org/zpid/vocabs/terms/04106 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/32008 and https://w3id.org/zpid/vocabs/terms/16960 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/32100 and https://w3id.org/zpid/vocabs/terms/39530 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/32517 and https://w3id.org/zpid/vocabs/terms/48628 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/32710 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/33073 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/33073 and https://w3id.org/zpid/vocabs/terms/52610 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/33175 and https://w3id.org/zpid/vocabs/terms/15400 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/33455 and https://w3id.org/zpid/vocabs/terms/02070 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/34413 and https://w3id.org/zpid/vocabs/terms/31000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/34720 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/34895 and https://w3id.org/zpid/vocabs/terms/40050 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/34985 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/35350 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/35770 and https://w3id.org/zpid/vocabs/terms/35780 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36282 and https://w3id.org/zpid/vocabs/terms/42110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36440 and https://w3id.org/zpid/vocabs/terms/41910 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36620 and https://w3id.org/zpid/vocabs/terms/60573 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36639 and https://w3id.org/zpid/vocabs/terms/36590 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36639 and https://w3id.org/zpid/vocabs/terms/36680 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/36715 and https://w3id.org/zpid/vocabs/terms/33540 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/37330 and https://w3id.org/zpid/vocabs/terms/15440 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/37680 and https://w3id.org/zpid/vocabs/terms/48080 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/37720 and https://w3id.org/zpid/vocabs/terms/37870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38010 and https://w3id.org/zpid/vocabs/terms/26240 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38200 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38465 and https://w3id.org/zpid/vocabs/terms/55770 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38670 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38680 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38690 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38710 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38740 and https://w3id.org/zpid/vocabs/terms/23402 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38757 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38790 and https://w3id.org/zpid/vocabs/terms/13395 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/38930 and https://w3id.org/zpid/vocabs/terms/32665 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/39460 and https://w3id.org/zpid/vocabs/terms/15900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/39485 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/39730 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/39970 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40156 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40177 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40328 and https://w3id.org/zpid/vocabs/terms/28030 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40665 and https://w3id.org/zpid/vocabs/terms/40720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40724 and https://w3id.org/zpid/vocabs/terms/12045 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40727 and https://w3id.org/zpid/vocabs/terms/40720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40780 and https://w3id.org/zpid/vocabs/terms/40715 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/40830 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/41134 and https://w3id.org/zpid/vocabs/terms/28450 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/41485 and https://w3id.org/zpid/vocabs/terms/23340 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/41485 and https://w3id.org/zpid/vocabs/terms/44080 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/41940 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/42484 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/42484 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/42488 and https://w3id.org/zpid/vocabs/terms/16990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/42815 and https://w3id.org/zpid/vocabs/terms/22985 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43298 and https://w3id.org/zpid/vocabs/terms/28030 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43390 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43555 and https://w3id.org/zpid/vocabs/terms/48330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43660 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43697 and https://w3id.org/zpid/vocabs/terms/43400 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/43910 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44013 and https://w3id.org/zpid/vocabs/terms/13990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44013 and https://w3id.org/zpid/vocabs/terms/41600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44125 and https://w3id.org/zpid/vocabs/terms/71360 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44228 and https://w3id.org/zpid/vocabs/terms/05660 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44612 and https://w3id.org/zpid/vocabs/terms/06750 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/44890 and https://w3id.org/zpid/vocabs/terms/28635 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/45250 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/45579 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/45590 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/45780 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/45790 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46325 and https://w3id.org/zpid/vocabs/terms/22624 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46660 and https://w3id.org/zpid/vocabs/terms/04355 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46724 and https://w3id.org/zpid/vocabs/terms/28030 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46824 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46920 and https://w3id.org/zpid/vocabs/terms/13830 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46920 and https://w3id.org/zpid/vocabs/terms/41708 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46920 and https://w3id.org/zpid/vocabs/terms/41890 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/46965 and https://w3id.org/zpid/vocabs/terms/74650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/47130 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/47185 and https://w3id.org/zpid/vocabs/terms/10640 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/47392 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/47880 and https://w3id.org/zpid/vocabs/terms/15380 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/48416 and https://w3id.org/zpid/vocabs/terms/48260 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/48530 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/48855 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/49035 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/49390 and https://w3id.org/zpid/vocabs/terms/16420 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/49820 and https://w3id.org/zpid/vocabs/terms/19230 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50263 and https://w3id.org/zpid/vocabs/terms/41600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50305 and https://w3id.org/zpid/vocabs/terms/16000 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50545 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50587 and https://w3id.org/zpid/vocabs/terms/13110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50620 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/50880 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51030 and https://w3id.org/zpid/vocabs/terms/27740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51262 and https://w3id.org/zpid/vocabs/terms/51270 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51622 and https://w3id.org/zpid/vocabs/terms/51690 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51627 and https://w3id.org/zpid/vocabs/terms/51615 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51770 and https://w3id.org/zpid/vocabs/terms/07120 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51858 and https://w3id.org/zpid/vocabs/terms/10900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51858 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/51860 and https://w3id.org/zpid/vocabs/terms/51840 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52150 and https://w3id.org/zpid/vocabs/terms/12430 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52150 and https://w3id.org/zpid/vocabs/terms/55770 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52210 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52240 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52260 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52370 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52415 and https://w3id.org/zpid/vocabs/terms/30200 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52470 and https://w3id.org/zpid/vocabs/terms/07440 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52473 and https://w3id.org/zpid/vocabs/terms/55520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52633 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52660 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/52737 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/53650 and https://w3id.org/zpid/vocabs/terms/08777 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54005 and https://w3id.org/zpid/vocabs/terms/19300 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54153 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54157 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54187 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54188 and https://w3id.org/zpid/vocabs/terms/23508 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54188 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54505 and https://w3id.org/zpid/vocabs/terms/54190 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54505 and https://w3id.org/zpid/vocabs/terms/65158 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/54960 and https://w3id.org/zpid/vocabs/terms/17570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/55718 and https://w3id.org/zpid/vocabs/terms/55990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/55815 and https://w3id.org/zpid/vocabs/terms/10900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56075 and https://w3id.org/zpid/vocabs/terms/10570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56075 and https://w3id.org/zpid/vocabs/terms/55520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56175 and https://w3id.org/zpid/vocabs/terms/35110 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56250 and https://w3id.org/zpid/vocabs/terms/10570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56250 and https://w3id.org/zpid/vocabs/terms/35610 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56303 and https://w3id.org/zpid/vocabs/terms/41133 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56464 and https://w3id.org/zpid/vocabs/terms/45120 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56885 and https://w3id.org/zpid/vocabs/terms/28103 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56930 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56993 and https://w3id.org/zpid/vocabs/terms/10900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/56993 and https://w3id.org/zpid/vocabs/terms/25345 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/57020 and https://w3id.org/zpid/vocabs/terms/21530 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/57500 and https://w3id.org/zpid/vocabs/terms/48500 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/57510 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58063 and https://w3id.org/zpid/vocabs/terms/16990 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58064 and https://w3id.org/zpid/vocabs/terms/01390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58071 and https://w3id.org/zpid/vocabs/terms/70171 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58075 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58081 and https://w3id.org/zpid/vocabs/terms/38330 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58085 and https://w3id.org/zpid/vocabs/terms/22394 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58093 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58099 and https://w3id.org/zpid/vocabs/terms/10900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/58109 and https://w3id.org/zpid/vocabs/terms/58071 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60003 and https://w3id.org/zpid/vocabs/terms/16960 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60004 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60030 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60062 and https://w3id.org/zpid/vocabs/terms/04310 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60062 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60089 and https://w3id.org/zpid/vocabs/terms/08080 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60096 and https://w3id.org/zpid/vocabs/terms/17570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60107 and https://w3id.org/zpid/vocabs/terms/33850 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60115 and https://w3id.org/zpid/vocabs/terms/03895 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60117 and https://w3id.org/zpid/vocabs/terms/38720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60242 and https://w3id.org/zpid/vocabs/terms/22393 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60242 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60516 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60521 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60533 and https://w3id.org/zpid/vocabs/terms/15915 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60548 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60556 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60576 and https://w3id.org/zpid/vocabs/terms/08820 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60581 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60583 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60595 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60600 and https://w3id.org/zpid/vocabs/terms/33605 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60611 and https://w3id.org/zpid/vocabs/terms/22393 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60611 and https://w3id.org/zpid/vocabs/terms/22396 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60613 and https://w3id.org/zpid/vocabs/terms/33810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60753 and https://w3id.org/zpid/vocabs/terms/37870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60771 and https://w3id.org/zpid/vocabs/terms/12750 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60775 and https://w3id.org/zpid/vocabs/terms/77710 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60784 and https://w3id.org/zpid/vocabs/terms/71360 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60794 and https://w3id.org/zpid/vocabs/terms/24600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60808 and https://w3id.org/zpid/vocabs/terms/16570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/60824 and https://w3id.org/zpid/vocabs/terms/16570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61007 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61032 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61035 and https://w3id.org/zpid/vocabs/terms/15915 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61043 and https://w3id.org/zpid/vocabs/terms/30740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61050 and https://w3id.org/zpid/vocabs/terms/51805 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61434 and https://w3id.org/zpid/vocabs/terms/32210 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61586 and https://w3id.org/zpid/vocabs/terms/44670 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61618 and https://w3id.org/zpid/vocabs/terms/04720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61678 and https://w3id.org/zpid/vocabs/terms/00385 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61678 and https://w3id.org/zpid/vocabs/terms/44345 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61681 and https://w3id.org/zpid/vocabs/terms/04355 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61684 and https://w3id.org/zpid/vocabs/terms/41890 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61686 and https://w3id.org/zpid/vocabs/terms/44340 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61691 and https://w3id.org/zpid/vocabs/terms/37870 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61749 and https://w3id.org/zpid/vocabs/terms/16900 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61771 and https://w3id.org/zpid/vocabs/terms/07085 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61777 and https://w3id.org/zpid/vocabs/terms/33698 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61782 and https://w3id.org/zpid/vocabs/terms/10970 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/61804 and https://w3id.org/zpid/vocabs/terms/40050 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65012 and https://w3id.org/zpid/vocabs/terms/14520 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65029 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65061 and https://w3id.org/zpid/vocabs/terms/10920 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65067 and https://w3id.org/zpid/vocabs/terms/60069 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65073 and https://w3id.org/zpid/vocabs/terms/65052 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65074 and https://w3id.org/zpid/vocabs/terms/65052 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65112 and https://w3id.org/zpid/vocabs/terms/50170 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65126 and https://w3id.org/zpid/vocabs/terms/60037 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65164 and https://w3id.org/zpid/vocabs/terms/48320 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65165 and https://w3id.org/zpid/vocabs/terms/03230 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65170 and https://w3id.org/zpid/vocabs/terms/41890 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65174 and https://w3id.org/zpid/vocabs/terms/20717 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65174 and https://w3id.org/zpid/vocabs/terms/47072 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65180 and https://w3id.org/zpid/vocabs/terms/43740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65204 and https://w3id.org/zpid/vocabs/terms/16570 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65208 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65221 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65232 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65233 and https://w3id.org/zpid/vocabs/terms/13005 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65234 and https://w3id.org/zpid/vocabs/terms/49550 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65239 and https://w3id.org/zpid/vocabs/terms/10920 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65239 and https://w3id.org/zpid/vocabs/terms/28030 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65243 and https://w3id.org/zpid/vocabs/terms/11548 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65244 and https://w3id.org/zpid/vocabs/terms/03895 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65284 and https://w3id.org/zpid/vocabs/terms/20860 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/65311 and https://w3id.org/zpid/vocabs/terms/18560 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/70163 and https://w3id.org/zpid/vocabs/terms/12430 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/71430 and https://w3id.org/zpid/vocabs/terms/34720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/71440 and https://w3id.org/zpid/vocabs/terms/08555 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/71880 and https://w3id.org/zpid/vocabs/terms/49370 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/71920 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/71930 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72050 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72340 and https://w3id.org/zpid/vocabs/terms/10920 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72340 and https://w3id.org/zpid/vocabs/terms/51740 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72340 and https://w3id.org/zpid/vocabs/terms/58071 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72360 and https://w3id.org/zpid/vocabs/terms/17670 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72370 and https://w3id.org/zpid/vocabs/terms/65052 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72380 and https://w3id.org/zpid/vocabs/terms/65051 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72380 and https://w3id.org/zpid/vocabs/terms/65052 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72390 and https://w3id.org/zpid/vocabs/terms/22390 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/72920 and https://w3id.org/zpid/vocabs/terms/18510 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/73080 and https://w3id.org/zpid/vocabs/terms/24580 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/73840 and https://w3id.org/zpid/vocabs/terms/55770 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/73900 and https://w3id.org/zpid/vocabs/terms/42617 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74140 and https://w3id.org/zpid/vocabs/terms/51805 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74170 and https://w3id.org/zpid/vocabs/terms/12810 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74610 and https://w3id.org/zpid/vocabs/terms/17600 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74730 and https://w3id.org/zpid/vocabs/terms/34720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74890 and https://w3id.org/zpid/vocabs/terms/34720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/74900 and https://w3id.org/zpid/vocabs/terms/34720 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/75470 and https://w3id.org/zpid/vocabs/terms/01660 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/76120 and https://w3id.org/zpid/vocabs/terms/14366 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/76150 and https://w3id.org/zpid/vocabs/terms/21430 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/76310 and https://w3id.org/zpid/vocabs/terms/24670 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/76600 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/76700 and https://w3id.org/zpid/vocabs/terms/23500 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77230 and https://w3id.org/zpid/vocabs/terms/10130 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77290 and https://w3id.org/zpid/vocabs/terms/18650 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77680 and https://w3id.org/zpid/vocabs/terms/60037 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77730 and https://w3id.org/zpid/vocabs/terms/28450 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77740 and https://w3id.org/zpid/vocabs/terms/60510 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77800 and https://w3id.org/zpid/vocabs/terms/60510 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77920 and https://w3id.org/zpid/vocabs/terms/60510 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Concepts https://w3id.org/zpid/vocabs/terms/77940 and https://w3id.org/zpid/vocabs/terms/18060 connected by both skos:broaderTransitive and skos:related, removing skos:related
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/00140 skos:broader https://w3id.org/zpid/vocabs/terms/64960 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/00430 skos:broader https://w3id.org/zpid/vocabs/terms/09060 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/00865 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/01350 skos:broader https://w3id.org/zpid/vocabs/terms/16190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/01515 skos:broader https://w3id.org/zpid/vocabs/terms/47125 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/01515 skos:broader https://w3id.org/zpid/vocabs/terms/73190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/01940 skos:broader https://w3id.org/zpid/vocabs/terms/35670 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/02550 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/02650 skos:broader https://w3id.org/zpid/vocabs/terms/02860 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/02775 skos:broader https://w3id.org/zpid/vocabs/terms/32310 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/03400 skos:broader https://w3id.org/zpid/vocabs/terms/51140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/03880 skos:broader https://w3id.org/zpid/vocabs/terms/55520 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/04590 skos:broader https://w3id.org/zpid/vocabs/terms/10580 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/04900 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/05975 skos:broader https://w3id.org/zpid/vocabs/terms/19300 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/05977 skos:broader https://w3id.org/zpid/vocabs/terms/06010 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/06523 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/07010 skos:broader https://w3id.org/zpid/vocabs/terms/44190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/07140 skos:broader https://w3id.org/zpid/vocabs/terms/35780 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/07840 skos:broader https://w3id.org/zpid/vocabs/terms/28030 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/08890 skos:broader https://w3id.org/zpid/vocabs/terms/29310 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/08900 skos:broader https://w3id.org/zpid/vocabs/terms/29310 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09015 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09530 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09660 skos:broader https://w3id.org/zpid/vocabs/terms/41760 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09680 skos:broader https://w3id.org/zpid/vocabs/terms/09640 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09680 skos:broader https://w3id.org/zpid/vocabs/terms/39685 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/09970 skos:broader https://w3id.org/zpid/vocabs/terms/01820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/10090 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/10110 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/10420 skos:broader https://w3id.org/zpid/vocabs/terms/10400 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/10977 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11000 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11070 skos:broader https://w3id.org/zpid/vocabs/terms/09330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11070 skos:broader https://w3id.org/zpid/vocabs/terms/35380 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11187 skos:broader https://w3id.org/zpid/vocabs/terms/05630 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11190 skos:broader https://w3id.org/zpid/vocabs/terms/08080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/11360 skos:broader https://w3id.org/zpid/vocabs/terms/41550 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/12025 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/12150 skos:broader https://w3id.org/zpid/vocabs/terms/44870 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/12640 skos:broader https://w3id.org/zpid/vocabs/terms/56075 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/13940 skos:broader https://w3id.org/zpid/vocabs/terms/01080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/13940 skos:broader https://w3id.org/zpid/vocabs/terms/03540 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/13940 skos:broader https://w3id.org/zpid/vocabs/terms/09870 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/13940 skos:broader https://w3id.org/zpid/vocabs/terms/51090 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/14445 skos:broader https://w3id.org/zpid/vocabs/terms/28030 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/14872 skos:broader https://w3id.org/zpid/vocabs/terms/55770 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/15610 skos:broader https://w3id.org/zpid/vocabs/terms/27763 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/15680 skos:broader https://w3id.org/zpid/vocabs/terms/51140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/15870 skos:broader https://w3id.org/zpid/vocabs/terms/27763 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/16120 skos:broader https://w3id.org/zpid/vocabs/terms/32210 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/16470 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/16530 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/16590 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/17690 skos:broader https://w3id.org/zpid/vocabs/terms/06800 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/17690 skos:broader https://w3id.org/zpid/vocabs/terms/06800 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/17690 skos:broader https://w3id.org/zpid/vocabs/terms/17680 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/18210 skos:broader https://w3id.org/zpid/vocabs/terms/20860 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/18564 skos:broader https://w3id.org/zpid/vocabs/terms/17680 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/18760 skos:broader https://w3id.org/zpid/vocabs/terms/19300 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/18830 skos:broader https://w3id.org/zpid/vocabs/terms/41890 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/19028 skos:broader https://w3id.org/zpid/vocabs/terms/17570 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/19040 skos:broader https://w3id.org/zpid/vocabs/terms/41770 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/20060 skos:broader https://w3id.org/zpid/vocabs/terms/13680 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/20185 skos:broader https://w3id.org/zpid/vocabs/terms/18260 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/20234 skos:broader https://w3id.org/zpid/vocabs/terms/33615 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/20400 skos:broader https://w3id.org/zpid/vocabs/terms/41746 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/20560 skos:broader https://w3id.org/zpid/vocabs/terms/48080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21400 skos:broader https://w3id.org/zpid/vocabs/terms/35780 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21570 skos:broader https://w3id.org/zpid/vocabs/terms/19210 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21680 skos:broader https://w3id.org/zpid/vocabs/terms/16900 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21780 skos:broader https://w3id.org/zpid/vocabs/terms/26250 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21780 skos:broader https://w3id.org/zpid/vocabs/terms/26250 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21790 skos:broader https://w3id.org/zpid/vocabs/terms/26250 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/21957 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/22040 skos:broader https://w3id.org/zpid/vocabs/terms/55090 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/22380 skos:broader https://w3id.org/zpid/vocabs/terms/51140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/22640 skos:broader https://w3id.org/zpid/vocabs/terms/51140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/22810 skos:broader https://w3id.org/zpid/vocabs/terms/01820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/22870 skos:broader https://w3id.org/zpid/vocabs/terms/03170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/23010 skos:broader https://w3id.org/zpid/vocabs/terms/08220 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/23120 skos:broader https://w3id.org/zpid/vocabs/terms/40990 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/23360 skos:broader https://w3id.org/zpid/vocabs/terms/30820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/23830 skos:broader https://w3id.org/zpid/vocabs/terms/07640 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/23860 skos:broader https://w3id.org/zpid/vocabs/terms/51140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/24150 skos:broader https://w3id.org/zpid/vocabs/terms/50790 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/24490 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/24720 skos:broader https://w3id.org/zpid/vocabs/terms/72200 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/26263 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/26600 skos:broader https://w3id.org/zpid/vocabs/terms/03170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/26930 skos:broader https://w3id.org/zpid/vocabs/terms/26220 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/27170 skos:broader https://w3id.org/zpid/vocabs/terms/32310 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/27940 skos:broader https://w3id.org/zpid/vocabs/terms/48080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/28115 skos:broader https://w3id.org/zpid/vocabs/terms/28110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29087 skos:broader https://w3id.org/zpid/vocabs/terms/37860 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29133 skos:broader https://w3id.org/zpid/vocabs/terms/33698 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29136 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29640 skos:broader https://w3id.org/zpid/vocabs/terms/58084 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29645 skos:broader https://w3id.org/zpid/vocabs/terms/45290 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/29680 skos:broader https://w3id.org/zpid/vocabs/terms/47510 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/30220 skos:broader https://w3id.org/zpid/vocabs/terms/03170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/30355 skos:broader https://w3id.org/zpid/vocabs/terms/31805 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/31090 skos:broader https://w3id.org/zpid/vocabs/terms/09870 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/31090 skos:broader https://w3id.org/zpid/vocabs/terms/55370 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/31850 skos:broader https://w3id.org/zpid/vocabs/terms/32210 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/32060 skos:broader https://w3id.org/zpid/vocabs/terms/01820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/32560 skos:broader https://w3id.org/zpid/vocabs/terms/09840 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/32730 skos:broader https://w3id.org/zpid/vocabs/terms/27763 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/32950 skos:broader https://w3id.org/zpid/vocabs/terms/37860 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/32970 skos:broader https://w3id.org/zpid/vocabs/terms/38610 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33455 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33550 skos:broader https://w3id.org/zpid/vocabs/terms/33540 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33705 skos:broader https://w3id.org/zpid/vocabs/terms/02070 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33705 skos:broader https://w3id.org/zpid/vocabs/terms/02070 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33705 skos:broader https://w3id.org/zpid/vocabs/terms/33805 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/33905 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/34560 skos:broader https://w3id.org/zpid/vocabs/terms/19300 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/34730 skos:broader https://w3id.org/zpid/vocabs/terms/38493 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/35060 skos:broader https://w3id.org/zpid/vocabs/terms/50170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/35247 skos:broader https://w3id.org/zpid/vocabs/terms/28410 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/35366 skos:broader https://w3id.org/zpid/vocabs/terms/38270 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/35535 skos:broader https://w3id.org/zpid/vocabs/terms/05630 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/35983 skos:broader https://w3id.org/zpid/vocabs/terms/48393 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/36270 skos:broader https://w3id.org/zpid/vocabs/terms/01820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/36590 skos:broader https://w3id.org/zpid/vocabs/terms/19250 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/36680 skos:broader https://w3id.org/zpid/vocabs/terms/19210 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/36700 skos:broader https://w3id.org/zpid/vocabs/terms/03170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/38465 skos:broader https://w3id.org/zpid/vocabs/terms/03230 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/38750 skos:broader https://w3id.org/zpid/vocabs/terms/09060 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/38840 skos:broader https://w3id.org/zpid/vocabs/terms/09060 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/38930 skos:broader https://w3id.org/zpid/vocabs/terms/04720 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/39190 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/39190 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/39200 skos:broader https://w3id.org/zpid/vocabs/terms/25160 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/39200 skos:broader https://w3id.org/zpid/vocabs/terms/25160 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/40490 skos:broader https://w3id.org/zpid/vocabs/terms/26100 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/41110 skos:broader https://w3id.org/zpid/vocabs/terms/33450 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/41410 skos:broader https://w3id.org/zpid/vocabs/terms/41430 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/41650 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/41795 skos:broader https://w3id.org/zpid/vocabs/terms/24600 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/41980 skos:broader https://w3id.org/zpid/vocabs/terms/38610 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/42290 skos:broader https://w3id.org/zpid/vocabs/terms/28970 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/42860 skos:broader https://w3id.org/zpid/vocabs/terms/28030 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/43580 skos:broader https://w3id.org/zpid/vocabs/terms/54190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/44040 skos:broader https://w3id.org/zpid/vocabs/terms/51080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/44480 skos:broader https://w3id.org/zpid/vocabs/terms/26100 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/44540 skos:broader https://w3id.org/zpid/vocabs/terms/30330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/44810 skos:broader https://w3id.org/zpid/vocabs/terms/37790 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/45170 skos:broader https://w3id.org/zpid/vocabs/terms/07120 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/45360 skos:broader https://w3id.org/zpid/vocabs/terms/52330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/46080 skos:broader https://w3id.org/zpid/vocabs/terms/07120 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/46335 skos:broader https://w3id.org/zpid/vocabs/terms/31140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/46490 skos:broader https://w3id.org/zpid/vocabs/terms/38493 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/46617 skos:broader https://w3id.org/zpid/vocabs/terms/37790 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/46783 skos:broader https://w3id.org/zpid/vocabs/terms/51740 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/48120 skos:broader https://w3id.org/zpid/vocabs/terms/72200 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/48387 skos:broader https://w3id.org/zpid/vocabs/terms/48080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/48621 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/48645 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/49310 skos:broader https://w3id.org/zpid/vocabs/terms/01275 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/49590 skos:broader https://w3id.org/zpid/vocabs/terms/40500 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/49725 skos:broader https://w3id.org/zpid/vocabs/terms/19300 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/50257 skos:broader https://w3id.org/zpid/vocabs/terms/29940 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/50527 skos:broader https://w3id.org/zpid/vocabs/terms/33805 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/50650 skos:broader https://w3id.org/zpid/vocabs/terms/30820 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/51610 skos:broader https://w3id.org/zpid/vocabs/terms/04500 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/51930 skos:broader https://w3id.org/zpid/vocabs/terms/04590 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/52150 skos:broader https://w3id.org/zpid/vocabs/terms/03230 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/52735 skos:broader https://w3id.org/zpid/vocabs/terms/44870 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/52830 skos:broader https://w3id.org/zpid/vocabs/terms/64960 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/52840 skos:broader https://w3id.org/zpid/vocabs/terms/33450 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/53270 skos:broader https://w3id.org/zpid/vocabs/terms/37860 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/55750 skos:broader https://w3id.org/zpid/vocabs/terms/04410 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/55750 skos:broader https://w3id.org/zpid/vocabs/terms/04410 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/55825 skos:broader https://w3id.org/zpid/vocabs/terms/38493 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/56480 skos:broader https://w3id.org/zpid/vocabs/terms/13680 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/56764 skos:broader https://w3id.org/zpid/vocabs/terms/20830 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/57103 skos:broader https://w3id.org/zpid/vocabs/terms/17030 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/57748 skos:broader https://w3id.org/zpid/vocabs/terms/04007 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60008 skos:broader https://w3id.org/zpid/vocabs/terms/41220 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60011 skos:broader https://w3id.org/zpid/vocabs/terms/08080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60027 skos:broader https://w3id.org/zpid/vocabs/terms/33850 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60036 skos:broader https://w3id.org/zpid/vocabs/terms/33850 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60045 skos:broader https://w3id.org/zpid/vocabs/terms/33850 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60089 skos:broader https://w3id.org/zpid/vocabs/terms/33660 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60102 skos:broader https://w3id.org/zpid/vocabs/terms/65300 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60110 skos:broader https://w3id.org/zpid/vocabs/terms/08080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60110 skos:broader https://w3id.org/zpid/vocabs/terms/33770 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60110 skos:broader https://w3id.org/zpid/vocabs/terms/08080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60110 skos:broader https://w3id.org/zpid/vocabs/terms/08080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60123 skos:broader https://w3id.org/zpid/vocabs/terms/33605 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60130 skos:broader https://w3id.org/zpid/vocabs/terms/33540 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60510 skos:broader https://w3id.org/zpid/vocabs/terms/29088 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60516 skos:broader https://w3id.org/zpid/vocabs/terms/60075 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60528 skos:broader https://w3id.org/zpid/vocabs/terms/38610 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60532 skos:broader https://w3id.org/zpid/vocabs/terms/33540 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60551 skos:broader https://w3id.org/zpid/vocabs/terms/38610 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60575 skos:broader https://w3id.org/zpid/vocabs/terms/08110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60576 skos:broader https://w3id.org/zpid/vocabs/terms/36637 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60579 skos:broader https://w3id.org/zpid/vocabs/terms/08560 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60581 skos:broader https://w3id.org/zpid/vocabs/terms/60075 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60586 skos:broader https://w3id.org/zpid/vocabs/terms/60519 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60595 skos:broader https://w3id.org/zpid/vocabs/terms/60075 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60598 skos:broader https://w3id.org/zpid/vocabs/terms/24080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60599 skos:broader https://w3id.org/zpid/vocabs/terms/24080 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60603 skos:broader https://w3id.org/zpid/vocabs/terms/37330 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60767 skos:broader https://w3id.org/zpid/vocabs/terms/08340 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60768 skos:broader https://w3id.org/zpid/vocabs/terms/33540 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60791 skos:broader https://w3id.org/zpid/vocabs/terms/65218 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60803 skos:broader https://w3id.org/zpid/vocabs/terms/06800 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60805 skos:broader https://w3id.org/zpid/vocabs/terms/07510 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/60834 skos:broader https://w3id.org/zpid/vocabs/terms/33692 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61001 skos:broader https://w3id.org/zpid/vocabs/terms/26220 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61008 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61008 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61008 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61020 skos:broader https://w3id.org/zpid/vocabs/terms/61058 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61047 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61052 skos:broader https://w3id.org/zpid/vocabs/terms/54190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61053 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61067 skos:broader https://w3id.org/zpid/vocabs/terms/42110 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61400 skos:broader https://w3id.org/zpid/vocabs/terms/50170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61470 skos:broader https://w3id.org/zpid/vocabs/terms/06050 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61505 skos:broader https://w3id.org/zpid/vocabs/terms/00990 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61506 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61506 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61570 skos:broader https://w3id.org/zpid/vocabs/terms/04410 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61616 skos:broader https://w3id.org/zpid/vocabs/terms/41706 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61619 skos:broader https://w3id.org/zpid/vocabs/terms/43797 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61664 skos:broader https://w3id.org/zpid/vocabs/terms/50170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61703 skos:broader https://w3id.org/zpid/vocabs/terms/31140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61726 skos:broader https://w3id.org/zpid/vocabs/terms/13950 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61751 skos:broader https://w3id.org/zpid/vocabs/terms/34720 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61771 skos:broader https://w3id.org/zpid/vocabs/terms/50180 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61838 skos:broader https://w3id.org/zpid/vocabs/terms/30200 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/61866 skos:broader https://w3id.org/zpid/vocabs/terms/31140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65047 skos:broader https://w3id.org/zpid/vocabs/terms/10580 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65058 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65058 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65058 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65106 skos:broader https://w3id.org/zpid/vocabs/terms/70171 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65142 skos:broader https://w3id.org/zpid/vocabs/terms/37490 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65153 skos:broader https://w3id.org/zpid/vocabs/terms/10130 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65170 skos:broader https://w3id.org/zpid/vocabs/terms/47072 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65174 skos:broader https://w3id.org/zpid/vocabs/terms/20880 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/65280 skos:broader https://w3id.org/zpid/vocabs/terms/31140 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/72630 skos:broader https://w3id.org/zpid/vocabs/terms/18510 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/73230 skos:broader https://w3id.org/zpid/vocabs/terms/55770 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/75300 skos:broader https://w3id.org/zpid/vocabs/terms/41910 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/75450 skos:broader https://w3id.org/zpid/vocabs/terms/51170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/75470 skos:broader https://w3id.org/zpid/vocabs/terms/51170 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77390 skos:broader https://w3id.org/zpid/vocabs/terms/54190 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77630 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77630 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77630 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77750 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77750 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77950 skos:broader https://w3id.org/zpid/vocabs/terms/51805 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77990 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
+WARNING: Redundant hierarchical relationship https://w3id.org/zpid/vocabs/terms/77990 skos:broader https://w3id.org/zpid/vocabs/terms/65056 found, but not eliminated because eliminate_redundancy is not set
