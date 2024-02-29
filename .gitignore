@@ -1,1 +1,5 @@
 .direnv/
+.cache/requests.sqlite
+.vscode/settings.json
+normkoerperschaften/.cache/requests.sqlite
+.env
