@@ -1,0 +1,133 @@
+PY (publicationYear) in record 8910 is a string: o.J. - omitting
+PY (publicationYear) in record 8772 is a string: o.J. - omitting
+PY (publicationYear) in record 8773 is a string: o.J. - omitting
+PY (publicationYear) in record 0574 is a string: o.J. - omitting
+PY (publicationYear) in record 8698 is a string: o.J. - omitting
+PY (publicationYear) in record 8697 is a string: o.J. - omitting
+SNAM field (short name) empty in record: 8694
+PY (publicationYear) in record 8646 is a string: o.J. - omitting
+PY (publicationYear) in record 8488 is a string: o.J. - omitting
+PY (publicationYear) in record 0057 is a string: o.J. - omitting
+PY (publicationYear) in record 0059 is a string: o.J. - omitting
+PY (publicationYear) in record 0073 is a string: o.J. - omitting
+PY (publicationYear) in record 0189 is a string: o.J. - omitting
+PY (publicationYear) in record 0258 is a string: o.J. - omitting
+PY (publicationYear) in record 0310 is a string: o.J. - omitting
+PY (publicationYear) in record 0334 is a string: o.J. - omitting
+PY (publicationYear) in record 0335 is a string: o.J. - omitting
+PY (publicationYear) in record 0336 is a string: o.J. - omitting
+PY (publicationYear) in record 0337 is a string: o.J. - omitting
+PY (publicationYear) in record 0370 is a string: o.J. - omitting
+PY (publicationYear) in record 0423 is a string: o.J. - omitting
+PY (publicationYear) in record 0441 is a string: o.J. - omitting
+PY (publicationYear) in record 0494 is a string: o.J. - omitting
+PY (publicationYear) in record 0495 is a string: o.J. - omitting
+PY (publicationYear) in record 0531 is a string: o.J. - omitting
+PY (publicationYear) in record 0532 is a string: o.J. - omitting
+PY (publicationYear) in record 0544 is a string: o.J. - omitting
+PY (publicationYear) in record 0545 is a string: o.J. - omitting
+PY (publicationYear) in record 0567 is a string: o.J. - omitting
+PY (publicationYear) in record 0592 is a string: o.J. - omitting
+PY (publicationYear) in record 0728 is a string: o.J. - omitting
+PY (publicationYear) in record 0853 is a string: o.J. - omitting
+PY (publicationYear) in record 0855 is a string: o.J. - omitting
+PY (publicationYear) in record 0975 is a string: o.J. - omitting
+PY (publicationYear) in record 1071 is a string: o.J. - omitting
+PY (publicationYear) in record 1175 is a string: o.J. - omitting
+PY (publicationYear) in record 1238 is a string: 1942/1943 - omitting
+PY (publicationYear) in record 1359 is a string: o.J. - omitting
+PY (publicationYear) in record 1377 is a string: o.J. - omitting
+PY (publicationYear) in record 1440 is a string: o.J. - omitting
+PY (publicationYear) in record 1625 is a string: o.J. - omitting
+PY (publicationYear) in record 1713 is a string: o.J. - omitting
+PY (publicationYear) in record 1714 is a string: o.J. - omitting
+PY (publicationYear) in record 1729 is a string: o.J. - omitting
+PY (publicationYear) in record 1739 is a string: o.J. - omitting
+PY (publicationYear) in record 1781 is a string: o.J. - omitting
+PY (publicationYear) in record 1795 is a string: o.J. - omitting
+PY (publicationYear) in record 1797 is a string: o.J. - omitting
+PY (publicationYear) in record 3995 is a string: o.J. - omitting
+AUP field (authors) in record 5657 has no role, using full field: Institut für berufliche Bildung, Arbeitsmarkt- und Sozialpolitik GmbH (INBAS).
+PY (publicationYear) in record 5657 is a string: o.J. - omitting
+PY (publicationYear) in record 1957 is a string: o.J. - omitting
+PY (publicationYear) in record 1969 is a string: o.J. - omitting
+PY (publicationYear) in record 2142 is a string: o.J. - omitting
+PY (publicationYear) in record 2143 is a string: o.J. - omitting
+PY (publicationYear) in record 2146 is a string: o.J. - omitting
+PY (publicationYear) in record 2160 is a string: o.J. - omitting
+PY (publicationYear) in record 2216 is a string: o.J. - omitting
+PY (publicationYear) in record 2466 is a string: o.J. - omitting
+PY (publicationYear) in record 2544 is a string: o.J. - omitting
+PY (publicationYear) in record 2550 is a string: o.J. - omitting
+PY (publicationYear) in record 2598 is a string: o.J. - omitting
+PY (publicationYear) in record 2645 is a string: o.J. - omitting
+PY (publicationYear) in record 2777 is a string: o.J. - omitting
+PY (publicationYear) in record 2875 is a string: o.J. - omitting
+PY (publicationYear) in record 2898 is a string: o.J. - omitting
+AUP field (authors) in record 3021 has no role, using full field: Schepank, H.
+PY (publicationYear) in record 3049 is a string: o.J. - omitting
+PY (publicationYear) in record 3061 is a string: o.J. - omitting
+AUP field (authors) in record 3163 has no role, using full field: Sommer, M.
+PY (publicationYear) in record 3343 is a string: o.J. - omitting
+PY (publicationYear) in record 3344 is a string: o.J. - omitting
+PY (publicationYear) in record 3389 is a string: o.J. - omitting
+PY (publicationYear) in record 3390 is a string: o.J. - omitting
+PY (publicationYear) in record 3435 is a string: o.J. - omitting
+PY (publicationYear) in record 3434 is a string: o.J. - omitting
+PY (publicationYear) in record 3659 is a string: o.J. - omitting
+PY (publicationYear) in record 3660 is a string: o.J. - omitting
+PY (publicationYear) in record 3799 is a string: o.J. - omitting
+PY (publicationYear) in record 3800 is a string: o.J. - omitting
+PY (publicationYear) in record 3750 is a string: o.J. - omitting
+PY (publicationYear) in record 2027 is a string: o.J. - omitting
+PY (publicationYear) in record 4187 is a string: o.J. - omitting
+PY (publicationYear) in record 4607 is a string: o.J. - omitting
+PY (publicationYear) in record 5044 is a string: o.J. - omitting
+AUP field (authors) in record 5096 has no role, using full field: Liepold, M.
+PY (publicationYear) in record 5131 is a string: o.J. - omitting
+AUP field (authors) in record 5047 has no role, using full field: Erpenbeck, J.
+PY (publicationYear) in record 5189 is a string: o.J. - omitting
+PY (publicationYear) in record 5209 is a string: o.J. - omitting
+AUP field (authors) in record 5311 has no role, using full field: Bahrke, U.
+PY (publicationYear) in record 5367 is a string: o.J. - omitting
+PY (publicationYear) in record 5400 is a string: o.J. - omitting
+PY (publicationYear) in record 5470 is a string: o.J. - omitting
+PY (publicationYear) in record 5676 is a string: o.J. - omitting
+PY (publicationYear) in record 6014 is a string: o.J. - omitting
+PY (publicationYear) in record 6015 is a string: o.J. - omitting
+PY (publicationYear) in record 5962 is a string: o.J. - omitting
+PY (publicationYear) in record 6038 is a string: o.J. - omitting
+PY (publicationYear) in record 6044 is a string: o.J. - omitting
+PY (publicationYear) in record 6054 is a string: o.J. - omitting
+PY (publicationYear) in record 6060 is a string: o.J. - omitting
+PY (publicationYear) in record 6256 is a string: o.J. - omitting
+PY (publicationYear) in record 6554 is a string: o.J. - omitting
+PY (publicationYear) in record 6604 is a string: o.J. - omitting
+PY (publicationYear) in record 6620 is a string: o.J. - omitting
+PY (publicationYear) in record 6631 is a string: o.J. - omitting
+PY (publicationYear) in record 6635 is a string: o.J. - omitting
+PY (publicationYear) in record 6642 is a string: o.J. - omitting
+PY (publicationYear) in record 7040 is a string: o.J. - omitting
+AUP field (authors) in record 7132 has no role, using full field: Kersting, M.
+PY (publicationYear) in record 7132 is a string: o.J. - omitting
+PY (publicationYear) in record 7595 is a string: o.J. - omitting
+PY (publicationYear) in record 7601 is a string: o.J. - omitting
+PY (publicationYear) in record 7759 is a string: o.J. - omitting
+PY (publicationYear) in record 8065 is a string: o.J. - omitting
+PY (publicationYear) in record 8115 is a string: o.J. - omitting
+PY (publicationYear) in record 8100 is a string: o.J. - omitting
+PY (publicationYear) in record 8268 is a string: i.Vorb. - omitting
+PY (publicationYear) in record 8422 is a string: o.J. - omitting
+AUP field (authors) in record 8439 has no role, using full field: Reschke, K. (Ed.)
+PY (publicationYear) in record 8655 is a string: o.J. - omitting
+
+================= Stats ======================
+Total records exported: 8895
+Number of records without classifications: 234
+Number of records without publicationYear: 113
+Number of records without author(s): 0
+Number of records without longName: 0
+Number of records without shortName: 1
+Records without englishName: 0
+Records without synonyms: 5946
+Records with includedTestVariants: 257

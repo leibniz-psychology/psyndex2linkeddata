@@ -1,0 +1,98 @@
+[
+    // %% "normaler" Test mit Kurz- und Langname, Jahresangabe und mehreren Klassifikationen (aber ohne includedTestVariants, die meisten haben das nicht) %%
+    {
+        "id": "0013",
+        "shortName": "AWST 3-6",
+        "longName": "Aktiver Wortschatztest für drei- bis sechsjährige Kinder",
+        "otherNames": [
+            "Active Vocabulary Test for 3- to 6-Year-Old Children"
+        ],
+        "authors": [
+            "Kiese, C.",
+            "Kozielski, P.-M."
+        ],
+        "publicationYear": 1979,
+        "classifications": [
+            "Wortschatztests",
+            "Tests zur sprachlichen Entwicklung"
+        ],
+        "bibliographicDescriptionDepth": "Review"
+    },
+    //    %% ohne classifications - bei Tests aus PTSHORT (Level "Short") fehlen sie: %%
+    {
+        "id": "8922",
+        "shortName": "MAAQ",
+        "longName": "Machiavellian Approach and Avoidance Questionnaire",
+        "otherNames": [
+            "Machiavellian Approach and Avoidance Questionnaire (MAAQ)"
+        ],
+        "authors": [
+            "Blötner, C.",
+            "Bergold, S."
+        ],
+        "publicationYear": 2022,
+        "bibliographicDescriptionDepth": "Short"
+    },
+    //    %% Test ohne Jahresangabe (wenn in Feld PY "o.J." stand -> kein publicationYear exportiert) - außerdem: Körperschaft als Autor %%
+    {
+        "id": "8910",
+        "shortName": "LS",
+        "longName": "Lumina Spark - deutsche Fassung",
+        "otherNames": [
+            "Lumina Spark - German version",
+            "Lumina Emotion 16",
+            "Lumina Spark 24;"
+        ],
+        "authors": [
+            "Lumina Learning Ltd."
+        ],
+        "bibliographicDescriptionDepth": "Short"
+    },
+    // %% Test ohne shortName: %%
+    {
+        "id": "8694",
+        "longName": "Checklisten zur Identifizierung von Risikofaktoren",
+        "otherNames": [
+            "Checklists for Identifying Risk Factors in the Copmpany"
+        ],
+        "authors": [
+            "Kanning, U. P."
+        ],
+        "publicationYear": 2019,
+        "bibliographicDescriptionDepth": "Short"
+    },
+    //  %% mit vorhandenen Testvarianten-Namen "includedTestVariants[i].shortName/.longName" (und eine Variante hat keinen shortName, die andere beides) %%
+    {
+        "id": "8451",
+        "shortName": "IM-SA",
+        "longName": "\"INTERMED-Self-Assessment\"-Fragebogen",
+        "otherNames": [
+            "INTERMED-Self-Assessment - German version",
+            "Fragebogen zur Erfassung des integrierten Versorgungsbedarfs"
+        ],
+        "includedTestVariants": [
+            {
+                "longName": "INTERMED-Interview"
+            },
+            {
+                "shortName": "IM-CAG",
+                "longName": "INTERMED Complexity Assessment Grid"
+            }
+        ],
+        "authors": [
+            "Boehlen, F. H.",
+            "Joos, A.",
+            "Bergmann, F.",
+            "Stiefel, F.",
+            "Eichenlaub, J.",
+            "Ferrari, S.",
+            "Boenink, A.",
+            "van Reedt Dortland, A.",
+            "Stein, B.",
+            "Söllner, W.",
+            "Wild, B."
+        ],
+        "publicationYear": 2016,
+        "bibliographicDescriptionDepth": "Short"
+    }
+]
