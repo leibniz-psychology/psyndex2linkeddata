@@ -13,6 +13,10 @@ reconciler = "*"
 pandas = "*"
 fuzzywuzzy = {extras = ["speedup"], version = "*"}
 rapidfuzz = "*"
+levenshtein = "*"
+linkml = "*"
+truecase = "*"
+openai = "*"
 
 [dev-packages]
 
