@@ -378,7 +378,7 @@ funder_names_replacelist = (
     (
         "Christian Doppler Forschungsgesellschaft in Österreich",
         "Christian Doppler Forschungsgesellschaft",
-    )
+    ),
     # actually, anytime the name contains "Emmy Noether, copy the whole name into the note, then replace with DFG"
     # also, anytime it ends in "grant", or "programme" or "program", remove that part- it may match better!
 )
@@ -582,9 +582,8 @@ geonames_countries = (
     ("Taiwan", "1668284", "TW"),
 )
 
-copr_publ = (
-)
-    
+copr_publ = ()
+
 copr_auth = ()
 
 copr_pdm = ()
@@ -592,6 +591,16 @@ copr_pdm = ()
 copr_cc0 = ()
 
 
+## issuance types:
+issuancetypes: (
+    ("SS", "Edited Book", "Buch: Sammelwerk"),
+    ("SM", "Authored Book", "Buch: Monografie"),
+    ("US", "Chapter", "Kapitel"),
+    ("UZ", "Journal Article", "Zeitschriftenartikel"),
+    ("SH", "Gray Literature", "Graue Literatur"),
+    ("SR", "Gray Literature", "Graue Literatur"),
+    ("UR", "Chapter", "Kapitel"),
+)
 # add another array or object for combos of mediatypes and DT/BE -&gt; see SPARQL Anything version (VALUES)
 
 
