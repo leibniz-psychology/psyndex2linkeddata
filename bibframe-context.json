@@ -1,0 +1,616 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "pxp": "https://w3id.org/zpid/ontology/properties/",
+    "pxc": "https://w3id.org/zpid/ontology/classes/",
+    "schema": "https://schema.org/",
+    "locid": "http://id.loc.gov/vocabulary/identifiers/",
+    "bf": "http://id.loc.gov/ontologies/bibframe/",
+    "bflc": "http://id.loc.gov/ontologies/bflc/",
+    "mads": "http://www.loc.gov/mads/rdf/v1#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "type": {
+      "@id": "@type",
+      "@container": "@set"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "lang": {
+      "@id": "@language"
+    },
+    "val": {
+      "@id": "@value"
+    },
+    "anyURL": "xsd:anyURI",
+    "hasAffiliation": {
+      "@id": "mads:hasAffiliation",
+      "@container": "@set"
+    },
+    "sameAs": {
+      "@id": "owl:sameAs",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "simpleDate": "bflc:simpleDate",
+    "simplePlace": "bflc:simplePlace",
+    "hasAffiliationAddress": {
+      "@id": "mads:hasAffiliationAddress",
+      "@type": "@id"
+    },
+    "Address": "mads:Address",
+    "email": "mads:email",
+    "country": "mads:country",
+    "organization": {
+      "@id": "mads:organization",
+      "@type": "@id"
+    },
+    "GeonamesId": "locid:geonames",
+    "RorId": "locid:ror",
+    "ORCID": "locid:orcid",
+    "DFK": "pxc:DFK",
+    "contributionPosition": {
+      "@id": "pxp:contributionPosition"
+    },
+    "mainEntityOfPage": {
+      "@id": "schema:mainEntityOfPage",
+      "@type": "@id"
+    },
+    "schemaSameAs": {
+      "@id": "schema:sameAs",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "qualifier": "bf:qualifier",
+    "Funder": "pxc:Funder",
+    "FundingReference": "pxc:FundingReference",
+    "FundRefDoi": "pxc:FundRefDoi",
+    "grant": {
+      "@id": "pxp:grant",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "value": "rdf:value",
+    "instanceOf": "bf:instanceOf",
+    "tableOfContents": "bf:tableOfContents",
+    "TableOfContents": "bf:TableOfContents",
+    "Abstract": "pxc:Abstract",
+    "SecondaryAbstract": "pxc:SecondaryAbstract",
+    "Concept": "skos:Concept",
+    "WeightedTopic": "pxc:WeightedTopic",
+    "SubjectHeading": "pxc:SubjectHeading",
+    "ControlledMethod": "pxc:ControlledMethod",
+    "PopulationLocation": "pxc:PopulationLocation",
+    "AccessPolicy": "bf:AccessPolicy",
+    "AgeGroup": "pxc:AgeGroup",
+    "Affiliation": "mads:Affiliation",
+    "UsagePolicy": "bf:UsagePolicy",
+    "AdminMetadata": "bf:AdminMetadata",
+    "Agent": "bf:Agent",
+    "AppliesTo": "bflc:AppliesTo",
+    "Arrangement": "bf:Arrangement",
+    "Audio": "bf:Audio",
+    "BaseMaterial": "bf:BaseMaterial",
+    "Conference": "pxc:Conference",
+    "Grant": "pxc:Grant",
+    "GrantId": "pxc:GrantId",
+    "TranslatedTitle": "pxc:TranslatedTitle",
+    "City": "mads:City",
+    "Classification": "bf:Classification",
+    "ConferenceReference": "pxc:ConferenceReference",
+    "Content": "bf:Content",
+    "Contribution": "bf:Contribution",
+    "Country": "mads:Country",
+    "CreatorCharacteristic": "bflc:CreatorCharacteristic",
+    "Dataset": "bf:Dataset",
+    "DemographicGroup": "bflc:DemographicGroup",
+    "DescriptionAuthentication": "bf:DescriptionAuthentication",
+    "DescriptionConventions": "bf:DescriptionConventions",
+    "Dissertation": "bf:Dissertation",
+    "Electronic": "bf:Electronic",
+    "EncodingLevel": "bflc:EncodingLevel",
+    "Family": "bf:Family",
+    "GenerationProcess": "bf:GenerationProcess",
+    "GenreForm": "bf:GenreForm",
+    "Geographic": "mads:Geographic",
+    "GeographicCoverage": "bf:GeographicCoverage",
+    "HierarchicalGeographic": "mads:HierarchicalGeographic",
+    "Identifier": "bf:Identifier",
+    "IntendedAudience": "bf:IntendedAudience",
+    "Instance": "bf:Instance",
+    "InstanceBundle": "pxc:InstanceBundle",
+    "Issn": "bf:Issn",
+    "IssnL": "bf:IssnL",
+    "Jurisdiction": "bf:Jurisdiction",
+    "Language": "bf:Language",
+    "Local": "bf:Local",
+    "MADSGenreForm": "mads:GenreForm",
+    "MADSTemporal": "mads:Temporal",
+    "MADSTitle": "mads:Title",
+    "MADSTopic": "mads:Topic",
+    "Meeting": "bf:Meeting",
+    "MetadataLicensor": "bflc:MetadataLicensor",
+    "MovingImage": "bf:MovingImage",
+    "MusicFormat": "bf:MusicFormat",
+    "MusicMedium": "bf:MusicMedium",
+    "Name": "mads:Name",
+    "NameTitle": "mads:NameTitle",
+    "NotatedMusic": "bf:NotatedMusic",
+    "Notation": "bf:Notation",
+    "Note": "bf:Note",
+    "Organization": "bf:Organization",
+    "Person": "bf:Person",
+    "Place": "bf:Place",
+    "PrimaryContribution": "bflc:PrimaryContribution",
+    "Projection": "bf:Projection",
+    "PsychAuthorsID": "pxc:PsychAuthorsID",
+    "Relation": "bflc:Relation",
+    "Relationship": "bflc:Relationship",
+    "Role": "bf:Role",
+    "Scale": "bf:Scale",
+    "Source": "bf:Source",
+    "Status": "bf:Status",
+    "StillImage": "bf:StillImage",
+    "Summary": "bf:Summary",
+    "SupplementaryContent": "bf:SupplementaryContent",
+    "Temporal": "bf:Temporal",
+    "Text": "bf:Text",
+    "Title": "bf:Title",
+    "Topic": "bf:Topic",
+    "VariantTitle": "bf:VariantTitle",
+    "Work": "bf:Work",
+    "Thing": "owl:Thing",
+    "absorbed": {
+      "@id": "bf:absorbed",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "absorbedBy": {
+      "@id": "bf:absorbedBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "adminMetadata": "bf:adminMetadata",
+    "agent": "bf:agent",
+    "applicableInstitution": {
+      "@id": "bflc:applicableInstitution",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "appliesTo": {
+      "@id": "bflc:appliesTo",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "arrangement": {
+      "@id": "bf:arrangement",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "ascensionAndDeclination": "bf:ascensionAndDeclination",
+    "assigner": {
+      "@id": "bf:assigner",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "authoritativeLabel": "mads:authoritativeLabel",
+    "baseMaterial": {
+      "@id": "bf:baseMaterial",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "provisionActivity": "bf:provisionActivity",
+    "capture": {
+      "@id": "bf:capture",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "cartographicAttributes": {
+      "@id": "bf:cartographicAttributes",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "changeDate": {
+      "@id": "bf:changeDate",
+      "@type": "xsd:dateTime"
+    },
+    "componentList": {
+      "@id": "mads:componentList",
+      "@container": "@list"
+    },
+    "creationDate": {
+      "@id": "bf:creationDate",
+      "@type": "xsd:date"
+    },
+    "classification": {
+      "@id": "bf:classification",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "classificationPortion": "bf:classificationPortion",
+    "code": "bf:code",
+    "coordinates": "bf:coordinates",
+    "creatorCharacteristic": {
+      "@id": "bflc:creatorCharacteristic",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "colorContent": {
+      "@id": "bf:colorContent",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "content": {
+      "@id": "bf:content",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "continuedBy": {
+      "@id": "bf:continuedBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "continuedInPartBy": {
+      "@id": "bf:continuedInPartBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "continues": {
+      "@id": "bf:continues",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "contribution": {
+      "@id": "bf:contribution",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "count": "bf:count",
+    "credits": "bf:credits",
+    "dataSource": {
+      "@id": "bf:dataSource",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "date": "bf:date",
+    "degree": "bf:degree",
+    "demographicGroup": {
+      "@id": "bflc:demographicGroup",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "descriptionAuthentication": {
+      "@id": "bf:descriptionAuthentication",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "descriptionConventions": {
+      "@id": "bf:descriptionConventions",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "descriptionLanguage": {
+      "@id": "bf:descriptionLanguage",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "descriptionModifier": {
+      "@id": "bf:descriptionModifier",
+      "@container": "@set"
+    },
+    "dissertation": {
+      "@id": "bf:dissertation",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "duration": {
+      "@id": "bf:duration",
+      "@type": "xsd:duration"
+    },
+    "edition": "bf:edition",
+    "electronicLocator": {
+      "@id": "bf:electronicLocator",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "encodingLevel": {
+      "@id": "bflc:encodingLevel",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "ensemble": {
+      "@id": "bf:ensemble",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "ensembleType": "bf:ensembleType",
+    "equinox": "bf:equinox",
+    "exclusionGRing": "bf:exclusionGRing",
+    "generationProcess": {
+      "@id": "bf:generationProcess",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "genreForm": {
+      "@id": "bf:genreForm",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "geographicCoverage": {
+      "@id": "bf:geographicCoverage",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "givenName": {
+      "@id": "schema:givenName"
+    },
+    "familyName": {
+      "@id": "schema:familyName"
+    },
+    "grantingInstitution": {
+      "@id": "bf:grantingInstitution",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "hasInstance": {
+      "@id": "bf:hasInstance",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "hasInstanceBundle": {
+      "@id": "pxp:hasInstanceBundle",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "hasPart": {
+      "@id": "bf:hasPart",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "hasSeries": {
+      "@id": "bf:hasSeries",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "hierarchicalLevel": "bf:hierarchicalLevel",
+    "identifiedBy": {
+      "@id": "bf:identifiedBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "instrument": {
+      "@id": "bf:instrument",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "instrumentalType": "bf:instrumentalType",
+    "intendedAudience": {
+      "@id": "bf:intendedAudience",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "isMemberofMADSScheme": "mads:isMemberOfMADSScheme",
+    "issuanceType": "pxp:issuanceType",
+    "issuedWith": {
+      "@id": "bf:issuedWith",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "itemPortion": "bf:itemPortion",
+    "label": {
+      "@id": "rdfs:label"
+    },
+    "prefLabel": {
+      "@id": "skos:prefLabel"
+    },
+    "altLabel": {
+      "@id": "skos:altLabel"
+    },
+    "language": {
+      "@id": "bf:language",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "legalDate": "bf:legalDate",
+    "mainTitle": {
+      "@id": "bf:mainTitle"
+    },
+    "mergedToForm": {
+      "@id": "bf:mergedToForm",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "mergerOf": {
+      "@id": "bf:mergerOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "metadataLicensor": {
+      "@id": "bflc:metadataLicensor",
+      "@container": "@set"
+    },
+    "musicOpusNumber": "bf:musicOpusNumber",
+    "musicFormat": {
+      "@id": "bf:musicFormat",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "musicKey": "bf:musicKey",
+    "musicMedium": {
+      "@id": "bf:musicMedium",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "musicSerialNumber": "bf:musicSerialNumber",
+    "musicThematicNumber": "bf:musicThematicNumber",
+    "name00MarcKey": "bflc:name00MarcKey",
+    "name00MatchKey": "bflc:name00MatchKey",
+    "name10MarcKey": "bflc:name10MarcKey",
+    "name10MatchKey": "bflc:name10MatchKey",
+    "name11MarcKey": "bflc:name11MarcKey",
+    "name11MatchKey": "bflc:name11MatchKey",
+    "natureOfContent": "bf:natureOfContent",
+    "notation": {
+      "@id": "bf:notation",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "note": "bf:note",
+    "noteType": "bf:noteType",
+    "originDate": "bf:originDate",
+    "otherEdition": {
+      "@id": "bf:otherEdition",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "otherPhysicalFormat": {
+      "@id": "bf:otherPhysicalFormat",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "outerGRing": "bf:outerGRing",
+    "part": "bf:part",
+    "partName": "bf:partName",
+    "partNumber": "bf:partNumber",
+    "partOf": {
+      "@id": "bf:partOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "pattern": "bf:pattern",
+    "place": {
+      "@id": "bf:place",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "precededBy": {
+      "@id": "bf:precededBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "primaryContributorName00MatchKey": "bflc:primaryContributorName00MatchKey",
+    "primaryContributorName10MatchKey": "bflc:primaryContributorName10MatchKey",
+    "primaryContributorName11MatchKey": "bflc:primaryContributorName11MatchKey",
+    "projection": {
+      "@id": "bf:projection",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "relatedTo": {
+      "@id": "bf:relatedTo",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "relation": {
+      "@id": "bflc:relation",
+      "@type": "@id"
+    },
+    "relationship": {
+      "@id": "bflc:relationship",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "role": {
+      "@id": "bf:role"
+    },
+    "scale": {
+      "@id": "bf:scale",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "separatedFrom": {
+      "@id": "bf:separatedFrom",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "source": {
+      "@id": "bf:source",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "splitInto": {
+      "@id": "bf:splitInto",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "status": {
+      "@id": "bf:status",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "subject": {
+      "@id": "bf:subject",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "subtitle": {
+      "@id": "bf:subtitle"
+    },
+    "succeededBy": {
+      "@id": "bf:succeededBy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "summary": {
+      "@id": "bf:summary",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "supplement": {
+      "@id": "bf:supplement",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "supplementaryContent": {
+      "@id": "bf:supplementaryContent",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "supplementTo": {
+      "@id": "bf:supplementTo",
+      "@type": "@id"
+    },
+    "temporalCoverage": "bf:temporalCoverage",
+    "title": {
+      "@id": "bf:title",
+      "@type": "@id"
+    },
+    "title00MarcKey": "bflc:title00MarcKey",
+    "title00MatchKey": "bflc:title00MatchKey",
+    "title10MarcKey": "bflc:title10MarcKey",
+    "title10MatchKey": "bflc:title10MatchKey",
+    "title11MarcKey": "bflc:title11MarcKey",
+    "title11MatchKey": "bflc:title11MatchKey",
+    "title30MarcKey": "bflc:title30MarcKey",
+    "title30MatchKey": "bflc:title30MatchKey",
+    "title40MarcKey": "bflc:title40MarcKey",
+    "title40MatchKey": "bflc:title40MatchKey",
+    "titleSortKey": "bflc:titleSortKey",
+    "translation": {
+      "@id": "bf:translation",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "translationOf": {
+      "@id": "bf:translationOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "usageAndAccessPolicy": {
+      "@id": "bf:usageAndAccessPolicy",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "version": "bf:version",
+    "voice": {
+      "@id": "bf:voice",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "voiceType": "bf:voiceType"
+  }
+}
