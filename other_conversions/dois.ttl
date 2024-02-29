@@ -1,0 +1,125 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+works:123456789 a bf:Work ;
+    bflc:relationship [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:electronicLocator [ rdf:value "http://webapps.ccns.sbg.ac.at/OpenData"^^xsd:anyURI ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:electronicLocator [ rdf:value "https://static-content.springer.com/esm/art%3A10.1038%2Fs41598-018-25953-0/MediaObjects/41598_2018_25953_MOESM1_ESM.pdf"^^xsd:anyURI ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:identifiedBy [ a bf:Doi ;
+                                    rdf:value "10.1016/j.psyneuen.2015.11.018" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:electronicLocator [ rdf:value "https://zenodo.org/record/160530"^^xsd:anyURI ] ;
+                            bf:identifiedBy [ a bf:Doi ;
+                                    rdf:value "10.5281/zenodo.160530" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:note [ a bf:Note ;
+                                    rdfs:label "123456789" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:electronicLocator [ rdf:value "http://osf.io/nj6zt/?view_only=b78ad5411b4b4e^Dffa15dc2c5fee17d6e"^^xsd:anyURI ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:identifiedBy [ a bf:Doi ;
+                                    rdf:value "10.5281/zenodo.160531" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:identifiedBy [ a bf:Doi ;
+                                    rdf:value "10.1016/j.jenvp.2020.101428" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ],
+        [ a bflc:Relationship ;
+            bflc:relation relations:hasResearchData ;
+            bf:supplement [ a bf:Dataset,
+                        bf:Work ;
+                    bf:content "dataset" ;
+                    bf:genre "researchData" ;
+                    bf:hasInstance [ a bf:Electronic,
+                                bf:Instance ;
+                            bf:identifiedBy [ a bf:Doi ;
+                                    rdf:value "10.3389/fpsyg.2020.01623" ] ;
+                            bf:usageAndAccessPolicy [ a bf:AccessPolicy ;
+                                    rdfs:label "open access"@en ;
+                                    rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI ] ] ] ] .
+

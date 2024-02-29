@@ -1,0 +1,50 @@
+Fehler, die ich beim Landesnamen holen abfangen und umschreiben kann:
+COSTA -> COSTA RICA
+NEW -> New Zealand
+ARAB -> UNITED ARAB EMIRATES
+CZECH -> CZECH REPUBLIC
+PEOPLES -> PEOPLES REPUBLIC OF CHINA
+PEOPLE^D>'S REPUBLIC OF CHINA -> Zeichenprobleme vorher korrigieren!
+SAUDI -> SAUDI ARABIA
+
+
+In der Datenbank korrigieren, schon gemeldet!
+AUSs in participating in a life-or-death decision. If -> AUSTRIA
+Ctr -> alles neu machen, |i und |c komplett wirr und auch falsch
+KAGOS -> Japan
+KATHARINA -> GERMANY
+NORTH -> United Kingdom
+REP -> GEORGIA
+SOUTH -> KOREA oder AFRICA, fallweise
+NORTHERN IRELAND -> UNITED KINGDOM
+EDINBURGH -> United Kingdom
+
+
+---
+
+^D*v (psi)</AUP>
+<AUP>5^D[2 (5 tiefgestellt 2) ^DTM (Trademark) ^D#&gt; (größer gleich)</AUP>
+
+
+# ---
+# these are also in those fields, but they are errors that should be repaired before migration!
+
+# EnglishX$
+# EnglishX$X$
+# GermanX$X$
+# X$$German
+# X$$GermanX$$German
+# GermanX$
+# GermanX$$EnglishX$$English
+# GermanX$$EnglishX$$EnglishX$$English
+# GermanX$English 
+# GermanX$English X$English 
+# GermanX$English X$English X$English 
+# GermanX$English X$EnglishX$EnglishX$English
+# GermanX$English; English
+# GermanX$EnglishX$English
+# GermanX$EnglishX$EnglishX$English
+# GermanX$EnglishX$EnglishX$EnglishX$EnglishX$English
+# Fi (aus TIUL) - während TIL "German" ist! Das Dokument ist auch eindeutig Deutsch.
+# 4 (aus LA2) -> kann gelöscht werden, das Dokument ist in Deutsch und hat keine Zweitsprache!
+# Q (aus LA2) -> kann gelöscht werden, das Dokument ist in Deutsch und hat keine Zweitsprache! 

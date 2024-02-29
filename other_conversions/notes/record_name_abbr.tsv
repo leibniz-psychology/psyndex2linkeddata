@@ -1,0 +1,60 @@
+## ASH1 = Haupt-Abstract-Herkunft ##
+
+
+--- ASH1 (Herkunft Hauptabstract): Orgs: Gemischt ---
+
+ASH1	Bundesinstitut für Bevölkerungsforschung beim Statistischen Bundesamt, Wiesbaden
+
+ASH1	FHKT Nürtingen # Fachhochschule für Kunsttherapie Nürtingen
+ASN1	FHKT Nürtingen
+
+### Kommen von der GESIS (siehe Feld SSO):
+ASH1	Fachinformationsstelle Publizistik
+ASH1	Freie Universität Berlin, Fachinformationsstelle Publizistik
+ASH1	Institut für Arbeitsmarkt- und Berufsforschung der Bundesagentur für Arbeit, Nürnberg
+ASH1	Institut für Arbeitsmarkt- und Berufsforschung der Bundesanstalt für Arbeit, Nürnberg
+ASH1	PROGRIS Rachel Gutmacher-Neveling, Berlin # Records alle von der GESIS geliefert, alles Filme, die nutzen wohl Progris
+
+
+
+
+Wie kann das sein, dass DeepL einen vorhandenen Abstract "bearbeitet" hat? Betroffen:
+0363711, ABLH: English, ASH1: Original, ASH2: DeepL
+0372242, ABLH: German, ASH1: Original, ASH2: DeepL
+0381803, ABLH: German, ASH1: Original, ASH2: DeepL
+0381805, ABLH: German, ASH1: Original, ASH2: DeepL
+0395756, ABLH: English, ASH1: Original, ASH2: DeepL
+0396913, ABLH: English, ASH1: ZPID, ASH2: DeepL
+0399168, ABLH: German, ASH1: Original, ASH2: DeepL
+- 0406721, ABLH: English, ASH1: ZPID, ASH2: DeepL # gab keinen Original-Abstract, wurde vom ZPID verfasst. Aber vielleicht von jemd auf Deutsch (diesen dann in ABN geschrieben) und dann manuell durch  DeepL gejagt und das Ergebnis in ABH kopiert. Man sieht wieder: ABH ist nicht als "Hauptabstract" behandelt worden, sondern als "Abstract in der Dokumentsprache" und "Nebenabstract" als "Abstract in anderer Sprache als Dokumentsprache (de oder en)".
+Was tun? -> DeepL ist auf keinen Fall Bearbeiter des Abstracts, sondern eigentlich Herkunft der Übersetzung, die diesmal in ABH steht. Aber jemand mwoltle sagen: "den hab ich geschrieben, DeepL hat ihn nur übersetzt, also bearbeitet, nicht verfasst, denn das war doch ich! -> ZPID reinschreiben!
+
+
+
+--- ? Müll: ---
+ASN2	2720
+
+
+
+====
+
+mögliche Herkünfte (ASH1, ASN1):
+- Original, 
+- ZPID, 
+- DeepL (21x in ASH1, 20k+ in ASN1), 
+- GESIS (1550x +90+346+ in ash1, 841+291+ in asn1)
+- FIS Bildung (ash1: 1568, asn1: 618)
+- KrimZ (ash1: 242, asn1: 13)
+#- IWF (50x in ash1, 18x asn1)
+# - Fachinformationsstelle Publizistik (ash1: 1, asn1: 0)
+# - FHKT Nürtingen (ash1: 1, asn1: 1)
+
+
+mögliche Editoren (ASH2, ASN2):
+
+- Original,
+- ZPID,
+- DeepL (Grummel),
+- FIS Bildung,
+- GESIS,
+- KrimZ

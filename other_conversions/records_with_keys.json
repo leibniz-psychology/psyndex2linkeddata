@@ -1,0 +1,116 @@
+[
+  {
+    "DFK": "0360687",
+    "mainTitle": "Interkulturelle Kompetenz der M\u00f6glichkeiten: Kritische Betrachtung eines Konstrukts und mehr - mit Aenderungen am Ma\u00df",
+    "subtitle": "",
+    "PY": "2018",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "Petia"
+      },
+      {
+        "familyname": "Maler",
+        "givenname": "Pedro"
+      }
+    ],
+    "title_key": "interkulturellekompetenzdermoeglichkeitenkritischebetrachtungeineskonstrukts&mehrmitaenderungenammass",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmalerp"
+  },
+  {
+    "DFK": "0368936",
+    "mainTitle": "Interkulturelle Kompetenz der M\u00f6glichkeiten",
+    "subtitle": "Kritische Betrachtung eines Konstrukts and mehr, mit \u00c4nderungen am Mass",
+    "PY": "2020",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "Petia"
+      },
+      {
+        "familyname": "M\u00fcller",
+        "givenname": "H."
+      }
+    ],
+    "title_key": "interkulturellekompetenzdermoeglichkeitenkritischebetrachtungeineskonstrukts&mehrmitaenderungenammass",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmuellerh"
+  },
+  {
+    "DFK": "0368935",
+    "mainTitle": "Interkulturelle Kompetenz der M\u00f6glichkeiten",
+    "subtitle": "Kritische Betrachtung eines Konstrukts and mehr, mit \u00c4nderungen am Mass",
+    "PY": "2020",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "P. A."
+      },
+      {
+        "familyname": "Mueller",
+        "givenname": "H."
+      }
+    ],
+    "title_key": "interkulturellekompetenzdermoeglichkeitenkritischebetrachtungeineskonstrukts&mehrmitaenderungenammass",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmuellerh"
+  },
+  {
+    "DFK": "000001",
+    "mainTitle": "Homogenit\u00e4t.",
+    "subtitle": "Ein Ma\u00df f\u00fcr \u00c4rger",
+    "PY": "2022",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "P."
+      },
+      {
+        "familyname": "Mueller",
+        "givenname": "Pedro"
+      }
+    ],
+    "title_key": "homogenitaeteinmassfueraerger",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmuellerp"
+  },
+  {
+    "DFK": "000002",
+    "mainTitle": "Homogenitaet: Ein Ma\u00df f\u00fcr \u00c4rger",
+    "subtitle": "",
+    "PY": "2022",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "Petia"
+      },
+      {
+        "familyname": "Mueller",
+        "givenname": "Heinz"
+      }
+    ],
+    "title_key": "homogenitaeteinmassfueraerger",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmuellerh"
+  },
+  {
+    "DFK": "000003",
+    "mainTitle": "Homogenitaet: Ein Mass f\u00fcr AErger",
+    "subtitle": "",
+    "PY": "2022",
+    "authors": [
+      {
+        "familyname": "Genkova",
+        "givenname": "P. A."
+      },
+      {
+        "familyname": "M\u00fcller",
+        "givenname": "H."
+      }
+    ],
+    "title_key": "homogenitaeteinmassfueraerger",
+    "first_author_key": "genkovap",
+    "all_authors_key": "genkovapmuellerh"
+  }
+]

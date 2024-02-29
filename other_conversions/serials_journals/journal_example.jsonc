@@ -1,0 +1,64 @@
+{
+    "type": "SeriesHub", //the hub starts here (defining what this is) "Reihe"/"Series"
+    "id": "f972ad48-7c9f-11ee-b962-0242ac12000", //the uuid of the hub in PSYNDEX
+    "seriesType": "Journal", //the type of the hub; can also be: "book series"
+    "lIssn": "1234-5678", //the linking issn of the hub (optional)
+    "title": {
+            "mainTitle": { // mandatory
+                "label": "Jahrbuch der Deutschen Gesellschaft für Musikpsychologie", 
+                "language": "de"
+            },
+            "subtitle": { //optional
+                "label": "", 
+                "language": "de"
+            }
+        }, // both versions of a journal may have different titles, actually. They are _usually_ the same, though. In cases where they are not, we ask catalogers to enter the title of the "first" version (if there is a print version, then it is usually that), which is usually the version whose issn is also the Lissn. So we keep only one title here - that of the "lissn" version.
+    "otherVariantTitles": [ //other known older or alternative titles of the series - all versions (optional)
+        {
+            "label": "JBDGM", //the title
+            "language": "de" //the language of the title
+        },
+        {
+            "label": "Jahrbuch Musikpsychologie",
+            "language": "de"
+        }
+    ],
+    "issuingBody": { //the "issuing body"/"herausgebende Körperschaft" of the journal (optional) - if it is the main communication "organ" of some association, society, etc. "Verbandsorgan der Körperschaft" 
+        "label": "Deutsche Gesellschaft für Musikpsychologie", //the name of the issuing body
+        "id": "f972ad48-7c9f-11ee-b962-0242ac12000" //the uuid of the issuing body in PSYNDEX (optional)
+    },
+    // peer review status
+    // open access status
+    "bibliographicNote": "Die Onlineausgabe erscheint durchgehend und wird ständig um neue Artikel erweitert, sobald diese den Peer-Review-Prozess duchlaufen haben (bis zum Ende des jeweiligen Jahres). Die Druckausgabe ist in Form von Jahresbänden als Buch mit ISBN im Waxmann-Verlag erhältlich (von den Jahresbänden gibt es bei Waxmann auch noch Ebooks).", // optional "Anmerkungen"/"Notes"
+    "adminMetadata":{
+        "catalogerOrCatalogerGroupId": "", // uuid of cataloger or cataloger group, mandatory
+        "generationDate": "", //automatic
+        "changeDate": "", //automatic
+        "seriesAnalysisLevel": "vocab concept" //mandatory
+        // the levels of analysis we have are: 
+    },
+    "seriesVersions": [
+        {
+            "mediaCarrier": "https://w3id.org/zpid/vocabs/psyndex-mediatypes/Online", //mandatory "Medientyp"/"Media type"
+            "issn": "2569-566", //optional, 
+            "zdbId": "2923245-4", //optional, 
+            "publisher": //latest known publisher of this version
+                {
+                    "label": "PsychOpen GOLD",  
+                    "id": "f972ad48-7c9f-11ee-b962-0242ac12000"
+                },
+            "extensionPlanOfIssues": "continuous publication" //must be either: "continuous publication"/"durchgehende Veröffentlichung" or "static"/"feste Ausgaben" (offer a radio button for quick selection - no vocab needed, use an enum or something.)
+        },
+        {
+            "mediaCarrier": "https://w3id.org/zpid/vocabs/psyndex-mediatypes/Print",
+            "issn": "2511-8277",
+            "zdbId":"123456-7",
+            "publisher": //latest known publisher of this version
+                {
+                    "label": "Waxmann",
+                    "id": "f761ad48-7c9f-11ee-b962-0242ac12111"
+                },
+            "extensionPlanOfIssues": "static"
+        }
+    ]
+}
