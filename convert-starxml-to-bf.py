@@ -18,6 +18,7 @@ import modules.mappings as mappings
 import modules.contributions as contributions
 
 # import modules.open_science as open_science
+import requests
 import requests_cache
 from datetime import timedelta
 
@@ -279,6 +280,19 @@ def add_bf_contributor_corporate_body(work_uri, record):
         # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
         org_name = mappings.replace_encodings(org.text.split("|")[0]).strip()
         # org_name = mappings.replace_encodings(org.text).strip()
+        # get ror id of org from api:
+        org_ror_id = get_ror_id_from_api(org_name)
+        # if there is a ror id, add the ror id as an identifier:
+        if org_ror_id is not None and org_ror_id != "null":
+            # create a fragment uri node fore the identifier:
+            org_ror_id_node = URIRef(str(org_node) + "_rorid")
+            # make it a locid:ror:
+            records_bf.set((org_ror_id_node, RDF.type, LOCID.ror))
+            # add the ror id as a literal to the identifier node:
+            records_bf.add((org_ror_id_node, RDF.value, Literal(org_ror_id)))
+            records_bf.add((org_node, BF.identifiedBy, org_ror_id_node))
+        else:
+            print("ror-api: no ror id found for " + org_name)
 
         # get any affiliation in |i and add it to the name:
         org_affiliation_name = get_subfield(org.text, "i")
@@ -286,19 +300,19 @@ def add_bf_contributor_corporate_body(work_uri, record):
             org_name = org_name + "; " + org_affiliation_name
             # print("org affiliation:" + org_affiliation_name)
         except:
-            print("no affiliation for org " + org_name)
+            print("AUK subfield i: no affiliation for org " + org_name)
 
         # # get country name in |c, if it exists:
         org_country = get_subfield(org.text, "c")
         try:
-            print("org country:" + org_country)
+            print("AUK subfield c: org country:" + org_country)
             # generate a node for the country, clean up the label, look up the geonames id and then add both label and geonamesid node to the org node!
             affiliation_node = build_affiliation_nodes(org_node, "", org_country)
             # add the affiliation node to the contribution node:
             records_bf.add((contribution_node, MADS.hasAffiliation, affiliation_node))
         except:
-            print("no country for org " + org_name)
-    
+            print("AUK subfield c: no country for org " + org_name)
+
         # TOD: we should probably check for affiliations and countries in fields CS and COU for records that have only AUKS or AUK as first contribution? we already did the same for persons.
 
         # add the name as the org node label:
@@ -626,6 +640,9 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
     #         (affiliation_local_id_node, RDF.value, Literal(affiliation_local_id))
     #     )
 
+    # TODO: sometimes people have an affiliation, but no country (no |c subfield).
+    # currently we dont handle that at all and a country label "None" is added
+    # where we should just not add an AffiliationAdress node with a country node at all.
     # make a fragment uri node for the affiliation address and make it class mads:Address:
     person_affiliation_address_node = URIRef(str(agent_affiliation_node) + "_address")
     records_bf.add((person_affiliation_address_node, RDF.type, MADS.Address))
@@ -643,7 +660,7 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
         (
             person_affiliation_country_node,
             RDFS.label,
-            Literal(agent_affiliation_country, lang="en"),
+            Literal(agent_affiliation_country),
         )
     )
 
@@ -2096,23 +2113,36 @@ def get_crossref_funder_id(funder_name):
     # result_count = int(crossref_api_response["message"]["total-results"])
     # if the request was successful, get the json response:
 
-    if (
-        crossref_api_request.status_code == 200
-        and crossref_api_response["message"]["total-results"] > 0
-    ):
-        # return the number of results:
-        # print("Treffer: " + str(crossref_api_response["message"]["total-results"]))
-        # return the first hit:
-        # print("Erster Treffer: " + crossref_api_response["message"]["items"][0]["name"])
-        # print("DOI: " + "10.13039" + crossref_api_response["message"]["items"][0]["id"])
-        return "10.13039/" + crossref_api_response["message"]["items"][0]["id"]
-    else:
-        # retry the funder_name, but remove any words after the first comma:
-        if funder_name.find(",") > -1:
-            funder_name = funder_name.split(",")[0]
-            return get_crossref_funder_id(funder_name)
-        else:
-            return None
+    try:
+        if (
+            crossref_api_request.status_code == 200
+            and crossref_api_response["message"]["total-results"] > 0
+        ):
+            # return the number of results:
+            # print("Treffer: " + str(crossref_api_response["message"]["total-results"]))
+            # return the first hit:
+            # print("Erster Treffer: " + crossref_api_response["message"]["items"][0]["name"])
+            # print("DOI: " + "10.13039" + crossref_api_response["message"]["items"][0]["id"])
+            return "10.13039/" + crossref_api_response["message"]["items"][0]["id"]
+        elif (
+            crossref_api_request.status_code == 200
+            and crossref_api_response["message"]["total-results"] == 0
+        ):
+            # retry the funder_name, but remove any words after the first comma:
+            print(f"fundref-api: no hits for {funder_name}.")
+            if funder_name.find(",") > -1:
+                funder_name = funder_name.split(",")[0]
+                print(f"fundref-api: new funder name: {funder_name}")
+                return get_crossref_funder_id(funder_name)
+            else:
+                print(f"fundref-api: nothing either for {funder_name}. Returning None.")
+                return None
+    except KeyError:
+        print("Error: Missing key in crossref_api_response.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Request failed - {e}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 # function to build the nodes for preregistration links
@@ -2572,7 +2602,8 @@ import json
 
 
 record_count = 0
-for record in root.findall("Record")[0:200]:
+for record in root.findall("Record"):
+    # for record in root.findall("Record")[0:200]:
     # get the count of this record:
     record_count += 1
 
