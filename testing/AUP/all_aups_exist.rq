@@ -1,0 +1,31 @@
+# this query will count the number of bf:Contributions in a given 
+# test file of records haven been created that have bf:Person as the bf:agent.
+# for comparing to the number auf AUP fields in the source xml file.
+
+# this means: just count if we made nodes for each AUP. Not yet included:
+# if they all have affiliations, countries, email, orcid, paup, or even names/labels.
+PREFIX works: <https://w3id.org/zpid/resources/works/>
+PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
+PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
+PREFIX pxp: <https://w3id.org/zpid/ontology/classes/>
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX bflc: <http://id.loc.gov/ontologies/bflc/>
+PREFIX locid: <http://id.loc.gov/vocabulary/identifiers/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT (COUNT(?contribution) AS ?count) 
+WHERE {
+  ?work a bf:Work ;
+    bf:contribution ?contribution .
+  ?contribution a bf:Contribution ;
+    bf:agent ?agent .
+  ?agent a bf:Person .
+}
