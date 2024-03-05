@@ -5,6 +5,8 @@
 # Import libraries:
 
 # %%
+import uu
+import uuid
 import dateparser
 from numpy import rec
 from rdflib import Graph, Literal
@@ -1669,7 +1671,7 @@ def build_work_relationship_node(work_uri, relation_type):
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
     # make a bnode for this relationship:
-    relationship_bnode = BNode()
+    relationship_bnode = URIRef(work_uri + "_relationship_" + str(uuid.uuid4()))
     # make it class bflc:Relationship:
     records_bf.set((relationship_bnode, RDF.type, BFLC.Relationship))
     # add a bflc:Relation (with a label and value) via bflc:relation to the relationship bnode
@@ -3130,7 +3132,7 @@ for record in root.findall("Record"):
         work_uri, record
     )  # adds the generated bflc:Relationship node to the work
 
-    get_datac(work_uri, record) # adds the generated bfls:Relationship node to the work
+    # get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
     # switched off for performance reasons
 
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong:
