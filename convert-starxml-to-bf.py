@@ -1,14 +1,8 @@
-# %% [markdown]
-# # Star2BF - Star to Bibframe
-
-# %% [markdown]
+# Purpose: Convert STAR XML to Bibframe RDF
 # Import libraries:
-
-# %%
-import uu
+from distutils.command import build
 import uuid
 import dateparser
-from numpy import rec
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
@@ -16,13 +10,11 @@ from rdflib import URIRef
 import xml.etree.ElementTree as ET
 import re
 import html
-
-import regex
-
 import modules.mappings as mappings
-import modules.contributions as contributions
 
+# import modules.contributions as contributions
 # import modules.open_science as open_science
+
 import requests
 import requests_cache
 from datetime import timedelta
@@ -31,30 +23,34 @@ from datetime import timedelta
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
-# new fuzzy compare: using the faster rapidfuzz as a drop-in replacement for fuzzywuzzy:
+# TODO: new fuzzy compare: using the faster rapidfuzz as a drop-in replacement for fuzzywuzzy:
 # from rapidfuzz import fuzz
 # from rapidfuzz import process
 
-import csv
-
-# ror lookup
-ROR_API_URL = "https://api.ror.org/organizations?affiliation="
+import csv  # for looking up institutes from our csv of luxembourg authority institutes
 
 from modules.mappings import funder_names_replacelist
 
+# ror lookup api url for looking up organization contributors and the affiliations of persons:
+ROR_API_URL = "https://api.ror.org/organizations?affiliation="
+
+# skosmos api url for looking up concepts in CT, SH, and other controlled vocabs:
+SKOSMOS_API_URL = "https://skosmos.dev.zpid.org/rest/v1/"
+
+## crossref api stuff for looking up funders:
 # set up friendly session by adding mail in request:
 CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
 # for getting a list of funders from api ():
 CROSSREF_API_URL = "https://api.crossref.org/funders?query="
 
-SKOSMOS_API_URL = "https://skosmos.dev.zpid.org/rest/v1/"
-
+## Caching requests:
 urls_expire_after = {
     # Custom cache duration per url, 0 means "don't cache"
     # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/09183&lang=de': 0,
     # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/': 0,
 }
-# using cache for ror requests
+
+# a cache for ror requests
 session = requests_cache.CachedSession(
     ".cache/requests",
     allowable_codes=[200, 404],
@@ -69,6 +65,7 @@ session_fundref = requests_cache.CachedSession(
     urls_expire_after=urls_expire_after,
 )
 
+# cache for skosmos requests:
 session_skosmos = requests_cache.CachedSession(
     ".cache/requests",
     allowable_codes=[200, 404],
@@ -88,10 +85,7 @@ with open("institute_lux.csv", newline="") as csvfile:
 # print(dachlux_institutes)
 
 
-# %% [markdown]
-# Create an "element tree" from the records in my xml file so we can loop through them and do things with them:
-
-# %%
+# Create an "element tree" from the records in my selected xml file so we can loop through them and do things with them:
 # root = ET.parse("xml-data/records-440.xml")
 # root = ET.parse("xml-data/records-322.xml")
 # root = ET.parse("xml-data/records-395.xml")
@@ -108,15 +102,12 @@ root = ET.parse("xml-data/records-556.xml")
 #     print_element(child)
 
 
-# %% [markdown]
-# We first set a few namespace objects for bibframe, schema.org and for our resources (the works and instances)
-# themselves.
+# We first set a few namespace objects for bibframe, schema.org and for our resources (the works and instances) themselves.
 #
 # Then, we create two graphs from the xml source file, one to generate triples for our bibframe profile output, and the other for the simplified schema.org profile.
 #
 # Finally, we bind the prefixes with their appropriate namespaces to the graphs.
 
-# %%
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 BFLC = Namespace("http://id.loc.gov/ontologies/bflc/")
 MADS = Namespace("http://www.loc.gov/mads/rdf/v1#")
@@ -138,17 +129,14 @@ PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
 
 # graph for bibframe profile:
 records_bf = Graph()
-# make the graph named:
+# make the graph named for the records: just for clarity in the output:
 records_bf = Graph(identifier=URIRef("https://w3id.org/zpid/bibframe/records/"))
 
+# import the graph for kerndaten.ttl from PsychAuthors - we'll need it for
+# matching person names to ids when the names in the records are unmatchable
+# - we'll try to match alternate names from kerndaten:
 kerndaten = Graph()
 kerndaten.parse("ttl-data/kerndaten.ttl", format="turtle")
-
-# import graph for crossref funder registry dump:
-# crossref_funders = Graph()
-# crossref_funders.parse("crossref_fundref_registry.rdf", format="xml")
-# we need a new graph for the schema.org profile, so it won't just reuse the old triples from the other profile
-# records_schema = Graph()
 
 # Bind the namespaces to the prefixes we want to see in the output:
 records_bf.bind("bf", BF)
@@ -166,20 +154,34 @@ records_bf.bind("roles", ROLES)
 records_bf.bind("relations", RELATIONS)
 records_bf.bind("genres", GENRES)
 records_bf.bind("contenttypes", CONTENTTYPES)
-records_bf.bind("issuances", ISSUANCES)
-records_bf.bind("pmt", PMT)
+records_bf.bind("issuances", ISSUANCES)  # issuance types
+records_bf.bind("pmt", PMT)  # mediacarriers
 
 
-# %% [markdown]
 # # Functions to do all the things
 #
 # We need functions for the different things we will do - to avoid one long monolith of a loop.
 #
-# This is where they will go. Examples: Create blank nodes for Idebtifiers, create nested contribution objects from disparate person entries in AUP, AUK, CS and COU fields, merge PAUP (psychauthor person names and ids) with the person's name in AUP...
+# This is where they will go. Examples: Create nodes for Idebtifiers, create nested contribution objects from disparate person entries in AUP, AUK, CS and COU fields, merge PAUP (psychauthor person names and ids) with the person's name in AUP...
 #
-# These functions will later be called at the bottom of this notebook, in a loop over all the xml records.
+# These functions will later be called at the bottom of the program, in a loop over all the xml records.
 
-# %%
+
+def get_ror_org_country(affiliation_ror_id):
+    # given a ror id, get the country of the organization from the ror api:
+    # first, use only the last part of the ror id, which is the id itself:
+    affiliation_ror_id = affiliation_ror_id.split("/")[-1]
+    # the country name is in country.name in the json response
+    ror_request = session.get(
+        "https://api.ror.org/organizations/" + affiliation_ror_id, timeout=20
+    )
+    if ror_request.status_code == 200:
+        ror_response = ror_request.json()
+        if "country" in ror_response:
+            return ror_response["country"]["name"]
+        else:
+            print("no country found for " + affiliation_ror_id)
+            return None
 
 
 def get_issuance_type(instance_bundle_uri, record):
@@ -188,6 +190,7 @@ def get_issuance_type(instance_bundle_uri, record):
     bibliographic_level = record.find("BE").text.strip()
     issuance_uri_fragment = None
     #  for different cases, add different issuance types:
+    # TODO: add others that are rarely used, such as for audiovisual media, etc.
     match bibliographic_level:
         case "SS":
             issuance_type = "Edited Book"
@@ -205,6 +208,8 @@ def get_issuance_type(instance_bundle_uri, record):
             issuance_type = "Chapter"
         case _:
             issuance_type = "Other"
+
+    # remove spaces from the label to make a CamelCase uri fragment
     issuance_uri_fragment = issuance_type.replace(" ", "")
     try:
         # generate a node for the Issuance:
@@ -238,7 +243,7 @@ def get_publication_date(record):
                 date = None
 
     else:
-        print("no date found in PHIST, using PY")
+        # print("no date found in PHIST, using PY")
         try:
             date = record.find("PY").text
         except:
@@ -275,7 +280,8 @@ def add_isbns(record, instancebundle_uri):
             records_bf.set((isbn_ebook_node, RDF.value, Literal(isbn_ebook)))
             records_bf.add((instancebundle_uri, BF.identifiedBy, isbn_ebook_node))
 
-        # check all the instances of this work whether they are print or online mediacarrier. If so, add appropriate isbn to them:
+        # Adding isbns by type to their repsective instance - by mediaCarrier. TODO: Make this actually work!
+        # Check all the instances of this work whether they are print or online mediacarrier. If so, add appropriate isbn to them:
         # for instance in records_bf.objects(work_uri, BF.hasInstance):
         #     if isbn_print is not None:
         #         if records_bf.value(instance, RDF.type) == BF.Print:
@@ -310,6 +316,7 @@ def add_isbns(record, instancebundle_uri):
 
 def get_concept_uri_from_skosmos(concept_label, vocid):
     # get the uri of a concept from skosmos by its label
+    # works with any skosmos vocabulary, if you know the vocid
 
     skosmos_request = session_skosmos.get(
         SKOSMOS_API_URL + vocid + "/lookup?label=" + concept_label + "&lang=en",
@@ -334,11 +341,6 @@ def match_paups_to_contribution_nodes(work_uri, record):
     for paup in record.findall("PAUP"):
         paup_id = get_subfield(paup.text, "n")
         paup_name = get_mainfield(paup.text)
-        # print(
-        #     "matching paup_id "
-        #     + paup_id
-        #     + " to existing contribution nodes of this work_uri"
-        # )
         # get the given and family part of the paup name:
         paup_split = paup_name.split(",")
         paup_familyname = paup_split[0].strip()
@@ -359,8 +361,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                 # if the paupname_normalized matches the agent's name, add the paup_id as an identifier to the agent:
                 # if paupname_normalized == aupname_normalized:
                 # check using fuzzywuzzy:
-                # if fuzz.ratio(paupname_normalized, aupname_normalized) > 90:
-                # use partial_ratio for a more lenient comparison - we can check if one of the them is a substring of the other:
+                # use partial_ratio for a more lenient comparison - so we can check if one of the them is a substring of the other - for double names, etc.:
                 if fuzz.partial_ratio(paupname_normalized, aupname_normalized) > 80:
                     # create a fragment uri node for the identifier:
                     paup_id_node = URIRef(str(agent) + "_psychauthorsid")
@@ -373,7 +374,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                     # print("paup_id added to agent: " + paup_id)
                     # and break the loop:
                     break
-                    # after all loops, print a message if no match was found:
+        # after all loops, print a message if no match was found:
         else:
             print(
                 "no match found for paup_id "
@@ -385,7 +386,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                 + record.find("DFK").text
                 + ". Checking name variants found in kerndaten for this id..."
             )
-            # loop through the contrubtors again, and check if any of the alternate names match the agent's name:
+            # loop through the contribtors again, and check if any of the alternate names from psychauthors kerndaten match a person's name from AUP:
             for contribution in records_bf.objects(work_uri, BF.contribution):
                 # get the agent of the contribution:
                 agent = records_bf.value(contribution, BF.agent)
@@ -395,13 +396,11 @@ def match_paups_to_contribution_nodes(work_uri, record):
                     givenname = records_bf.value(agent, SCHEMA.givenName)
                     familyname = records_bf.value(agent, SCHEMA.familyName)
                     aupname_normalized = normalize_names(familyname, givenname)
-                    # print("aupname_normalized: " + aupname_normalized)
                     # try to match the paup_id to a uri in kerndaten.ttl and check if any of the alternate names match the agent's name:
                     person_uri = URIRef("https://w3id.org/zpid/person/" + paup_id)
                     for alternatename in kerndaten.objects(
                         person_uri, SCHEMA.alternateName
                     ):
-                        # print("alternatename: " + alternatename)
                         # split the alternatename into family and given name:
                         alternatename_split = alternatename.split(",")
                         alternatename_familyname = alternatename_split[0].strip()
@@ -410,10 +409,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                         alternatename_normalized = normalize_names(
                             alternatename_familyname, alternatename_givenname
                         )
-                        # print("alternatename_normalized: " + alternatename_normalized)
-                        # print("aupname_normalized: " + aupname_normalized)
-
-                        # if the alternatename matches the agent's name, add the paup_id as an identifier to the agent:
+                        # if the alternatename matches the agent's name, add the paup_id as an identifier to the agent: again using fuzzywuzzy'S partial ratio to also match substrings of the name inside each other:
                         if (
                             fuzz.partial_ratio(
                                 alternatename_normalized, aupname_normalized
@@ -437,15 +433,10 @@ def match_orcids_to_contribution_nodes(work_uri, record):
         # print("orcid: " + orcid.text)
         orcid_id = get_subfield(orcid.text, "u")
         orcid_name = get_mainfield(orcid.text)
-        # print(
-        #     "matching orcid_id "
-        #     + orcid_id
-        #     + " to existing contribution nodes of this work_uri"
-        # )
         # is the orcid well formed?
         # clean up the orcid_id by removing spaces that sometimes sneak in when entering them in the database:
         if orcid_id is not None and " " in orcid_id:
-            print("warning: orcid_id contains spaces: " + orcid_id)
+            print("warning: orcid_id contains spaces, cleaning it up: " + orcid_id)
         orcid_id = orcid_id.replace(" ", "")
         # by the way, here is a regex pattern for valid orcids:
         orcid_pattern = re.compile(
@@ -455,15 +446,27 @@ def match_orcids_to_contribution_nodes(work_uri, record):
             # remove the prefixes and slashes from the orcid id:
             orcid_id = orcid_pattern.match(orcid_id).group(5)
         else:
-            # don't use it if it doesn't match the pattern:
+            # warn if it doesn't match the pattern for well-formed orcids:
             print(f"warning: invalid orcid: {orcid_id}")
         # get the given and family part of the orcid name:
-        orcid_split = orcid_name.split(",")
-        orcid_familyname = orcid_split[0].strip()
-        orcid_givenname = orcid_split[1].strip()
-        orcidname_normalized = normalize_names(orcid_familyname, orcid_givenname)
-        # print("orcidname_normalized: " + orcidname_normalized)
-        # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
+        # make sure we give an error message when we can't split:
+        try:
+            orcid_split = orcid_name.split(",")
+            orcid_familyname = orcid_split[0].strip()
+            orcid_givenname = orcid_split[1].strip()
+            orcidname_normalized = normalize_names(orcid_familyname, orcid_givenname)
+        except:
+            print(
+                "couldn't split orcid name into given and family name: "
+                + orcid_name
+                + " in record "
+                + record.find("DFK").text
+                + ". Using the full name as a fallback."
+            )
+            orcidname_normalized = (
+                orcid_name  # if we can't split, just try the full name
+            )
+        # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person - and match names to those in the orcid field:
         for contribution in records_bf.objects(work_uri, BF.contribution):
             # get the agent of the contribution:
             agent = records_bf.value(contribution, BF.agent)
@@ -473,12 +476,10 @@ def match_orcids_to_contribution_nodes(work_uri, record):
                 givenname = records_bf.value(agent, SCHEMA.givenName)
                 familyname = records_bf.value(agent, SCHEMA.familyName)
                 aupname_normalized = normalize_names(familyname, givenname)
-                # print("aupname_normalized: " + aupname_normalized)
+
                 # if the orcidname_normalized matches the agent's name, add the orcid_id as an identifier to the agent:
-                # if orcidname_normalized == orcidname_normalized:
-                # check using fuzzywuzzy:
-                # if fuzz.ratio(orcidname_normalized, orcidname_normalized) > 90:
-                # use partial_ratio for a more lenient comparison - we can check if one of the them is a substring of the other:
+
+                # check using fuzzywuzzy - use partial_ratio to check if one of the them is a substring of the other:
                 if fuzz.partial_ratio(aupname_normalized, orcidname_normalized) > 80:
                     # create a fragment uri node for the identifier:
                     orcid_id_node = URIRef(str(agent) + "_orcid")
@@ -491,7 +492,7 @@ def match_orcids_to_contribution_nodes(work_uri, record):
                     # print("orcid_id added to agent: " + orcid_id)
                     # and break the loop:
                     break
-                    # after all loops, print a message if no match was found:
+        # after all loops, print a message if no match was found:
         else:
             print(
                 "no match found for orcid_id "
@@ -503,12 +504,51 @@ def match_orcids_to_contribution_nodes(work_uri, record):
             )
 
 
+def match_CS_COU_affiliations_to_first_contribution(work_uri, record):
+    # get the content of CS:
+    try:
+        affiliation = record.find("CS").text
+    except:
+        affiliation = ""
+    # get the country from COU:
+    try:
+        country = record.find("COU").text
+    except:
+        country = ""
+    #
+    # if there is a CS field, add the affiliation to the first contribution node:
+    if affiliation is not None and country is not None:
+        # get the first contribution node:
+        for contribution in records_bf.objects(work_uri, BF.contribution):
+            agent_node = records_bf.value(
+                contribution, BF.agent
+            )  # get the agent of the contribution
+            # dont get the agent at all, but just the position of the contribution:
+            position = records_bf.value(contribution, PXP.contributionPosition)
+            if (
+                int(position) == 1
+                and records_bf.value(agent_node, RDF.type) == BF.Person
+            ):
+                # add the affiliation to the contribution node using the function we already have for it:
+                records_bf.add(
+                    (
+                        contribution,
+                        MADS.hasAffiliation,
+                        build_affiliation_nodes(agent_node, affiliation, country),
+                    )
+                )
+                break
+
+
 def match_email_to_contribution_nodes(work_uri, record):
     # there is only ever one email field in a record, so we can just get it.
     # unless there is also a field emid, the email will be added to the first contribution node.
     # if there is an emid, the email will be added to the person with a name matching the name in emid.
-    # get the email:
+    # fortunately, the name in EMID should always be exactly the same as the one in an AUP field
+    # (unlike for PAUP and ORCID, :eyeroll:) so matching the names is pretty easy.
+    # First get the email:
     if record.find("EMAIL") is not None:
+        # cleaning up the horrible mess that star makes of any urls and email addresses (it replaces _ with space, but there is no way to differentiate between an underscore-based space and a real one...):
         email = html.unescape(
             mappings.replace_encodings(record.find("EMAIL").text.strip())
         )
@@ -535,8 +575,6 @@ def match_email_to_contribution_nodes(work_uri, record):
         except:
             emid_name = None
         if emid_name is not None:
-            # emid_name = emid.text
-            # print("matching email to person with name " + emid_name)
             # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
             for contribution in records_bf.objects(work_uri, BF.contribution):
                 # get the agent of the contribution:
@@ -546,33 +584,23 @@ def match_email_to_contribution_nodes(work_uri, record):
                     # get the given and family names of the agent:
                     name = records_bf.value(agent, RDFS.label)
                     emid_name = mappings.replace_encodings(emid_name).strip()
-                    # print("aupname_normalized: " + aupname_normalized)
                     # if the emid_name matches the agent's name, add the email as a mads:email to the agent:
                     if fuzz.partial_ratio(emid_name, name) > 80:
                         # add to contribution node:
                         records_bf.add((contribution, MADS.email, URIRef(email)))
-                        # print("email added to agent: " + email)
-                        # and break the loop:
-                        print("email: " + email)
+                        # and break the loop, since we only need to add the email to one person:
                         break
-                    # after all loops, print a message if no match was found:
-        # if no emid was found, add the email to the first contribution node:
+        # if after all loops, no match was found for EMID in the AUP-based name,
+        # add the email to the first contribution node:
         else:
-            # print("email: to first " + email)
-
-            # print(
-            #     "no emid found, trying to add email to first contribution node:" + email
-            # )
-            # finding the contribution node from those the work_uri has that has bf:qualifier "first":
+            # finding the contribution node from those the work_uri has that has pxp:contributionPosition 1:
             for contribution in records_bf.objects(work_uri, BF.contribution):
                 # dont get the agent at all, but just the position of the contribution:
                 position = records_bf.value(contribution, PXP.contributionPosition)
-                # print("position of contribution: " + str(position))
-                # break after position 1:
                 if int(position) == 1:
                     # add to contribution node:
                     records_bf.add((contribution, MADS.email, URIRef(email)))
-                    # print("email added to first contribution: " + email)
+                    # break after position 1 - since we only need the first contribution node:
                     break
 
 
@@ -598,7 +626,7 @@ def generate_bf_contribution_node(work_uri):
     records_bf.add(
         (contribution_node, PXP.contributionPosition, Literal(contribution_counter))
     )
-    # if we are in the first loop, set "contribution_qualifier" to "first":
+    # if we are in the first loop, set contribution's bf:qualifier" to "first":
     if contribution_counter == 1:
         contribution_qualifier = "first"
         records_bf.add((contribution_node, RDF.type, BFLC.PrimaryContribution))
@@ -636,7 +664,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
         records_bf.set((contribution_node, BF.role, add_bf_contribution_role(role)))
 
         # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
-        org_name = mappings.replace_encodings(org.text.split("|")[0]).strip()
+        org_name = mappings.replace_encodings(get_mainfield(org.text))
         # org_name = mappings.replace_encodings(org.text).strip()
         # get ror id of org from api:
         org_ror_id = get_ror_id_from_api(org_name)
@@ -649,29 +677,32 @@ def add_bf_contributor_corporate_body(work_uri, record):
             # add the ror id as a literal to the identifier node:
             records_bf.add((org_ror_id_node, RDF.value, Literal(org_ror_id)))
             records_bf.add((org_node, BF.identifiedBy, org_ror_id_node))
-        else:
-            print("ror-api: no ror id found for " + org_name)
+        # else:
+        #     print("ror-api: no ror id found for " + org_name)
 
         # get any affiliation in |i and add it to the name:
-        org_affiliation_name = get_subfield(org.text, "i")
         try:
-            org_name = org_name + "; " + org_affiliation_name
+            org_affiliation_name = get_subfield(org.text, "i")
             # print("org affiliation:" + org_affiliation_name)
         except:
-            print("AUK subfield i: no affiliation for org " + org_name)
-
+            org_affiliation_name = None
+            # print("AUK subfield i: no affiliation for org " + org_name)
+        if org_affiliation_name is not None:
+            org_name = org_name + "; " + org_affiliation_name
         # # get country name in |c, if it exists:
-        org_country = get_subfield(org.text, "c")
         try:
-            print("AUK subfield c: org country:" + org_country)
+            org_country = get_subfield(org.text, "c")
+            # print("AUK subfield c: org country:" + org_country)
+        except:
+            org_country = None
+            # print("AUK subfield c: no country for org " + org_name)
+        if org_country is not None:
             # generate a node for the country, clean up the label, look up the geonames id and then add both label and geonamesid node to the org node!
             affiliation_node = build_affiliation_nodes(org_node, "", org_country)
             # add the affiliation node to the contribution node:
             records_bf.add((contribution_node, MADS.hasAffiliation, affiliation_node))
-        except:
-            print("AUK subfield c: no country for org " + org_name)
 
-        # TOD: we should probably check for affiliations and countries in fields CS and COU for records that have only AUKS or AUK as first contribution? we already did the same for persons.
+        # TODO: we should probably check for affiliations and countries in fields CS and COU for records that have only AUKS or AUK as first contribution? we already did the same for persons.
 
         # add the name as the org node label:
         records_bf.add((org_node, RDFS.label, Literal(org_name)))
@@ -892,7 +923,7 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
         )
     # else:
     # print("no ror id found for " + person_affiliation)
-
+    #### unused: matching luxembourg Affiliation names to local authority table in our csv:
     # affiliation_local_id = None
     # affiliation_local_id = get_local_authority_institute(
     #     person_affiliation, person_affiliation_country
@@ -914,6 +945,13 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
     # currently we dont handle that at all and a country label "None" is added
     # where we should just not add an AffiliationAdress node with a country node at all.
     # make a fragment uri node for the affiliation address and make it class mads:Address:
+    if agent_affiliation_country is None or agent_affiliation_country == "":
+        # try to check if we have a ror id for the affiliation and get the country from the ror api:
+        try:
+            agent_affiliation_country = get_ror_org_country(affiliation_ror_id)
+        except:
+            agent_affiliation_country = None
+
     if agent_affiliation_country is not None and agent_affiliation_country != "":
         person_affiliation_address_node = URIRef(
             str(agent_affiliation_node) + "_address"
@@ -1021,7 +1059,7 @@ def add_bf_contributor_person(work_uri, record):
         records_bf.add((person_node, RDF.type, BF.Person))
 
         # add the name from AUP to the person node, but only use the text before the first |: (and clean up the encoding):
-        personname = mappings.replace_encodings(person.text.split("|")[0]).strip()
+        personname = mappings.replace_encodings(get_mainfield(person.text)).strip()
 
         records_bf.add((person_node, RDFS.label, Literal(personname)))
 
@@ -1031,9 +1069,20 @@ def add_bf_contributor_person(work_uri, record):
 
         # split personname into first and last name:
         personname_split = personname.split(",")
-        if len(personname_split) > 1:
+        try:
             familyname = personname_split[0].strip()
             givenname = personname_split[1].strip()
+        except:
+            familyname = personname
+            givenname = ""
+            print(
+                "no comma in personname: "
+                + personname
+                + " in record "
+                + record.find("DFK").text
+                + " - name content added as familyname + empty string for givenname."
+            )
+        else:
             records_bf.add((person_node, SCHEMA.familyName, Literal(familyname)))
             records_bf.add((person_node, SCHEMA.givenName, Literal(givenname)))
             # generate a normalized version of familyname to compare with PAUP name later:
@@ -1084,18 +1133,19 @@ def add_bf_contributor_person(work_uri, record):
         # dont add ADR here yet (even if this is the place for it - we may drop that info anyway.
         # look for the field CS:
         # if the contribution_counter is 1 (i.e. if this is the first loop/first author), add the affiliation to the person node:
-        if contribution_counter == 1:
-            if record.find("CS") is not None:
-                # get the content of the CS field:
-                affiliation_string = html.unescape(
-                    mappings.replace_encodings(record.find("CS").text.strip())
-                )
+        # if contribution_counter == 1:
+        #     if record.find("CS") is not None:
+        #         print("CS field found in record " + record.find("DFK").text)
+        #         # get the content of the CS field:
+        #         affiliation_string = html.unescape(
+        #             mappings.replace_encodings(record.find("CS").text.strip())
+        #         )
 
-            if record.find("COU") is not None:
-                # get the country from the COU field:
-                affiliation_country = mappings.replace_encodings(
-                    sanitize_country_names(record.find("COU").text.strip())
-                )
+        #     if record.find("COU") is not None:
+        #         # get the country from the COU field:
+        #         affiliation_country = mappings.replace_encodings(
+        #             sanitize_country_names(record.find("COU").text.strip())
+        #         )
 
         ## Get affiliation from AUP |i, country from |c:
         # no looping necessary here, just check if a string |i exists in AUP and if so, add it to the person node as the affiliation string:
@@ -1103,7 +1153,6 @@ def add_bf_contributor_person(work_uri, record):
 
         affiliation_country = sanitize_country_names(get_subfield(person.text, "c"))
 
-        ### TODO: Switched off affiliation node creation, because we don't want the overhead in our opensearch test index for psychporta
         # pass this to function build_affiliation_nodes to get a finished affiliation node:
         if affiliation_string != "" and affiliation_string is not None:
             affiliation_node = build_affiliation_nodes(
@@ -1112,37 +1161,7 @@ def add_bf_contributor_person(work_uri, record):
             # add the affiliation node to the contribution node:
             records_bf.add((contribution_node, MADS.hasAffiliation, affiliation_node))
 
-        # look for the field EMAIL:
-        # email = None
-        # # TODO: the email address actually belongs into the affiliation section, but we'll leave it directly in the contribution node for now:
-        # if record.find("EMAIL") is not None:
-        #     # get the email address from the EMAIL field, replacing spaces with underscores (common problem in urls in star) and adding a "mailto:" prefix:
-        #     email = html.unescape(
-        #         mappings.replace_encodings(
-        #             record.find("EMAIL").text.strip().replace(" ", "_")
-        #         )
-        #     )
-        #     # check if this is a valid email address:
-        #     email_pattern = re.compile(
-        #         r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
-        #     )
-        #     # check if email matches the regex in email_pattern:
-        #     if not email_pattern.match(email):
-        #         print("warning: invalid email address: " + email)
-        #         # email = None
-        #     email = "mailto:" + email
-        #     # email = "mailto:" + record.find("EMAIL").text.strip()
-        #     # if there is no EMID and the contribution_counter is 1 (i.e. if this is the first loop), add the email to the person node:
-        #     if record.find("EMID") is None and contribution_counter == 1:
-        #         records_bf.add((contribution_node, MADS.email, URIRef(email)))
-        #     # else match the existing EMID field to the personname:
-        #     elif (
-        #         record.find("EMID") is not None
-        #         and mappings.replace_encodings(record.find("EMID").text.strip())
-        #         == personname
-        #     ):
-        #         records_bf.add((contribution_node, MADS.email, URIRef(email)))
-
+        # add the role from AUP subfield |f to the contribution node:
         # extracting the role:
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
         role = extract_contribution_role(person.text)
@@ -1193,84 +1212,6 @@ def get_mediacarrier(mediatype):
             return URIRef(BF["Print"]), URIRef(PMT["Print"])
 
 
-# def get_publication_info(instance_uri, record, mediatype):
-#     # get the publication info:
-#     pu = None
-#     pu = record.find("PU")
-#     pufield = html.unescape(pu.text.strip())
-#     if pu is not None and pufield != "":
-#         # split out the content after |e:
-#         pub_lisher = pufield.split("|v")
-#         pub_place = pufield.split("|o")
-#         p_isbn = pufield.split("|i")
-#         e_isbn = pufield.split("|e")
-#         # add a bf:provisionActivity to the instance:
-#         publication_node = BNode()
-#         records_bf.add((instance_uri, BF.provisionActivity, publication_node))
-#         # add the bf:place to the bf:provisionActivity:
-#         if len(pub_place) > 1:
-#             records_bf.add(
-#                 (publication_node, BFLC.simplePlace, Literal(str(pub_place[1]).strip()))
-#             )
-#         # add the pub_lisher to the bf:provisionActivity as bflc:simpleAgent:
-#         if len(pub_lisher) > 1:
-#             records_bf.add(
-#                 (
-#                     publication_node,
-#                     BFLC.simpleAgent,
-#                     Literal(str(pub_lisher[1]).strip()),
-#                 )
-#             )
-#         # add the p_isbn to the instance:
-#         isbn_node = BNode()
-#         records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
-#         records_bf.add((isbn_node, RDF.type, BF.Isbn))
-#         if get_mediacarrier(mediatype) == BF.Electronic:
-#             records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
-#             records_bf.add((isbn_node, RDF.type, BF.Isbn))
-#             records_bf.add((isbn_node, RDF.value, Literal(str(e_isbn[1]).strip())))
-#         else:
-#             records_bf.add((isbn_node, RDF.value, Literal(str(p_isbn[1]).strip())))
-
-
-# def split_books(instance_uri, record):
-#     # check the BE field to see if it is "SS" or "SM":
-#     be = None
-#     be = record.find("BE")
-#     befield = be.text.strip()
-#     if be is not None and befield == "SS" or befield == "SM":
-#         mt = None
-#         mt2 = None
-#         mtfield = html.unescape(record.find("MT").text.strip())
-#         mt2field = html.unescape(record.find("MT2").text.strip())
-#         # we should check if there is an "e isbn" somewhere in PU subfield |e:
-
-#         if mt is not None and mtfield != "":
-#             # note the content of the MT field and use get_mediacarrier to get the corresponding bibframe instance class:
-#             # add the resulting bf class to the instance:
-#             # print("It's a book! Subclass: " + str(get_mediacarrier(mt.text)))
-#             records_bf.add((instance_uri, RDF.type, get_mediacarrier(mtfield)))
-
-#         if mt2 is not None and mt2field != "":
-#             # use get_mediacarrier to get the corresponding bibframe instance class:
-#             # add the resulting bf class to the instance:
-#             # print("It's also a subclass: " + str(get_mediacarrier(mt2.text)))
-#             # we add another instance for the second book:
-#             instance2 = BNode()
-#             # make it class Instance:
-#             records_bf.add((instance2, RDF.type, BF.Instance))
-#             # since it is "second instance", also give it the class bflc:SecondaryInstance:
-#             records_bf.add((instance2, RDF.type, BFLC.SecondaryInstance))
-#             # also add instance subclass that describes the media type (Electronic or Print):
-#             records_bf.add((instance2, RDF.type, get_mediacarrier(mt2field)))
-#             # make sure to connect the two instances with an explicit bf:otherPsychicalFormat,
-#             # even though we already say this _implicitly_ with the bflc:SecondaryInstance class:
-#             records_bf.add((instance_uri, BF.otherPhysicalFormat, instance2))
-
-
-###
-
-
 ###
 ## get the publication info from PU field and add to the instance:
 def add_publication_info(instance_uri, record):
@@ -1310,10 +1251,8 @@ def add_publication_info(instance_uri, record):
             )
 
 
-# %% [markdown]
 # ## Semi-generic helper functions
 
-# %% [markdown]
 # ### Getting subfields from a field
 
 
@@ -1374,7 +1313,10 @@ def check_for_url_or_doi(string):
     """checks if the content of the string is a doi or url or something else.
     Returns the a string and a string_type (doi, url, unknown). The given string
     is sanitized, eg. missing http protocol is added for urls; dois are stripped
-    of web protocols and domain/subdomains like dx, doi.org)."""
+    of web protocols and domain/subdomains like dx, doi.org).
+    Pass any string where you suspect it might be a url or doi,
+    returns the cleaned up string (for urls and dois; because STAR messes then up and indexers make mistakes and are inconsistent) and a string type (doi, url, or unknown).
+    """
     # use a regex: if string starts with "DOI " or "DOI:" or "DOI: " (case insensitive), remove that and strip again:
     doi_error_pattern = re.compile(r"^(DOI:|DOI |DOI: )", re.IGNORECASE)
     string = doi_error_pattern.sub("", string).strip()
@@ -1467,11 +1409,9 @@ def build_doi_identifier_node(instance, doi):
     records_bf.add((instance, BF.identifiedBy, identifier_node))
 
 
-# %% [markdown]
 # ### Building "Links" as electronic locator nodes for an instance
 
 
-# %%
 def build_electronic_locator_node(instance, url):
     # locator_node = BNode()
     # make it a uri that we can add directly! example: https://id.loc.gov/ontologies/bibframe.html#p_electronicLocator
@@ -1490,34 +1430,18 @@ def build_electronic_locator_node(instance, url):
 
 
 # %%
-def build_note_node(instance, note):
-    note_node = BNode()
+def build_note_node(resource_uri, note):
+    note_node = (
+        BNode()
+    )  # TODO: make a hashed uri node instead - but how can we decide whether to add it with _note or #note?
     records_bf.set((note_node, RDF.type, BF.Note))
     records_bf.set((note_node, RDFS.label, Literal(note)))
-    records_bf.set((instance, BF.note, note_node))
+    records_bf.set((resource_uri, BF.note, note_node))
 
 
-# %% [markdown]
-# ## Function: Replace weird characters with unicode
-#
-#
-
-# %%
-# from modules.mappings import dd_codes
-
-# def replace_encodings(text):
-#     # text = html.escape(text)
-#     for case in dd_codes:
-#         text = text.replace(case[0], case[1])
-#     return text
-
-# moved to modules.mappings!
-
-# %% [markdown]
 # ## Function: Guess language of a given string
 # Used for missing language fields or if there are discrepancies between the language field and the language of the title etc.
 
-# %%
 import langid
 
 langid.set_languages(["de", "en"])
@@ -1527,10 +1451,8 @@ def guess_language(string_in_language):
     return langid.classify(string_in_language)[0]
 
 
-# %% [markdown]
 # ## Function: Adding DFK as an Identifier
 
-# %% [markdown]
 # ### DFK as id for Bibframe
 #
 # We want to add the DFK as a local bf:Identifier to the work (or instance?).
@@ -1538,22 +1460,19 @@ def guess_language(string_in_language):
 #
 # The format for that is:
 # ```turtle
-# <Work/Instance> bf:identifiedBy [
-#     a bf:Local, pxc:DFK;
+# instancebundles:123456 bf:identifiedBy instancebundles:123456#dfk .
+# instancebundles:123456#dfk a bf:Identifier ;
+#     a pxc:DFK;
 #     rdf:value "1234456";
-#     bf:source [
-#         a bf:Source; bf:code "ZPID.PSYNDEX.DFK"
-#     ]
-# ];
+# .
 # ```
 #
-# So, we need a blank node for the Identifier and inside, another nested bnode for the bf:Source. This is a function that will return such an identifier bnode to add to the work_uri. We are calling it way up down below in the loop:
+# So, we need a node for the Identifier. This is a function that will return such an identifier bnode to add to the work_uri. We are calling it way down below in the loop:
 
 
-# %%
 #  a function to be called in a for-loop while going through all records of the source xml,
-# which returns a new triple to add to the graph that has a bnode for the dfk identifier.
-# The predicate is "bf:identifiedBy" and the object is a blank node of rdf:Type "bf:Identifier" and "bf:Local":
+# which returns a new triple to add to the graph that has a hashed uri node for the dfk identifier.
+# The predicate is "bf:identifiedBy" and the object is a node of rdf:Type "pxc:DFK":
 # The actual identifier is a literal with the text from the "DFK" element of the record.
 def get_bf_identifier_dfk(resource_uri, dfk):
     # make a node of the Identifier class from the BF namespace:
@@ -1570,7 +1489,6 @@ def get_bf_identifier_dfk(resource_uri, dfk):
     return identifier
 
 
-# %% [markdown]
 # ## Generic Function: Replace languages with their language tag
 #
 # Can be used for different fields that are converted to langstrings or language uris. Use within other functions that work with the languages in different fields.
@@ -1578,7 +1496,6 @@ def get_bf_identifier_dfk(resource_uri, dfk):
 # Returns an array with two values: a two-letter langstring tag at [0] and a three-letter uri code for the library of congress language vocab at [1].
 
 
-# %%
 def get_langtag_from_field(langfield):
     # when passed a string from any language field in star, returns an array with two items.
     # Index 0: two-letter langstring tag, e.g. "de"
@@ -1626,7 +1543,6 @@ def get_langtag_from_field(langfield):
             return ["und", "und"]  # for "undetermined!"
 
 
-# %% [markdown]
 # ## Function: Get work language from LA
 #
 # Example
@@ -1643,20 +1559,15 @@ def get_langtag_from_field(langfield):
 # - or if there is another language in LA2? (in my test set, 2 out of 700 records have LA2)
 
 
-# %%
-# function
 def get_work_language(record):
     work_language = get_langtag_from_field(record.find("LA").text.strip())[1]
     work_lang_uri = LANG[work_language]
     return work_lang_uri
 
 
-# %% [markdown]
 # ## Function: Build a Relationship Node for different types of related works
 #
 # Should take parameters - a dict per type (research data closed access, rd open access, ...) that has values for all the needed fields
-
-# %%
 
 
 def build_work_relationship_node(work_uri, relation_type):
@@ -1670,7 +1581,7 @@ def build_work_relationship_node(work_uri, relation_type):
         genre = relation_types[relation_type]["genre"]
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
-    # make a bnode for this relationship:
+    # make a node for this relationship:
     relationship_bnode = URIRef(work_uri + "_relationship_" + str(uuid.uuid4()))
     # make it class bflc:Relationship:
     records_bf.set((relationship_bnode, RDF.type, BFLC.Relationship))
@@ -1755,7 +1666,7 @@ relation_types = {
     },
 }
 
-# %% [markdown]
+
 # ## Function: Create Instance Title nodes from fields TI, TIU, TIL, TIUE...
 #
 # Titles and Translated titles are attached to Instances. Translated titles also have a source, which can be DeepL, ZPID, or Original.
@@ -1763,10 +1674,11 @@ relation_types = {
 # Example:
 #
 # ```turtle
-# <Instance> bf:title
-#         [a bf:Title;
-#             bf:mainTitle "Disentangling the process of epistemic change"@en;
-#             bf:subtitle "The role of epistemic volition"@en;
+# instancebundles:123456 bf:title instancebundles:123456#title .
+# instancebundles:123456#title a bf:Title ;
+#    rdfs:label "Disentangling the process of epistemic change" ;
+#    bf:mainTitle "Disentangling the process of epistemic change"@en;
+#    bf:subtitle "The role of epistemic volition"@en;
 #         ],
 #         [a pxc:TranslatedTitle;
 #             rdfs:label "Den Prozess des epistemischen Wandels entwirren: Die Rolle des epistemischen Willens."@de;
@@ -1788,7 +1700,6 @@ relation_types = {
 # - [x] create a source/origin for the translated title (from "(DeepL)" at the end)
 
 
-# %%
 #  a function to be called in a for-loop while going through all records of the source xml,
 # which returns a new triple to add to the graph that has a bnode for the dfk identifier.
 # The predicate is "bf:identifiedBy" and the object is a blank node of rdf:Type "bf:Identifier" and "bf:Local":
@@ -2430,7 +2341,6 @@ def get_bf_preregistrations(work_uri, record):
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
 
-# %% [markdown]
 # ## Function: Create nodes for Grants (GRANT)
 #
 # Includes several helper functions that
@@ -2439,15 +2349,15 @@ def get_bf_preregistrations(work_uri, record):
 # - look up funder names in crossref's fundref api to get their fundref id (a doi)
 
 
-# %%
 def extract_grant_numbers(subfield_n_string):
     # this function takes a string that possibly contains an unstructured set of several award numbers connected with "and" etc. and returns a real array (List) of award numbers
     # first, split the string on "," or ";" or "and": (first replacing all semicolons and "ands" with commas)")
-    subfield_n_string = subfield_n_string.replace(" and ", ", ")
-    subfield_n_string = subfield_n_string.replace(" und ", ", ")
-    subfield_n_string = subfield_n_string.replace(" & ", ", ")
-    subfield_n_string = subfield_n_string.replace(";", ",")
-    subfield_n_string = subfield_n_string.split(", ")
+    if subfield_n_string is not None and subfield_n_string != "":
+        subfield_n_string = subfield_n_string.replace(" and ", ", ")
+        subfield_n_string = subfield_n_string.replace(" und ", ", ")
+        subfield_n_string = subfield_n_string.replace(" & ", ", ")
+        subfield_n_string = subfield_n_string.replace(";", ",")
+        subfield_n_string = subfield_n_string.split(", ")
     # in each of the returned list elements, remove any substrings that are shorter
     # than 5 characters (to get rid of things like " for" or "KDL: " YG: " etc.)
     # for element in subfield_n_string:
@@ -2491,24 +2401,19 @@ def get_crossref_funder_id(funder_name):
             crossref_api_request.status_code == 200
             and crossref_api_response["message"]["total-results"] > 0
         ):
-            # return the number of results:
-            # print("Treffer: " + str(crossref_api_response["message"]["total-results"]))
-            # return the first hit:
-            # print("Erster Treffer: " + crossref_api_response["message"]["items"][0]["name"])
-            # print("DOI: " + "10.13039" + crossref_api_response["message"]["items"][0]["id"])
             return "10.13039/" + crossref_api_response["message"]["items"][0]["id"]
         elif (
             crossref_api_request.status_code == 200
             and crossref_api_response["message"]["total-results"] == 0
         ):
             # retry the funder_name, but remove any words after the first comma:
-            print(f"fundref-api: no hits for {funder_name}.")
+            # print(f"fundref-api: no hits for {funder_name}.")
             if funder_name.find(",") > -1:
                 funder_name = funder_name.split(",")[0]
-                print(f"fundref-api: new funder name: {funder_name}")
+                # print(f"fundref-api: new funder name: {funder_name}")
                 return get_crossref_funder_id(funder_name)
             else:
-                print(f"fundref-api: nothing either for {funder_name}. Returning None.")
+                # print(f"fundref-api: nothing either for {funder_name}. Returning None.")
                 return None
     except KeyError:
         print("Error: Missing key in crossref_api_response.")
@@ -2554,12 +2459,15 @@ def get_bf_grants(work_uri, record):
             )
         )
 
-        # first, use anything before the first "|" as the funder:
-        # but because the database is still messy, use a default funder name in case there
-        # is no name in the field:
-        funder_name = "FUNDERNAME NOT FOUND"
-        # funder = {"funder_name": grantfield.split("|")[0].strip(), "funder_id": None}
-        funder_name = grantfield.split("|")[0].strip()
+        # first, use anything found in the main GRANT field as the funder name:
+        # but because the database is still messy (may have no funder name at all in some GRANTs), use a
+        # default funder name in case there is none, because the label is mandatory for an agent node:
+        try:
+            funder_name = get_mainfield(
+                grantfield
+            )  # we already checked wheter the field is empty, so we can use get_mainfield here
+        except:
+            funder_name = "unknown funder"  # just in case the GRANT field has no content beside the subfields
         # add the funder name to the funder node:
         records_bf.add((funder_node, RDFS.label, Literal(funder_name)))
         # try to look up this funder name in the crossref funder registry:
@@ -2567,7 +2475,7 @@ def get_bf_grants(work_uri, record):
         crossref_funder_id = None
         crossref_funder_id = get_crossref_funder_id(funder_name)
         if crossref_funder_id is not None:
-            # add a blank node for the identifier:
+            # add a node for the identifier:
             crossref_funder_id_node = URIRef(str(funder_node) + "_funderid")
             # use our custim identifier class FundRefDoi (subclass of bf:Doi):
             records_bf.add((crossref_funder_id_node, RDF.type, PXC.FundRefDoi))
@@ -2580,14 +2488,16 @@ def get_bf_grants(work_uri, record):
         # then check the rest for a grant number:
 
         try:
-            # if "|n " in grantfield:
-            grants = grantfield.split("|n ")[1].split(" |")[0]
+            # if "|n " in grantfield, extract it. It can contain one grant numbers, separated by "and" or "or":
+            grants = get_subfield(grantfield, "n")
+            # to number the nodes, we need to count the grants:
             grant_counter = 0
         except:
             grants = None
-        else:
+        if grants is not None:
+            # make an array of grant numbers by extracting them from the string:
             grants = extract_grant_numbers(grants)
-            # add the grant number to the funding contribution node:
+            # add the grant number to the funding contribution node, counting up:
             for grant_id in grants:
                 grant_counter += 1
                 # add a blank node for the grant (class pxc:Grant via pxp:grant)
@@ -2610,16 +2520,16 @@ def get_bf_grants(work_uri, record):
         # then check the rest for a grant name or other info/note:
         try:
             # if "|i " in grantfield:
-            funding_info = grantfield.split("|i ")[1].split(" |")[0]
+            funding_info = get_subfield(grantfield, "i")
         except:
             funding_info = None
 
         try:
             # if "|e " in grantfield:
-            funding_recipient = grantfield.split("|e ")[1].split(" |")[0]
+            funding_recipient = get_subfield(grantfield, "e")
         except:
             funding_recipient = None
-        else:
+        if funding_recipient is not None:
             # add an explanatory prefix text:
             funding_recipient = "Recipient(s): " + funding_recipient
             # add the funding_recipient to the funding_info (with a ". " separator), if that already contains some text, otherwise just use the funding_recipient as the funding_info:
@@ -2638,16 +2548,13 @@ def get_bf_grants(work_uri, record):
         # return funding_contribution_node
 
 
-# %% [markdown]
 # # Function: Add Conference info from field CF
-#
-#
 
 
-# %%
 def get_bf_conferences(work_uri, record):
     # only use conferences from actual books (BE=SS or SM)
     # ignore those in other publication types like journal article
+    # get the conference info from the field CF:
     if record.find("BE").text == "SS" or record.find("BE").text == "SM":
         for conference in record.findall("CF"):
             # get the text content of the CF field,
@@ -2659,15 +2566,19 @@ def get_bf_conferences(work_uri, record):
             # try to get the conference name from the CF field:
             try:
                 # get conference_name from main CF field, using the first part before any |:
-                conference_name = conference_field.split("|")[0].strip()
+                conference_name = get_mainfield(conference_field)
             except:
                 conference_name = "MISSING CONFERENCE NAME"
+                print(
+                    "a conference in field CF has no name. DFK: "
+                    + record.find("DFK").text
+                )
             # then check the field for a date in apotential subfield |d:
             try:
-                conference_date = conference_field.split("|d ")[1].split(" |")[0]
+                conference_date = get_subfield(conference_field, "d")
             except:
                 conference_date = None
-            else:
+            if conference_date is not None:
                 # if there is a |d, add the full date to conference_note:
                 conference_note = "Date(s): " + conference_date
                 # extract the year from the date to use it as conference_year:
@@ -2675,25 +2586,23 @@ def get_bf_conferences(work_uri, record):
                 # here is a regex for finding YYYY pattern in any string:
                 year_pattern = re.compile(r"\d{4}")
                 # if there is a year in the date string, use that as the date:
-                if year_pattern.search(conference_date):
+                try:
                     conference_year = year_pattern.search(conference_date).group()
-                else:
+                except:
                     conference_year = None
-            # then check the field for a place in a potential subfield |o:
-            try:
-                conference_place = conference_field.split("|o ")[1].split(" |")[0]
-            except:
-                conference_place = None
             # then check for a note in a potential subfield |b, but
-            # remebering to keep what is already in conference_note:
+            # remebering to keep what is already in conference_note from the date:
             try:
                 conference_note = (
-                    conference_note
-                    + ". "
-                    + conference_field.split("|b ")[1].split(" |")[0]
+                    conference_note + ". " + get_subfield(conference_field, "b")
                 )
             except:
                 conference_note = conference_note
+            # then check the field for a place in a potential subfield |o:
+            try:
+                conference_place = get_subfield(conference_field, "o")
+            except:
+                conference_place = None
 
             # construct the node for the conference:
             # count up the global conference counter for this record:
@@ -2742,7 +2651,6 @@ def get_bf_conferences(work_uri, record):
             records_bf.add((work_uri, BF.contribution, conference_reference_node))
 
 
-# %% [markdown]
 # ## Functions: Add Research Data Link from DATAC and URLAI
 #
 # Field URLAI should only hold a doi for a psychdata dataset (these are usually, or rather, always, restricted access). This field always has a full doi link, in various prefix formats. We remove the prefix and only keep the pure doi.
@@ -2782,7 +2690,6 @@ def get_bf_conferences(work_uri, record):
 # https://vocabularies.coar-repositories.org/access_rights/ - its four concepts: open access, restriced access, embargoed access, metadata only access.
 
 
-# %%
 def get_urlai(work_uri, record):
     """Gets research data from field URLAI. This is always in PsychData, so it will be restricted access by default.
     We will also assume it to always be just research data, not code.
@@ -2845,7 +2752,6 @@ def get_urlai(work_uri, record):
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
 
-# %%
 def get_datac(work_uri, record):
     """Gets research data from field DATAC, adds a Relationship node to the work.
     Note: We define all data from this field as type "research data only, no code", and "open/unrestricted access"
@@ -2926,8 +2832,7 @@ def get_datac(work_uri, record):
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
 
-# %% [markdown]
-# ## Function: Get Series info for Books (field SE)
+# ## TODO: Function: Get Series info for Books (field SE)
 #
 # Books (their Instances) can pe part of a monographic series - or even part of more than one series (usually that is a subseries of a bigger series). We currently store the title of that series, along with the volume number of the current book within that series, in field SE. Numbering is usually separated with a comma (but not always, sigh.)
 # Also, there are cases where there is no numbering at all, or a strange one that is actually the issue and volume like from a journal?
@@ -2936,8 +2841,8 @@ def get_datac(work_uri, record):
 #
 # ```r
 # Works:0396715_work a bf:Work;
-#     # omitted: info about the work of the book itself (title, abstract, topics etc.)
-# bf:hasInstance
+#     # omitted: info about the work of the book itself (contributions, abstract, topics etc.)
+# pxp:hasInstanceBundle
 #     [
 #         # omitted: info about the instance of the book itself (publisher, date, etc.)
 #         bflc:relationship [a bflc:Relationship;
@@ -2956,49 +2861,99 @@ def get_datac(work_uri, record):
 # ```
 #
 
-# %% [markdown]
-# # The Loop!
+#### # ----- The Loop! -------------- # ####
 # ## Creating the Work and Instance uris and adding other triples via functions
-
-# %% [markdown]
-# ### Uris and types for Bibframe profile
-#
-# We want two URIs, since we split the Records into (at first) one work and one instance, which will be linked together.
-# We also say one will be a (rdf:type) bf:Work and the other bf:Instance.
-# Then we print all these triples into a file for the bibframe profile.
-
-# %%
-# print(len(root.findall("Record")))
-
+# ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-for record in root.findall("Record"):
-    # for record in root.findall("Record")[0:200]:
-    # get the count of this record:
+# for record in root.findall("Record"):
+"""comment this out to run the only 200 records instead of all 700:"""
+for record in root.findall("Record")[0:20]:
+    # count up the processed records for logging purposes:
     record_count += 1
 
-    # create a named graph dataset for each "record":
-    # Create an empty Dataset
-    # d = Dataset()
-    # Add a namespace prefix to it, just like for Graph
-    # d.bind("ex", Namespace("http://example.com/"))
-    # Declare a Graph URI to be used to identify a Graph
-    # graph_1 = URIRef("http://example.com/graph/" + dfk + "/")
-    # Add an empty Graph, identified by graph_1, to the Dataset
-    # d.graph(identifier=graph_1)
-
-    # get the DFK identifier from the record:
+    # Get the DFK identifier from the record - we need it for naming our URIs of works, instances and instancebundles:
+    # note: actually adding it as an identifier is done below, to the instancebundle.
     dfk = record.find("DFK").text
 
-    # create a URI for the work and the instance and give them their correct bf classes:
+    # Create a URI node for the work and  give it the correct bibframe classes:
     # make sure a work_uri will look like this: works:dfk_work, eg works:123456_work
     work_uri = URIRef(WORKS + dfk + "_work")
     records_bf.add((work_uri, RDF.type, BF.Work))
-    # d.add((work_uri, RDF.type, BF.Work, graph_1))
 
-    # for each work, create one pxc:InstanceBundle with an uri like this: instancebundles:0123456 (where 0123456 is the dfk of the record):
+    # Add language of work from field LA and add to Work -
+    # TODO: second language from <LA2>? no way to distinguish
+    # between main/first language and second in bibframe
+    records_bf.add((work_uri, BF.language, get_work_language(record)))
+
+    ## Adding Contributions by Persons and Corporate Bodies to the work (only real creators, like editors, authors, translators,
+    # not funders or conferences, which are handled below)
+    # set up/reset a global counter for contributions to a work (it will count up in the functions that add Person contributions from AUP fields and Org contributions from AUK fields) - we need it to add the contribution position
+    contribution_counter = 0
+    fundingreference_counter = 0
+    conferencereference_counter = 0
+    add_bf_contributor_person(work_uri, record)
+    # are there any PAUPs left that haven't been successfull matched and added to contributors?
+    match_CS_COU_affiliations_to_first_contribution(work_uri, record)
+    match_paups_to_contribution_nodes(work_uri, record)
+    match_orcids_to_contribution_nodes(work_uri, record)
+    add_bf_contributor_corporate_body(work_uri, record)
+    match_email_to_contribution_nodes(work_uri, record)
+
+    # Add the table of contents to the work, if we can extract it from the abstract field (ABH):
+    get_bf_toc(work_uri, record)
+
+    # Adding main/original abstract to the work:
+    # note: somehow not all records have one!
+    if record.find("ABH") is not None:
+        get_bf_abstract(work_uri, record)
+        # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
+    # d.add((work_uri, BF.summary, get_bf_abstract(work_uri, record), graph_1))
+
+    # Adding secondary abstract to the work - (usually a translation, so also has data about the origin of the abstract):
+    # note: somehow not all records have one!
+    if record.find("ABN") is not None:
+        records_bf.add(
+            (work_uri, BF.summary, get_bf_secondary_abstract(work_uri, record))
+        )
+
+    # Adding CTs to the work, including skosmos lookup for the concept uris:
+    add_controlled_terms(work_uri, record)
+
+    ## TODO: add all the other controlled keywords from the record to the work - SH, CM, AGE, SAM, PLOC
+    # including skosmos lookups.
+
+    ## TODO: add any uncotrolled keywords we have:
+    # from fields KP - and if they exist, UTE and UTG
+
+    # Adding pxc:FundingReferences from fields <GRANT> to the work:
+    get_bf_grants(work_uri, record)
+
+    ## Adding Conferences to the work:
+    get_bf_conferences(
+        work_uri, record
+    )  # adds a bf:contribution >> pxc:ConferenceReference node to the work
+
+    ## Add research data links from fields URLAI and DATAC to the work:
+    # get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
+    # switched off for performance reasons
+
+    ### Adding Preregistration links to the work (from field <PREREG>):
+    # deactivated due to performance issues and
+    # needing a rewrite (replace bnodes with hash-uris),
+    # finding a way to frame only "real" main works (1 per star record) in the jsonld,
+    # instead of these linked Works, too
+    # get_bf_preregistrations(work_uri, record)
+
+    ## ==== InstanceBundle ==== ##
+
+    # For each work, create one pxc:InstanceBundle node with an uri
+    # like this: instancebundles:0123456 (where 0123456 is the dfk of the record):
+    # (we migrate each record as an InstanceBundle with 1 or 2 Instances)
     instance_bundle_uri = URIRef(INSTANCEBUNDLES + dfk)
     records_bf.add((instance_bundle_uri, RDF.type, PXC.InstanceBundle))
-    # create one instance:
+
+    ## ==== Instances ==== ##
+    # Create the first instance - there will always be at least one:
     instance_uri = URIRef(INSTANCES + dfk + "#1")
     records_bf.add((instance_uri, RDF.type, BF.Instance))
 
@@ -3006,10 +2961,15 @@ for record in root.findall("Record"):
     records_bf.add((work_uri, PXP.hasInstanceBundle, instance_bundle_uri))
     # connect the instance_bundle to the instance:
     records_bf.add((instance_bundle_uri, BF.hasPart, instance_uri))
+
     # connect work and instance via bf:instanceOf and bf:hasInstance:
     records_bf.add((instance_uri, BF.instanceOf, work_uri))
     records_bf.add((work_uri, BF.hasInstance, instance_uri))
-    # add mediacarrier from MT to the instance:
+
+    # Add mediacarrier from field MT to the first instance:
+    # Note: MT is the first media type field in a record, it contains
+    # a string name of the medium of the first instance (e.g. "Print" or "Online Medium").
+
     if record.find("MT") is not None:
         records_bf.add(
             (
@@ -3018,7 +2978,8 @@ for record in root.findall("Record"):
                 get_mediacarrier(record.find("MT").text)[1],
             )
         )
-        # also add a second class to instance - Eletronic or Print, based on the mediacarrier:
+        # Also add a second class to instance (usually bf:Eletronic or bf:Print, subclasses of bf:Instance),
+        # based on the mediacarrier: deactivating this, as it is not needed for the migration
         # records_bf.add(
         #     (
         #         instance_uri,
@@ -3027,16 +2988,24 @@ for record in root.findall("Record"):
         #     )
         # )
 
-    ## add the publication info (date, publisher, place) to the instancebundle:
+    ## Add the publication info (date, publisher, place) to the instancebundle:
+    # Note 1: we only have one publication date per record, although two instances could have
+    # different publication dates. We only add the first one to the instancebundle.
+    # Note 2: publisher and publication place are the same for all instances of a record,
+    # so we add them to the instancebundle, not the instance (yet). In future, we should copy them over
+    # to the instance, so we can have a complete bf:Publication node for each instance, and then add the
+    # (possibly) different publication dates to this node, too.
+    # So TODO: add a copy of this bf:Publication node to each instance, adding the instance's unique publication date to it.
     add_publication_info(instance_bundle_uri, record)
-    # TODO: add any additional instance in the record as well - identifiable from the existence of an MT2 field.
+
+    # Add a second instance to the work and instancebundle, if there is a second mediatype in the record:
     if record.find("MT2") is not None:
         instance_uri_2 = URIRef(
             INSTANCES + dfk + "#2"
         )  # create a second instance node:
         records_bf.add(
             (instance_uri_2, RDF.type, BF.Instance)
-        )  # give it the type bf:Instance
+        )  # give it type/class bf:Instance
         records_bf.add(
             (instance_bundle_uri, BF.hasPart, instance_uri_2)
         )  # connect the instancebundle to the instance
@@ -3046,9 +3015,9 @@ for record in root.findall("Record"):
         records_bf.add(
             (work_uri, BF.hasInstance, instance_uri_2)
         )  # connect work to this instance
-        # add publication date, publisher, place:
-        # add_publication_info(instance_uri_2, record, record.find("MT2").text)
-        # add the mediacarrier node to the instance:
+        # TODO: add publication date, publisher, place:
+        # like this, probably: add_publication_info(instance_uri_2, record, record.find("MT2").text)
+        ## Add the mediacarrier node to the instance:
         records_bf.add(
             (
                 instance_uri_2,
@@ -3057,7 +3026,7 @@ for record in root.findall("Record"):
             )
         )
 
-    # for the DFK, add an identifier node to the instancebundle using a function:
+    # Add the DFK as an identifier node to the instancebundle:
     records_bf.add(
         (
             instance_bundle_uri,
@@ -3066,17 +3035,20 @@ for record in root.findall("Record"):
         )
     )
 
-    # add the issuance type (from BE) to the bundle:
+    # Add the issuance type (from BE) to the instancebundle (e.g. "Journal Article" or "Edited Book"):
     get_issuance_type(instance_bundle_uri, record)
 
-    # get field TI and add as title node to the instance bundle:
+    ### Add titles (original and translated) to the instancebundle:
+
+    # Add title from field TI (original title) and associated fields:
     title = get_bf_title(instance_bundle_uri, record)
     records_bf.set((instance_bundle_uri, BF.title, title))
-    # also link the title to the instance:
-    # records_bf.set((instance_uri, BF.title, title))
 
-    # get TIUE field and add as translated title node:
-    # but only if the field exists!
+    # Add translated title from TIUE field and associated fields
+    # but only if the field exists - which is not always the case, sadly!
+    # Not using the same function here as for TI, since translated titles have
+    # have many more fields, such as origin etc.
+    # There is certainly room for refactoring here!
     if record.find("TIUE") is not None and record.find("TIUE").text != "":
         records_bf.add(
             (
@@ -3086,63 +3058,11 @@ for record in root.findall("Record"):
             )
         )
 
-    # get work language from LA
-    records_bf.add((work_uri, BF.language, get_work_language(record)))
-
-    # get and add contributors:
-    # set up/reset a global counter for contributions to a work (it will count up in the functions that add Person contributions from AUP fields and Org contributions from AUK fields) - we need it to add the contribution position
-    contribution_counter = 0
-    fundingreference_counter = 0
-    conferencereference_counter = 0
-    add_bf_contributor_person(work_uri, record)
-    # are there any PAUPs left that haven't been successfull matched and added to contributors?
-    match_paups_to_contribution_nodes(work_uri, record)
-    match_orcids_to_contribution_nodes(work_uri, record)
-    add_bf_contributor_corporate_body(work_uri, record)
-    match_email_to_contribution_nodes(work_uri, record)
-    # get toc, if it exists:
-    get_bf_toc(work_uri, record)
-
-    # get and add main/original abstract:
-    # note: somehow not all records have one!
-    if record.find("ABH") is not None:
-        get_bf_abstract(work_uri, record)
-        # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
-    # d.add((work_uri, BF.summary, get_bf_abstract(work_uri, record), graph_1))
-
-    # get and add main/original abstract:
-    # note: somehow not all records have one!
-    if record.find("ABN") is not None:
-        records_bf.add(
-            (work_uri, BF.summary, get_bf_secondary_abstract(work_uri, record))
-        )
-
-    # get and add any CTs:
-    add_controlled_terms(work_uri, record)
-
-    # get and add preregistration links:
-    # get_bf_preregistrations(work_uri, record)
-    # switched off for performance reasons
-
-    # get and add grants by using the returned set of nodes and adding it to the work:
-    get_bf_grants(work_uri, record)
-
-    # get and add conferences:
-    get_bf_conferences(
-        work_uri, record
-    )  # adds the generated bflc:Relationship node to the work
-
-    # get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
-    # switched off for performance reasons
-
-    # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong:
-    # get the isbns and add them to the instance bundle first:
-    # return two nodes, one for the print isbn, another for the ebook_isbn.
-    # well add them to the appropriate instance.
+    ## adding ISBNs:
+    # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong.
+    # that is hard and very slow. MAybe we should do this in a separate sparql query afterwards?
+    # For now, we get the isbns from <PU> subfield |i and |e and add them to the instancebundle first:
     add_isbns(record, instance_bundle_uri)
-
-    # Serialize the Dataset to a file.
-    # d.serialize(destination="ttl-data/" + dfk + ".jsonld", format="json-ld", auto_compact=True)
 
 
 # add a Literal for the count of records:
@@ -3169,7 +3089,7 @@ records_bf.add(
 
 print(record_count, "records")
 
-# print all the resulting triples:
+# Serialize all the resulting triples as a turtle file and a jsonld file:
 records_bf.serialize("ttl-data/bibframe_records.ttl", format="turtle")
 records_bf.serialize(
     "ttl-data/bibframe_records.jsonld",
@@ -3178,48 +3098,8 @@ records_bf.serialize(
     sort_keys=True,
     index=True,
 )
-# serialize as xml
+# also serialize as xml
 records_bf.serialize("ttl-data/bibframe_records.xml", format="pretty-xml")
 
-
-# # import a context file as a dict:
-# with open("bibframe-context.json", "r") as context_file:
-#     context = json.load(context_file)
-# # add the context to the graph:
-# context_dict = context
-# # serialize as json-ld and pass the context dict:
-# records_bf.serialize("ttl-data/bibframe_records.jsonld", format="json-ld", auto_compact=True, sort_keys=True, index=True, context=context_dict)
-
-# testwork = "https://w3id.org/resources/works/0401567"
-# records_bf[testwork].serialize("ttl-data/bibframe_sample.jsonld", format="json-ld")
-
+# print a count the triples we generated:
 print(len(records_bf), "triples")
-
-
-# %% [markdown]
-# ### Uris and types for simplified profile (schema-org)
-#
-# For the simplified profile, we only need one entity per record (for now) and we give it the class schema:CreativeWork.
-# Then we print the resulting triples into a separate file for the simplified profile that mostly uses schema.org properties and classes.
-
-# %%
-
-
-# print(len(root.findall("Record")))
-
-# for record in root.findall("Record"):
-#     # get the DFK identifier from the record:
-#     dfk = record.find("DFK").text
-
-#     # create a URI for the work by attaching the dfk to the works namespace and
-#     # then give it the correct schema.org class:
-#     work_uri = WORKS[dfk]
-#     records_schema.add((work_uri, RDF.type, SCHEMA.CreativeWork))
-
-#     # get work language from LA
-#     records_schema.add((work_uri, SCHEMA.inLanguage, get_work_language(record)))
-
-
-# records_schema.serialize("ttl-data/schema_records.jsonld", format="json-ld")
-# # records_schema.serialize("ttl-data/schema_records.ttl", format="turtle")
-# print(len(records_schema), "triples")
