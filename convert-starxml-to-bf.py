@@ -1191,79 +1191,79 @@ def get_mediacarrier(mediatype):
             return URIRef(BF["Print"]), URIRef(PMT["Print"])
 
 
-def get_publication_info(instance_uri, record, mediatype):
-    # get the publication info:
-    pu = None
-    pu = record.find("PU")
-    pufield = html.unescape(pu.text.strip())
-    if pu is not None and pufield != "":
-        # split out the content after |e:
-        pub_lisher = pufield.split("|v")
-        pub_place = pufield.split("|o")
-        p_isbn = pufield.split("|i")
-        e_isbn = pufield.split("|e")
-        # add a bf:provisionActivity to the instance:
-        publication_node = BNode()
-        records_bf.add((instance_uri, BF.provisionActivity, publication_node))
-        # add the bf:place to the bf:provisionActivity:
-        if len(pub_place) > 1:
-            records_bf.add(
-                (publication_node, BFLC.simplePlace, Literal(str(pub_place[1]).strip()))
-            )
-        # add the pub_lisher to the bf:provisionActivity as bflc:simpleAgent:
-        if len(pub_lisher) > 1:
-            records_bf.add(
-                (
-                    publication_node,
-                    BFLC.simpleAgent,
-                    Literal(str(pub_lisher[1]).strip()),
-                )
-            )
-        # add the p_isbn to the instance:
-        isbn_node = BNode()
-        records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
-        records_bf.add((isbn_node, RDF.type, BF.Isbn))
-        if get_mediacarrier(mediatype) == BF.Electronic:
-            records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
-            records_bf.add((isbn_node, RDF.type, BF.Isbn))
-            records_bf.add((isbn_node, RDF.value, Literal(str(e_isbn[1]).strip())))
-        else:
-            records_bf.add((isbn_node, RDF.value, Literal(str(p_isbn[1]).strip())))
+# def get_publication_info(instance_uri, record, mediatype):
+#     # get the publication info:
+#     pu = None
+#     pu = record.find("PU")
+#     pufield = html.unescape(pu.text.strip())
+#     if pu is not None and pufield != "":
+#         # split out the content after |e:
+#         pub_lisher = pufield.split("|v")
+#         pub_place = pufield.split("|o")
+#         p_isbn = pufield.split("|i")
+#         e_isbn = pufield.split("|e")
+#         # add a bf:provisionActivity to the instance:
+#         publication_node = BNode()
+#         records_bf.add((instance_uri, BF.provisionActivity, publication_node))
+#         # add the bf:place to the bf:provisionActivity:
+#         if len(pub_place) > 1:
+#             records_bf.add(
+#                 (publication_node, BFLC.simplePlace, Literal(str(pub_place[1]).strip()))
+#             )
+#         # add the pub_lisher to the bf:provisionActivity as bflc:simpleAgent:
+#         if len(pub_lisher) > 1:
+#             records_bf.add(
+#                 (
+#                     publication_node,
+#                     BFLC.simpleAgent,
+#                     Literal(str(pub_lisher[1]).strip()),
+#                 )
+#             )
+#         # add the p_isbn to the instance:
+#         isbn_node = BNode()
+#         records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
+#         records_bf.add((isbn_node, RDF.type, BF.Isbn))
+#         if get_mediacarrier(mediatype) == BF.Electronic:
+#             records_bf.add((instance_uri, BF.identifiedBy, isbn_node))
+#             records_bf.add((isbn_node, RDF.type, BF.Isbn))
+#             records_bf.add((isbn_node, RDF.value, Literal(str(e_isbn[1]).strip())))
+#         else:
+#             records_bf.add((isbn_node, RDF.value, Literal(str(p_isbn[1]).strip())))
 
 
-def split_books(instance_uri, record):
-    # check the BE field to see if it is "SS" or "SM":
-    be = None
-    be = record.find("BE")
-    befield = be.text.strip()
-    if be is not None and befield == "SS" or befield == "SM":
-        mt = None
-        mt2 = None
-        mtfield = html.unescape(record.find("MT").text.strip())
-        mt2field = html.unescape(record.find("MT2").text.strip())
-        # we should check if there is an "e isbn" somewhere in PU subfield |e:
+# def split_books(instance_uri, record):
+#     # check the BE field to see if it is "SS" or "SM":
+#     be = None
+#     be = record.find("BE")
+#     befield = be.text.strip()
+#     if be is not None and befield == "SS" or befield == "SM":
+#         mt = None
+#         mt2 = None
+#         mtfield = html.unescape(record.find("MT").text.strip())
+#         mt2field = html.unescape(record.find("MT2").text.strip())
+#         # we should check if there is an "e isbn" somewhere in PU subfield |e:
 
-        if mt is not None and mtfield != "":
-            # note the content of the MT field and use get_mediacarrier to get the corresponding bibframe instance class:
-            # add the resulting bf class to the instance:
-            # print("It's a book! Subclass: " + str(get_mediacarrier(mt.text)))
-            records_bf.add((instance_uri, RDF.type, get_mediacarrier(mtfield)))
+#         if mt is not None and mtfield != "":
+#             # note the content of the MT field and use get_mediacarrier to get the corresponding bibframe instance class:
+#             # add the resulting bf class to the instance:
+#             # print("It's a book! Subclass: " + str(get_mediacarrier(mt.text)))
+#             records_bf.add((instance_uri, RDF.type, get_mediacarrier(mtfield)))
 
-        if mt2 is not None and mt2field != "":
-            # use get_mediacarrier to get the corresponding bibframe instance class:
-            # add the resulting bf class to the instance:
-            # print("It's also a subclass: " + str(get_mediacarrier(mt2.text)))
-            # we add another instance for the second book:
-            instance2 = BNode()
-            # make it class Instance:
-            records_bf.add((instance2, RDF.type, BF.Instance))
-            # since it is "second instance", also give it the class bflc:SecondaryInstance:
-            records_bf.add((instance2, RDF.type, BFLC.SecondaryInstance))
-            # also add instance subclass that describes the media type (Electronic or Print):
-            records_bf.add((instance2, RDF.type, get_mediacarrier(mt2field)))
-            # make sure to connect the two instances with an explicit bf:otherPsychicalFormat,
-            # even though we already say this _implicitly_ with the bflc:SecondaryInstance class:
-            records_bf.add((instance_uri, BF.otherPhysicalFormat, instance2))
+#         if mt2 is not None and mt2field != "":
+#             # use get_mediacarrier to get the corresponding bibframe instance class:
+#             # add the resulting bf class to the instance:
+#             # print("It's also a subclass: " + str(get_mediacarrier(mt2.text)))
+#             # we add another instance for the second book:
+#             instance2 = BNode()
+#             # make it class Instance:
+#             records_bf.add((instance2, RDF.type, BF.Instance))
+#             # since it is "second instance", also give it the class bflc:SecondaryInstance:
+#             records_bf.add((instance2, RDF.type, BFLC.SecondaryInstance))
+#             # also add instance subclass that describes the media type (Electronic or Print):
+#             records_bf.add((instance2, RDF.type, get_mediacarrier(mt2field)))
+#             # make sure to connect the two instances with an explicit bf:otherPsychicalFormat,
+#             # even though we already say this _implicitly_ with the bflc:SecondaryInstance class:
+#             records_bf.add((instance_uri, BF.otherPhysicalFormat, instance2))
 
 
 ###
@@ -1982,7 +1982,7 @@ def get_bf_abstract(work_uri, record):
         abstracttext = match2.group(1).strip()
         contents = match2.group(2).strip()
         # make a node for bf:TableOfContents:
-        toc = BNode()
+        toc = URIRef(work_uri + "#toc")
         records_bf.add((toc, RDF.type, BF.TableOfContents))
         # add the bnode to the work via bf:tableOfContents:
         records_bf.add((work_uri, BF.tableOfContents, toc))
@@ -2709,7 +2709,7 @@ def get_bf_conferences(work_uri, record):
             # a blank node for the conference/meeting/agent:
             conference_node = URIRef(str(conference_reference_node) + "_meeting")
             records_bf.add((conference_node, RDF.type, BF.Meeting))
-            records_bf.add((conference_node, RDF.type, PXC.Conference))
+            # records_bf.add((conference_node, RDF.type, PXC.Conference))
             # attach the agent to the contribution/conferencereference:
             records_bf.add((conference_reference_node, BF.agent, conference_node))
             # add the conference name as a label to the agent/meeting node:
@@ -3130,7 +3130,7 @@ for record in root.findall("Record"):
         work_uri, record
     )  # adds the generated bflc:Relationship node to the work
 
-    # get_datac(work_uri, record) # adds the generated bfls:Relationship node to the work
+    get_datac(work_uri, record) # adds the generated bfls:Relationship node to the work
     # switched off for performance reasons
 
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong:
