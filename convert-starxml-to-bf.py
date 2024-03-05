@@ -5,16 +5,17 @@
 # Import libraries:
 
 # %%
-from calendar import c
+import dateparser
+from numpy import rec
 from rdflib import Graph, Literal
-from rdflib.namespace import RDF, RDFS, XSD, SKOS, Namespace
+from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
 from rdflib import URIRef
 import xml.etree.ElementTree as ET
 import re
 import html
 
-from regex import F
+import regex
 
 import modules.mappings as mappings
 import modules.contributions as contributions
@@ -44,6 +45,8 @@ CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
 # for getting a list of funders from api ():
 CROSSREF_API_URL = "https://api.crossref.org/funders?query="
 
+SKOSMOS_API_URL = "https://skosmos.dev.zpid.org/rest/v1/"
+
 urls_expire_after = {
     # Custom cache duration per url, 0 means "don't cache"
     # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/09183&lang=de': 0,
@@ -58,6 +61,13 @@ session = requests_cache.CachedSession(
 )
 # and a cache for the crossref api:
 session_fundref = requests_cache.CachedSession(
+    ".cache/requests",
+    allowable_codes=[200, 404],
+    expire_after=timedelta(days=30),
+    urls_expire_after=urls_expire_after,
+)
+
+session_skosmos = requests_cache.CachedSession(
     ".cache/requests",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
@@ -121,6 +131,7 @@ ROLES = Namespace("https://w3id.org/zpid/vocabs/roles/")
 ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
 RELATIONS = Namespace("https://w3id.org/zpid/vocabs/relations/")
 GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
+PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
 
 
 # graph for bibframe profile:
@@ -153,6 +164,8 @@ records_bf.bind("roles", ROLES)
 records_bf.bind("relations", RELATIONS)
 records_bf.bind("genres", GENRES)
 records_bf.bind("contenttypes", CONTENTTYPES)
+records_bf.bind("issuances", ISSUANCES)
+records_bf.bind("pmt", PMT)
 
 
 # %% [markdown]
@@ -202,29 +215,123 @@ def get_issuance_type(instance_bundle_uri, record):
         print("record has no valid bibliographic level!")
 
 
-def get_publication_date(instance_uri, record):
-    # from field PY, get pub date and create a provisonActivity > Publication node with this as the simpleDate.
-    try:
-        pub_date = html.unescape(
-            mappings.replace_encodings(record.find("PY").text.strip())
-        )
-        # generate a node for the Publication:
-        publication_node = URIRef(str(instance_uri) + "_publication")
-        # add the date:
-        records_bf.set((publication_node, BFLC.simpleDate, Literal(pub_date)))
-        # return publication_node
-        # add it to the instance
-        records_bf.add((instance_uri, BF.provisionActivity, publication_node))
+def get_publication_date(record):
+    # from field PHIST or PY, get pub date and return this as a Literal
+    # get date from PHIST field, it exists, otherwise from P> field:
+    if record.find("PHIST") is not None and record.find("PHIST").text != "":
+        date = get_subfield(record.find("PHIST").text, "o")
+        # clean up anything that's not a digit at the  start, such as ":" - make sure with a regex that date starts with a digit:
+        date.strip()
+        # parse the date: it can be either "8 June 2021" or "08.06.2021"
+        try:
+            # parse and convert this to the yyyy-mm-dd format:
+            date = dateparser.parse(date).strftime("%Y-%m-%d")
+        except:
+            print("parsedate: couldn't parse " + str(date))
+            print("Data in PHIST looks like an unsalvagable mess, using PY insead!")
+            try:
+                date = record.find("PY").text
+            except:
+                print("record has no valid publication date!")
+                date = None
 
+    else:
+        print("no date found in PHIST, using PY")
+        try:
+            date = record.find("PY").text
+        except:
+            print("record has no valid publication date!")
+            date = None
+    return date
+
+
+def add_isbns(record, instancebundle_uri):
+    # if there is a PU, find subfield |i and e
+    try:
+        pu = record.find("PU")
     except:
-        print("record has no valid publication date!")
+        pu = None
+    if pu is not None and pu.text != "":
+        try:
+            isbn_print = get_subfield(pu.text, "i")
+        except:
+            isbn_print = None
+        try:
+            isbn_ebook = get_subfield(pu.text, "e")
+        except:
+            isbn_ebook = None
+
+        if isbn_print is not None:
+            isbn_print_node = URIRef(str(instancebundle_uri) + "#isbn_print")
+            records_bf.set((isbn_print_node, RDF.type, BF.Isbn))
+            records_bf.set((isbn_print_node, RDF.value, Literal(isbn_print)))
+            records_bf.add((instancebundle_uri, BF.identifiedBy, isbn_print_node))
+
+        if isbn_ebook is not None:
+            isbn_ebook_node = URIRef(str(instancebundle_uri) + "#isbn_ebook")
+            records_bf.set((isbn_ebook_node, RDF.type, BF.Isbn))
+            records_bf.set((isbn_ebook_node, RDF.value, Literal(isbn_ebook)))
+            records_bf.add((instancebundle_uri, BF.identifiedBy, isbn_ebook_node))
+
+        # check all the instances of this work whether they are print or online mediacarrier. If so, add appropriate isbn to them:
+        # for instance in records_bf.objects(work_uri, BF.hasInstance):
+        #     if isbn_print is not None:
+        #         if records_bf.value(instance, RDF.type) == BF.Print:
+        #             isbn_print_node = URIRef(str(instance) + "_isbn")
+        #             records_bf.set((isbn_print_node, RDF.type, BF.Isbn))
+        #             records_bf.set((isbn_print_node, RDF.value, Literal(isbn_print)))
+        #             records_bf.add((instance, BF.identifiedBy, isbn_print_node))
+        #         else:
+        #             print("found no place for print isbn: " + isbn_print)
+        #             # try:
+        #             #     instance_bundle = records_bf.value(work_uri, PXP.hasInstanceBundle)
+        #             #     isbn_print_node = URIRef(str(instance_bundle) + "_isbn")
+        #             #     records_bf.set((isbn_print_node, RDF.type, BF.Isbn))
+        #             #     records_bf.set(
+        #             #         (isbn_print_node, RDF.value, Literal(isbn_print))
+        #             #     )
+        #             #     records_bf.add((instance_bundle, BF.identifiedBy, isbn_print_node))
+        #             # except:
+        #             #     print("failed adding print isbn")
+
+        #             # why are they not being added? maybe we should try to add singletons to singleton Instances, at least?
+
+        #     if isbn_ebook is not None:
+        #         if records_bf.value(instance, RDF.type) == BF.Electronic:
+        #             isbn_ebook_node = URIRef(str(instance) + "_isbn")
+        #             records_bf.set((isbn_ebook_node, RDF.type, BF.Isbn))
+        #             records_bf.set((isbn_ebook_node, RDF.value, Literal(isbn_ebook)))
+        #             records_bf.add((instance, BF.identifiedBy, isbn_ebook_node))
+        #         else:
+        #             print("found no place for e-issn: " + isbn_ebook)
+
+
+def get_concept_uri_from_skosmos(concept_label, vocid):
+    # get the uri of a concept from skosmos by its label
+
+    skosmos_request = session_skosmos.get(
+        SKOSMOS_API_URL + vocid + "/lookup?label=" + concept_label + "&lang=en",
+        timeout=20,
+    )
+
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response["result"]) > 0:
+            # print(skosmos_response["result"][0]["uri"])
+            return skosmos_response["result"][0]["uri"]
+        else:
+            print("no uri found for " + concept_label)
+            return None
+    else:
+        print("skosmos request failed for " + concept_label)
+        return None
 
 
 def match_paups_to_contribution_nodes(work_uri, record):
     # go through all PAUP fields and get the id:
     for paup in record.findall("PAUP"):
-        paup_id = paup.text.strip().split("|n")[1].strip().split("|")[0].strip()
-        paup_name = paup.text.strip().split("|n")[0].strip()
+        paup_id = get_subfield(paup.text, "n")
+        paup_name = get_mainfield(paup.text)
         # print(
         #     "matching paup_id "
         #     + paup_id
@@ -325,8 +432,9 @@ def match_paups_to_contribution_nodes(work_uri, record):
 def match_orcids_to_contribution_nodes(work_uri, record):
     # go through all ORCID fields and get the id:
     for orcid in record.findall("ORCID"):
-        orcid_id = orcid.text.strip().split("|u")[1].strip()
-        orcid_name = orcid.text.strip().split("|u")[0].strip()
+        # print("orcid: " + orcid.text)
+        orcid_id = get_subfield(orcid.text, "u")
+        orcid_name = get_mainfield(orcid.text)
         # print(
         #     "matching orcid_id "
         #     + orcid_id
@@ -334,6 +442,8 @@ def match_orcids_to_contribution_nodes(work_uri, record):
         # )
         # is the orcid well formed?
         # clean up the orcid_id by removing spaces that sometimes sneak in when entering them in the database:
+        if orcid_id is not None and " " in orcid_id:
+            print("warning: orcid_id contains spaces: " + orcid_id)
         orcid_id = orcid_id.replace(" ", "")
         # by the way, here is a regex pattern for valid orcids:
         orcid_pattern = re.compile(
@@ -344,7 +454,7 @@ def match_orcids_to_contribution_nodes(work_uri, record):
             orcid_id = orcid_pattern.match(orcid_id).group(5)
         else:
             # don't use it if it doesn't match the pattern:
-            print(f"invalid orcid: {orcid_id}, dropping.")
+            print(f"warning: invalid orcid: {orcid_id}")
         # get the given and family part of the orcid name:
         orcid_split = orcid_name.split(",")
         orcid_familyname = orcid_split[0].strip()
@@ -389,6 +499,79 @@ def match_orcids_to_contribution_nodes(work_uri, record):
                 + ") in record "
                 + record.find("DFK").text
             )
+
+
+def match_email_to_contribution_nodes(work_uri, record):
+    # there is only ever one email field in a record, so we can just get it.
+    # unless there is also a field emid, the email will be added to the first contribution node.
+    # if there is an emid, the email will be added to the person with a name matching the name in emid.
+    # get the email:
+    if record.find("EMAIL") is not None:
+        email = html.unescape(
+            mappings.replace_encodings(record.find("EMAIL").text.strip())
+        )
+        # replace spaces with _, but only if it doesnt come directly before a dot:
+        email = re.sub(r"\s(?=[^\.]*\.)", "_", email)
+        # if a space comes directly before a dot or after a dot, remove it:
+        email = re.sub(r"\s\.", ".", email)
+        email = re.sub(r"\.\s", ".", email)
+        # check if this is a valid email:
+        email_pattern = re.compile(
+            r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
+        )
+        # check if email matches the regex in email_pattern:
+        if not email_pattern.match(email):
+            print(
+                f"warning: invalid email: {email} in record {record.find('DFK').text}"
+            )
+        email = "mailto:" + email
+        # if there is an emid, the email will be added to the person with a name matching the name in emid.
+
+        # get the emid:
+        try:
+            emid_name = record.find("EMID").text
+        except:
+            emid_name = None
+        if emid_name is not None:
+            # emid_name = emid.text
+            # print("matching email to person with name " + emid_name)
+            # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
+            for contribution in records_bf.objects(work_uri, BF.contribution):
+                # get the agent of the contribution:
+                agent = records_bf.value(contribution, BF.agent)
+                # if the agent is a person, get the given and family names:
+                if records_bf.value(agent, RDF.type) == BF.Person:
+                    # get the given and family names of the agent:
+                    name = records_bf.value(agent, RDFS.label)
+                    emid_name = mappings.replace_encodings(emid_name).strip()
+                    # print("aupname_normalized: " + aupname_normalized)
+                    # if the emid_name matches the agent's name, add the email as a mads:email to the agent:
+                    if fuzz.partial_ratio(emid_name, name) > 80:
+                        # add to contribution node:
+                        records_bf.add((contribution, MADS.email, URIRef(email)))
+                        # print("email added to agent: " + email)
+                        # and break the loop:
+                        print("email: " + email)
+                        break
+                    # after all loops, print a message if no match was found:
+        # if no emid was found, add the email to the first contribution node:
+        else:
+            # print("email: to first " + email)
+
+            # print(
+            #     "no emid found, trying to add email to first contribution node:" + email
+            # )
+            # finding the contribution node from those the work_uri has that has bf:qualifier "first":
+            for contribution in records_bf.objects(work_uri, BF.contribution):
+                # dont get the agent at all, but just the position of the contribution:
+                position = records_bf.value(contribution, PXP.contributionPosition)
+                # print("position of contribution: " + str(position))
+                # break after position 1:
+                if int(position) == 1:
+                    # add to contribution node:
+                    records_bf.add((contribution, MADS.email, URIRef(email)))
+                    # print("email added to first contribution: " + email)
+                    break
 
 
 def extract_contribution_role(contributiontext):
@@ -566,7 +749,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
 # - [x] add role from AUP subfield |f
 # - [x] add country geonames id using lookup table
 # - [ ] move mads:email Literal from bf:Contribution to mads:Affiliation
-# - [ ] later: reconcile affiliations to add org id, org ror id (once we actually have institution authority files)
+# - [x] later: reconcile affiliations to add org id, org ror id (once we actually have institution authority files)
 #
 
 # %%
@@ -928,35 +1111,35 @@ def add_bf_contributor_person(work_uri, record):
             records_bf.add((contribution_node, MADS.hasAffiliation, affiliation_node))
 
         # look for the field EMAIL:
-        email = None
-        # TODO: the email address actually belongs into the affiliation section, but we'll leave it directly in the contribution node for now:
-        if record.find("EMAIL") is not None:
-            # get the email address from the EMAIL field, replacing spaces with underscores (common problem in urls in star) and adding a "mailto:" prefix:
-            email = html.unescape(
-                mappings.replace_encodings(
-                    record.find("EMAIL").text.strip().replace(" ", "_")
-                )
-            )
-            # check if this is a valid email address:
-            email_pattern = re.compile(
-                r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
-            )
-            # check if email matches the regex in email_pattern:
-            if not email_pattern.match(email):
-                print("warning: invalid email address: " + email)
-                # email = None
-            email = "mailto:" + email
-            # email = "mailto:" + record.find("EMAIL").text.strip()
-            # if there is no EMID and the contribution_counter is 1 (i.e. if this is the first loop), add the email to the person node:
-            if record.find("EMID") is None and contribution_counter == 1:
-                records_bf.add((contribution_node, MADS.email, URIRef(email)))
-            # else match the existing EMID field to the personname:
-            elif (
-                record.find("EMID") is not None
-                and mappings.replace_encodings(record.find("EMID").text.strip())
-                == personname
-            ):
-                records_bf.add((contribution_node, MADS.email, URIRef(email)))
+        # email = None
+        # # TODO: the email address actually belongs into the affiliation section, but we'll leave it directly in the contribution node for now:
+        # if record.find("EMAIL") is not None:
+        #     # get the email address from the EMAIL field, replacing spaces with underscores (common problem in urls in star) and adding a "mailto:" prefix:
+        #     email = html.unescape(
+        #         mappings.replace_encodings(
+        #             record.find("EMAIL").text.strip().replace(" ", "_")
+        #         )
+        #     )
+        #     # check if this is a valid email address:
+        #     email_pattern = re.compile(
+        #         r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
+        #     )
+        #     # check if email matches the regex in email_pattern:
+        #     if not email_pattern.match(email):
+        #         print("warning: invalid email address: " + email)
+        #         # email = None
+        #     email = "mailto:" + email
+        #     # email = "mailto:" + record.find("EMAIL").text.strip()
+        #     # if there is no EMID and the contribution_counter is 1 (i.e. if this is the first loop), add the email to the person node:
+        #     if record.find("EMID") is None and contribution_counter == 1:
+        #         records_bf.add((contribution_node, MADS.email, URIRef(email)))
+        #     # else match the existing EMID field to the personname:
+        #     elif (
+        #         record.find("EMID") is not None
+        #         and mappings.replace_encodings(record.find("EMID").text.strip())
+        #         == personname
+        #     ):
+        #         records_bf.add((contribution_node, MADS.email, URIRef(email)))
 
         # extracting the role:
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
@@ -985,15 +1168,27 @@ def add_bf_contributor_person(work_uri, record):
 # %%
 # function to set mediaCarrier from mt and mt2:
 def get_mediacarrier(mediatype):
-    cases = [
-        ("Print", "Print"),
-        ("Online Medium", "Electronic"),
-        ("eBook", "Electronic"),
-    ]
-    for case in cases:
-        if case[0] == mediatype:
-            return URIRef(BF[case[1]])
-    return URIRef(BF[mediatype])
+    mediatype = mediatype.strip()
+    MEDIACARRIER_VOCAB_PREFIX_URI = "https://w3id.org/zpid/vocabs/mediacarrier/"
+    # cases = [
+    #     # format: MT/MT2 value, bf:Instance subclass, pxp:mediaCarrier value/uri localname"
+    #     ("Print", "Print", "Print"),
+    #     ("Online Medium", "Electronic", "Online"),
+    #     ("eBook", "Electronic", "Online"),
+    #     # add more types here
+    # ]
+    match mediatype:
+        case "Print":
+            return URIRef(BF["Print"]), URIRef(PMT["Print"])
+        case "Online Medium":
+            return URIRef(BF["Electronic"]), URIRef(PMT["Online"])
+        case "eBook":
+            return URIRef(BF["Electronic"]), URIRef(PMT["Online"])
+        case "Optical Disc":
+            return URIRef(BF["Electronic"]), URIRef(PMT["ElectronicDisc"])
+        case _:
+            print("no match for " + mediatype)
+            return URIRef(BF["Print"]), URIRef(PMT["Print"])
 
 
 def get_publication_info(instance_uri, record, mediatype):
@@ -1071,6 +1266,48 @@ def split_books(instance_uri, record):
             records_bf.add((instance_uri, BF.otherPhysicalFormat, instance2))
 
 
+###
+
+
+###
+## get the publication info from PU field and add to the instance:
+def add_publication_info(instance_uri, record):
+    # print("media type: " + mediatype)
+    # get field PU:
+    pu = None
+    pu = record.find("PU")
+    publisher_name = None
+    publication_place = None
+    publication_date = None
+    # create the node for the publication info:
+    publication_node = URIRef(str(instance_uri) + "_publication")
+    # add the date to the bf:provisionActivity:
+    publication_date = get_publication_date(record)
+    # add the publication node to the instance:
+    records_bf.add((instance_uri, BF.provisionActivity, publication_node))
+    # make it class bf:Publication:
+    records_bf.set((publication_node, RDF.type, BF.Publication))
+    if publication_date is not None:
+        records_bf.add((publication_node, BFLC.simpleDate, Literal(publication_date)))
+
+    if pu is not None and pu.text != "":
+        pufield = html.unescape(pu.text.strip())
+        # get publisher name from subfield v:
+        publisher_name = get_subfield(pufield, "v")
+        # get place from subfield o:
+        publication_place = get_subfield(pufield, "o")
+        # add the place to the bf:provisionActivity, its not none:
+        if publication_place is not None:
+            records_bf.add(
+                (publication_node, BFLC.simplePlace, Literal(publication_place))
+            )
+        # add the publisher to the bf:provisionActivity as bflc:simpleAgent:
+        if publisher_name is not None:
+            records_bf.add(
+                (publication_node, BFLC.simpleAgent, Literal(publisher_name))
+            )
+
+
 # %% [markdown]
 # ## Semi-generic helper functions
 
@@ -1098,6 +1335,29 @@ def get_subfield(subfield_full_string, subfield_name):
         # print(subfield)
         if subfield != "" and subfield is not None:
             return html.unescape(mappings.replace_encodings(subfield))
+        else:
+            return None
+
+
+def get_mainfield(field_fullstring):
+    """Given a string extracted from a star field that may have substrings or not, return the content of
+    the main field as a string - either to the first |subfield or the end of the field, if no subfields.
+    """
+    # first, make sure that the extracted substring is not None, not empty or completely comprised of spaces:
+    if field_fullstring is not None and field_fullstring != "":
+        # strip out any double spaces and replace with single space, also strip spaces around:
+        field_fullstring = re.sub(" {2,}", " ", field_fullstring.strip())
+        # split out the content of the field - to the first | or the end of subfield_full_string:
+        field = None
+        # check if a subfield is in the string:
+        if f"|" in field_fullstring:
+            # if it is, return the part before it:
+            field = field_fullstring.split("|")[0].strip()
+        else:
+            # if not, return the whole string:
+            field = field_fullstring.strip()
+        if field != "" and field is not None:
+            return html.unescape(mappings.replace_encodings(field))
         else:
             return None
 
@@ -1695,13 +1955,22 @@ def replace_abstract_origin_string(origin_string):
 # function to get the original abstract:
 def get_bf_abstract(work_uri, record):
     """Extracts the abstract from field ABH and adds a bf:Summary bnode with the abstract and its metadata. Also extracts the Table of Content from the same field."""
-    abstract = BNode()
+    abstract = URIRef(work_uri + "#abstract")
     # abstract = URIRef(work_uri + "/abstract")
     records_bf.add((abstract, RDF.type, PXC.Abstract))
     # get abstract text from ABH
     abstracttext = html.unescape(
         mappings.replace_encodings(record.find("ABH").text).strip()
     )
+    # TODO: check if the abstract is not really an abstract but a note that says a variation of "no abstract available":
+    # if so, return None and don't add the abstract node at all. Or add a note node instead. Or a vocab term for "no abstract available". There was some discussion about this. probably use bf:status for it.
+    # works:10000 bf:summary <0000abstract> . <0000abstract> bf:status status:NoAbstractAvailable. # that is weird! i'm not at all sure this works, or that i want it to work, because it makes no sense. Maybe i must export the abstract label as an empty string instead of not exporting the abstract at all?
+    # some variations found:
+    # - "Abstract not provided by publisher"
+    # - Abstract nicht vom Verlag zur Verfügung gestellt
+    # - Abstract not released by publisher.
+    # - No abstract available.
+    # - Kein Abstract vorhanden.
     # check if the abstracttext ends with " (translated by DeepL)" and if so, remove that part:
     match1 = re.search(r"^(.*)\s\(translated by DeepL\)$", abstracttext)
     if match1:
@@ -1735,7 +2004,7 @@ def get_bf_abstract(work_uri, record):
     else:  # if the ABLH field is missing, try to recognize the language of the abstract from its text:
         abstract_language = guess_language(abstracttext)
 
-    # add the text to the bnode:
+    # add the text to the node:
     records_bf.add(
         (abstract, RDFS.label, Literal(abstracttext, lang=abstract_language))
     )
@@ -1743,7 +2012,7 @@ def get_bf_abstract(work_uri, record):
     # get abstract original source from ASH1 ("Original" or "ZPID")
     abstract_source = "Original"  # default
     # create a blank node for admin metadata:
-    abstract_source_node = BNode()
+    abstract_source_node = URIRef(str(abstract) + "_source")
     records_bf.add((abstract_source_node, RDF.type, BF.AdminMetadata))
 
     if record.find("ASH1") is not None:
@@ -1783,7 +2052,7 @@ def get_bf_abstract(work_uri, record):
 
 
 def get_bf_secondary_abstract(work_uri, record):
-    abstract = BNode()
+    abstract = URIRef(work_uri + "#secondaryabstract")
     # abstract = URIRef(work_uri + "/abstract/secondary")
     records_bf.add((abstract, RDF.type, PXC.Abstract))
     records_bf.add((abstract, RDF.type, PXC.SecondaryAbstract))
@@ -1809,7 +2078,7 @@ def get_bf_secondary_abstract(work_uri, record):
         (abstract, RDFS.label, Literal(abstracttext, lang=abstract_language))
     )
 
-    abstract_source_node = BNode()
+    abstract_source_node = URIRef(str(abstract) + "_source")
     records_bf.add((abstract_source_node, RDF.type, BF.AdminMetadata))
     abstract_source = "Original"  # fallback default
     if record.find("ASN1") is not None:
@@ -1957,12 +2226,16 @@ def add_controlled_terms(work_uri, record):
         records_bf.add((controlled_term_node, RDF.type, BF.Topic))
         # records_bf.add((controlled_term_node, RDF.type, SKOS.Concept))
         # add source to the controlled term node (bf:source <https://w3id.org/zpid/vocabs/terms>):
-        records_bf.add(
-            (
-                controlled_term_node,
-                BF.source,
-                URIRef("https://w3id.org/zpid/vocabs/terms"),
-            )
+        # records_bf.add(
+        #     (
+        #         controlled_term_node,
+        #         BF.source,
+        #         URIRef("https://w3id.org/zpid/vocabs/terms"),
+        #     )
+        # )
+        # get uri from lookup in skosmos api:
+        controlled_term_uri = get_concept_uri_from_skosmos(
+            controlled_term_string_english, "terms"
         )
         if controlled_term_weighted:
             records_bf.add((controlled_term_node, RDF.type, PXC.WeightedTopic))
@@ -1988,6 +2261,7 @@ def add_controlled_terms(work_uri, record):
                 Literal(controlled_term_string_german, lang="de"),
             )
         )
+        records_bf.set((controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri)))
 
         # attach the controlled term node to the work node:
         records_bf.add((work_uri, BF.subject, controlled_term_node))
@@ -2694,10 +2968,6 @@ def get_datac(work_uri, record):
 # %%
 # print(len(root.findall("Record")))
 
-
-import json
-
-
 record_count = 0
 for record in root.findall("Record"):
     # for record in root.findall("Record")[0:200]:
@@ -2723,13 +2993,12 @@ for record in root.findall("Record"):
     records_bf.add((work_uri, RDF.type, BF.Work))
     # d.add((work_uri, RDF.type, BF.Work, graph_1))
 
-    # for each work, create one pxc:InstanceBundle with an uri like this instancebundles:0123456 (where 0123456 is the dfk of the record):
+    # for each work, create one pxc:InstanceBundle with an uri like this: instancebundles:0123456 (where 0123456 is the dfk of the record):
     instance_bundle_uri = URIRef(INSTANCEBUNDLES + dfk)
     records_bf.add((instance_bundle_uri, RDF.type, PXC.InstanceBundle))
     # create one instance:
     instance_uri = URIRef(INSTANCES + dfk + "#1")
     records_bf.add((instance_uri, RDF.type, BF.Instance))
-    # d.add((instance_uri, RDF.type, BF.Instance, graph_1))
 
     # connect the instancebundle to the work:
     records_bf.add((work_uri, PXP.hasInstanceBundle, instance_bundle_uri))
@@ -2738,17 +3007,62 @@ for record in root.findall("Record"):
     # connect work and instance via bf:instanceOf and bf:hasInstance:
     records_bf.add((instance_uri, BF.instanceOf, work_uri))
     records_bf.add((work_uri, BF.hasInstance, instance_uri))
-    # d.add((instance_uri, BF.instanceOf, work_uri, graph_1))
-    # d.add((work_uri, BF.hasInstance, instance_uri, graph_1))
+    # add mediacarrier from MT to the instance:
+    if record.find("MT") is not None:
+        records_bf.add(
+            (
+                instance_uri,
+                PXP.mediaCarrier,
+                get_mediacarrier(record.find("MT").text)[1],
+            )
+        )
+        # also add a second class to instance - Eletronic or Print, based on the mediacarrier:
+        # records_bf.add(
+        #     (
+        #         instance_uri,
+        #         RDF.type,
+        #         get_mediacarrier(record.find("MT").text)[0],
+        #     )
+        # )
+
+    ## add the publication info (date, publisher, place) to the instancebundle:
+    add_publication_info(instance_bundle_uri, record)
+    # TODO: add any additional instance in the record as well - identifiable from the existence of an MT2 field.
+    if record.find("MT2") is not None:
+        instance_uri_2 = URIRef(
+            INSTANCES + dfk + "#2"
+        )  # create a second instance node:
+        records_bf.add(
+            (instance_uri_2, RDF.type, BF.Instance)
+        )  # give it the type bf:Instance
+        records_bf.add(
+            (instance_bundle_uri, BF.hasPart, instance_uri_2)
+        )  # connect the instancebundle to the instance
+        records_bf.add(
+            (instance_uri_2, BF.instanceOf, work_uri)
+        )  # connect instance back to work
+        records_bf.add(
+            (work_uri, BF.hasInstance, instance_uri_2)
+        )  # connect work to this instance
+        # add publication date, publisher, place:
+        # add_publication_info(instance_uri_2, record, record.find("MT2").text)
+        # add the mediacarrier node to the instance:
+        records_bf.add(
+            (
+                instance_uri_2,
+                PXP.mediaCarrier,
+                get_mediacarrier(record.find("MT2").text)[1],
+            )
+        )
 
     # for the DFK, add an identifier node to the instancebundle using a function:
-    # records_bf.add(
-    #     (
-    #         instance_bundle_uri,
-    #         BF.identifiedBy,
-    #         get_bf_identifier_dfk(instance_bundle_uri, dfk),
-    #     )
-    # )
+    records_bf.add(
+        (
+            instance_bundle_uri,
+            BF.identifiedBy,
+            get_bf_identifier_dfk(instance_bundle_uri, dfk),
+        )
+    )
 
     # add the issuance type (from BE) to the bundle:
     get_issuance_type(instance_bundle_uri, record)
@@ -2761,17 +3075,17 @@ for record in root.findall("Record"):
 
     # get TIUE field and add as translated title node:
     # but only if the field exists!
-    # if record.find("TIUE") is not None and record.find("TIUE").text != "":
-    #     records_bf.add(
-    #         (
-    #             instance_bundle_uri,
-    #             BF.title,
-    #             get_bf_translated_title(instance_bundle_uri, record),
-    #         )
-    #     )
+    if record.find("TIUE") is not None and record.find("TIUE").text != "":
+        records_bf.add(
+            (
+                instance_bundle_uri,
+                BF.title,
+                get_bf_translated_title(instance_bundle_uri, record),
+            )
+        )
 
     # get work language from LA
-    # records_bf.add((work_uri, BF.language, get_work_language(record)))
+    records_bf.add((work_uri, BF.language, get_work_language(record)))
 
     # get and add contributors:
     # set up/reset a global counter for contributions to a work (it will count up in the functions that add Person contributions from AUP fields and Org contributions from AUK fields) - we need it to add the contribution position
@@ -2783,22 +3097,23 @@ for record in root.findall("Record"):
     match_paups_to_contribution_nodes(work_uri, record)
     match_orcids_to_contribution_nodes(work_uri, record)
     add_bf_contributor_corporate_body(work_uri, record)
+    match_email_to_contribution_nodes(work_uri, record)
     # get toc, if it exists:
-    # get_bf_toc(work_uri, record)
+    get_bf_toc(work_uri, record)
 
     # get and add main/original abstract:
     # note: somehow not all records have one!
-    # if record.find("ABH") is not None:
-    #     get_bf_abstract(work_uri, record)
-    # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
+    if record.find("ABH") is not None:
+        get_bf_abstract(work_uri, record)
+        # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
     # d.add((work_uri, BF.summary, get_bf_abstract(work_uri, record), graph_1))
 
     # get and add main/original abstract:
     # note: somehow not all records have one!
-    # if record.find("ABN") is not None:
-    #     records_bf.add(
-    #         (work_uri, BF.summary, get_bf_secondary_abstract(work_uri, record))
-    #     )
+    if record.find("ABN") is not None:
+        records_bf.add(
+            (work_uri, BF.summary, get_bf_secondary_abstract(work_uri, record))
+        )
 
     # get and add any CTs:
     add_controlled_terms(work_uri, record)
@@ -2818,11 +3133,11 @@ for record in root.findall("Record"):
     # get_datac(work_uri, record) # adds the generated bfls:Relationship node to the work
     # switched off for performance reasons
 
-    # get publication date (PY):
-    get_publication_date(instance_uri, record)
-
-    # get book mediacarrier and add as secondary instance class:
-    # split_books(instance_uri, record)
+    # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong:
+    # get the isbns and add them to the instance bundle first:
+    # return two nodes, one for the print isbn, another for the ebook_isbn.
+    # well add them to the appropriate instance.
+    add_isbns(record, instance_bundle_uri)
 
     # Serialize the Dataset to a file.
     # d.serialize(destination="ttl-data/" + dfk + ".jsonld", format="json-ld", auto_compact=True)

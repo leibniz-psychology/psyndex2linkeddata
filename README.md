@@ -267,85 +267,65 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 # TODO: Fields to convert
 
-- [x] DFK -> Instance > bf:identifiedBy > bf:Local, pxc:DFK
-- [x] split work and instance, add uris based on DFK (simple - one work, one instance bundle; no multiple instances yet)
-- [ ] instancebundle with up to two instances, if we can get them based on MT2 etc.
+## Werk
+
 - [x] LA -> bf:language
 - [ ] LA2!
-
-- [x] TI, TIL (Sprache) -> bf:title > bf:Title > bf:mainTitle
-  - [x] move from bnode to fragment uri
-- [x] TIU, TIUL -> bf:title > bf:Title > bf:subtitle
-  - [x] move from bnode to fragment uri
-- [x] TIUE (Übersetzung) -> bf:title > pxc:TranslatedTitle > bf:mainTitle
-  - [x] move from bnode to fragment uri
 - [x] ABH
-  - [ ] move from bnode to fragment uri
+  - [x ] move from bnode to fragment uri
 - [x] ABN
-  - [ ] move from bnode to fragment uri
+  - [x] move from bnode to fragment uri
 - [x] extract Table of Contents from end of ABH
-    - [ ] move from bnode to fragment uri
+    - [ ] move from bnode to fragment uri - except for urls?
 - [x] AUP, PAUP, ORCID, CS, COU -> bf:contribution > bf:Contribution > bf:agent > bf:Person mit Affiliationen und Ror-ID-Lookup der Affiliation per API, Geonames-ID-Lookup des Affiliationslandes
     - [x] move from bnode to fragment uri
       - [x] Contribution node itself
       - [x] agent
+      - [x] email
+      - [x] role
+      - [x] ORCID
+      - [x] PAUP
       - [x] affiliation
       - [x] affil org
       - [x] affil address
       - [x] country 
+      - [x] fix countries in affiliation with "None" label string
 - [x] AUK (Körperschaften als Verfasser)
   - [x] restructure to make a generic contribution function?
   - [x] name (+ content of |i) -> rdfs:label
   - [x] optional (!) country - incl. geonames id - after lookup!
-  - [ ] get ror-id from API and add as identifier node
-- [ ] MT, MT2 
-- [ ] LA2 -> bf:language
+  - [x] get ror-id from API and add as identifier node
 - [ ] ABH: String endet in Lizenzierungsangaben (aber vorher das ToC abziehen!) wie "(C) Thieme"... -> Lizengeber erkennen und als Vokabularbegriff aus abstractnote-Vok exportieren. Format: [a pxc:Abstract ; bf:usageAndAccessPolicy [a bf:UsagePolicy [rdfs:label "(C) Thieme"@en, ; rdf:value "vocabs/Thieme"^^^xsd:anyURI]]]. Wenn Abstract in ABH "leer" (also "Kein Abstract vorhanden"/"No abstract available" oder ähnlich, + nur kurzer String unter x Zeichen den Vok-Begriff vocabs/.../NoAbstract...)
 
-
-## Open Science
-- [x] GRANT -> bf:contribution > bf:FundingReference mit fundref-lookup per API bei Crossref
-- [x] CF (only keeping for BE=SS and SM) -> bf:contribution > bf:ConferenceReference
-- [x] DATAC (Forschungsdatenlink)
-- [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
-- [ ] Lizenz! COPR -> |d Creative Commons Namensnennung - Nicht-kommerziell - Keine Bearbeitung |e Creative Commons Attribution - Non-Commercial - No-Derivatives |c CC BY-NC-ND 4.0 (Subfelder: |d (deutscher Name), |e (Englischer Name), |c (Kurzname))
-- [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
-- [ ] fix countries in affiliation with "None" label string
-- [ ] BE, DT
-
-## Veröffentlichung
-- [ ] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled 
-  > bf:title > bf:Title > bf:mainTitle "Buchreihehntitel" ;
-> bf:seriesEnumeration "Band 1" 
-- [ ] NE - Edition -> Instanz > bf:editionStatement "2., überarb. Aufl." 
-- [ ] PY (nur Jahr)/PHIST (volles Datum in Subfeld |o: DD.MM.JJJJ) -> Instanz > bf:provisionActivity > bf:Publication > bf:date
-- [ ] PU, zb "|v Budrich |o Opladen |i 978-3-8474-2429-1 |e 978-3-8474-1567-1" -> Verlag, Ort, ISBN, E-ISBN (Verlage schon mit Fuzzywuzzy rekonzilieren!)
--> Instanz > bf:provisionActivity > bf:Publication > bf:agent > bf:Agent > bf:label "Budrich" ; bf:place > bf:Place > bf:label "Opladen" ; 
--> Instanz > bf:identifiedBy > bf:Isbn > rdf:value "978-3-8474-2429-1" ; bf:identifiedBy > bf:Isbn > rdf:value "978-3-8474-1567-1"
-- [ ] DOI
-- [ ] URN
-- [ ] PREIS -> in BN auslagern.
-
+### Beziehungen zu anderen Werken
 - [ ] REL -> Werk > bflc:relationship > bflc:Relationship > bf:relatedTo > bf:Work
 - [ ] TESN, TESTC (nur jeweils Subfeld |n und |c von TESTO und TESTG) -> Werk > bflc:relationship >> bflc:Relationship > bf:relatedTo > bf:Work
 
-## Biblio für Unselbständige:
-### Journal Article
-- [ ] JT
-- [ ] JBD
-- [ ] JHFT
-- [ ] ISSN, EISSN
-- [ ] PAGE -> aufsplitten in Start- und Endseite, Artikelnummer. Jeweils ins passende Feld. Wenn nicht absolute Zahl (Seitensumme), dann in Relationship zum Journal!
+### Keywords/Classifications
 
-### Chapter
-- [ ] BIP - Titel des Buches
-- [ ] EDRP - Herausgeber des Buches
-- [ ] SSDFK 
-- [ ] SSNE - Edition
-- [ ] SSSE - Buchreihe mit Band
-- [ ] SSPU ? Veröffentlichungsangaben des ganzen Buchs
+- [x] CT with weighting
+  - [x] skosmos lookup for uri
+- [ ] IT
+- [ ] SH mit weighting
+- [ ] UTE/UTG?
+- [ ] KP (Keyphrase)
+- [ ] CM
 
-## Dissertationen
+### Population:
+- [ ] AGE (Achtung, hier passiert künstiches Upposting - wenn zb Preschool Age, dann immer auch Childood. Das verwässert die Suche. Eventuell muss ich da das Vokabular/Skosmos zur Migration nutzen: nur Leaf Nodes, also nur die niedrigsten Unterbegriffe mit exportieren - Skosmos-API: hat keinen Unterbegriff?)
+- [ ] PLOC
+- [ ] SAM (manchmal |m |m , aber eigentlich nur noch ein |m, sonst nichts) (Human, Inanimate, Animal) 
+
+### Open Science
+- [x] GRANT -> bf:contribution > bf:FundingReference mit fundref-lookup per API bei Crossref
+- [x] CF (only keeping for BE=SS and SM) -> bf:contribution > bf:ConferenceReference
+- [x] DATAC (Forschungsdatenlink)
+  - [ ] move from bnode to fragment uri
+- [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
+- [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
+  - [ ] move from bnode to fragment uri
+
+### Dissertationen
 - [ ] GRAD
 - [ ] PROMY
 - [ ] INST
@@ -353,21 +333,60 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [ ] HRF
 - [ ] KRF
 
-## Keywords/Classifications
+## Instanzen/-bündel
+- [x] DFK -> Instance > bf:identifiedBy > bf:Local, pxc:DFK
+- [x] split work and instance, add uris based on DFK (simple - one work, one instance bundle; no multiple instances yet)
+- [x] instancebundle with up to two instances, if we can get them based on MT2 etc.
 
-- [x] CT with weighting
-- [ ] IT
-- [ ] SH mit weighting
-- [ ] UTE/UTG?
-- [ ] KP (Keyphrase)
-- [ ] CM
-
-## Population:
-- [ ] AGE (Achtung, hier passiert künstiches Upposting - wenn zb Preschool Age, dann immer auch Childood. Das verwässert die Suche. Eventuell muss ich da das Vokabular/Skosmos zur Migration nutzen: nur Leaf Nodes, also nur die niedrigsten Unterbegriffe mit exportieren - Skosmos-API: hat keinen Unterbegriff?)
-- [ ] PLOC
-- [ ] SAM (manchmal |m |m , aber eigentlich nur noch ein |m, sonst nichts) (Human, Inanimate, Animal) 
+### Titel und co
+- [x] TI, TIL (Sprache) -> bf:title > bf:Title > bf:mainTitle
+  - [x] move from bnode to fragment uri
+- [x] TIU, TIUL -> bf:title > bf:Title > bf:subtitle
+  - [x] move from bnode to fragment uri
+- [x] TIUE (Übersetzung) -> bf:title > pxc:TranslatedTitle > bf:mainTitle
+  - [x] move from bnode to fragment uri
 
 
+- [ ] Lizenz! COPR -> |d Creative Commons Namensnennung - Nicht-kommerziell - Keine Bearbeitung |e Creative Commons Attribution - Non-Commercial - No-Derivatives |c CC BY-NC-ND 4.0 (Subfelder: |d (deutscher Name), |e (Englischer Name), |c (Kurzname))
+
+
+### Veröffentlichung
+- [x] BE
+- [ ] DT -> Genre?
+- [x] MT, MT2 an den einzelnen Instanzen
+- [ ] DOI
+- [ ] URN
+- [ ] URLAI
+
+- [ ] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled 
+  > bf:title > bf:Title > bf:mainTitle "Buchreihehntitel" ;
+> bf:seriesEnumeration "Band 1" 
+- [ ] NE - Edition -> Instanz > bf:editionStatement "2., überarb. Aufl." 
+
+- [x] PY (nur Jahr)/PHIST (volles Datum in Subfeld |o: DD.MM.JJJJ) -> vorerst beim nur beim Instanbündel > bf:provisionActivity > bf:Publication > bflc:simpleDate (entweder "YYYY" wenn aus PY oder "YYYY-MM-DD" wenn aus PHIST)
+- [x] PU v, o, zb "|v Budrich |o Opladen |i 978-3-8474-2429-1 |e 978-3-8474-1567-1" -> Verlag, Ort => -> InstanzBundle > bf:provisionActivity > bf:Publication > bf:agent > bf:Agent > bf:label "Budrich" ; bf:place > bf:Place > bf:label "Opladen" ; bzw simplePlace und simpleAgent und Literale- sollen die anderern sich doch um das Verknüpfen mit Normdaten kümmern!
+  - [x] PU |i und |e: ISBN, E-ISBN an die Instanz > bf:identifiedBy > bf:Isbn > rdf:value "978-3-8474-2429-1" ; bf:identifiedBy > bf:Isbn > rdf:value "978-3-8474-1567-1"
+  - [ ] (später vielleicht Verlage schon mit Fuzzywuzzy rekonzilieren!)
+
+
+
+- [ ] PREIS -> in BN auslagern. Note an der Instanz? Trotzdem noch vorsichtshalber als bf:acquisitionTerms "Preis: 12,99 €" in Instanz?
+
+### Biblio für Unselbständige:
+#### Journal Article
+- [ ] JT
+- [ ] JBD
+- [ ] JHFT
+- [ ] ISSN, EISSN
+- [ ] PAGE -> aufsplitten in Start- und Endseite, Artikelnummer. Jeweils ins passende Feld. Wenn nicht absolute Zahl (Seitensumme), dann in Relationship zum Journal!
+
+#### Chapter
+- [ ] BIP - Titel des Buches
+- [ ] EDRP - Herausgeber des Buches
+- [ ] SSDFK 
+- [ ] SSNE - Edition
+- [ ] SSSE - Buchreihe mit Band
+- [ ] SSPU ? Veröffentlichungsangaben des ganzen Buchs
 
 ## General things
 

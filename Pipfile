@@ -17,6 +17,7 @@ levenshtein = "*"
 linkml = "*"
 truecase = "*"
 openai = "*"
+dateparser = "*"
 
 [dev-packages]
 

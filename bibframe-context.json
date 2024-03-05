@@ -36,6 +36,7 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "simpleAgent": "bflc:simpleAgent",
     "simpleDate": "bflc:simpleDate",
     "simplePlace": "bflc:simplePlace",
     "hasAffiliationAddress": {
@@ -79,6 +80,7 @@
     "tableOfContents": "bf:tableOfContents",
     "TableOfContents": "bf:TableOfContents",
     "Abstract": "pxc:Abstract",
+    "Isbn": "bf:Isbn",
     "SecondaryAbstract": "pxc:SecondaryAbstract",
     "Concept": "skos:Concept",
     "WeightedTopic": "pxc:WeightedTopic",
@@ -100,6 +102,8 @@
     "GrantId": "pxc:GrantId",
     "TranslatedTitle": "pxc:TranslatedTitle",
     "City": "mads:City",
+    "Print": "bf:Print",
+    "Publication": "bf:Publication",
     "Classification": "bf:Classification",
     "ConferenceReference": "pxc:ConferenceReference",
     "Content": "bf:Content",
@@ -366,11 +370,13 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "issuanceType": "pxp:issuanceType",
     "hasPart": {
       "@id": "bf:hasPart",
       "@type": "@id",
       "@container": "@set"
     },
+    "mediaCarrier": "pxp:mediaCarrier",
     "hasSeries": {
       "@id": "bf:hasSeries",
       "@type": "@id",
@@ -394,7 +400,6 @@
       "@container": "@set"
     },
     "isMemberofMADSScheme": "mads:isMemberOfMADSScheme",
-    "issuanceType": "pxp:issuanceType",
     "issuedWith": {
       "@id": "bf:issuedWith",
       "@type": "@id",
