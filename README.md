@@ -392,3 +392,215 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 - [x] replace ^DD codes
 - [x] unescape html entities
+
+
+----
+
+## Conversion and Migration status of PXR fields:
+
+## Verschiedenes
+
+- [ ] remarks (Bibliographic note zum Werk?) > `bf:note.rdfs:label`
+- [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen
+- [ ] instance.license > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:UsePolicy` (uri wie https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
+- [ ] instance.openAccessStatus > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:AccessPolicy` (uri wie https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted)
+- ~~instance.peerReviewStatus~~ - fällt weg, war auch nie in Bestandsdaten
+
+### Contributors (Work)
+
+#### contributingPersons
+
+- [x] contributingPersons	ContributingPerson > `bfcontribution.bf:agent` (type: `bf:Person`)
+- [x] contributingPerson.givenName > `bf:contribution.bf:agent.schema:givenName`
+- [x] contributingPerson.familyName > `bf:contribution.bf:agent.schema:familyName`
+- [x] contributingPerson.email > `bf:contribution.mads:email`               
+- contributingPerson.normPerson - noch keine vorhanden in den Bestandsdaten -
+- [x] contributingPerson.contributorRole > `bf:contribution.bf:role`
+- [x] contributingPerson.orcId > `bf:contribution.bf:agent.bf:identifiedBy.rdf:value` type Identifier: `locid:orcid`
+- [x] contributingPerson.affiliations	Affiliation > `bf:contribution.bf:agent.mads:hasAffiliation`
+- [x] contributingPerson.affiliation.name > `bf:contribution.bf:agent.mads:hasAffiliation.mads:organization.rdfs:label`
+- [x] contributingPerson.affiliation.rorId > `bf:contribution.bf:agent.mads:hasAffiliation.mads:organization.bf:identifiedBy.rdf.value`
+- [x] contributingPerson.affiliation.normCorporateBodyId - noch keine vorhanden in den Bestandsdaten -              
+- [x] contributingPerson.affiliation.country > (als geonames-id) `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.rdfs:label`
+- [x] contributingPerson.affiliation.normCountryId > `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.bf:identifiedBy.rdf:value` (Identifier type `locid:geonames`)
+
+#### contributingCorporateBodies
+
+- [x] contributingCorporateBodies	`ContributingCorporateBody bfcontribution.bf:agent` (type: `bf:Organization`)
+- [x] contributingCorporateBody.name > `bf:contribution.bf:agent.rdfs:label`
+- [x] contributingCorporateBody.contributorRole > `bf:contribution.bf:role`
+- [x] contributingCorporateBody.rorId > `bf:contribution.bf:agent.bf:identifiedBy.rdf:value` type Identifier: `locid:ror`
+- [x] contributingCorporateBody.normCorporateBodyId - noch keine vorhanden in den Bestandsdaten -                
+- [x] contributingCorporateBody.country > (wie bei Personen) `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.rdfs:label`
+- [x] contributingCorporateBody.normCountryId	> (wie bei Personen, als geonames-id) `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.bf:identifiedBy.rdf:value` (Identifier type `locid:geonames`)
+## Abstracts und Inhaltsverzeichnisse (Werk)
+- [x] englishAbstract > `bf:summary.rdfs:label` (type: `pxc:Abstract`), ob english oder german: erkennbar an Sprachangabe des rdfs:label (en)
+- [x] germanAbstract `bf:summary.rdfs:label` (type: `pxc:Abstract`), ob english oder german: erkennbar an Sprachangabe des rdfs:label (de)
+- [x] englishAbstractOrigin > `bf:summary.bf:adminMetadata.bflc:metadataLicensor`
+- [x] germanAbstractOrigin > `bf:summary.bf:adminMetadata.bflc:metadataLicensor`
+- [ ] englishAbstractEditOrigin > `bf:summary.bf:adminMetadata.bf:descriptionModifier`
+- [ ] germanAbstractEditOrigin> `bf:summary.bf:adminMetadata.bf:descriptionModifier`
+- [ ] englishAbstractNote > `bf:summary.bf:status`  (Wert ist uri aus Vokabular, das noch kommt)
+- [ ] germanAbstractNote > `bf:summary.bf:status` (Wert ist uri aus Vokabular, das noch kommt)
+- [x] toc > `bf:tableOfContents.rdfs.label`
+- [x] tocUrl > `bf:tableOfContents.rdf:value` (Wert ist url nach Muster "..dnb../04")
+
+## Funding (Werk)
+- [x] funders	Funder > `bf:contribution.bf:agent` bei contribution type `pxc:FundingReference`
+- [x] funder.name > `bf:contribution.bf:agent.rdfs:label`
+- [x] funder.fundrefDoi > `bf:contribution.bf:agent.bf:identifiedBy.rdf:value` identifier type: `pxc:FundrefDoi`
+- [x] funder.note > `bf:contribution.bf:note.rdfs:label`
+- [x] funder.grants> `bf:contribution.pxp:grant`
+- [x] funder.grant.grantId `bf:contribution.pxp:grant.bf:identifiedBy.rdf:value` bei identifier type `pxc:GrantId`
+- funder.grant.doi - nicht in Bestandsdaten vorhanden - später aus PXR: > `bf:contribution.pxp:grant.bf:identifiedBy.rdf:value` bei identifier type `bf:Doi`
+
+## Konferenzen (Werk)
+- [x] conferenceReferences	ConferenceReference > `bf:contribution.bf:agent` bei contribution type `pxc:ConferenceReference` (agent type ist `bf:Meeting`)
+- [x] conferenceReference.name > `bf:contribution.bf:agent.rdfs:label`
+- conferenceReference.doi - nicht in Bestandsdaten - später aus PXR: `bf:contribution.bf:agent.bf:identifiedBy.rdf:value` bei identifier type `pxc:ConferenceDoi`
+- [x] conferenceReference.year >  `bf:contribution.bf:agent.bflc:simpleDate` 
+- [x] conferenceReference.place > `bf:contribution.bf:agent.bflc:simpleDate`
+- [x] conferenceReference.note > `bf:contribution.bf:note.rdfs:label`
+
+
+## InstanceBundles ("Instanzen" in PXR)
+
+- [x] instance.formatInstances > `pxp:hasInstanceBundle.bf:hasPart` 
+## Titel (InstanceBundle)
+
+- [x] instance.mainTitle > `pxp:hasInstanceBundle.bf:title.bf:mainTitle` type: `bf:Title;` Sprache ist im Sprachtag (en oder de)
+- [x] instance.subTitle > `pxp:hasInstanceBundle.bf:title.bf:subitle` type: `bf:Title`; Sprache ist im Sprachtag (en oder de)
+- [x] instance.translatedTitle > `pxp:hasInstanceBundle.bf:title.bf:mainTitle` bei title type: `bf:TranslatedTitle`; Sprache ist im Sprachtag (en oder de)
+- [x] instance.translatedTitleOrigin `pxp:hasInstanceBundle.bf:title.bf:adminMetadata.bflc:metadataLicensor` bei title type: `bf:TranslatedTitle`
+
+## Verlagsangaben/Publikationsangaben (InstanceBundle)
+
+- [x] instance.placeOfPublicationString > `pxp:hasInstanceBundle.bf:provisionActivity.bflc:simplePlace` type of provision activity: `bf:Publication`
+- instance.placeOfPublication	Place - noch keine Normverknüpfungen in den Bestandsdaten
+- [x] instance.publisherName > `pxp:hasInstanceBundle.bf:provisionActivity.bflc:simpleAgent`
+- instance.publisherLink - noch keine Normverknüpfungen in den Bestandsdaten
+- [x] instance.formatInstance.date > `pxp:hasInstanceBundle.bf:provisionActivity.bflc:simpleDate` (entweder YYYY - meistens; oder eher selten: YYYY-MM-DD aus unstrukturiertem PHIST mit parsedate erkannt) Achtung: am InstanceBundle, da immer nur ein Publikationsdatum im Record, auch bei zwei Formatinstanzen
+
+## Reihenangaben für Bücher
+
+- [ ] instance.seriesTitle
+- [ ] instance.subSeriesTitle
+- [ ] instance.seriesVolume
+- [ ] instance.bookEdition
+## Kapitel und Journal Articles: Verweis auf umgebendes Buch oder Journal
+
+- [ ] instance.journalTitle
+- [ ] instance.containingJournal
+- [ ] instance.containingBook	Instance
+
+- [ ] instance.journalVolume
+- [ ] instance.journalIssue
+
+- [ ] instance.formatInstance.startPage
+- [ ] instance.formatInstance.endPage
+- [ ] instance.formatInstance.pageCount
+- [ ] instance.formatInstance.issn
+- [ ] instance.formatInstance.articleNumber
+
+## Links und Identifier der Instanzen selbst 
+
+- [x] instance.dfk > `pxp:hasInstanceBundle.bf:identifiedBy.rdf:value` bei identifier type `pxc:DFK`
+- [x] instance.formatInstance.isbn > `pxp:hasInstanceBundle.bf:identifiedBy.rdf:value` bei identifier type `bf:Isbn` (hash-uri endet bei isbns für Print-OFrmatinstanzen in `#isbn_print` und bei Online-Formatinstanzen in `#isbn_ebook` )
+- [ ] instance.formatInstance.publicationUrls > `pxp:hasInstanceBundle.bf:hasPart.bf:electronicLocator`
+- [ ] instance.formatInstance.publicationUrns `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Urn`
+- [ ] instance.formatInstance.doi > `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Doi`
+
+## Status
+- publishingStatus - nicht in den Bestandsdaten
+- psyFoMoStatus - nicht in den Bestandsdaten
+
+## ? (Personen/Körperschaften als Thema?)
+- concernedPersonIds  - nicht in den Bestandsdaten
+- concernedCorporateBodyIds - nicht in den Bestandsdaten
+
+## Verwandte Werke (Werk)
+- [ ] relatedWorks	RelatedWork
+- [ ] relatedWork.relationType
+- [ ] relatedWork.objectWork
+- [ ] relatedWork.doi
+- [ ] relatedWork.citation
+- [ ] relatedWork.url
+
+- [ ] relatedTestOrMeasures	RelatedTestOrMeasure
+- [ ] relatedTestOrMeasure.relationType
+- [ ] relatedTestOrMeasure.shortName
+- [ ] relatedTestOrMeasure.longName
+- [ ] relatedTestOrMeasure.test
+- [ ] relatedTestOrMeasure.itemsComplete
+- [ ] relatedTestOrMeasure.remark
+
+## Plain Language Summaries (Werk)
+- englishShortPls - nicht in den Bestandsdaten
+- englishShortPlsOrigin - nicht in den Bestandsdaten
+- longPlsDoi - nicht in den Bestandsdaten
+- longPlsUrl - nicht in den Bestandsdaten
+- longPlsStatus - nicht in den Bestandsdaten
+
+## Verschlagwortung (Werk)
+- [x] controlledKeywords > `bf:subject.owl:sameAs` bei subject type `bf:Topic` und zusätzlich `pxc:WeightedTopic` wenn gewichtet. (Wert ist eine Uri aus dem "terms"-Vokabular wie zB https://w3id.org/zpid/vocabs/terms/02370)
+- [ ] subjectClassifications
+- [ ] methodClassifications	-
+- [ ] ageGroups
+- [ ] simplePopulationLocations
+- [ ] populationLocation	Place
+- [ ] sampleCharacteristics
+- [ ] authorKeywords
+- [ ] uncontrolledKeywords
+
+
+## Dissertationsangaben (Werk)
+- [ ] degreeGranted
+- [ ] dateDegreeGranted
+- [ ] thesisAdvisor	Person
+- [ ] thesisAdvisorGivenName
+- [ ] thesisAdvisorFamilyName
+- [ ] thesisReviewerGivenName
+- [ ] thesisReviewerFamilyName
+- [ ] thesisReviewer	Person
+
+## referenceWorks (Werk) 
+- [ ] referencedWorks	ReferencedWork
+- [ ] referencedWork.authors	string		0..n	-
+- [ ] referencedWork.title	string		1..1	-
+- [ ] referencedWork.publicationYear	integer		0..1	-
+- [ ] referencedWork.doi	string	{Doi}	0..1	-
+- [ ] referencedWork.journalName	string		0..1	-
+- [ ] referencedWork.journalVolume	string	{*Regex*:/^[0-9]+$/}	0..1	-
+- [ ] referencedWork.journalIssue	string	{*Regex*:/^(?:\d+(?:-\d+)?|Supp|S\d+)$/}	0..1	-
+- [ ] referencedWork.journalSites	string		0..1	-
+
+
+## Typen von Werk und Instanz
+- [ ] contentType - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:content` (Wert ist Uri aus content-Vokabular, zB https://w3id.org/zpid/vocabs/contenttypes/text)
+- [ ] genre - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:genreForm` (Wert ist Uri aus genres-Vokabular, zB https://w3id.org/zpid/vocabs/genres/ResearchPaper)
+- [x] instance.publicationType > `pxp:issuanceType`  (Wert ist Uri aus issuances-Vokabular, zB https://w3id.org/zpid/vocabs/issuances/JournalArticle)
+- [x] instance.formatInstance.carrierType `pxp:mediaCarrier`  (Wert ist Uri aus mediacarriers-Vokabular, zB https://w3id.org/zpid/vocabs/mediacarriers/Online)
+
+## Links zu Forschungsdaten 
+- [ ] researchData	ResearchData		0..n	-
+- [ ] researchData.relation	string	{ControlledTerm[group=relations, collection=PSYNDEXresearchDataRelations]->id}	1..1	-
+- [ ] researchData.doi	string	{Doi}	0..1	-
+- [ ] researchData.url	string	{Url}	0..1	-
+- [ ] researchData.access	string	{ControlledTerm[group=access, collection=PSYNDEXresearchDataAccess]->id}	1..1	-
+
+## Links zu Präregistrierungen
+- [ ] preregisteredStudies	PreregisteredStudy		0..n	-
+- [ ] preregisteredStudy.doi	string	{Doi}	0..1	-
+- [ ] preregisteredStudy.url	string	{Url}	0..1	-
+- [ ] preregisteredStudy.trialNumber	string		0..1	-
+- [ ] preregisteredStudy.trialRegistry	string	{ControlledTerm[group=trialregs, collection=allRegistriesCollection]->id}	0..1	-
+
+## Links zu replizierten Studien #
+- [ ] replicatedStudies	ReplicatedStudy		0..n	-
+- [ ] replicatedStudy.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXoriginalDataRelations]->id}	1..1	-
+- [ ] replicatedStudy.doi	string	{Doi}	0..1	-
+- [ ] replicatedStudy.url	string	{Url}	0..1	-
+- [ ] replicatedStudy.studyId	string	{Work->id}	0..1	-
+- [ ] replicatedStudy.citation
+
+
