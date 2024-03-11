@@ -1,6 +1,7 @@
 # Purpose: Convert STAR XML to Bibframe RDF
 # Import libraries:
 from distutils.command import build
+import random
 import uuid
 import dateparser
 from rdflib import Graph, Literal
@@ -1399,8 +1400,8 @@ def check_for_url_or_doi(string):
 # %%
 def build_doi_identifier_node(instance, doi):
     # print(f"bf:identifiedBy > bf:Doi > rdf:value: {doi}.")
-    # make bnode for the identifier:
-    identifier_node = BNode()
+    # make node for the identifier:
+    identifier_node = URIRef(instance + "_doi")
     # give it class bf:Doi:
     records_bf.add((identifier_node, RDF.type, BF.Doi))
     # give it the doi as a literal value:
@@ -1413,7 +1414,6 @@ def build_doi_identifier_node(instance, doi):
 
 
 def build_electronic_locator_node(instance, url):
-    # locator_node = BNode()
     # make it a uri that we can add directly! example: https://id.loc.gov/ontologies/bibframe.html#p_electronicLocator
     locator_node = URIRef(url)
     # add it to the instance_node of relationship_node via bf:electronicLocator
@@ -1431,9 +1431,9 @@ def build_electronic_locator_node(instance, url):
 
 # %%
 def build_note_node(resource_uri, note):
-    note_node = (
-        BNode()
-    )  # TODO: make a hashed uri node instead - but how can we decide whether to add it with _note or #note?
+    note_node = URIRef(
+        resource_uri + "_note"
+    )  # TODO: how can we decide whether to add it with _note or #note - based on whether it is a node for a main work or a subnode?
     records_bf.set((note_node, RDF.type, BF.Note))
     records_bf.set((note_node, RDFS.label, Literal(note)))
     records_bf.set((resource_uri, BF.note, note_node))
@@ -1582,7 +1582,8 @@ def build_work_relationship_node(work_uri, relation_type):
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
     # make a node for this relationship:
-    relationship_bnode = URIRef(work_uri + "_relationship_" + str(uuid.uuid4()))
+    # use a random number to make node unique:
+    relationship_bnode = URIRef(work_uri + "#relationship_" + str(relation))
     # make it class bflc:Relationship:
     records_bf.set((relationship_bnode, RDF.type, BFLC.Relationship))
     # add a bflc:Relation (with a label and value) via bflc:relation to the relationship bnode
@@ -1594,7 +1595,8 @@ def build_work_relationship_node(work_uri, relation_type):
     # records_bf.add((relation_bnode, RDF.value, Literal(RELATIONS.hasResearchData)))
     records_bf.set((relationship_bnode, BFLC.relation, URIRef(RELATIONS[relation])))
     # make a bnode for the work:
-    related_work_bnode = BNode()
+    # related_work_bnode = BNode()
+    related_work_bnode = URIRef(relationship_bnode + "_work")
     records_bf.add((related_work_bnode, RDF.type, BF.Work))
     records_bf.add((related_work_bnode, RDF.type, URIRef(BF[work_subclass])))
     # give work a content type:
@@ -1609,14 +1611,14 @@ def build_work_relationship_node(work_uri, relation_type):
     # (or a subproperty as given as a parameter)):
     # print("\tbf:relatedTo [a bf:Work ;")
     records_bf.add((relationship_bnode, BF[relatedTo_subprop], related_work_bnode))
-    # make a bnode for the instance:
-    related_instance_bnode = BNode()
+    # make a node for the instance:
+    related_instance_bnode = URIRef(related_work_bnode + "_instance")
     records_bf.set((related_instance_bnode, RDF.type, BF.Instance))
     records_bf.add((related_instance_bnode, RDF.type, BF.Electronic))
     records_bf.add((related_work_bnode, BF.hasInstance, related_instance_bnode))
     # add accesspolicy to instance:
     if access_policy_label is not None and access_policy_value is not None:
-        access_policy_node = BNode()
+        access_policy_node = URIRef(relationship_bnode + "_accesspolicy")
         records_bf.add((access_policy_node, RDF.type, BF.AccessPolicy))
         records_bf.add(
             (access_policy_node, RDFS.label, Literal(access_policy_label, lang="en"))
@@ -2065,7 +2067,7 @@ def get_bf_toc(work_uri, record):
             abstracttext = match.group(1).strip()
             contents = match.group(2).strip()
 
-    # also check if what comes is either a string or a uri following thegiven pattern
+    # also check if what comes is either a string or a uri following the  given pattern
     # and export one as a rdfs_label and the other as rdf:value "..."^^xsd:anyUrl (remember to add XSD namespace!)
     # also remember that we should only create a node and attach it to the work
     # if a) ABH exists at all and
@@ -2257,6 +2259,7 @@ def get_bf_preregistrations(work_uri, record):
         # get the full content of the field, sanitize it:
         prregfield = html.unescape(mappings.replace_encodings(prreg.text.strip()))
         # use our node-building function to build the node:
+        # TODO: add secondary class pxc:PreregistrationRelationship to the relationship node for preregs
         relationship_node, instance = build_work_relationship_node(
             work_uri, relation_type="preregistration"
         )
@@ -2698,6 +2701,7 @@ def get_urlai(work_uri, record):
         urlai_field = mappings.replace_encodings(data.text.strip())
         unknown_field_content = None
         # build the relationship node:
+        # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
             work_uri, relation_type="rd_restricted_access"
         )
@@ -2763,6 +2767,7 @@ def get_datac(work_uri, record):
         # print(datac_field)
         # add an item "hello" to the set:
         # build the relationship node:
+        # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
             work_uri, relation_type="rd_open_access"
         )
@@ -2865,9 +2870,9 @@ def get_datac(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-# for record in root.findall("Record"):
-"""comment this out to run the only 200 records instead of all 700:"""
-for record in root.findall("Record")[0:20]:
+for record in root.findall("Record"):
+    """comment this out to run the only 200 records instead of all 700:"""
+    # for record in root.findall("Record")[0:200]:
     # count up the processed records for logging purposes:
     record_count += 1
 
@@ -2879,6 +2884,7 @@ for record in root.findall("Record")[0:20]:
     # make sure a work_uri will look like this: works:dfk_work, eg works:123456_work
     work_uri = URIRef(WORKS + dfk + "_work")
     records_bf.add((work_uri, RDF.type, BF.Work))
+    records_bf.add((work_uri, RDF.type, PXC.MainWork))
 
     # Add language of work from field LA and add to Work -
     # TODO: second language from <LA2>? no way to distinguish
@@ -2934,15 +2940,15 @@ for record in root.findall("Record")[0:20]:
     )  # adds a bf:contribution >> pxc:ConferenceReference node to the work
 
     ## Add research data links from fields URLAI and DATAC to the work:
-    # get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
+    get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
     # switched off for performance reasons
 
     ### Adding Preregistration links to the work (from field <PREREG>):
     # deactivated due to performance issues and
     # needing a rewrite (replace bnodes with hash-uris),
     # finding a way to frame only "real" main works (1 per star record) in the jsonld,
-    # instead of these linked Works, too
-    # get_bf_preregistrations(work_uri, record)
+    # instead of these linked Works, too -> fixed by adding a unique class "MainWork" for root works
+    get_bf_preregistrations(work_uri, record)
 
     ## ==== InstanceBundle ==== ##
 
