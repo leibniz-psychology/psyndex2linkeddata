@@ -13,6 +13,7 @@ import xml.etree.ElementTree as ET
 import re
 import html
 
+
 import modules.mappings as mappings
 
 # import modules.contributions as contributions
@@ -180,6 +181,17 @@ def camel_case(s):
 
     # Join the string, ensuring the first letter is lowercase
     return "".join([s[0].lower(), s[1:]])
+
+
+def get_abstract_release(record):
+    """ "Checks if the record's abstract can be exported or must be suppressed for copyright reasons. Based on Publisher as determined from DOI stem 10.1016 && COPR = PUBL"""
+    if record.find("DOI") is not None and record.find("COPR") is not None:
+        record_doi = record.find("DOI").text
+        record_copyright = record.find("COPR").text
+        if "10.1016" in record_doi and "PUBL" in record_copyright:
+            return False
+        else:
+            return True
 
 
 def get_ror_org_country(affiliation_ror_id):
@@ -1933,10 +1945,21 @@ def add_abstract_licensing_note(abstract, abstracttext):
         abstract_license_node = URIRef(abstract + "_license")
         # give it a class:
         records_bf.add((abstract_license_node, RDF.type, BF.UsageAndAccessPolicy))
-        # add the license type to the node with rdf:value and anyURL:
-        records_bf.add(
-            (abstract_license_node, RDFS.label, Literal(abstract_copyright_string))
-        )
+        # add the license type to the node with rdf:value and anyURI:
+        if (
+            abstract_blocked
+        ):  # if it's an elsevier abstract with publisher copyright (blocked from release/sharing), use this specific string to indicate we can't release it, otherwise the string we find at the end:
+            records_bf.add(
+                (
+                    abstract_license_node,
+                    RDFS.label,
+                    Literal("Abstract not released by publisher."),
+                )
+            )
+        else:
+            records_bf.add(
+                (abstract_license_node, RDFS.label, Literal(abstract_copyright_string))
+            )
         # attach it to the abstract node with bf:usageAndAccessPolicy:
         records_bf.add((abstract, BF.usageAndAccessPolicy, abstract_license_node))
     # also, return the new abstracttext with any copyright string removed:
@@ -1944,7 +1967,7 @@ def add_abstract_licensing_note(abstract, abstracttext):
 
 
 # function to get the original abstract:
-def get_bf_abstract(work_uri, record):
+def get_bf_abstract(work_uri, record, abstract_blocked):
     """Extracts the abstract from field ABH and adds a bf:Summary bnode with the abstract and its metadata. Also extracts the Table of Content from the same field."""
     ## first check if this is even an abstract at all, or just some text saying "no abstract":
     # if the text is very short (under 50 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
@@ -2050,9 +2073,17 @@ def get_bf_abstract(work_uri, record):
     # return (abstract)
     # or better, attach it right away:
     records_bf.add((work_uri, BF.summary, abstract))
+    # add a boolean qualifier whether the abstract is "open" - cleared by the publisher to be shared
+    records_bf.add(
+        (
+            abstract_source_node,
+            PXP.blockedAbstract,
+            Literal(abstract_blocked, datatype=XSD.boolean),
+        )
+    )
 
 
-def get_bf_secondary_abstract(work_uri, record):
+def get_bf_secondary_abstract(work_uri, record, abstract_blocked):
     ## first check if this is even an abstract at all, or just some text saying "no abstract":
     # if the text is very short (under 100 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
     if len(record.find("ABN").text) < 50 and re.search(
@@ -2114,6 +2145,14 @@ def get_bf_secondary_abstract(work_uri, record):
     # return abstract
     # or better, attach it right away:
     records_bf.add((work_uri, BF.summary, abstract))
+    # add a boolean qualifier whether the abstract is "open" - cleared by the publisher to be shared
+    records_bf.add(
+        (
+            abstract_source_node,
+            PXP.blockedAbstract,
+            Literal(abstract_blocked, datatype=XSD.boolean),
+        )
+    )
 
 
 # %% [markdown]
@@ -2161,7 +2200,7 @@ def get_bf_secondary_abstract(work_uri, record):
 #             contents = match.group(2).strip()
 
 #     # also check if what comes is either a string or a uri following the  given pattern
-#     # and export one as a rdfs_label and the other as rdf:value "..."^^xsd:anyUrl (remember to add XSD namespace!)
+#     # and export one as a rdfs_label and the other as rdf:value "..."^^xsd:anyURI (remember to add XSD namespace!)
 #     # also remember that we should only create a node and attach it to the work
 #     # if a) ABH exists at all and
 #     # b) the regex is satisfied.
@@ -2999,17 +3038,20 @@ for record in root.findall("Record"):
     # Add the table of contents to the work, if we can extract it from the abstract field (ABH):
     # get_bf_toc(work_uri, record) # this is now done inside the abstract functions - along with abstract license recognition
 
+    # TODO: calculate a bool true/false value from fields to set whether abstract should be made available or not due to copyright reasons.
+    abstract_blocked = not get_abstract_release(record)
+
     # Adding main/original abstract to the work:
     # note: somehow not all records have one!
     if record.find("ABH") is not None:
-        get_bf_abstract(work_uri, record)
+        get_bf_abstract(work_uri, record, abstract_blocked)
         # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
     # d.add((work_uri, BF.summary, get_bf_abstract(work_uri, record), graph_1))
 
     # Adding secondary abstract to the work - (usually a translation, so also has data about the origin of the abstract):
     # note: somehow not all records have one!
     if record.find("ABN") is not None:
-        get_bf_secondary_abstract(work_uri, record)
+        get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     add_controlled_terms(work_uri, record)
