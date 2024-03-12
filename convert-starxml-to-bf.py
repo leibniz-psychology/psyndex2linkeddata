@@ -1,5 +1,6 @@
 # Purpose: Convert STAR XML to Bibframe RDF
 # Import libraries:
+
 from distutils.command import build
 import random
 import uuid
@@ -11,6 +12,7 @@ from rdflib import URIRef
 import xml.etree.ElementTree as ET
 import re
 import html
+
 import modules.mappings as mappings
 
 # import modules.contributions as contributions
@@ -126,6 +128,7 @@ ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
 RELATIONS = Namespace("https://w3id.org/zpid/vocabs/relations/")
 GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
 PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
+LICENSES = Namespace("https://w3id.org/zpid/vocabs/licenses/")
 
 
 # graph for bibframe profile:
@@ -157,6 +160,7 @@ records_bf.bind("genres", GENRES)
 records_bf.bind("contenttypes", CONTENTTYPES)
 records_bf.bind("issuances", ISSUANCES)  # issuance types
 records_bf.bind("pmt", PMT)  # mediacarriers
+records_bf.bind("licenses", LICENSES)  # licenses
 
 
 # # Functions to do all the things
@@ -1867,9 +1871,72 @@ def replace_abstract_origin_string(origin_string):
         return origin_string
 
 
+def add_abstract_licensing_note(abstract, abstracttext):
+    # use this on the abstract _after_ first removing the ToC!
+    # we will extract any text at the end of an abstract that is not actually part of the abstract, but a licensing note or a note about what software was used to translate it.
+    """Adds a licensing note to the abstract if it contains a copyright string and/or a "translated by DeepL" notice."""
+    abstract_copyright_string = None
+    # 1. first check if there is a "(translated by DeepL)" at the end of the abstract, remove it and add it to the licensing note.
+    # 2 then check for a copyright string at the (new) end of the abstract. Remove it and copy it into the licensinf note -
+    # but only if there isn't already something in there (the translated by deepl note) - because if there is, the translation note takes precedence
+    # and the copyright note will not be retained.
+    deepl_match = re.search(
+        r"^(.*)\s\((translated by DeepL)\)$", abstracttext, re.IGNORECASE
+    )
+    if deepl_match:
+        # replace the abstract with the content before the "(translated by DeepL)":
+        abstracttext = deepl_match.group(1)
+        # add it to the licensing note, but only if empty:
+        abstract_copyright_string = deepl_match.group(2)
+    else:
+        abstract_copyright_string = None
+
+    # also, after that, check the new abstract for a copyright string:
+    license_match = re.search(r"(.*)(\(c\).*)$", abstracttext, re.IGNORECASE)
+    # if that match is not None, check if it is in the last 100 characters of the abstract:
+    if license_match and len(license_match.group(2)) < 100:
+        # if so, check if there is a "(b)" anywhere in the abstract before the match (this is an exclusion criterion,
+        # because if there is a "(b)" before the "(c)", it's just a lettered list item, not the copyright string):
+        if re.search(r"(.*)(\(b\).*)", license_match.group(1), re.IGNORECASE):
+            pass
+            # if there is _no_ "(b)" before the "(c)", we have a copyright string; add it to the licensing note.
+            # unless it already contains something - which will always be the translation note:
+        else:
+            if abstract_copyright_string is None or abstract_copyright_string == "":
+                abstract_copyright_string = license_match.group(2)
+                abstracttext = license_match.group(1)
+            else:
+                # don't write it into the note if there is already something in it, but do remove it from the abstract!
+                abstracttext = license_match.group(1)
+            # otherwise ignore the string, we have no copyright string
+
+    if abstract_copyright_string is not None and abstract_copyright_string != "":
+        # make a node for the abstract licensing note:
+        # give it a fragment uri:
+        abstract_license_node = URIRef(abstract + "_license")
+        # give it a class:
+        records_bf.add((abstract_license_node, RDF.type, BF.UsageAndAccessPolicy))
+        # add the license type to the node with rdf:value and anyURL:
+        records_bf.add(
+            (abstract_license_node, RDFS.label, Literal(abstract_copyright_string))
+        )
+        # attach it to the abstract node with bf:usageAndAccessPolicy:
+        records_bf.add((abstract, BF.usageAndAccessPolicy, abstract_license_node))
+    # also, return the new abstracttext with any copyright string removed:
+    return abstracttext.strip()
+
+
 # function to get the original abstract:
 def get_bf_abstract(work_uri, record):
     """Extracts the abstract from field ABH and adds a bf:Summary bnode with the abstract and its metadata. Also extracts the Table of Content from the same field."""
+    ## first check if this is even an abstract at all, or just some text saying "no abstract":
+    # if the text is very short (under 50 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
+    if len(record.find("ABH").text) < 500 and re.search(
+        r"(no abstract|kein Abstract)", record.find("ABH").text, re.IGNORECASE
+    ):
+        return None  # don't make a node at all!
+    # if it's not a "no abstract" text, make a node for the abstract:
+
     abstract = URIRef(work_uri + "#abstract")
     # abstract = URIRef(work_uri + "/abstract")
     records_bf.add((abstract, RDF.type, PXC.Abstract))
@@ -1877,19 +1944,8 @@ def get_bf_abstract(work_uri, record):
     abstracttext = html.unescape(
         mappings.replace_encodings(record.find("ABH").text).strip()
     )
-    # TODO: check if the abstract is not really an abstract but a note that says a variation of "no abstract available":
-    # if so, return None and don't add the abstract node at all. Or add a note node instead. Or a vocab term for "no abstract available". There was some discussion about this. probably use bf:status for it.
-    # works:10000 bf:summary <0000abstract> . <0000abstract> bf:status status:NoAbstractAvailable. # that is weird! i'm not at all sure this works, or that i want it to work, because it makes no sense. Maybe i must export the abstract label as an empty string instead of not exporting the abstract at all?
-    # some variations found:
-    # - "Abstract not provided by publisher"
-    # - Abstract nicht vom Verlag zur Verfügung gestellt
-    # - Abstract not released by publisher.
-    # - No abstract available.
-    # - Kein Abstract vorhanden.
-    # check if the abstracttext ends with " (translated by DeepL)" and if so, remove that part:
-    match1 = re.search(r"^(.*)\s\(translated by DeepL\)$", abstracttext)
-    if match1:
-        abstracttext = match1.group(1).strip()
+
+    ## == Extracting the table of contents from the abstract: == ##
     # check via regex if there is a " - Inhalt: " or " - Contents: " in it.
     # if so, split out what comes after. Drop the contents/inhalt part itself.
     match2 = re.search(r"^(.*)[-–]\s*(?:Contents|Inhalt)\s*:\s*(.*)$", abstracttext)
@@ -1908,6 +1964,14 @@ def get_bf_abstract(work_uri, record):
             # otherwise it's a text toc and needs to go into the label
         else:
             records_bf.add((toc, RDFS.label, Literal(contents, lang="und")))
+
+    # Check for end of abstract that says something about the license "translated by DeepL"
+    # and remove them, but add them to the node as a bf:usageAndAccessPolicy:
+    # note: I won't remove the useless string saying "no abstract" that is in place of the abstract. It's not worth the effort. Somebody else
+    # can do it if they want to - it can be filtered by looking for the "no abstract" concept added to the abstract node.
+    # check the abstract for any copyright strings (and "translated by DeepL") and remove them, but add them to the node as a bf:usageAndAccessPolicy:
+    abstracttext = add_abstract_licensing_note(abstract, abstracttext)
+
     # get abstract language from ABLH ("German" or "English")
     abstract_language = "en"  # set default
     # TODO: that's a bad idea, actually. Better: if field is missing, use a language recog function!
@@ -1967,6 +2031,12 @@ def get_bf_abstract(work_uri, record):
 
 
 def get_bf_secondary_abstract(work_uri, record):
+    ## first check if this is even an abstract at all, or just some text saying "no abstract":
+    # if the text is very short (under 100 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
+    if len(record.find("ABN").text) < 50 and re.search(
+        r"(no abstract|kein Abstract)", record.find("ABH").text, re.IGNORECASE
+    ):
+        return None  # don't make a node at all!
     abstract = URIRef(work_uri + "#secondaryabstract")
     # abstract = URIRef(work_uri + "/abstract/secondary")
     records_bf.add((abstract, RDF.type, PXC.Abstract))
@@ -1974,10 +2044,9 @@ def get_bf_secondary_abstract(work_uri, record):
     abstracttext = html.unescape(
         mappings.replace_encodings(record.find("ABN").text).strip()
     )
-    # check if the abstracttext ends with " (translated by DeepL)" and if so, remove that part:
-    match = re.search(r"^(.*)\s\(translated by DeepL\)$", abstracttext)
-    if match:
-        abstracttext = match.group(1).strip()
+    # check if the abstracttext ends with " (translated by DeepL)" or a licensing note,
+    # and if so, remove those from the abstract and place them into a UsageandAccessPolicy node.
+    abstracttext = add_abstract_licensing_note(abstract, abstracttext)
 
     abstract_language = "de"  # fallback default
 
@@ -2020,7 +2089,9 @@ def get_bf_secondary_abstract(work_uri, record):
     # add the source node to the abstract node:
     records_bf.add((abstract, BF.adminMetadata, abstract_source_node))
     # and return the completed node:
-    return abstract
+    # return abstract
+    # or better, attach it right away:
+    records_bf.add((work_uri, BF.summary, abstract))
 
 
 # %% [markdown]
@@ -2053,33 +2124,33 @@ def get_bf_secondary_abstract(work_uri, record):
 
 
 # %%
-def get_bf_toc(work_uri, record):
-    # read the abstract in ABH
-    contents = ""
-    if record.find("ABH") is not None:
-        abstracttext = html.unescape(
-            mappings.replace_encodings(record.find("ABH").text).strip()
-        )
-        # check via regex if there is a " - Inhalt: " or " - Contents: " in it.
-        # if so, split out what comes after. Drop the contents/inhalt part itself.
-        match = re.search(r"^(.*)[-–]\s*(?:Contents|Inhalt)\s*:\s*(.*)$", abstracttext)
-        if match:
-            abstracttext = match.group(1).strip()
-            contents = match.group(2).strip()
+# def get_bf_toc(work_uri, record):
+#     # read the abstract in ABH
+#     contents = ""
+#     if record.find("ABH") is not None:
+#         abstracttext = html.unescape(
+#             mappings.replace_encodings(record.find("ABH").text).strip()
+#         )
+#         # check via regex if there is a " - Inhalt: " or " - Contents: " in it.
+#         # if so, split out what comes after. Drop the contents/inhalt part itself.
+#         match = re.search(r"^(.*)[-–]\s*(?:Contents|Inhalt)\s*:\s*(.*)$", abstracttext)
+#         if match:
+#             abstracttext = match.group(1).strip()
+#             contents = match.group(2).strip()
 
-    # also check if what comes is either a string or a uri following the  given pattern
-    # and export one as a rdfs_label and the other as rdf:value "..."^^xsd:anyUrl (remember to add XSD namespace!)
-    # also remember that we should only create a node and attach it to the work
-    # if a) ABH exists at all and
-    # b) the regex is satisfied.
-    # So I guess we must do the whole checking and adding procedure in this function!
+#     # also check if what comes is either a string or a uri following the  given pattern
+#     # and export one as a rdfs_label and the other as rdf:value "..."^^xsd:anyUrl (remember to add XSD namespace!)
+#     # also remember that we should only create a node and attach it to the work
+#     # if a) ABH exists at all and
+#     # b) the regex is satisfied.
+#     # So I guess we must do the whole checking and adding procedure in this function!
 
-    # only return an added triple if the toc exisits, otherwise return nothing:
-    if contents:
-        return records_bf.add((work_uri, BF.tableOfContents, Literal(contents)))
-    else:
-        return None
-    # return records_bf.add((work_uri, BF.tableOfContents, Literal("test")))
+#     # only return an added triple if the toc exisits, otherwise return nothing:
+#     if contents:
+#         return records_bf.add((work_uri, BF.tableOfContents, Literal(contents)))
+#     else:
+#         return None
+#     # return records_bf.add((work_uri, BF.tableOfContents, Literal("test")))
 
 
 # %% [markdown]
@@ -2871,8 +2942,8 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 for record in root.findall("Record"):
-    """comment this out to run the only 200 records instead of all 700:"""
     # for record in root.findall("Record")[0:200]:
+    """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
 
@@ -2906,7 +2977,7 @@ for record in root.findall("Record"):
     match_email_to_contribution_nodes(work_uri, record)
 
     # Add the table of contents to the work, if we can extract it from the abstract field (ABH):
-    get_bf_toc(work_uri, record)
+    # get_bf_toc(work_uri, record) # this is now done inside the abstract functions - along with abstract license recognition
 
     # Adding main/original abstract to the work:
     # note: somehow not all records have one!
@@ -2918,9 +2989,7 @@ for record in root.findall("Record"):
     # Adding secondary abstract to the work - (usually a translation, so also has data about the origin of the abstract):
     # note: somehow not all records have one!
     if record.find("ABN") is not None:
-        records_bf.add(
-            (work_uri, BF.summary, get_bf_secondary_abstract(work_uri, record))
-        )
+        get_bf_secondary_abstract(work_uri, record)
 
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     add_controlled_terms(work_uri, record)
@@ -2928,7 +2997,7 @@ for record in root.findall("Record"):
     ## TODO: add all the other controlled keywords from the record to the work - SH, CM, AGE, SAM, PLOC
     # including skosmos lookups.
 
-    ## TODO: add any uncotrolled keywords we have:
+    ## TODO: add any uncontrolled keywords we have:
     # from fields KP - and if they exist, UTE and UTG
 
     # Adding pxc:FundingReferences from fields <GRANT> to the work:
