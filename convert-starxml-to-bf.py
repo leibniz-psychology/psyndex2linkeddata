@@ -172,6 +172,16 @@ records_bf.bind("licenses", LICENSES)  # licenses
 # These functions will later be called at the bottom of the program, in a loop over all the xml records.
 
 
+# Define a function to convert a string to camel case
+def camel_case(s):
+    # Use regular expression substitution to replace underscores and hyphens with spaces,
+    # then title case the string (capitalize the first letter of each word), and remove spaces
+    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
+
+    # Join the string, ensuring the first letter is lowercase
+    return "".join([s[0].lower(), s[1:]])
+
+
 def get_ror_org_country(affiliation_ror_id):
     # given a ror id, get the country of the organization from the ror api:
     # first, use only the last part of the ror id, which is the id itself:
@@ -1087,13 +1097,13 @@ def add_bf_contributor_person(work_uri, record):
                 + record.find("DFK").text
                 + " - name content added as familyname + empty string for givenname."
             )
-        else:
-            records_bf.add((person_node, SCHEMA.familyName, Literal(familyname)))
-            records_bf.add((person_node, SCHEMA.givenName, Literal(givenname)))
-            # generate a normalized version of familyname to compare with PAUP name later:
-            # personname_normalized = normalize_names(familyname, givenname)
-            # for debugging, print the normalized name:
-            # records_bf.add((person_node, PXP.normalizedName, Literal(personname_normalized)))
+
+        records_bf.add((person_node, SCHEMA.familyName, Literal(familyname)))
+        records_bf.add((person_node, SCHEMA.givenName, Literal(givenname)))
+        # generate a normalized version of familyname to compare with PAUP name later:
+        # personname_normalized = normalize_names(familyname, givenname)
+        # for debugging, print the normalized name:
+        # records_bf.add((person_node, PXP.normalizedName, Literal(personname_normalized)))
 
         # # check if there is a PAUP field in the same record that matches the personname from this AUP:
         # paId = match_paup(record, person_node, personname_normalized)
@@ -1591,7 +1601,12 @@ def build_work_relationship_node(work_uri, relation_type):
     # use a random number to make node unique:
     relationship_bnode = URIRef(work_uri + "#relationship_" + str(relation))
     # make it class bflc:Relationship:
-    records_bf.set((relationship_bnode, RDF.type, BFLC.Relationship))
+    relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
+    # or "PreregistrationRelationship"
+    # or other. We can use the content of "genre" in Camelcase for this:
+    records_bf.add((relationship_bnode, RDF.type, BFLC.Relationship))
+    records_bf.add((relationship_bnode, RDF.type, PXC[relationship_subclass]))
+
     # add a bflc:Relation (with a label and value) via bflc:relation to the relationship bnode
     # (label and value could be given as a parameter):
     # print("\tbflc:relation [a bflc:Relation ; rdfs:label 'has research data', rdf:value 'relation:hasResearchData'^^xsd:anyURI] ;")
@@ -2842,8 +2857,6 @@ def get_datac(work_uri, record):
     # go through the list of datac fields and get the doi, if there is one:
     for data in record.findall("DATAC"):
         datac_field = mappings.replace_encodings(data.text.strip())
-        # print(datac_field)
-        # add an item "hello" to the set:
         # build the relationship node:
         # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
