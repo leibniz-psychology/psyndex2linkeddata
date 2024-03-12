@@ -1404,8 +1404,10 @@ def check_for_url_or_doi(string):
 # %%
 def build_doi_identifier_node(instance, doi):
     # print(f"bf:identifiedBy > bf:Doi > rdf:value: {doi}.")
+    # we use the doi itself as part of the doi node uri to make it a unique node,
+    # otherwise all doi values will be added to the same node.
     # make node for the identifier:
-    identifier_node = URIRef(instance + "_doi")
+    identifier_node = URIRef("https://doi.org/" + doi)
     # give it class bf:Doi:
     records_bf.add((identifier_node, RDF.type, BF.Doi))
     # give it the doi as a literal value:
@@ -1963,7 +1965,12 @@ def get_bf_abstract(work_uri, record):
             records_bf.add((toc, RDF.value, Literal(contents, datatype=XSD.anyURI)))
             # otherwise it's a text toc and needs to go into the label
         else:
-            records_bf.add((toc, RDFS.label, Literal(contents, lang="und")))
+            # but we need to determine the language of the toc:
+            try:
+                toc_language = guess_language(contents)
+            except:
+                toc_language = "und"
+            records_bf.add((toc, RDFS.label, Literal(contents, lang=toc_language)))
 
     # Check for end of abstract that says something about the license "translated by DeepL"
     # and remove them, but add them to the node as a bf:usageAndAccessPolicy:
