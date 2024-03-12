@@ -272,11 +272,11 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] LA -> bf:language
 - [ ] LA2!
 - [x] ABH
-  - [x ] move from bnode to fragment uri
+  - [x] move from bnode to fragment uri
 - [x] ABN
   - [x] move from bnode to fragment uri
 - [x] extract Table of Contents from end of ABH
-    - [ ] move from bnode to fragment uri - except for urls?
+    - [x] move from bnode to fragment uri - except for urls?
 - [x] AUP, PAUP, ORCID, CS, COU -> bf:contribution > bf:Contribution > bf:agent > bf:Person mit Affiliationen und Ror-ID-Lookup der Affiliation per API, Geonames-ID-Lookup des Affiliationslandes
     - [x] move from bnode to fragment uri
       - [x] Contribution node itself
@@ -295,7 +295,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
   - [x] name (+ content of |i) -> rdfs:label
   - [x] optional (!) country - incl. geonames id - after lookup!
   - [x] get ror-id from API and add as identifier node
-- [ ] ABH: String endet in Lizenzierungsangaben (aber vorher das ToC abziehen!) wie "(C) Thieme"... -> Lizengeber erkennen und als Vokabularbegriff aus abstractnote-Vok exportieren. Format: [a pxc:Abstract ; bf:usageAndAccessPolicy [a bf:UsagePolicy [rdfs:label "(C) Thieme"@en, ; rdf:value "vocabs/Thieme"^^^xsd:anyURI]]]. Wenn Abstract in ABH "leer" (also "Kein Abstract vorhanden"/"No abstract available" oder ähnlich, + nur kurzer String unter x Zeichen den Vok-Begriff vocabs/.../NoAbstract...)
+- [x] ABH: String endet in Lizenzierungsangaben (aber vorher das ToC abziehen!) wie "(C) Thieme"... -> Lizengeber erkennen und als Vokabularbegriff aus abstractnote-Vok exportieren. Format: [a pxc:Abstract ; bf:usageAndAccessPolicy [a bf:UsageAndAccessPolicy [rdfs:label "(C) Thieme"@en, ; rdf:value "vocabs/Thieme"^^^xsd:anyURI]]]. Wenn Abstract in ABH "leer" (also "Kein Abstract vorhanden"/"No abstract available" oder ähnlich, + nur kurzer String unter x Zeichen den Vok-Begriff vocabs/.../NoAbstract...)
 
 ### Beziehungen zu anderen Werken
 - [ ] REL -> Werk > bflc:relationship > bflc:Relationship > bf:relatedTo > bf:Work
@@ -320,10 +320,10 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] GRANT -> bf:contribution > bf:FundingReference mit fundref-lookup per API bei Crossref
 - [x] CF (only keeping for BE=SS and SM) -> bf:contribution > bf:ConferenceReference
 - [x] DATAC (Forschungsdatenlink)
-  - [ ] move from bnode to fragment uri
+  - [ ] move from bnode to fragment uri, making sure not to collapse several into one!
 - [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
 - [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
-  - [ ] move from bnode to fragment uri
+  - [ ] move from bnode to fragment uri, make sure not to collapse 2 or more into one by counting up or something.
 
 ### Dissertationen
 - [ ] GRAD
@@ -401,7 +401,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 ## Verschiedenes
 
 - [ ] remarks (Bibliographic note zum Werk?) > `bf:note.rdfs:label`
-- [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen
+- [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen - scheint irgendwi in einem der `MK`-Felder zu stecken
 - [ ] instance.license > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:UsePolicy` (uri wie https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
 - [ ] instance.openAccessStatus > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:AccessPolicy` (uri wie https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted)
 - ~~instance.peerReviewStatus~~ - fällt weg, war auch nie in Bestandsdaten
@@ -438,10 +438,12 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] germanAbstract `bf:summary.rdfs:label` (type: `pxc:Abstract`), ob english oder german: erkennbar an Sprachangabe des rdfs:label (de)
 - [x] englishAbstractOrigin > `bf:summary.bf:adminMetadata.bflc:metadataLicensor`
 - [x] germanAbstractOrigin > `bf:summary.bf:adminMetadata.bflc:metadataLicensor`
-- [ ] englishAbstractEditOrigin > `bf:summary.bf:adminMetadata.bf:descriptionModifier`
-- [ ] germanAbstractEditOrigin> `bf:summary.bf:adminMetadata.bf:descriptionModifier`
-- [ ] englishAbstractNote > `bf:summary.bf:status`  (Wert ist uri aus Vokabular, das noch kommt)
-- [ ] germanAbstractNote > `bf:summary.bf:status` (Wert ist uri aus Vokabular, das noch kommt)
+- [x] englishAbstractEditOrigin > `bf:summary.bf:adminMetadata.bf:descriptionModifier`
+- [x] germanAbstractEditOrigin> `bf:summary.bf:adminMetadata.bf:descriptionModifier`
+- [x] englishAbstractNote > `bf:summary.bf:usageAndAccessPolicy.rdfs:label`  (Wert: viele verschiedene Strings wie "Abstract not released by publisher.", "translated by DeepL", "(c) Springer Nature Limited 2021", "(c) European Union", "(c) ZPID" etc. ...)
+- [x] germanAbstractNote > wie bei englishAbstractNote:  `bf:summary.bf:usageAndAccessPolicy.rdfs:label`
+- [x] englishAbstractblocked > `bf:summary.bf:adminMetadata.pxp:blockedAbstract` (true/false)
+- [x] germanAbstractblocked > `bf:summary.bf:adminMetadata.pxp:blockedAbstract` (true/false)
 - [x] toc > `bf:tableOfContents.rdfs.label`
 - [x] tocUrl > `bf:tableOfContents.rdf:value` (Wert ist url nach Muster "..dnb../04")
 
@@ -582,18 +584,19 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] instance.formatInstance.carrierType `pxp:mediaCarrier`  (Wert ist Uri aus mediacarriers-Vokabular, zB https://w3id.org/zpid/vocabs/mediacarriers/Online)
 
 ## Links zu Forschungsdaten 
-- [ ] researchData	ResearchData		0..n	-
-- [ ] researchData.relation	string	{ControlledTerm[group=relations, collection=PSYNDEXresearchDataRelations]->id}	1..1	-
-- [ ] researchData.doi	string	{Doi}	0..1	-
-- [ ] researchData.url	string	{Url}	0..1	-
-- [ ] researchData.access	string	{ControlledTerm[group=access, collection=PSYNDEXresearchDataAccess]->id}	1..1	-
+- [x] researchData	ResearchData	> `bflc:relationship` type der relationship ist immer: `pxc:ResearchDataRelationship`
+- [x] researchData.relation	> `bflc:relationship.bflc:relation`  (Werte: später entweder "relations:hasResearchData" oder "relations:hasAnalyticCode", bisher gibt es im Bestand aber nur welche mit "relations:hasResearchData")
+- [x] researchData.doi	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `bf:Doi`)
+- [x] researchData.url	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:electronicLocator`
+- [x] researchData.access	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:usageAndAccessPolicy.owl:sameAs` (Wert ist Uri aus access-Vokabular, bisher immer bei allen im Bestand verlinkten Forschungsdaten: https://w3id.org/zpid/vocabs/access/open)
+
 
 ## Links zu Präregistrierungen
-- [ ] preregisteredStudies	PreregisteredStudy		0..n	-
-- [ ] preregisteredStudy.doi	string	{Doi}	0..1	-
-- [ ] preregisteredStudy.url	string	{Url}	0..1	-
-- [ ] preregisteredStudy.trialNumber	string		0..1	-
-- [ ] preregisteredStudy.trialRegistry	string	{ControlledTerm[group=trialregs, collection=allRegistriesCollection]->id}	0..1	-
+- [x] preregisteredStudies	PreregisteredStudy	> `bflc:relationship` type der relationship ist immer: `pxc:PreregistrationRelationship`
+- [x] preregisteredStudy.doi >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `bf:Doi`)
+- [x] preregisteredStudy.url >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:electronicLocator`
+- [ ] preregisteredStudy.trialNumber	- noch nicht migriert, muss komplziert aus Infofeld PRREG |i geparst werden. Erstmal alles in `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:note.rdfs:label` (Wert ist String) - aber dafür gibt es gar kein Feld in PSYNDEXER?
+- [ ] preregisteredStudy.trialRegistry	- noch nicht im Detail migriert, siehe preregisteredStudy.trialNumber
 
 ## Links zu replizierten Studien #
 - [ ] replicatedStudies	ReplicatedStudy		0..n	-

@@ -1459,12 +1459,14 @@ def build_electronic_locator_node(instance, url):
 
 # %%
 def build_note_node(resource_uri, note):
-    note_node = URIRef(
-        resource_uri + "_note"
-    )  # TODO: how can we decide whether to add it with _note or #note - based on whether it is a node for a main work or a subnode?
-    records_bf.set((note_node, RDF.type, BF.Note))
-    records_bf.set((note_node, RDFS.label, Literal(note)))
-    records_bf.set((resource_uri, BF.note, note_node))
+    if note is not None and note != "":
+        # make a fragment uri node for the note:
+        note_node = URIRef(
+            resource_uri + "_note"
+        )  # TODO: how can swe decide whether to add it with _note or #note - based on whether it is a node for a main work or a subnode? Probably check for existing "#" in the resource_uri!
+        records_bf.set((note_node, RDF.type, BF.Note))
+        records_bf.set((note_node, RDFS.label, Literal(note)))
+        records_bf.set((resource_uri, BF.note, note_node))
 
 
 # ## Function: Guess language of a given string
@@ -1598,7 +1600,7 @@ def get_work_language(record):
 # Should take parameters - a dict per type (research data closed access, rd open access, ...) that has values for all the needed fields
 
 
-def build_work_relationship_node(work_uri, relation_type):
+def build_work_relationship_node(work_uri, relation_type, count=None):
     # check the relation_type against the relation_types dict:
     if relation_type in relation_types:
         # if it is, get the values for the relation_type:
@@ -1609,12 +1611,16 @@ def build_work_relationship_node(work_uri, relation_type):
         genre = relation_types[relation_type]["genre"]
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
+        access_policy_concept = relation_types[relation_type]["access_policy_concept"]
     # make a node for this relationship:
     # use a random number to make node unique:
-    relationship_bnode = URIRef(work_uri + "#relationship_" + str(relation))
+    # TODO: use count to attach a numbering to the node so two different Relationships have unique names and aren't collapsed anymore!
     # make it class bflc:Relationship:
     relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
     # or "PreregistrationRelationship"
+    relationship_bnode = URIRef(
+        work_uri + "#" + str(relationship_subclass) + str(count)
+    )
     # or other. We can use the content of "genre" in Camelcase for this:
     records_bf.add((relationship_bnode, RDF.type, BFLC.Relationship))
     records_bf.add((relationship_bnode, RDF.type, PXC[relationship_subclass]))
@@ -1653,16 +1659,16 @@ def build_work_relationship_node(work_uri, relation_type):
     if access_policy_label is not None and access_policy_value is not None:
         access_policy_node = URIRef(relationship_bnode + "_accesspolicy")
         records_bf.add((access_policy_node, RDF.type, BF.AccessPolicy))
-        records_bf.add(
-            (access_policy_node, RDFS.label, Literal(access_policy_label, lang="en"))
-        )
-        records_bf.add(
+        records_bf.add((access_policy_node, RDFS.label, Literal(access_policy_label)))
+        records_bf.set(
             (
                 access_policy_node,
                 RDF.value,
                 Literal(access_policy_value, datatype=XSD.anyURI),
             )
         )
+        # add concept from our own vocabulary:
+        records_bf.set((access_policy_node, OWL.sameAs, URIRef(access_policy_concept)))
         records_bf.add(
             (related_instance_bnode, BF.usageAndAccessPolicy, access_policy_node)
         )
@@ -1680,6 +1686,7 @@ relation_types = {
         "genre": "researchData",
         "access_policy_label": "open access",
         "access_policy_value": "http://purl.org/coar/access_right/c_abf2",
+        "access_policy_concept": "https://w3id.org/zpid/vocabs/access/open",
     },
     "rd_restricted_access": {
         "relation": "hasResearchData",
@@ -1689,6 +1696,7 @@ relation_types = {
         "genre": "researchData",
         "access_policy_label": "restricted access",
         "access_policy_value": "http://purl.org/coar/access_right/c_16ec",
+        "access_policy_concept": "https://w3id.org/zpid/vocabs/access/open",
     },
     "preregistration": {
         "relation": "hasPreregistration",
@@ -1698,6 +1706,7 @@ relation_types = {
         "genre": "preregistration",
         "access_policy_label": None,
         "access_policy_value": None,
+        "access_policy_concept": None,
     },
 }
 
@@ -2388,12 +2397,13 @@ def get_bf_preregistrations(work_uri, record):
     preregistration_note = None
     unknown_field_content = None
     for prreg in record.findall("PRREG"):
+        global preregistrationlink_counter
+        preregistrationlink_counter += 1
         # get the full content of the field, sanitize it:
         prregfield = html.unescape(mappings.replace_encodings(prreg.text.strip()))
         # use our node-building function to build the node:
-        # TODO: add secondary class pxc:PreregistrationRelationship to the relationship node for preregs
         relationship_node, instance = build_work_relationship_node(
-            work_uri, relation_type="preregistration"
+            work_uri, relation_type="preregistration", count=preregistrationlink_counter
         )
         doi_set = set()
         url_set = set()
@@ -2460,15 +2470,15 @@ def get_bf_preregistrations(work_uri, record):
             preregistration_note = get_subfield(prregfield, "i")
         except:
             preregistration_note = None
+
+        # add anything in the |i subfield as a note to the instance:
+        # but if we found something unrecognizable in |u or |i, also add it to the note:
+        if unknown_field_content is not None:
+            build_note_node(
+                instance, preregistration_note + ". " + unknown_field_content
+            )
         else:
-            # add anything in the |i subfield as a note to the instance:
-            # but if we found something unrecognizable in |u or |i, also add it to the note:
-            if unknown_field_content is not None:
-                build_note_node(
-                    instance, preregistration_note + ". " + unknown_field_content
-                )
-            else:
-                build_note_node(instance, preregistration_note)
+            build_note_node(instance, preregistration_note)
         # now attach the finished node for the relationship to the work:
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
@@ -2832,10 +2842,14 @@ def get_urlai(work_uri, record):
     for data in record.findall("URLAI"):
         urlai_field = mappings.replace_encodings(data.text.strip())
         unknown_field_content = None
+        global researchdatalink_counter
+        researchdatalink_counter += 1
         # build the relationship node:
         # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
-            work_uri, relation_type="rd_restricted_access"
+            work_uri,
+            relation_type="rd_restricted_access",
+            count=researchdatalink_counter,
         )
         # there are no subfields in urlai, so let's just grab the whole thing and pass it on to the url or doi checker:
         # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
@@ -2897,9 +2911,10 @@ def get_datac(work_uri, record):
     for data in record.findall("DATAC"):
         datac_field = mappings.replace_encodings(data.text.strip())
         # build the relationship node:
-        # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
+        global researchdatalink_counter
+        researchdatalink_counter += 1
         relationship_node, instance = build_work_relationship_node(
-            work_uri, relation_type="rd_open_access"
+            work_uri, count=researchdatalink_counter, relation_type="rd_open_access"
         )
         # we want to drop any duplicate dois that can occur if datac has a doi and doi url (same doi, but protocol etc prefixed)
         # for the same data that,
@@ -3027,6 +3042,8 @@ for record in root.findall("Record"):
     contribution_counter = 0
     fundingreference_counter = 0
     conferencereference_counter = 0
+    researchdatalink_counter = 0
+    preregistrationlink_counter = 0
     add_bf_contributor_person(work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
     match_CS_COU_affiliations_to_first_contribution(work_uri, record)
