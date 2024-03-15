@@ -5,6 +5,7 @@ from distutils.command import build
 import random
 import uuid
 import dateparser
+from numpy import rec
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
@@ -12,6 +13,8 @@ from rdflib import URIRef
 import xml.etree.ElementTree as ET
 import re
 import html
+
+from zmq import has
 
 
 import modules.mappings as mappings
@@ -192,6 +195,8 @@ def get_abstract_release(record):
             return False
         else:
             return True
+    else:
+        return True
 
 
 def get_ror_org_country(affiliation_ror_id):
@@ -249,7 +254,188 @@ def get_issuance_type(instance_bundle_uri, record):
         print("record has no valid bibliographic level!")
 
 
+def add_instance_license(resource_uri, record):
+    """Reads field COPR and generates a bf:usageAndAccessPolicy node for the resource_uri based on it. Includes a link to the vocabs/licenses/ vocabulary in our Skosmos. We'll probably only use the last subfield (|c PUBL) and directly build a skosmos-uri from it (and pull the label from there?). There are more specific notes in the migration aection of each license concept in Skosmos. Note: the license always applies to an instance (or an instancebundle), not to a work, since the license is about the publication, not the content of the publication - the work content might be published elsewhere with a different license. Manuel mentioned something like that already about being confused about different licenses for different versions at Crossref.
+
+    Args:
+        resource_uri (_type_): The node to which the usageAndAccessPolicy node will be added.
+        record (_type_): The PSYNDEX record from which the COPR field will be read.
+    """
+    if record.find("COPR") is not None:
+        # get the last subfield of COPR:
+        license_code = get_subfield(record.find("COPR").text, "c")
+        # get the german_label from |d:
+        license_german_label = get_subfield(record.find("COPR").text, "d")
+        # create a skosmos uri for the license:
+        SKOSMOS_LICENSES_PREFIX = "https://w3id.org/zpid/vocabs/licenses/"
+        # license_uri = URIRef(LICENSES + license_code)
+        # several cases and the different uris for the licenses:
+        if license_code == "CC":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1.0")
+        elif license_code == "PDM":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1.0")
+        # CC BY 4.0
+        elif license_code == "CC BY 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4.0")
+        # CC BY-SA 4.0
+        elif license_code == "CC BY-SA 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4.0")
+        # CC BY-NC-ND 3.0
+        elif license_code == "CC BY-NC-ND 3.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3.0")
+        # CC BY-NC-ND 4.0
+        elif license_code == "CC BY-NC-ND 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4.0")
+        elif license_code == "CC BY-NC 1.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1.0")
+        elif license_code == "CC BY-NC 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4.0")
+            # CC BY-NC-ND 2.5
+        elif license_code == "CC BY-NC-ND 2.5":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2.5")
+            # CC BY-NC-SA 4.0
+        elif license_code == "CC BY-NC-SA 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4.0")
+            # CC BY-ND 4.0
+        elif license_code == "CC BY-ND 4.0":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4.0")
+            # CC BY-ND 2.5
+        elif license_code == "CC BY-ND 2.5":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2.5")
+            # CC BY (unknown version)
+        elif license_code == "CC BY":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY")
+            # CC BY-NC (unknown version)
+        elif license_code == "CC BY-NC":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC")
+            # CC BY-NC-SA (unknown version)
+        elif license_code == "CC BY-NC-SA":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA")
+            # CC BY-SA (unknown version)
+        elif license_code == "CC BY-SA":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA")
+            # CC BY-NC-ND (unknown version)
+        elif license_code == "CC BY-NC-ND":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND")
+            # CC BY-ND (unknown version)
+        elif license_code == "CC BY-ND":
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND")
+            # starts with "AUTH":
+        elif license_code.startswith("AUTH"):
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "AUTH")
+            # starts with "PUBL" or license_german_label starts with "Volles Urheberrecht des Verlags" > PUBL:
+        elif license_code.startswith("PUBL") or license_german_label.startswith(
+            "Volles Urheberrecht des Verlags"
+        ):
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PUBL")
+            # starts with starts with "Hogrefe OpenMind" -> HogrefeOpenMind
+        elif license_code.startswith("Hogrefe OpenMind"):
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "HogrefeOpenMind")
+            # contains contains "Springer"-> ExclusiveSpringer:
+        elif "Springer" in license_code:
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "ExclusiveSpringer")
+        # starts with "OTHER" -> UnspecifiedOpenLicense
+        elif license_code.startswith("OTHER"):
+            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "UnspecifiedOpenLicense")
+        else:
+            print(
+                f"no license uri found for {license_code} in record {record.find('DFK').text}"
+            )
+            license_uri = None
+        if license_uri is not None:
+            # add the license uri from skosmos directly:
+            license_node = license_uri
+            records_bf.set((license_node, RDF.type, BF.UsePolicy))
+            records_bf.add((resource_uri, BF.usageAndAccessPolicy, license_node))
+            # try:
+            #     records_bf.add((license_node, OWL.sameAs, license_uri))
+            # except:
+            #     print(
+            #         f"failed adding sameAs for license {license_uri} to {license_node}"
+            #     )
+            # TODO: get the label from skosmos:
+            try:
+                german_preflabel = get_preflabel_from_skosmos(
+                    license_uri, "licenses", "de"
+                )
+            except:
+                print(f"failed getting prefLabels for license {license_uri}")
+                german_preflabel = None
+            try:
+                english_preflabel = get_preflabel_from_skosmos(
+                    license_uri, "licenses", "en"
+                )
+            except:
+                print(f"failed getting prefLabels for license {license_uri}")
+                english_preflabel = None
+            # add the prefLabels to the license node:
+            if german_preflabel is not None:
+                records_bf.add(
+                    (license_node, SKOS.prefLabel, Literal(german_preflabel, lang="de"))
+                )
+            else:
+                print(f"no german prefLabel found for {license_uri}")
+            if english_preflabel is not None:
+                records_bf.add(
+                    (
+                        license_node,
+                        SKOS.prefLabel,
+                        Literal(english_preflabel, lang="en"),
+                    )
+                )
+                records_bf.set((license_node, RDFS.label, Literal(english_preflabel)))
+            else:
+                print(f"no english prefLabel found for {license_uri}")
+
+            # english_preflabel = get_preflabel_from_skosmos(license_uri, "licenses", "en")
+            # TODO: get url for license itself from skosmos (e.g. creative commons deed url)
+    else:
+        print(f"warning: record {record.find('DFK').text} has no valid license!")
+
+
+def add_work_classification(work_uri, record):
+    pass
+
+
+def add_additional_descriptor(work_uri, record):
+    """Reads any fields `IT` and adds the descriptor as a bf_subject > bf:Topic. Looks up the URI of that concept using the Skomos API. Note that the IT will be added like any other PSYNDEX (APA) Term. We may add the IT vocab as a different "source" to tell them apart. In the furture, these two vocabs will be integrated, and there is already only one input field in PSYNDEXER for it.
+    TODO: May merge this functionality into the subject function, so that it can be used for both IT and CT fields.
+
+    Args:
+        work_uri (_type_): The work to which the subject/topics will be added.
+        record (_type_): The record from which the IT fields will be read.
+    """
+
+
+def add_work_studytype(work_uri, record):
+    """Reads any CM fields in the record and generates bf:classification nodes for the Work based on it. Includes a link to the vocabs/methods/ vocabulary in our Skosmos.
+
+    Args:
+        work_uri (_type_): The uri of the work to which the classification node will be added.
+        record (_type_): The record from which the CM fields will be read.
+    """
+    pass
+
+
+def add_work_genre(work_uri, record):
+    """Reads several fields from the record to calculate a genreForm for the work_uri and adds it as a bf:genreForm node. Includes a link to the vocabs/genres/ vocabulary in our Skosmos. Fields considered are: BE, DT, DT2, CM.
+
+    Args:
+        work_uri (_type_): The work node to which the genreForm node will be added.
+        record (_type_): The record from which the fields will be read.
+    """
+    pass
+
+
 def get_publication_date(record):
+    """Get the publication date from the record's PHIST or PY field and return it as a Literal.
+
+    Args:
+        record (_type_): The record from which the publication date will be read.
+
+    Returns:
+        _type_: The publication date as a Literal, either YYYY or, if from PHIST, YYYY-MM-DD.
+    """
     # from field PHIST or PY, get pub date and return this as a Literal
     # get date from PHIST field, it exists, otherwise from P> field:
     if record.find("PHIST") is not None and record.find("PHIST").text != "":
@@ -280,6 +466,12 @@ def get_publication_date(record):
 
 
 def add_isbns(record, instancebundle_uri):
+    """Reads the record's PU field and adds any ISBNs found in it as bf:identifiedBy nodes to the instancebundle_uri.
+
+    Args:
+        record (_type_): _description_
+        instancebundle_uri (_type_): _description_
+    """
     # if there is a PU, find subfield |i and e
     try:
         pu = record.find("PU")
@@ -342,6 +534,15 @@ def add_isbns(record, instancebundle_uri):
 
 
 def get_concept_uri_from_skosmos(concept_label, vocid):
+    """Generic function to get the uri of a concept from skosmos by its label. Works with any skosmos vocabulary, if you know the vocid.
+
+    Args:
+        concept_label (String): The label of the concept we want to find in the vocabulary
+        vocid (String): The short id of the vocabulary in skosmos, e.g. "terms" for the CT vocabulary, "class" for SH, "addterms" for IT, "agegroups" for AGE.
+
+    Returns:
+        uri: The skos:Concept uri of the concept.
+    """
     # get the uri of a concept from skosmos by its label
     # works with any skosmos vocabulary, if you know the vocid
 
@@ -360,6 +561,36 @@ def get_concept_uri_from_skosmos(concept_label, vocid):
             return None
     else:
         print("skosmos request failed for " + concept_label)
+        return None
+
+
+def get_preflabel_from_skosmos(uri, vocid, lang="de"):
+    """Get the preferred label of a concept from skosmos by its uri. Needs a vocid and the language you want the label in. Works with any skosmos vocabulary, if you know the vocid.
+
+    Args:
+        uri (String): The uri of the concept we want to find in the vocabulary
+        vocid (String): The short id of the vocabulary in skosmos, e.g. "terms" for the CT vocabulary, "class" for SH, "addterms" for IT, "agegroups" for AGE.
+        lang (String, optional): The language of the label we want to get. Defaults to "de".
+
+
+    Returns:
+        String: The preferred label of the concept.
+    """
+
+    skosmos_request = session_skosmos.get(
+        SKOSMOS_API_URL + "label?uri=" + uri + "&lang=" + lang, timeout=20
+    )
+
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response) > 0:
+            # print(skosmos_response["labels"][0]["label"])
+            return skosmos_response["prefLabel"]
+        else:
+            print("no label found for " + uri)
+            return None
+    else:
+        print("skosmos request failed for " + uri)
         return None
 
 
@@ -1622,7 +1853,7 @@ def build_work_relationship_node(work_uri, relation_type, count=None):
         work_uri + "#" + str(relationship_subclass) + str(count)
     )
     # or other. We can use the content of "genre" in Camelcase for this:
-    records_bf.add((relationship_bnode, RDF.type, BFLC.Relationship))
+    # records_bf.add((relationship_bnode, RDF.type, BFLC.Relationship))
     records_bf.add((relationship_bnode, RDF.type, PXC[relationship_subclass]))
 
     # add a bflc:Relation (with a label and value) via bflc:relation to the relationship bnode
@@ -2373,11 +2604,16 @@ def add_controlled_terms(work_uri, record):
 #             a bf:Work, bf:Text;
 #             bf:genreForm genres:preregistration;
 #             bf:content content:text;
+
 #             bf:hasInstance
 #             [
 #                 a bf:Instance;
 #                 bf:electronicLocator <https://osf.io/prereg1>;
-#                 bf:identifier [a bf:Identifier, bf:Doi; rdf:value "10.123code003"];
+#                 bf:identifiedBy [a bf:Identifier, bf:Doi; rdf:value "10.123code003"];
+#                 bf:identifiedBy [a bf:TrialNumber;
+# rdf:value "DRCT-123";
+# bf:assigner <https://w3id.org/zpid/vocabs/trialregs/clinical-trials-gov> ;
+# ];
 #                 # add bf:media "computer" from rda media types
 #                 bf:media <http://rdvocab.info/termList/RDAMediaType/1003>;
 #                 # bf:carrier "online resource" from rda vocabulary
@@ -2475,15 +2711,182 @@ def get_bf_preregistrations(work_uri, record):
         # but if we found something unrecognizable in |u or |i, also add it to the note:
         if unknown_field_content is not None:
             build_note_node(
-                instance, preregistration_note + ". " + unknown_field_content
+                relationship_node, preregistration_note + ". " + unknown_field_content
             )
         else:
-            build_note_node(instance, preregistration_note)
+            build_note_node(relationship_node, preregistration_note)
         # now attach the finished node for the relationship to the work:
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
         # add preregistration_node to work:
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
+
+
+def add_trials_as_preregs(work_uri, prereg_string):
+    """Checks the PRREG field for trial numbers and adds them as separate preregistrations per number, adding the recognzed registry, too.
+    Also checks any existing Preregistration nodes to see if a trial is already listed via its url, and adding the trialnumber and registry to that node, otherwise creating a new Preregistration node.
+    """
+    trial_number_regexes = [
+        ("DRKS\d+", "drks"),
+        ("CRD\d+", "prospero"),
+        ("ISRCTN\d+", "srctn"),
+        ("NCT\d+", "clinical-trials-gov"),
+        ("actrn\d+", "anzctr"),
+        ("(?i)chictr[-a-z]*\d+", "chictr"),
+        ("kct\d+", "cris"),
+        ("ctri[\d/]+", "clinical-trial-registry-india"),
+        # ("\d{4}-\d+-\d+", "euctr"),
+        ("irct[0-9a-z]+", "irct"),
+        ("isrctn\d+", "isrctn"),
+        # ("", "jma"),
+        # ("", "jprn"),
+        ("(?i)(nl|ntr)[-0-9]+", "dutch-trial-register"),
+        ("rbr\d+", "rebec"),
+        ("rpcec\d+", "rpec"),
+        ("slctr[\d/]+", "slctr"),
+        ("tctr\d+", "tctr"),
+        ("umin\d+", "umin-japan"),
+        # ("u[\d-]+", "utn"),
+    ]
+    # for each PRREG field:
+    for prreg in record.findall("PRREG"):
+        # a string may contain several trial numbers from different registries.
+        # match all of them!
+        prereg_string = html.unescape(mappings.replace_encodings(prreg.text.strip()))
+        trialnumber_matches = []
+        for trial_number_regex, trialreg in trial_number_regexes:
+            # match = trial_number_regex.search(prereg_string)
+            # change to use a string for the regex, adding re.compile() here only once:
+            # and make sure to ignore the case:
+            match = re.compile(trial_number_regex, re.IGNORECASE).search(prereg_string)
+            if match:
+                trialnumber_matches.append(
+                    [trialreg, match.group(), False]
+                )  # this adds a list with the registry and the trial number to the trialnumber_matches list, and sets a boolean to False to indicate that it has not been added to a node yet.
+
+                # print(match.group() + " matches registry: " + trialreg)
+        # print(trialnumber_matches)
+
+        # create a new Preregistration node for each match:
+        for trialnumber in trialnumber_matches:
+            # if it has two parts, the first is the registry, the second the trial number, the third a boolean to indicate if it has been added to a node yet.:
+            if trialnumber is not None and len(trialnumber) == 3:
+                # if the locator contains the trial number, add the trial number and registry to the node:
+                # break this loop if we find a match
+                for relationship in records_bf.objects(
+                    subject=work_uri, predicate=BFLC.relationship
+                ):
+                    # print(
+                    #     "checking relationship node: "
+                    #     + str(relationship)
+                    #     + " of class "
+                    #     + records_bf.value(relationship, RDF.type)
+                    #     + " against trial number: "
+                    #     + trialnumber[1]
+                    # )
+
+                    # if the rdf:type of the relationship node is pxc:PreregistrationRelationship:
+                    if (
+                        records_bf.value(relationship, RDF.type)
+                        == PXC.PreregistrationRelationship
+                    ):
+                        # first get the work that is attached via bf:supplement:
+                        # print(
+                        #     "found a PreregistrationRelationship node! "
+                        #     + str(relationship)
+                        # )
+                        preregistration_work = records_bf.value(
+                            subject=relationship, predicate=BF.supplement, any=False
+                        )
+                        # then the instance of this preregistration work:
+                        prereg_instance = records_bf.value(
+                            subject=preregistration_work,
+                            predicate=BF.hasInstance,
+                            any=False,
+                        )
+                        # then the electronicLocator of this instance:
+                        prereg_url = records_bf.value(
+                            subject=prereg_instance,
+                            predicate=BF.electronicLocator,
+                            any=False,
+                        )
+                        # print(prereg_url)
+                        # if the url contains the trial number, add the trial number and registry to the node:
+                        if prereg_url is not None and trialnumber[1] in prereg_url:
+                            # print("found match for trialnumber in prereg url!")
+                            # get the instance node, so we can attach the trial number and registry to it:
+                            # add the trial number to the node:
+                            # make a node for the number:
+                            trialnumber_node = URIRef(
+                                str(prereg_instance) + "_trialnumber"
+                            )
+                            records_bf.add(
+                                (trialnumber_node, RDF.type, PXC.TrialNumber)
+                            )
+                            records_bf.add(
+                                (prereg_instance, BF.identifiedBy, trialnumber_node)
+                            )
+                            records_bf.add(
+                                (trialnumber_node, RDF.value, Literal(trialnumber[1]))
+                            )
+                            # add the registry as an bf:assigner with class pxc:TrialRegistry:
+                            registry_node = URIRef(
+                                "https://w3id.org/zpid/vocabs/trialregs/"
+                                + trialnumber[0]
+                            )
+                            records_bf.set((registry_node, RDF.type, PXC.TrialRegistry))
+                            records_bf.add(
+                                (trialnumber_node, BF.assigner, registry_node)
+                            )
+                            # after adding the trial number and registry to the instance, we can stop looking for a match and move on to the next trial number.
+                            # i should remove the trial number from its array after adding it to the node, so that we don't add it twice.
+                            # trialnumber_matches.remove(trialnumber)
+                            # set the trialnumber as added = True
+                            # maybe by adding another key to the trialnumber dict, "added" = True
+                            # and then checking for that key in the next loop.
+                            # ok, let's do it:
+                            trialnumber[2] = True  # is that enough?
+                            break  #  break the loop for the relationship node, so we can move on to the next trial number.
+                # for any trialnumbers that found no match in the previous loop, we need to create a new Preregistration node:
+                # however, the current code does both - it adds the number to the existing matching node, but it also creates a new node.
+                # we only want to create a new node if there was no match in the previous loop.
+                # so we need to add a check here to see if the trial number was added to a node in the previous loop, and only if it wasn't, create a new node.
+                # if the trial number was added to a node in the previous loop, we can skip this part and move on to the next trial number.
+                # how can we do this? we need to add a check to see if the trial number was added to a node in the previous loop.
+                # we could add a boolean variable that is set to False at the beginning of the loop, and set to True if the trial number was added to a node.
+
+                if trialnumber[2] is not True:
+                    # first, count up the counter:
+                    global preregistrationlink_counter
+                    preregistrationlink_counter += 1
+                    # make a new Preregistration node:
+                    relationship_node, instance = build_work_relationship_node(
+                        work_uri,
+                        relation_type="preregistration",
+                        count=preregistrationlink_counter,
+                    )
+                    print(
+                        "adding new Preregistration node for trial number: "
+                        + trialnumber[1]
+                    )
+                    # add the trial number to the node:
+                    # make a node for the number:
+                    trialnumber_node = URIRef(str(instance) + "_trialnumber")
+                    records_bf.add((trialnumber_node, RDF.type, PXC.TrialNumber))
+                    records_bf.add((instance, BF.identifiedBy, trialnumber_node))
+                    records_bf.add(
+                        (trialnumber_node, RDF.value, Literal(trialnumber[1]))
+                    )
+                    # add the registry as an bf:assigner with class pxc:TrialRegistry:
+                    registry_node = URIRef(
+                        "https://w3id.org/zpid/vocabs/trialregs/" + trialnumber[0]
+                    )
+                    records_bf.set((registry_node, RDF.type, PXC.TrialRegistry))
+                    records_bf.add((trialnumber_node, BF.assigner, registry_node))
+                    # add the finished node for the relationship to the work:
+                    records_bf.add((work_uri, BFLC.relationship, relationship_node))
+                    # add preregistration_node to work:
+                    records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
 
 # ## Function: Create nodes for Grants (GRANT)
@@ -3098,6 +3501,9 @@ for record in root.findall("Record"):
     # instead of these linked Works, too -> fixed by adding a unique class "MainWork" for root works
     get_bf_preregistrations(work_uri, record)
 
+    # make another round through all the PRREG fields of the record, identifying any trial numbers and adding each as separate pxc:PreregistrationRelationship to the work, including the number as an identifier of the instance, and the ifentified registry as the assigner of the identifier:
+    add_trials_as_preregs(work_uri, record)
+
     ## ==== InstanceBundle ==== ##
 
     # For each work, create one pxc:InstanceBundle node with an uri
@@ -3191,6 +3597,9 @@ for record in root.findall("Record"):
 
     # Add the issuance type (from BE) to the instancebundle (e.g. "Journal Article" or "Edited Book"):
     get_issuance_type(instance_bundle_uri, record)
+
+    ## add license to bundle:
+    add_instance_license(instance_bundle_uri, record)
 
     ### Add titles (original and translated) to the instancebundle:
 

@@ -95,7 +95,6 @@
     "AccessPolicy": "bf:AccessPolicy",
     "AgeGroup": "pxc:AgeGroup",
     "Affiliation": "mads:Affiliation",
-    "UsagePolicy": "bf:UsagePolicy",
     "UsageAndAccessPolicy": "bf:UsageAndAccessPolicy",
     "AdminMetadata": "bf:AdminMetadata",
     "Agent": "bf:Agent",
@@ -171,6 +170,8 @@
     "Text": "bf:Text",
     "Title": "bf:Title",
     "Topic": "bf:Topic",
+    "TrialNumber": "pxc:TrialNumber",
+    "TrialRegistry": "pxc:TrialRegistry",
     "VariantTitle": "bf:VariantTitle",
     "Work": "bf:Work",
     "Thing": "owl:Thing",
@@ -616,6 +617,7 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "UsePolicy": "bf:UsePolicy",
     "version": "bf:version",
     "voice": {
       "@id": "bf:voice",

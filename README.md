@@ -312,7 +312,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [ ] CM
 
 ### Population:
-- [ ] AGE (Achtung, hier passiert künstiches Upposting - wenn zb Preschool Age, dann immer auch Childood. Das verwässert die Suche. Eventuell muss ich da das Vokabular/Skosmos zur Migration nutzen: nur Leaf Nodes, also nur die niedrigsten Unterbegriffe mit exportieren - Skosmos-API: hat keinen Unterbegriff?)
+- [ ] AGE (Achtung, hier passiert künstiches Upposting - wenn zb Preschool Age, dann immer auch Childood. Das verwässert die Suche. Eventuell muss ich da das Vokabular/Skosmos zur Migration nutzen: nur Leaf Nodes, also nur die niedrigsten Unterbegriffe mit exportieren - Skosmos-API: hat keinen Unterbegriff?) - und wie migrieren? Mit verschachtelter SKOS-Hierarchie direkt im Werk? als Work > concept > broader > concept!?
 - [ ] PLOC
 - [ ] SAM (manchmal |m |m , aber eigentlich nur noch ein |m, sonst nichts) (Human, Inanimate, Animal) 
 
@@ -320,10 +320,10 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] GRANT -> bf:contribution > bf:FundingReference mit fundref-lookup per API bei Crossref
 - [x] CF (only keeping for BE=SS and SM) -> bf:contribution > bf:ConferenceReference
 - [x] DATAC (Forschungsdatenlink)
-  - [ ] move from bnode to fragment uri, making sure not to collapse several into one!
+  - [x] move from bnode to fragment uri, making sure not to collapse several into one!
 - [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
 - [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
-  - [ ] move from bnode to fragment uri, make sure not to collapse 2 or more into one by counting up or something.
+  - [x] move from bnode to fragment uri, make sure not to collapse 2 or more into one by counting up or something.
 
 ### Dissertationen
 - [ ] GRAD
@@ -402,8 +402,8 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 - [ ] remarks (Bibliographic note zum Werk?) > `bf:note.rdfs:label`
 - [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen - scheint irgendwi in einem der `MK`-Felder zu stecken
-- [ ] instance.license > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:UsePolicy` (uri wie https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
-- [ ] instance.openAccessStatus > `bf:usageAndAccessPolicy.rdf:value` mit type `bf:AccessPolicy` (uri wie https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted)
+- [x] instance.license > `bf:usageAndAccessPolicy.` mit type `bf:UsePolicy` (Ziel ist eine URI aus dem licenses-Vokabular, zB https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
+- [ ] instance.openAccessStatus > `bf:usageAndAccessPolicy` mit type `bf:AccessPolicy` (Ziel ist uri aus access-Vokabular, zB https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted) - berechnen  aus license?
 - ~~instance.peerReviewStatus~~ - fällt weg, war auch nie in Bestandsdaten
 
 ### Contributors (Work)
@@ -433,6 +433,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] contributingCorporateBody.normCorporateBodyId - noch keine vorhanden in den Bestandsdaten -                
 - [x] contributingCorporateBody.country > (wie bei Personen) `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.rdfs:label`
 - [x] contributingCorporateBody.normCountryId	> (wie bei Personen, als geonames-id) `bf:contribution.bf:agent.mads:hasAffiliation.mads:hasAffiliationAddress.mads:country.bf:identifiedBy.rdf:value` (Identifier type `locid:geonames`)
+
 ## Abstracts und Inhaltsverzeichnisse (Werk)
 - [x] englishAbstract > `bf:summary.rdfs:label` (type: `pxc:Abstract`), ob english oder german: erkennbar an Sprachangabe des rdfs:label (en)
 - [x] germanAbstract `bf:summary.rdfs:label` (type: `pxc:Abstract`), ob english oder german: erkennbar an Sprachangabe des rdfs:label (de)
@@ -467,7 +468,8 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 ## InstanceBundles ("Instanzen" in PXR)
 
-- [x] instance.formatInstances > `pxp:hasInstanceBundle.bf:hasPart` 
+- [x] instance.formatInstances > `pxp:hasInstanceBundle.bf:hasPart` (Array, bisher immer nur 1-2 Instanzen darin)
+
 ## Titel (InstanceBundle)
 
 - [x] instance.mainTitle > `pxp:hasInstanceBundle.bf:title.bf:mainTitle` type: `bf:Title;` Sprache ist im Sprachtag (en oder de)
@@ -581,7 +583,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [ ] contentType - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:content` (Wert ist Uri aus content-Vokabular, zB https://w3id.org/zpid/vocabs/contenttypes/text)
 - [ ] genre - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:genreForm` (Wert ist Uri aus genres-Vokabular, zB https://w3id.org/zpid/vocabs/genres/ResearchPaper)
 - [x] instance.publicationType > `pxp:issuanceType`  (Wert ist Uri aus issuances-Vokabular, zB https://w3id.org/zpid/vocabs/issuances/JournalArticle)
-- [x] instance.formatInstance.carrierType `pxp:mediaCarrier`  (Wert ist Uri aus mediacarriers-Vokabular, zB https://w3id.org/zpid/vocabs/mediacarriers/Online)
+- [x] instance.formatInstance.carrierType `pxp:mediaCarrier` (Wert ist Uri aus mediacarriers-Vokabular, zB https://w3id.org/zpid/vocabs/mediacarriers/Online)
 
 ## Links zu Forschungsdaten 
 - [x] researchData	ResearchData	> `bflc:relationship` type der relationship ist immer: `pxc:ResearchDataRelationship`
@@ -595,8 +597,9 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] preregisteredStudies	PreregisteredStudy	> `bflc:relationship` type der relationship ist immer: `pxc:PreregistrationRelationship`
 - [x] preregisteredStudy.doi >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `bf:Doi`)
 - [x] preregisteredStudy.url >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:electronicLocator`
-- [ ] preregisteredStudy.trialNumber	- noch nicht migriert, muss komplziert aus Infofeld PRREG |i geparst werden. Erstmal alles in `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:note.rdfs:label` (Wert ist String) - aber dafür gibt es gar kein Feld in PSYNDEXER?
-- [ ] preregisteredStudy.trialRegistry	- noch nicht im Detail migriert, siehe preregisteredStudy.trialNumber
+- [x] preregisteredStudy.trialNumber > `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `pxc:TrialNumber`)	- komplziert aus Infofeld PRREG |i geparst und nur angehängt, wenn nicht schon Teil der URL einer schon existierenden pxc:PreregistrationRelationship. 
+- [x] preregisteredStudy.trialRegistry	> an der TrialNumber als "assigner": `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.bf:assigner` (Wert ist Uri aus assigner-Vokabular, zB https://w3id.org/zpid/vocabs/trialregs, zB https://w3id.org/zpid/vocabs/trialregs/prospero; hat auch type `pxc:TrialRegistry`)
+- [x] **preregisteredStudy.note**  `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:note.rdfs:label` (Wert ist String) - aber dafür gibt es gar kein Feld in PSYNDEXER?
 
 ## Links zu replizierten Studien #
 - [ ] replicatedStudies	ReplicatedStudy		0..n	-
