@@ -402,8 +402,8 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 - [ ] remarks (Bibliographic note zum Werk?) > `bf:note.rdfs:label`
 - [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen - scheint irgendwi in einem der `MK`-Felder zu stecken
-- [x] instance.license > `bf:usageAndAccessPolicy.` mit type `bf:UsePolicy` (Ziel ist eine URI aus dem licenses-Vokabular, zB https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
-- [ ] instance.openAccessStatus > `bf:usageAndAccessPolicy` mit type `bf:AccessPolicy` (Ziel ist uri aus access-Vokabular, zB https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted) - berechnen  aus license?
+- [x] instance.license > `bf:hasInstanceBundle.bf:usageAndAccessPolicy.` mit type `bf:UsePolicy` (Ziel ist eine URI aus dem licenses-Vokabular, zB https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
+- [ ] instance.openAccessStatus > `bf:hasInstanceBundle.bf:usageAndAccessPolicy` mit type `bf:AccessPolicy` (Ziel ist uri aus access-Vokabular, zB https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted) - berechnen  aus license & API-Abfrage bei OpenAlex?
 - ~~instance.peerReviewStatus~~ - fällt weg, war auch nie in Bestandsdaten
 
 ### Contributors (Work)
@@ -588,16 +588,16 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 ## Links zu Forschungsdaten 
 - [x] researchData	ResearchData	> `bflc:relationship` type der relationship ist immer: `pxc:ResearchDataRelationship`
 - [x] researchData.relation	> `bflc:relationship.bflc:relation`  (Werte: später entweder "relations:hasResearchData" oder "relations:hasAnalyticCode", bisher gibt es im Bestand aber nur welche mit "relations:hasResearchData")
-- [x] researchData.doi	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `bf:Doi`)
+- [x] researchData.doi	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy` (bei identifier type `bf:Doi`) (Node ist DOI als volle URL an)
 - [x] researchData.url	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:electronicLocator`
-- [x] researchData.access	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:usageAndAccessPolicy.owl:sameAs` (Wert ist Uri aus access-Vokabular, bisher immer bei allen im Bestand verlinkten Forschungsdaten: https://w3id.org/zpid/vocabs/access/open)
+- [x] researchData.access	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:usageAndAccessPolicy` (Wert ist Uri aus access-Vokabular, bisher immer bei allen im Bestand verlinkten Forschungsdaten: https://w3id.org/zpid/vocabs/access/open) Achtung: in den aktuell verlinkten Daten noch nicht geändert, wird aber Direktlink auf URI des Vokabularbegriffs sein, statt owl.sameAs-Beziehung.
 
 
 ## Links zu Präregistrierungen
 - [x] preregisteredStudies	PreregisteredStudy	> `bflc:relationship` type der relationship ist immer: `pxc:PreregistrationRelationship`
 - [x] preregisteredStudy.doi >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `bf:Doi`)
 - [x] preregisteredStudy.url >	`bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:electronicLocator`
-- [x] preregisteredStudy.trialNumber > `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `pxc:TrialNumber`)	- komplziert aus Infofeld PRREG |i geparst und nur angehängt, wenn nicht schon Teil der URL einer schon existierenden pxc:PreregistrationRelationship. 
+- [x] preregisteredStudy.trialNumber > `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.rdf:value` (bei identifier type `pxc:TrialNumber`)	- kompliziert aus Infofeld PRREG |i geparst und nur angehängt, wenn nicht schon Teil der URL einer schon existierenden pxc:PreregistrationRelationship. 
 - [x] preregisteredStudy.trialRegistry	> an der TrialNumber als "assigner": `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:identifiedBy.bf:assigner` (Wert ist Uri aus assigner-Vokabular, zB https://w3id.org/zpid/vocabs/trialregs, zB https://w3id.org/zpid/vocabs/trialregs/prospero; hat auch type `pxc:TrialRegistry`)
 - [x] **preregisteredStudy.note**  `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:note.rdfs:label` (Wert ist String) - aber dafür gibt es gar kein Feld in PSYNDEXER?
 

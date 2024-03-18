@@ -347,13 +347,8 @@ def add_instance_license(resource_uri, record):
             license_node = license_uri
             records_bf.set((license_node, RDF.type, BF.UsePolicy))
             records_bf.add((resource_uri, BF.usageAndAccessPolicy, license_node))
-            # try:
-            #     records_bf.add((license_node, OWL.sameAs, license_uri))
-            # except:
-            #     print(
-            #         f"failed adding sameAs for license {license_uri} to {license_node}"
-            #     )
-            # TODO: get the label from skosmos:
+
+            # Get the label from skosmos:
             try:
                 german_preflabel = get_preflabel_from_skosmos(
                     license_uri, "licenses", "de"
@@ -1888,18 +1883,30 @@ def build_work_relationship_node(work_uri, relation_type, count=None):
     records_bf.add((related_work_bnode, BF.hasInstance, related_instance_bnode))
     # add accesspolicy to instance:
     if access_policy_label is not None and access_policy_value is not None:
-        access_policy_node = URIRef(relationship_bnode + "_accesspolicy")
+        access_policy_node = URIRef(access_policy_concept)
         records_bf.add((access_policy_node, RDF.type, BF.AccessPolicy))
         records_bf.add((access_policy_node, RDFS.label, Literal(access_policy_label)))
-        records_bf.set(
+        # add preflabels "freier Zugang" and open access - since it will always be open, we don't need to fetch from skosmos, but just use preset labels:
+        records_bf.add(
             (
                 access_policy_node,
-                RDF.value,
-                Literal(access_policy_value, datatype=XSD.anyURI),
+                SKOS.prefLabel,
+                Literal(access_policy_label, lang="en"),
             )
         )
+        records_bf.add(
+            (access_policy_node, SKOS.prefLabel, Literal("freier Zugang", lang="de"))
+        )
+        # not addind the url to coar for now, we don't need it for migration:
+        # records_bf.set(
+        #     (
+        #         access_policy_node,
+        #         RDF.value,
+        #         Literal(access_policy_value, datatype=XSD.anyURI),
+        #     )
+        # )
         # add concept from our own vocabulary:
-        records_bf.set((access_policy_node, OWL.sameAs, URIRef(access_policy_concept)))
+        # records_bf.set((access_policy_node, OWL.sameAs, URIRef(access_policy_concept)))
         records_bf.add(
             (related_instance_bnode, BF.usageAndAccessPolicy, access_policy_node)
         )
@@ -3223,19 +3230,16 @@ def get_bf_conferences(work_uri, record):
 # According to the github repo of the conversion script, it should look like this:
 #
 # ```turtle
-# <Instance> bf:usageAndAccessPolicy [
-#     a bf:AccessPolicy;
+# <Instance> bf:usageAndAccessPolicy access:open . # or access:restricted
+# access:open a bf:AccessPolicy;
 #     rdfs:label "open access"@en, "offener Zugang"@de;
 #     # or:
 #     # rdfs:label "restricted access"@en, "eingeschränkter Zugang"@de;
 #     rdf:value "http://purl.org/coar/access_right/c_abf2"^^xsd:anyURI; # a link to the license or uri of the skos term: here: open access
 #     # or:
 #     # rdf:value "http://purl.org/coar/access_right/c_16ec"^^xsd:anyURI; # restricted
-# ].
+# .
 # ```
-#
-# To be able to use a controlled vocabulary for this, we will make use of the COAR "access rights" skos vocabulary!
-# https://vocabularies.coar-repositories.org/access_rights/ - its four concepts: open access, restriced access, embargoed access, metadata only access.
 
 
 def get_urlai(work_uri, record):
@@ -3248,7 +3252,7 @@ def get_urlai(work_uri, record):
         global researchdatalink_counter
         researchdatalink_counter += 1
         # build the relationship node:
-        # TODO: add secondary class pxc:ResearchDataRelationship to the relationship node for research data
+        # add ~~secondary~~ only class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
             work_uri,
             relation_type="rd_restricted_access",
