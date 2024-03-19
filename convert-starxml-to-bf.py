@@ -246,6 +246,8 @@ def get_issuance_type(instance_bundle_uri, record):
     try:
         # generate a node for the Issuance:
         issuance_node = URIRef(ISSUANCES + issuance_uri_fragment)
+        # class bf:Issuance
+        records_bf.set((issuance_node, RDF.type, PXC.IssuanceType))
         # add it to the instance
         records_bf.add((instance_bundle_uri, PXP.issuanceType, issuance_node))
         # add a label:
@@ -412,14 +414,106 @@ def add_work_studytype(work_uri, record):
     pass
 
 
-def add_work_genre(work_uri, record):
+def add_work_genres(work_uri, record):
     """Reads several fields from the record to calculate a genreForm for the work_uri and adds it as a bf:genreForm node. Includes a link to the vocabs/genres/ vocabulary in our Skosmos. Fields considered are: BE, DT, DT2, CM.
 
     Args:
         work_uri (_type_): The work node to which the genreForm node will be added.
         record (_type_): The record from which the fields will be read.
     """
-    pass
+    # set up a list of genres to add to the work:
+    genres = []
+    # get the bibliographic level from BE:
+    try:
+        bibliographic_level = record.find("BE").text.strip()
+    except:
+        bibliographic_level = ""
+    # get the document type from DT:
+    try:
+        document_type = record.find("DT").text.strip()
+    except:
+        document_type = ""
+    # get the document type 2 from DT2:
+    try:
+        document_type_2 = record.find("DT2").text.strip()
+    except:
+        document_type_2 = ""
+    try:
+        didh = record.find("DIDH").text.strip()
+    except:
+        didh = ""
+    try:
+        bibliographic_note = record.find("BN").text.strip()
+    except:
+        bibliographic_note = ""
+    # get an array of all the methods from CM, but only subfield c:
+    try:
+        methods = record.findall("CM")
+        # print("methods: " + str(methods))
+        # for each method, get the text, then the c subfield:
+        methods = [get_subfield(method.text, "c") for method in methods]
+        print("methods for record " + record.find("DFK").text + ": " + str(methods))
+    except:
+        methods = []
+        print("no methods found in record " + record.find("DFK").text)
+
+    ## Doctoral Thesis:
+    if (
+        bibliographic_level == "SH"
+        or document_type == "61"
+        or document_type_2 == "61"
+        or "Diss".casefold() in didh.casefold()
+        or "Dissertation".casefold() in bibliographic_note.casefold()
+    ):
+        genres.append("ThesisDoctoral")
+    ## Habilitation Thesis:
+    elif (
+        "habil".casefold() in didh.casefold()
+        or "habilitationsschrift".casefold() in bibliographic_note.casefold()
+    ):
+        genres.append("ThesisHabilitation")
+    ## cumulative/compilation theses:
+    if "kumulative".casefold() in bibliographic_note.casefold():
+        genres.append("CompilationThesis")
+    # if any method _starts with_  "|c 10" add "ResearchPaper" to genres
+    # remeber it has to start with "|c 10" and not just contain it:
+    # or if it is exactly one of the following: 11100 (method. study),12100 (theor. study), 13100 (literature review),13110 (systematic review)
+    if any(notation.startswith("101") for notation in methods) or any(
+        notation in ["11100", "10200", "10300", "12100", "13100", "13110"]
+        for notation in methods
+    ):
+        # but only if it isn't already a thesis:
+        if "ThesisDoctoral" not in genres and "ThesisHabilitation" not in genres:
+            genres.append("ResearchPaper")
+
+    # if any are 11200 or 11300 and also bibliographic level is "UZ", also add ResearchPaper:
+    if (
+        any(notation in ["11200", "11300"] for notation in methods)
+        and bibliographic_level == "UZ"
+    ):
+        genres.append("ResearchPaper")
+    
+
+    # if any method can be found via a search in skosmos, add it to genres as the skosmos concept you found:
+    for notation in methods:
+        try:
+            # print("searching for " + notation + " in skosmos")
+            genre_cm = search_in_skosmos(notation, "genres")
+        except:
+            genre_cm = None
+            print("failed searching for " + notation + " in skosmos")
+        if genre_cm is not None:
+            genres.append(genre_cm)
+
+    # # create node for each genre:
+    for genre in genres:
+        genre_node = URIRef(GENRES[genre])
+        # class bf:GenreForm
+        records_bf.set((genre_node, RDF.type, BF.GenreForm))
+        # add it to the work:
+        records_bf.add((work_uri, BF.genreForm, genre_node))
+        # add a label: no need for first migration! Get from skosmos api later.
+        # records_bf.set((genre_node, RDFS.label, Literal(genre)))
 
 
 def get_publication_date(record):
@@ -586,6 +680,27 @@ def get_preflabel_from_skosmos(uri, vocid, lang="de"):
             return None
     else:
         print("skosmos request failed for " + uri)
+        return None
+
+
+def search_in_skosmos(search_term, vocid):
+    """Search for a term in a skosmos vocabulary and return the first hit as a skos:Concept uri (localname)."""
+    query = SKOSMOS_API_URL + vocid + "/search?query=" + search_term + "&maxhits=1"
+    # print("searching " + query)
+    skosmos_request = session_skosmos.get(
+        query,
+        timeout=20,
+    )
+    # print(skosmos_request.status_code)
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response["results"]) > 0:
+            return skosmos_response["results"][0]["localname"]
+        else:
+            # print("no concept found for " + search_term)
+            return None
+    else:
+        print("skosmos request failed for " + search_term)
         return None
 
 
@@ -1463,6 +1578,8 @@ def get_mediacarrier(mediatype):
         case _:
             print("no match for " + mediatype)
             return URIRef(BF["Print"]), URIRef(PMT["Print"])
+        # TODO: if MT is Print, but BN or BNDI has "Schreibmaschinenfassung", it is actually a manuscript: https://w3id.org/zpid/vocabs/mediacarriers/Manuscript
+        # and what about "Offsetdruck" in BN/BNDI? That would really be Print, I suppose.
 
 
 ###
@@ -1864,14 +1981,14 @@ def build_work_relationship_node(work_uri, relation_type, count=None):
     related_work_bnode = URIRef(relationship_bnode + "_work")
     records_bf.add((related_work_bnode, RDF.type, BF.Work))
     records_bf.add((related_work_bnode, RDF.type, URIRef(BF[work_subclass])))
-    # give work a content type:
-    records_bf.add((related_work_bnode, BF.content, URIRef(CONTENTTYPES[content_type])))
+    # give work a content type: no need for initial migration, but later
+    # records_bf.add((related_work_bnode, BF.content, URIRef(CONTENTTYPES[content_type])))
     # make the content type a bf:Content:
-    records_bf.add((URIRef(CONTENTTYPES[content_type]), RDF.type, BF.Content))
-    # and a genre:
-    records_bf.add((related_work_bnode, BF.genreForm, URIRef(GENRES[genre])))
+    # records_bf.add((URIRef(CONTENTTYPES[content_type]), RDF.type, BF.Content))
+    # and a genre: not needed for migration, but later
+    # records_bf.add((related_work_bnode, BF.genreForm, URIRef(GENRES[genre])))
     # make the genreform a bf:GenreForm:
-    records_bf.add((URIRef(GENRES[genre]), RDF.type, BF.GenreForm))
+    # records_bf.add((URIRef(GENRES[genre]), RDF.type, BF.GenreForm))
     # attach the work bnode to the relationship bnode with bf:relatedTo
     # (or a subproperty as given as a parameter)):
     # print("\tbf:relatedTo [a bf:Work ;")
@@ -1879,7 +1996,8 @@ def build_work_relationship_node(work_uri, relation_type, count=None):
     # make a node for the instance:
     related_instance_bnode = URIRef(related_work_bnode + "_instance")
     records_bf.set((related_instance_bnode, RDF.type, BF.Instance))
-    records_bf.add((related_instance_bnode, RDF.type, BF.Electronic))
+    # add subclass for electronic - not needed for initial migration, but later
+    # records_bf.add((related_instance_bnode, RDF.type, BF.Electronic))
     records_bf.add((related_work_bnode, BF.hasInstance, related_instance_bnode))
     # add accesspolicy to instance:
     if access_policy_label is not None and access_policy_value is not None:
@@ -1921,7 +2039,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
-        "genre": "researchData",
+        "genre": "ResearchData",
         "access_policy_label": "open access",
         "access_policy_value": "http://purl.org/coar/access_right/c_abf2",
         "access_policy_concept": "https://w3id.org/zpid/vocabs/access/open",
@@ -1931,7 +2049,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
-        "genre": "researchData",
+        "genre": "ResearchData",
         "access_policy_label": "restricted access",
         "access_policy_value": "http://purl.org/coar/access_right/c_16ec",
         "access_policy_concept": "https://w3id.org/zpid/vocabs/access/open",
@@ -1941,7 +2059,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Text",
         "content_type": "txt",
-        "genre": "preregistration",
+        "genre": "Preregistration",
         "access_policy_label": None,
         "access_policy_value": None,
         "access_policy_concept": None,
@@ -3423,7 +3541,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 for record in root.findall("Record"):
-    # for record in root.findall("Record")[0:200]:
+    # for record in root.findall("Record")[0:20]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3477,6 +3595,8 @@ for record in root.findall("Record"):
     if record.find("ABN") is not None:
         get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
+    # add genres to the work:
+    add_work_genres(work_uri, record)
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     add_controlled_terms(work_uri, record)
 
