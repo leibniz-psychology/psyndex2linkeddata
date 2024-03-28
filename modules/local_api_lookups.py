@@ -12,6 +12,7 @@ ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
 # psyndex-methods-en + /suggest
 # psyndex-methods-de + /suggest
 
+# skosmos api url for looking up concepts in CT, SH, and other controlled vocabs:
 SKOSMOS_API_URL = "https://skosmos.dev.zpid.org/rest/v1/"
 
 # annif api caching:
@@ -27,6 +28,8 @@ session_annif = requests_cache.CachedSession(
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
 )
+
+# cache for skosmos requests:
 session_skosmos = requests_cache.CachedSession(
     ".cache/requests_skosmos",
     allowable_codes=[200, 404],
@@ -67,4 +70,86 @@ def get_annif_method_suggestion(text, language):
         return response.json()["results"][0]["notation"]
     except:
         print(f"Could not get a method suggestion from Annif - empty result list.")
+        return None
+
+
+def get_concept_uri_from_skosmos(concept_label, vocid):
+    """Generic function to get the uri of a concept from skosmos by its label. Works with any skosmos vocabulary, if you know the vocid.
+
+    Args:
+        concept_label (String): The label of the concept we want to find in the vocabulary
+        vocid (String): The short id of the vocabulary in skosmos, e.g. "terms" for the CT vocabulary, "class" for SH, "addterms" for IT, "agegroups" for AGE.
+
+    Returns:
+        uri: The skos:Concept uri of the concept.
+    """
+    # get the uri of a concept from skosmos by its label
+    # works with any skosmos vocabulary, if you know the vocid
+
+    skosmos_request = session_skosmos.get(
+        SKOSMOS_API_URL + vocid + "/lookup?label=" + concept_label + "&lang=en",
+        timeout=20,
+    )
+
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response["result"]) > 0:
+            # print(skosmos_response["result"][0]["uri"])
+            return skosmos_response["result"][0]["uri"]
+        else:
+            print("no uri found for " + concept_label)
+            return None
+    else:
+        print("skosmos request failed for " + concept_label)
+        return None
+
+
+def get_preflabel_from_skosmos(uri, vocid, lang="de"):
+    """Get the preferred label of a concept from skosmos by its uri. Needs a vocid and the language you want the label in. Works with any skosmos vocabulary, if you know the vocid.
+
+    Args:
+        uri (String): The uri of the concept we want to find in the vocabulary
+        vocid (String): The short id of the vocabulary in skosmos, e.g. "terms" for the CT vocabulary, "class" for SH, "addterms" for IT, "agegroups" for AGE.
+        lang (String, optional): The language of the label we want to get. Defaults to "de".
+
+
+    Returns:
+        String: The preferred label of the concept.
+    """
+
+    skosmos_request = session_skosmos.get(
+        SKOSMOS_API_URL + "label?uri=" + uri + "&lang=" + lang, timeout=20
+    )
+
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response) > 0:
+            # print(skosmos_response["labels"][0]["label"])
+            return skosmos_response["prefLabel"]
+        else:
+            print("no label found for " + uri)
+            return None
+    else:
+        print("skosmos request failed for " + uri)
+        return None
+
+
+def search_in_skosmos(search_term, vocid):
+    """Search for a term in a skosmos vocabulary and return the first hit as a skos:Concept uri (localname)."""
+    query = SKOSMOS_API_URL + vocid + "/search?query=" + search_term + "&maxhits=1"
+    # print("searching " + query)
+    skosmos_request = session_skosmos.get(
+        query,
+        timeout=20,
+    )
+    # print(skosmos_request.status_code)
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        if len(skosmos_response["results"]) > 0:
+            return skosmos_response["results"][0]["localname"]
+        else:
+            # print("no concept found for " + search_term)
+            return None
+    else:
+        print("skosmos request failed for " + search_term)
         return None
