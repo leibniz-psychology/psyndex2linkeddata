@@ -6,7 +6,7 @@
 """
 
 import xml.etree.ElementTree as ET
-from rdflib import Literal, URIRef, Namespace, Graph, RDF, RDFS
+from rdflib import OWL, Literal, URIRef, Namespace, Graph, RDF, RDFS
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 
@@ -198,8 +198,10 @@ def get_controlled_methods(record, dfk, work_node, instance_bundle_node, graph):
         if method_suggestion is not None:
             methods.append(method_suggestion)
     # add a node for each method:
-    for method_code in methods:
-        method_node = URIRef(METHODS[method_code])
+    for index, method_code in enumerate(methods, start=1):
+        # method_node = URIRef(METHODS[method_code])
+        # make a hashed uri from work:
+        method_node = URIRef(work_node + "#studytype" + str(index))
         # give it class pxc:ControlledMethod:
         graph.add(
             (
@@ -208,6 +210,25 @@ def get_controlled_methods(record, dfk, work_node, instance_bundle_node, graph):
                 PXC.ControlledMethod,
             )
         )
+        # add the method_code as an owl:sameAs to the node:
+        graph.add(
+            (
+                method_node,
+                OWL.sameAs,
+                URIRef(METHODS[method_code]),
+            )
+        )
+
+        # if this is the first method in the list, add a class pxc:ControlledMethodWeighted to the work:
+        if index == 1:
+            graph.add(
+                (
+                    method_node,
+                    RDF.type,
+                    PXC.ControlledMethodWeighted,
+                )
+            )
+
         graph.add(
             (
                 work_node,
@@ -215,6 +236,8 @@ def get_controlled_methods(record, dfk, work_node, instance_bundle_node, graph):
                 method_node,
             )
         )
+        # add labels we got from skosmos:
+        #
 
     # print(f"Methods found in {dfk}: {methods}")
 

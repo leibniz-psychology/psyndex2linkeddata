@@ -2,6 +2,7 @@
 # Import libraries:
 
 
+import datetime
 import dateparser
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
@@ -3471,8 +3472,8 @@ def get_datac(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-for record in root.findall("Record"):
-    # for record in root.findall("Record")[0:200]:
+# for record in root.findall("Record"):
+for record in root.findall("Record")[0:200]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3687,9 +3688,21 @@ records_bf.add(
     )
 )
 # # add a bf:generationProcess to the admin metadata node:
-# records_bf.add((records_bf_admin_metadata_root, BF.generationProcess, Literal("Converted from PsychAuthors XML to BIBFRAME 2.2 using Python scripts")))
+records_bf.add(
+    (
+        records_bf_admin_metadata_root,
+        BF.generationProcess,
+        Literal("Converted from STAR XML to BIBFRAME 2.3 using Python scripts"),
+    )
+)
 # # add a bf:generationDate to the admin metadata node:
-# #records_bf.add((records_bf_admin_metadata_root, BF.generationDate, Literal(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))))
+records_bf.add(
+    (
+        records_bf_admin_metadata_root,
+        BF.generationDate,
+        Literal(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+    )
+)
 # # add the count as BF.count:
 # records_bf.add((records_bf_admin_metadata_root, PXP.recordCount, Literal(record_count)))
 
