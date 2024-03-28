@@ -1,11 +1,8 @@
 # Purpose: Convert STAR XML to Bibframe RDF
 # Import libraries:
 
-from distutils.command import build
-import random
-import uuid
+
 import dateparser
-from numpy import rec
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
@@ -14,10 +11,11 @@ import xml.etree.ElementTree as ET
 import re
 import html
 
-from zmq import has
-
 
 import modules.mappings as mappings
+import modules.publication_types as publication_types
+import modules.helpers as helpers
+import modules.local_api_lookups as localapi
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science
@@ -58,15 +56,15 @@ urls_expire_after = {
 }
 
 # a cache for ror requests
-session = requests_cache.CachedSession(
-    ".cache/requests",
+session_ror = requests_cache.CachedSession(
+    ".cache/requests_ror",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
 )
 # and a cache for the crossref api:
 session_fundref = requests_cache.CachedSession(
-    ".cache/requests",
+    ".cache/requests_fundref",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
@@ -74,7 +72,7 @@ session_fundref = requests_cache.CachedSession(
 
 # cache for skosmos requests:
 session_skosmos = requests_cache.CachedSession(
-    ".cache/requests",
+    ".cache/requests_skosmos",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
@@ -204,7 +202,7 @@ def get_ror_org_country(affiliation_ror_id):
     # first, use only the last part of the ror id, which is the id itself:
     affiliation_ror_id = affiliation_ror_id.split("/")[-1]
     # the country name is in country.name in the json response
-    ror_request = session.get(
+    ror_request = session_ror.get(
         "https://api.ror.org/organizations/" + affiliation_ror_id, timeout=20
     )
     if ror_request.status_code == 200:
@@ -216,46 +214,6 @@ def get_ror_org_country(affiliation_ror_id):
             return None
 
 
-def get_issuance_type(instance_bundle_uri, record):
-    # // from field BE
-    # from modules.mappings import issuancetypes
-    bibliographic_level = record.find("BE").text.strip()
-    issuance_uri_fragment = None
-    #  for different cases, add different issuance types:
-    # TODO: add others that are rarely used, such as for audiovisual media, etc.
-    match bibliographic_level:
-        case "SS":
-            issuance_type = "Edited Book"
-        case "SM":
-            issuance_type = "Authored Book"
-        case "UZ":
-            issuance_type = "Journal Article"
-        case "SH":
-            issuance_type = "Gray Literature"
-        case "SR":
-            issuance_type = "Gray Literature"
-        case "UR":
-            issuance_type = "Chapter"
-        case "US":
-            issuance_type = "Chapter"
-        case _:
-            issuance_type = "Other"
-
-    # remove spaces from the label to make a CamelCase uri fragment
-    issuance_uri_fragment = issuance_type.replace(" ", "")
-    try:
-        # generate a node for the Issuance:
-        issuance_node = URIRef(ISSUANCES + issuance_uri_fragment)
-        # class bf:Issuance
-        records_bf.set((issuance_node, RDF.type, PXC.IssuanceType))
-        # add it to the instance
-        records_bf.add((instance_bundle_uri, PXP.issuanceType, issuance_node))
-        # add a label:
-        records_bf.set((issuance_node, RDFS.label, Literal(issuance_type)))
-    except:
-        print("record has no valid bibliographic level!")
-
-
 def add_instance_license(resource_uri, record):
     """Reads field COPR and generates a bf:usageAndAccessPolicy node for the resource_uri based on it. Includes a link to the vocabs/licenses/ vocabulary in our Skosmos. We'll probably only use the last subfield (|c PUBL) and directly build a skosmos-uri from it (and pull the label from there?). There are more specific notes in the migration aection of each license concept in Skosmos. Note: the license always applies to an instance (or an instancebundle), not to a work, since the license is about the publication, not the content of the publication - the work content might be published elsewhere with a different license. Manuel mentioned something like that already about being confused about different licenses for different versions at Crossref.
 
@@ -265,9 +223,9 @@ def add_instance_license(resource_uri, record):
     """
     if record.find("COPR") is not None:
         # get the last subfield of COPR:
-        license_code = get_subfield(record.find("COPR").text, "c")
+        license_code = helpers.get_subfield(record.find("COPR").text, "c")
         # get the german_label from |d:
-        license_german_label = get_subfield(record.find("COPR").text, "d")
+        license_german_label = helpers.get_subfield(record.find("COPR").text, "d")
         # create a skosmos uri for the license:
         SKOSMOS_LICENSES_PREFIX = "https://w3id.org/zpid/vocabs/licenses/"
         # license_uri = URIRef(LICENSES + license_code)
@@ -414,7 +372,7 @@ def add_work_studytype(work_uri, record):
     pass
 
 
-def add_work_genres(work_uri, record):
+def add_work_genres(work_uri, record, dfk):
     """Reads several fields from the record to calculate a genreForm for the work_uri and adds it as a bf:genreForm node. Includes a link to the vocabs/genres/ vocabulary in our Skosmos. Fields considered are: BE, DT, DT2, CM.
 
     Args:
@@ -451,11 +409,11 @@ def add_work_genres(work_uri, record):
         methods = record.findall("CM")
         # print("methods: " + str(methods))
         # for each method, get the text, then the c subfield:
-        methods = [get_subfield(method.text, "c") for method in methods]
-        print("methods for record " + record.find("DFK").text + ": " + str(methods))
+        methods = [helpers.get_subfield(method.text, "c") for method in methods]
+        # print("methods for record " + record.find("DFK").text + ": " + str(methods))
     except:
         methods = []
-        print("no methods found in record " + record.find("DFK").text)
+        print("no methods found in record " + dfk)
 
     ## Doctoral Thesis:
     if (
@@ -492,7 +450,42 @@ def add_work_genres(work_uri, record):
         and bibliographic_level == "UZ"
     ):
         genres.append("ResearchPaper")
-    
+
+    # for any that are 18650 (workshop) and also have specific DFKs, treat them before, then go through the rest to make them either MeetingReport or CourseMaterial:
+    if any(notation in ["18650"] for notation in methods):
+        ## Special cases wrongly tagged as "workshop":
+        # DFK = 0369284 -> "ConferenceProceedings"
+        if "0369284" in dfk:
+            genres.append("ConferenceProceedings")
+        # DFKs 0262075, 0266517, 0266519, 0273412, 0291044 -> "Talk"
+        elif any(dfk in ["0262075", "0266517", "0266519", "0273412", "0291044"]):
+            genres.append("Talk")
+        elif any(
+            # 0307206 "Textbesprechung" - einfach eine Sammlung von Aufsätzen dieser verstorbenen Person -> "PaperCollection"
+            "0307206"
+            in record.find("DFK").text
+        ):
+            genres.append("PaperCollection")
+        # for any that are 18650 (workshop) and also BE=UZ, UR, US, add "MeetingReport"
+        elif bibliographic_level in [
+            "UZ",
+            "UR",
+            "US",
+        ]:
+            genres.append("MeetingReport")
+        # for any that are 18650 (workshop) and BE=AV, add "CourseMaterial"
+        elif bibliographic_level == "AV":
+            genres.append("CourseMaterial")
+
+    # for any that are 13600 (educational audiovisual material) add "CourseMaterial"
+    if any(notation in ["18650"] for notation in methods):
+        genres.append("CourseMaterial")
+    if any(notation in ["13600"] for notation in methods):
+        genres.append("CourseMaterial")
+
+    # if this record has a DFK from the following list, add "Bibliography": 0308189, 0179058, 0406548 (Manfred's testverzeichnisse)
+    if dfk in ["0308189", "0179058", "0406548"]:
+        genres.append("Bibliography")
 
     # if any method can be found via a search in skosmos, add it to genres as the skosmos concept you found:
     for notation in methods:
@@ -510,6 +503,13 @@ def add_work_genres(work_uri, record):
         genre_node = URIRef(GENRES[genre])
         # class bf:GenreForm
         records_bf.set((genre_node, RDF.type, BF.GenreForm))
+        # get the label from skosmos:
+        german_label = get_preflabel_from_skosmos(genre_node, "genres", "de").strip()
+        english_label = get_preflabel_from_skosmos(genre_node, "genres", "en").strip()
+        # add as prefLabel:
+        records_bf.add((genre_node, SKOS.prefLabel, Literal(german_label, "de")))
+        records_bf.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
+        records_bf.add((genre_node, RDFS.label, Literal(english_label)))
         # add it to the work:
         records_bf.add((work_uri, BF.genreForm, genre_node))
         # add a label: no need for first migration! Get from skosmos api later.
@@ -528,7 +528,7 @@ def get_publication_date(record):
     # from field PHIST or PY, get pub date and return this as a Literal
     # get date from PHIST field, it exists, otherwise from P> field:
     if record.find("PHIST") is not None and record.find("PHIST").text != "":
-        date = get_subfield(record.find("PHIST").text, "o")
+        date = helpers.get_subfield(record.find("PHIST").text, "o")
         # clean up anything that's not a digit at the  start, such as ":" - make sure with a regex that date starts with a digit:
         date.strip()
         # parse the date: it can be either "8 June 2021" or "08.06.2021"
@@ -568,11 +568,11 @@ def add_isbns(record, instancebundle_uri):
         pu = None
     if pu is not None and pu.text != "":
         try:
-            isbn_print = get_subfield(pu.text, "i")
+            isbn_print = helpers.get_subfield(pu.text, "i")
         except:
             isbn_print = None
         try:
-            isbn_ebook = get_subfield(pu.text, "e")
+            isbn_ebook = helpers.get_subfield(pu.text, "e")
         except:
             isbn_ebook = None
 
@@ -707,8 +707,8 @@ def search_in_skosmos(search_term, vocid):
 def match_paups_to_contribution_nodes(work_uri, record):
     # go through all PAUP fields and get the id:
     for paup in record.findall("PAUP"):
-        paup_id = get_subfield(paup.text, "n")
-        paup_name = get_mainfield(paup.text)
+        paup_id = helpers.get_subfield(paup.text, "n")
+        paup_name = helpers.get_mainfield(paup.text)
         # get the given and family part of the paup name:
         paup_split = paup_name.split(",")
         paup_familyname = paup_split[0].strip()
@@ -799,8 +799,8 @@ def match_orcids_to_contribution_nodes(work_uri, record):
     # go through all ORCID fields and get the id:
     for orcid in record.findall("ORCID"):
         # print("orcid: " + orcid.text)
-        orcid_id = get_subfield(orcid.text, "u")
-        orcid_name = get_mainfield(orcid.text)
+        orcid_id = helpers.get_subfield(orcid.text, "u")
+        orcid_name = helpers.get_mainfield(orcid.text)
         # is the orcid well formed?
         # clean up the orcid_id by removing spaces that sometimes sneak in when entering them in the database:
         if orcid_id is not None and " " in orcid_id:
@@ -973,7 +973,7 @@ def match_email_to_contribution_nodes(work_uri, record):
 
 
 def extract_contribution_role(contributiontext):
-    role = get_subfield(contributiontext, "f")
+    role = helpers.get_subfield(contributiontext, "f")
     if role is not None:
         # if we find a role, return it:
         return role
@@ -1032,7 +1032,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
         records_bf.set((contribution_node, BF.role, add_bf_contribution_role(role)))
 
         # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
-        org_name = mappings.replace_encodings(get_mainfield(org.text))
+        org_name = mappings.replace_encodings(helpers.get_mainfield(org.text))
         # org_name = mappings.replace_encodings(org.text).strip()
         # get ror id of org from api:
         org_ror_id = get_ror_id_from_api(org_name)
@@ -1050,7 +1050,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
 
         # get any affiliation in |i and add it to the name:
         try:
-            org_affiliation_name = get_subfield(org.text, "i")
+            org_affiliation_name = helpers.get_subfield(org.text, "i")
             # print("org affiliation:" + org_affiliation_name)
         except:
             org_affiliation_name = None
@@ -1059,7 +1059,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
             org_name = org_name + "; " + org_affiliation_name
         # # get country name in |c, if it exists:
         try:
-            org_country = get_subfield(org.text, "c")
+            org_country = helpers.get_subfield(org.text, "c")
             # print("AUK subfield c: org country:" + org_country)
         except:
             org_country = None
@@ -1234,7 +1234,7 @@ def get_ror_id_from_api(orgname_string):
     # make a request to the ror api:
     # ror_api_request = requests.get(ror_api_url)
     # make request to api with caching:
-    ror_api_request = session.get(ror_api_url, timeout=20)
+    ror_api_request = session_ror.get(ror_api_url, timeout=20)
     # if the request was successful, get the json response:
     if ror_api_request.status_code == 200:
         ror_api_response = ror_api_request.json()
@@ -1427,7 +1427,9 @@ def add_bf_contributor_person(work_uri, record):
         records_bf.add((person_node, RDF.type, BF.Person))
 
         # add the name from AUP to the person node, but only use the text before the first |: (and clean up the encoding):
-        personname = mappings.replace_encodings(get_mainfield(person.text)).strip()
+        personname = mappings.replace_encodings(
+            helpers.get_mainfield(person.text)
+        ).strip()
 
         records_bf.add((person_node, RDFS.label, Literal(personname)))
 
@@ -1517,9 +1519,11 @@ def add_bf_contributor_person(work_uri, record):
 
         ## Get affiliation from AUP |i, country from |c:
         # no looping necessary here, just check if a string |i exists in AUP and if so, add it to the person node as the affiliation string:
-        affiliation_string = get_subfield(person.text, "i")
+        affiliation_string = helpers.get_subfield(person.text, "i")
 
-        affiliation_country = sanitize_country_names(get_subfield(person.text, "c"))
+        affiliation_country = sanitize_country_names(
+            helpers.get_subfield(person.text, "c")
+        )
 
         # pass this to function build_affiliation_nodes to get a finished affiliation node:
         if affiliation_string != "" and affiliation_string is not None:
@@ -1555,31 +1559,6 @@ def add_bf_contributor_person(work_uri, record):
 
 
 # %%
-# function to set mediaCarrier from mt and mt2:
-def get_mediacarrier(mediatype):
-    mediatype = mediatype.strip()
-    MEDIACARRIER_VOCAB_PREFIX_URI = "https://w3id.org/zpid/vocabs/mediacarrier/"
-    # cases = [
-    #     # format: MT/MT2 value, bf:Instance subclass, pxp:mediaCarrier value/uri localname"
-    #     ("Print", "Print", "Print"),
-    #     ("Online Medium", "Electronic", "Online"),
-    #     ("eBook", "Electronic", "Online"),
-    #     # add more types here
-    # ]
-    match mediatype:
-        case "Print":
-            return URIRef(BF["Print"]), URIRef(PMT["Print"])
-        case "Online Medium":
-            return URIRef(BF["Electronic"]), URIRef(PMT["Online"])
-        case "eBook":
-            return URIRef(BF["Electronic"]), URIRef(PMT["Online"])
-        case "Optical Disc":
-            return URIRef(BF["Electronic"]), URIRef(PMT["ElectronicDisc"])
-        case _:
-            print("no match for " + mediatype)
-            return URIRef(BF["Print"]), URIRef(PMT["Print"])
-        # TODO: if MT is Print, but BN or BNDI has "Schreibmaschinenfassung", it is actually a manuscript: https://w3id.org/zpid/vocabs/mediacarriers/Manuscript
-        # and what about "Offsetdruck" in BN/BNDI? That would really be Print, I suppose.
 
 
 ###
@@ -1606,9 +1585,9 @@ def add_publication_info(instance_uri, record):
     if pu is not None and pu.text != "":
         pufield = html.unescape(pu.text.strip())
         # get publisher name from subfield v:
-        publisher_name = get_subfield(pufield, "v")
+        publisher_name = helpers.get_subfield(pufield, "v")
         # get place from subfield o:
-        publication_place = get_subfield(pufield, "o")
+        publication_place = helpers.get_subfield(pufield, "o")
         # add the place to the bf:provisionActivity, its not none:
         if publication_place is not None:
             records_bf.add(
@@ -1622,55 +1601,6 @@ def add_publication_info(instance_uri, record):
 
 
 # ## Semi-generic helper functions
-
-# ### Getting subfields from a field
-
-
-# %%
-def get_subfield(subfield_full_string, subfield_name):
-    """Given a string that contains star subfields (|name ) and the name of the subfield,
-    e.g. i for |i, return the content of only that subfield as a string."""
-    # first, make sure that the extracted substring is not None, not empty or completely comprised of spaces:
-    if subfield_full_string is not None and subfield_full_string != "":
-        # strip out any double spaces and replace with single space, also strip spaces around:
-        subfield_full_string = re.sub(" {2,}", " ", subfield_full_string.strip())
-        # split out the content of the field - from the first |name to either the next | or the end of subfield_full_string:
-        subfield = None
-        # check if the subfield is in the string:
-        if f"|{subfield_name}" in subfield_full_string:
-            # if it is, split the string on the subfield name:
-            subfield = subfield_full_string.split(f"|{subfield_name}")[1].strip()
-            # end the string at the next | or the end of the string:
-            subfield = subfield.split("|")[0].strip()
-        # subfield = subfield_full_string.split(f"|{subfield_name}")[1].strip().split("|")[0].strip()
-        # print(subfield)
-        if subfield != "" and subfield is not None:
-            return html.unescape(mappings.replace_encodings(subfield))
-        else:
-            return None
-
-
-def get_mainfield(field_fullstring):
-    """Given a string extracted from a star field that may have substrings or not, return the content of
-    the main field as a string - either to the first |subfield or the end of the field, if no subfields.
-    """
-    # first, make sure that the extracted substring is not None, not empty or completely comprised of spaces:
-    if field_fullstring is not None and field_fullstring != "":
-        # strip out any double spaces and replace with single space, also strip spaces around:
-        field_fullstring = re.sub(" {2,}", " ", field_fullstring.strip())
-        # split out the content of the field - to the first | or the end of subfield_full_string:
-        field = None
-        # check if a subfield is in the string:
-        if f"|" in field_fullstring:
-            # if it is, return the part before it:
-            field = field_fullstring.split("|")[0].strip()
-        else:
-            # if not, return the whole string:
-            field = field_fullstring.strip()
-        if field != "" and field is not None:
-            return html.unescape(mappings.replace_encodings(field))
-        else:
-            return None
 
 
 # %% [markdown]
@@ -1810,18 +1740,6 @@ def build_note_node(resource_uri, note):
         records_bf.set((note_node, RDF.type, BF.Note))
         records_bf.set((note_node, RDFS.label, Literal(note)))
         records_bf.set((resource_uri, BF.note, note_node))
-
-
-# ## Function: Guess language of a given string
-# Used for missing language fields or if there are discrepancies between the language field and the language of the title etc.
-
-import langid
-
-langid.set_languages(["de", "en"])
-
-
-def guess_language(string_in_language):
-    return langid.classify(string_in_language)[0]
 
 
 # ## Function: Adding DFK as an Identifier
@@ -2126,9 +2044,9 @@ def get_bf_title(resource_uri, record):
         # if maintitle_language that is returned the get_langtag_from_field is "und"
         # (because it was a malformed language name), guess the language from the string itself!
         if maintitle_language == "und":
-            maintitle_language = guess_language(maintitle)
+            maintitle_language = helpers.guess_language(maintitle)
     else:  # if there is no TIL field, guess the language from the string itself!
-        maintitle_language = guess_language(maintitle)
+        maintitle_language = helpers.guess_language(maintitle)
 
     # add the content of TI etc via bf:mainTitle:
     records_bf.add((title, BF.mainTitle, Literal(maintitle, lang=maintitle_language)))
@@ -2148,9 +2066,9 @@ def get_bf_title(resource_uri, record):
                 record.find("TIUL").text.strip()
             )[0]
             if subtitle_language == "und":
-                subtitle_language = guess_language(subtitle)
+                subtitle_language = helpers.guess_language(subtitle)
         else:  # if there is no TIUL field, guess the language from the string itself!
-            subtitle_language = guess_language(subtitle)
+            subtitle_language = helpers.guess_language(subtitle)
 
         # add the content of TIU to the bf:Title via bf:subtitle:
         records_bf.add((title, BF.subtitle, Literal(subtitle, lang=subtitle_language)))
@@ -2180,7 +2098,7 @@ def get_bf_translated_title(resource_uri, record):
         fulltitle_language = get_langtag_from_field(match.group(2).strip())[0]
     else:
         # if the language of the translated title (in |s) is missing, guess the language from the string itself!
-        fulltitle_language = guess_language(fulltitle)
+        fulltitle_language = helpers.guess_language(fulltitle)
 
     # check if the title contains a "(DeepL)" and cut it into a variable for the source:
     titlesource = "ZPID"  # translation source is "ZPID" by default
@@ -2370,7 +2288,7 @@ def get_bf_abstract(work_uri, record, abstract_blocked):
         else:
             # but we need to determine the language of the toc:
             try:
-                toc_language = guess_language(contents)
+                toc_language = helpers.guess_language(contents)
             except:
                 toc_language = "und"
             records_bf.add((toc, RDFS.label, Literal(contents, lang=toc_language)))
@@ -2389,9 +2307,9 @@ def get_bf_abstract(work_uri, record, abstract_blocked):
         abstract_language = get_langtag_from_field(record.find("ABLH").text.strip())[0]
         if abstract_language == "und":
             # guess language from the text:
-            abstract_language = guess_language(abstracttext)
+            abstract_language = helpers.guess_language(abstracttext)
     else:  # if the ABLH field is missing, try to recognize the language of the abstract from its text:
-        abstract_language = guess_language(abstracttext)
+        abstract_language = helpers.guess_language(abstracttext)
 
     # add the text to the node:
     records_bf.add(
@@ -2472,9 +2390,9 @@ def get_bf_secondary_abstract(work_uri, record, abstract_blocked):
         abstract_language = get_langtag_from_field(record.find("ABLN").text.strip())[0]
         if abstract_language == "und":
             # guess language from the text:
-            abstract_language = guess_language(abstracttext)
+            abstract_language = helpers.guess_language(abstracttext)
     else:  # if no language field, guess language from the text:
-        abstract_language = guess_language(abstracttext)
+        abstract_language = helpers.guess_language(abstracttext)
 
     records_bf.add(
         (abstract, RDFS.label, Literal(abstracttext, lang=abstract_language))
@@ -2615,18 +2533,22 @@ def get_bf_secondary_abstract(work_uri, record, abstract_blocked):
 def add_controlled_terms(work_uri, record):
     # get the controlled terms from the field CT:
     topiccount = 0
-    for data in record.findall("CT"):
+    for topic in record.findall("CT"):
         # get the content of the CT field:
-        controlled_term_string = mappings.replace_encodings(data.text.strip())
+        controlled_term_string = mappings.replace_encodings(topic.text.strip())
         # we need to split the string into these possible parts:
         # "|e English Label" for the English label,
         # "|d Deutsches Label" for the German label, and
         # "|g x", which, if it exists, indicates that this Topic is also weighted and should get an additional class (beside bf:Topic) of either "PXC.WeightedTopic"
         # we will use the get_Subfield function, which takes the subfield name as the parameter and returns the content of that subfield if it exists, or None if it doesn't.
         # initialize variables for the controlled term string parts:
-        controlled_term_string_english = get_subfield(controlled_term_string, "e")
-        controlled_term_string_german = get_subfield(controlled_term_string, "d")
-        term_weighting = get_subfield(controlled_term_string, "g")
+        controlled_term_string_english = helpers.get_subfield(
+            controlled_term_string, "e"
+        )
+        controlled_term_string_german = helpers.get_subfield(
+            controlled_term_string, "d"
+        )
+        term_weighting = helpers.get_subfield(controlled_term_string, "g")
         if term_weighting is not None and term_weighting == "x":
             controlled_term_weighted = True
         else:
@@ -2646,9 +2568,12 @@ def add_controlled_terms(work_uri, record):
         #     )
         # )
         # get uri from lookup in skosmos api:
-        controlled_term_uri = get_concept_uri_from_skosmos(
-            controlled_term_string_english, "terms"
-        )
+        try:
+            controlled_term_uri = get_concept_uri_from_skosmos(
+                controlled_term_string_english, "terms"
+            )
+        except:
+            controlled_term_uri = None
         if controlled_term_weighted:
             records_bf.add((controlled_term_node, RDF.type, PXC.WeightedTopic))
         # add the controlled term string to the controlled term node:
@@ -2673,7 +2598,7 @@ def add_controlled_terms(work_uri, record):
                 Literal(controlled_term_string_german, lang="de"),
             )
         )
-        records_bf.set((controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri)))
+        records_bf.add((controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri)))
 
         # attach the controlled term node to the work node:
         records_bf.add((work_uri, BF.subject, controlled_term_node))
@@ -2770,7 +2695,7 @@ def get_bf_preregistrations(work_uri, record):
         url_set = set()
         for subfield_name in ("u", "d"):
             try:
-                subfield = get_subfield(prregfield, subfield_name)
+                subfield = helpers.get_subfield(prregfield, subfield_name)
             except:
                 subfield = None
             else:
@@ -2828,7 +2753,7 @@ def get_bf_preregistrations(work_uri, record):
             build_electronic_locator_node(instance, url)
         # for the text in the |i subfield, build a note without further processing:
         try:
-            preregistration_note = get_subfield(prregfield, "i")
+            preregistration_note = helpers.get_subfield(prregfield, "i")
         except:
             preregistration_note = None
 
@@ -3064,8 +2989,14 @@ def get_crossref_funder_id(funder_name):
     # make a request to the crossref api:
     # crossref_api_request = requests.get(crossref_api_url)
     # make request to api:
-    crossref_api_request = session_fundref.get(crossref_api_url, timeout=20)
-    crossref_api_response = crossref_api_request.json()
+    try:
+        crossref_api_request = session_fundref.get(crossref_api_url, timeout=20)
+    except:
+        print("fundref request failed at " + crossref_api_url)
+    try:
+        crossref_api_response = crossref_api_request.json()
+    except:
+        print("fundref response not received for " + crossref_api_url)
     # result_count = int(crossref_api_response["message"]["total-results"])
     # if the request was successful, get the json response:
 
@@ -3136,7 +3067,7 @@ def get_bf_grants(work_uri, record):
         # but because the database is still messy (may have no funder name at all in some GRANTs), use a
         # default funder name in case there is none, because the label is mandatory for an agent node:
         try:
-            funder_name = get_mainfield(
+            funder_name = helpers.get_mainfield(
                 grantfield
             )  # we already checked wheter the field is empty, so we can use get_mainfield here
         except:
@@ -3162,7 +3093,7 @@ def get_bf_grants(work_uri, record):
 
         try:
             # if "|n " in grantfield, extract it. It can contain one grant numbers, separated by "and" or "or":
-            grants = get_subfield(grantfield, "n")
+            grants = helpers.get_subfield(grantfield, "n")
             # to number the nodes, we need to count the grants:
             grant_counter = 0
         except:
@@ -3193,13 +3124,13 @@ def get_bf_grants(work_uri, record):
         # then check the rest for a grant name or other info/note:
         try:
             # if "|i " in grantfield:
-            funding_info = get_subfield(grantfield, "i")
+            funding_info = helpers.get_subfield(grantfield, "i")
         except:
             funding_info = None
 
         try:
             # if "|e " in grantfield:
-            funding_recipient = get_subfield(grantfield, "e")
+            funding_recipient = helpers.get_subfield(grantfield, "e")
         except:
             funding_recipient = None
         if funding_recipient is not None:
@@ -3239,7 +3170,7 @@ def get_bf_conferences(work_uri, record):
             # try to get the conference name from the CF field:
             try:
                 # get conference_name from main CF field, using the first part before any |:
-                conference_name = get_mainfield(conference_field)
+                conference_name = helpers.get_mainfield(conference_field)
             except:
                 conference_name = "MISSING CONFERENCE NAME"
                 print(
@@ -3248,7 +3179,7 @@ def get_bf_conferences(work_uri, record):
                 )
             # then check the field for a date in apotential subfield |d:
             try:
-                conference_date = get_subfield(conference_field, "d")
+                conference_date = helpers.get_subfield(conference_field, "d")
             except:
                 conference_date = None
             if conference_date is not None:
@@ -3267,13 +3198,13 @@ def get_bf_conferences(work_uri, record):
             # remebering to keep what is already in conference_note from the date:
             try:
                 conference_note = (
-                    conference_note + ". " + get_subfield(conference_field, "b")
+                    conference_note + ". " + helpers.get_subfield(conference_field, "b")
                 )
             except:
                 conference_note = conference_note
             # then check the field for a place in a potential subfield |o:
             try:
-                conference_place = get_subfield(conference_field, "o")
+                conference_place = helpers.get_subfield(conference_field, "o")
             except:
                 conference_place = None
 
@@ -3450,7 +3381,7 @@ def get_datac(work_uri, record):
         # grab subfields u and d as strings and check if they are a url or a doi:
         for subfield_name in ("u", "d"):
             try:
-                subfield = get_subfield(datac_field, subfield_name)
+                subfield = helpers.get_subfield(datac_field, subfield_name)
             except:
                 subfield = None
             else:
@@ -3541,7 +3472,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 for record in root.findall("Record"):
-    # for record in root.findall("Record")[0:20]:
+    # for record in root.findall("Record")[0:200]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3560,6 +3491,8 @@ for record in root.findall("Record"):
     # TODO: second language from <LA2>? no way to distinguish
     # between main/first language and second in bibframe
     records_bf.add((work_uri, BF.language, get_work_language(record)))
+
+    publication_types.generate_content_type(record, dfk, work_uri, records_bf)
 
     ## Adding Contributions by Persons and Corporate Bodies to the work (only real creators, like editors, authors, translators,
     # not funders or conferences, which are handled below)
@@ -3595,8 +3528,6 @@ for record in root.findall("Record"):
     if record.find("ABN") is not None:
         get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
-    # add genres to the work:
-    add_work_genres(work_uri, record)
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     add_controlled_terms(work_uri, record)
 
@@ -3654,23 +3585,9 @@ for record in root.findall("Record"):
     # Note: MT is the first media type field in a record, it contains
     # a string name of the medium of the first instance (e.g. "Print" or "Online Medium").
 
-    if record.find("MT") is not None:
-        records_bf.add(
-            (
-                instance_uri,
-                PXP.mediaCarrier,
-                get_mediacarrier(record.find("MT").text)[1],
-            )
-        )
-        # Also add a second class to instance (usually bf:Eletronic or bf:Print, subclasses of bf:Instance),
-        # based on the mediacarrier: deactivating this, as it is not needed for the migration
-        # records_bf.add(
-        #     (
-        #         instance_uri,
-        #         RDF.type,
-        #         get_mediacarrier(record.find("MT").text)[0],
-        #     )
-        # )
+    publication_types.add_mediacarrier_to_instance(
+        instance_uri, records_bf, record.find("MT")
+    )
 
     ## Add the publication info (date, publisher, place) to the instancebundle:
     # Note 1: we only have one publication date per record, although two instances could have
@@ -3702,12 +3619,8 @@ for record in root.findall("Record"):
         # TODO: add publication date, publisher, place:
         # like this, probably: add_publication_info(instance_uri_2, record, record.find("MT2").text)
         ## Add the mediacarrier node to the instance:
-        records_bf.add(
-            (
-                instance_uri_2,
-                PXP.mediaCarrier,
-                get_mediacarrier(record.find("MT2").text)[1],
-            )
+        publication_types.add_mediacarrier_to_instance(
+            instance_uri_2, records_bf, record.find("MT2")
         )
 
     # Add the DFK as an identifier node to the instancebundle:
@@ -3720,7 +3633,7 @@ for record in root.findall("Record"):
     )
 
     # Add the issuance type (from BE) to the instancebundle (e.g. "Journal Article" or "Edited Book"):
-    get_issuance_type(instance_bundle_uri, record)
+    publication_types.get_issuance_type(instance_bundle_uri, record, records_bf)
 
     ## add license to bundle:
     add_instance_license(instance_bundle_uri, record)
@@ -3744,6 +3657,13 @@ for record in root.findall("Record"):
                 get_bf_translated_title(instance_bundle_uri, record),
             )
         )
+
+    # add methods (needs title and abstract already in graph, so do it after all the other stuff):
+    publication_types.get_controlled_methods(
+        record, dfk, work_uri, instance_bundle_uri, records_bf
+    )
+    # add genres to the work:
+    add_work_genres(work_uri, record, dfk)
 
     ## adding ISBNs:
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong.

@@ -134,6 +134,7 @@
     "InstanceBundle": "pxc:InstanceBundle",
     "Issn": "bf:Issn",
     "IssnL": "bf:IssnL",
+    "IssuanceType": "pxc:IssuanceType",
     "Jurisdiction": "bf:Jurisdiction",
     "Language": "bf:Language",
     "Local": "bf:Local",
@@ -215,6 +216,7 @@
       "@container": "@set"
     },
     "provisionActivity": "bf:provisionActivity",
+    "carrier": "bf:carrier",
     "capture": {
       "@id": "bf:capture",
       "@type": "@id",
@@ -383,6 +385,7 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "media": "bf:media",
     "mediaCarrier": "pxp:mediaCarrier",
     "hasSeries": {
       "@id": "bf:hasSeries",
