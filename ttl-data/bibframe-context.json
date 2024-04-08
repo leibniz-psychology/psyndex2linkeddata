@@ -91,6 +91,7 @@
     "WeightedTopic": "pxc:WeightedTopic",
     "SubjectHeading": "pxc:SubjectHeading",
     "ControlledMethod": "pxc:ControlledMethod",
+    "ControlledMethodWeighted": "pxc:ControlledMethodWeighted",
     "PopulationLocation": "pxc:PopulationLocation",
     "AccessPolicy": "bf:AccessPolicy",
     "AgeGroup": "pxc:AgeGroup",

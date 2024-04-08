@@ -354,164 +354,6 @@ def add_additional_descriptor(work_uri, record):
     """
 
 
-def add_work_studytype(work_uri, record):
-    """Reads any CM fields in the record and generates bf:classification nodes for the Work based on it. Includes a link to the vocabs/methods/ vocabulary in our Skosmos.
-
-    Args:
-        work_uri (_type_): The uri of the work to which the classification node will be added.
-        record (_type_): The record from which the CM fields will be read.
-    """
-    pass
-
-
-def add_work_genres(work_uri, record, dfk):
-    """Reads several fields from the record to calculate a genreForm for the work_uri and adds it as a bf:genreForm node. Includes a link to the vocabs/genres/ vocabulary in our Skosmos. Fields considered are: BE, DT, DT2, CM.
-
-    Args:
-        work_uri (_type_): The work node to which the genreForm node will be added.
-        record (_type_): The record from which the fields will be read.
-    """
-    # set up a list of genres to add to the work:
-    genres = []
-    # get the bibliographic level from BE:
-    try:
-        bibliographic_level = record.find("BE").text.strip()
-    except:
-        bibliographic_level = ""
-    # get the document type from DT:
-    try:
-        document_type = record.find("DT").text.strip()
-    except:
-        document_type = ""
-    # get the document type 2 from DT2:
-    try:
-        document_type_2 = record.find("DT2").text.strip()
-    except:
-        document_type_2 = ""
-    try:
-        didh = record.find("DIDH").text.strip()
-    except:
-        didh = ""
-    try:
-        bibliographic_note = record.find("BN").text.strip()
-    except:
-        bibliographic_note = ""
-    # get an array of all the methods from CM, but only subfield c:
-    try:
-        methods = record.findall("CM")
-        # print("methods: " + str(methods))
-        # for each method, get the text, then the c subfield:
-        methods = [helpers.get_subfield(method.text, "c") for method in methods]
-        # print("methods for record " + record.find("DFK").text + ": " + str(methods))
-    except:
-        methods = []
-        print("no methods found in record " + dfk)
-
-    ## Doctoral Thesis:
-    if (
-        bibliographic_level == "SH"
-        or document_type == "61"
-        or document_type_2 == "61"
-        or "Diss".casefold() in didh.casefold()
-        or "Dissertation".casefold() in bibliographic_note.casefold()
-    ):
-        genres.append("ThesisDoctoral")
-    ## Habilitation Thesis:
-    elif (
-        "habil".casefold() in didh.casefold()
-        or "habilitationsschrift".casefold() in bibliographic_note.casefold()
-    ):
-        genres.append("ThesisHabilitation")
-    ## cumulative/compilation theses:
-    if "kumulative".casefold() in bibliographic_note.casefold():
-        genres.append("CompilationThesis")
-    # if any method _starts with_  "|c 10" add "ResearchPaper" to genres
-    # remeber it has to start with "|c 10" and not just contain it:
-    # or if it is exactly one of the following: 11100 (method. study),12100 (theor. study), 13100 (literature review),13110 (systematic review)
-    if any(notation.startswith("101") for notation in methods) or any(
-        notation in ["11100", "10200", "10300", "12100", "13100", "13110"]
-        for notation in methods
-    ):
-        # but only if it isn't already a thesis:
-        if "ThesisDoctoral" not in genres and "ThesisHabilitation" not in genres:
-            genres.append("ResearchPaper")
-
-    # if any are 11200 or 11300 and also bibliographic level is "UZ", also add ResearchPaper:
-    if (
-        any(notation in ["11200", "11300"] for notation in methods)
-        and bibliographic_level == "UZ"
-    ):
-        genres.append("ResearchPaper")
-
-    # for any that are 18650 (workshop) and also have specific DFKs, treat them before, then go through the rest to make them either MeetingReport or CourseMaterial:
-    if any(notation in ["18650"] for notation in methods):
-        ## Special cases wrongly tagged as "workshop":
-        # DFK = 0369284 -> "ConferenceProceedings"
-        if "0369284" in dfk:
-            genres.append("ConferenceProceedings")
-        # DFKs 0262075, 0266517, 0266519, 0273412, 0291044 -> "Talk"
-        elif any(dfk in ["0262075", "0266517", "0266519", "0273412", "0291044"]):
-            genres.append("Talk")
-        elif any(
-            # 0307206 "Textbesprechung" - einfach eine Sammlung von Aufsätzen dieser verstorbenen Person -> "PaperCollection"
-            "0307206"
-            in record.find("DFK").text
-        ):
-            genres.append("PaperCollection")
-        # for any that are 18650 (workshop) and also BE=UZ, UR, US, add "MeetingReport"
-        elif bibliographic_level in [
-            "UZ",
-            "UR",
-            "US",
-        ]:
-            genres.append("MeetingReport")
-        # for any that are 18650 (workshop) and BE=AV, add "CourseMaterial"
-        elif bibliographic_level == "AV":
-            genres.append("CourseMaterial")
-
-    # for any that are 13600 (educational audiovisual material) add "CourseMaterial"
-    if any(notation in ["18650"] for notation in methods):
-        genres.append("CourseMaterial")
-    if any(notation in ["13600"] for notation in methods):
-        genres.append("CourseMaterial")
-
-    # if this record has a DFK from the following list, add "Bibliography": 0308189, 0179058, 0406548 (Manfred's testverzeichnisse)
-    if dfk in ["0308189", "0179058", "0406548"]:
-        genres.append("Bibliography")
-
-    # if any method can be found via a search in skosmos, add it to genres as the skosmos concept you found:
-    for notation in methods:
-        try:
-            # print("searching for " + notation + " in skosmos")
-            genre_cm = localapi.search_in_skosmos(notation, "genres")
-        except:
-            genre_cm = None
-            print("failed searching for " + notation + " in skosmos")
-        if genre_cm is not None:
-            genres.append(genre_cm)
-
-    # # create node for each genre:
-    for genre in genres:
-        genre_node = URIRef(GENRES[genre])
-        # class bf:GenreForm
-        records_bf.set((genre_node, RDF.type, BF.GenreForm))
-        # get the label from skosmos:
-        german_label = localapi.get_preflabel_from_skosmos(
-            genre_node, "genres", "de"
-        ).strip()
-        english_label = localapi.get_preflabel_from_skosmos(
-            genre_node, "genres", "en"
-        ).strip()
-        # add as prefLabel:
-        records_bf.add((genre_node, SKOS.prefLabel, Literal(german_label, "de")))
-        records_bf.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
-        records_bf.add((genre_node, RDFS.label, Literal(english_label)))
-        # add it to the work:
-        records_bf.add((work_uri, BF.genreForm, genre_node))
-        # add a label: no need for first migration! Get from skosmos api later.
-        # records_bf.set((genre_node, RDFS.label, Literal(genre)))
-
-
 def get_publication_date(record):
     """Get the publication date from the record's PHIST or PY field and return it as a Literal.
 
@@ -3573,11 +3415,11 @@ for record in root.findall("Record")[0:200]:
         )
 
     # add methods (needs title and abstract already in graph, so do it after all the other stuff):
-    publication_types.get_controlled_methods(
+    publication_types.add_work_studytypes(
         record, dfk, work_uri, instance_bundle_uri, records_bf
     )
     # add genres to the work:
-    add_work_genres(work_uri, record, dfk)
+    # publication_types.add_work_genres(work_uri, record, dfk, records_bf)
 
     ## adding ISBNs:
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong.
