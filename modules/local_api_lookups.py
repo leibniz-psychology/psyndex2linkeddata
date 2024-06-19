@@ -1,8 +1,3 @@
-import modules.mappings as mappings
-import modules.publication_types as publication_types
-import modules.helpers as helpers
-
-import requests
 import requests_cache
 from datetime import timedelta
 
@@ -13,7 +8,7 @@ ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
 # psyndex-methods-de + /suggest
 
 # skosmos api url for looking up concepts in CT, SH, and other controlled vocabs:
-SKOSMOS_API_URL = "https://skosmos.dev.zpid.org/rest/v1/"
+SKOSMOS_API_URL = "https://skosmos.stg.zpid.org/rest/v1/"
 
 # annif api caching:
 ## Caching requests:
