@@ -107,6 +107,10 @@ def add_controlled_terms(work_uri, record, records_bf):
             )
         except:
             controlled_term_uri = None
+            print(
+                "no uri found in skosmos for Controlled term: "
+                + controlled_term_string_english
+            )
         if controlled_term_weighted:
             records_bf.add((controlled_term_node, RDF.type, PXC.WeightedTopic))
         # add the controlled term string to the controlled term node:
@@ -134,11 +138,6 @@ def add_controlled_terms(work_uri, record, records_bf):
         if controlled_term_uri is not None:
             records_bf.add(
                 (controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri))
-            )
-        else:
-            print(
-                "no uri found in skosmos for Controlled term: "
-                + controlled_term_string_english
             )
 
         # attach the controlled term node to the work node:
