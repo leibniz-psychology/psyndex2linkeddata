@@ -19,6 +19,8 @@ import modules.publication_types as publication_types
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 import modules.terms as terms
+import modules.identifiers as identifiers
+import modules.instance_source_ids as instance_source_ids
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science
@@ -1362,127 +1364,6 @@ def add_publication_info(instance_uri, record):
 
 
 # %% [markdown]
-# ### Getting URLs and DOIs from a field
-# Converting http-DOIs to pure ones, checking if what looks like url really is one.
-
-
-# %%
-def check_for_url_or_doi(string):
-    """checks if the content of the string is a doi or url or something else.
-    Returns the a string and a string_type (doi, url, unknown). The given string
-    is sanitized, eg. missing http protocol is added for urls; dois are stripped
-    of web protocols and domain/subdomains like dx, doi.org).
-    Pass any string where you suspect it might be a url or doi,
-    returns the cleaned up string (for urls and dois; because STAR messes then up and indexers make mistakes and are inconsistent) and a string type (doi, url, or unknown).
-    """
-    # use a regex: if string starts with "DOI " or "DOI:" or "DOI: " (case insensitive), remove that and strip again:
-    doi_error_pattern = re.compile(r"^(DOI:|DOI |DOI: )", re.IGNORECASE)
-    string = doi_error_pattern.sub("", string).strip()
-
-    # find any stray characters at the start of the field with spaces around them and remove them:
-    # "^ . " - this will catch :, but also |u fields marked with "x" for empty:
-    error_pattern2 = re.compile(r"^(. )")
-    string = error_pattern2.sub("", string).strip()
-    # and also remove the words "PsychOpen GOLD" from the start of the field:
-    string = re.sub(r"PsychOpen GOLD", "", string)
-
-    # replace double spaces with single space
-    string = re.sub(" {2,}", " ", string)
-
-    # Fix spaces in common urls:
-    # use this regex: "(.*\.) ((io)|(org)|(com)|(net)|(de))\b"
-    # and replace with: group1, group2:
-    url_error_pattern = re.compile(r"(.*\.) ((io)|(org)|(com)|(net)|(de))\b")
-    string = url_error_pattern.sub(r"\1\2", string)
-
-    # replace spaces after slashes (when followed by a letter or a digit a question mark, eg "osf.io/ abc"):
-    # use this regex: (.*/) ([a-z]) and replace with group1, group2:
-    # example: "osf.io/ abc" -> "osf.io/abc", "https:// osf.io/ abc" -> "https://osf.io/abc"
-    url_error_pattern3 = re.compile(r"(.*/) ([a-z]|[0-9]|\?)")
-    string = url_error_pattern3.sub(r"\1\2", string)
-
-    # and now spaces before slashes:
-    # use this regex: (.*) (/) and replace with group1, group2:
-    # example: "https: //", "http://domain.org/blabla /"
-    url_error_pattern4 = re.compile(r"(.*) (/)")
-    string = url_error_pattern4.sub(r"\1\2", string)
-
-    # replace single space with underscore,
-    # fixing a known STAR bug that replaces underscores with spaces,
-    # which is especially bad for urls.  (In other text,
-    # we can't really fix it, since usually a space was intended):
-    string = re.sub(" ", "_", string)
-
-    # now check for doi or url:
-    doi_pattern = re.compile(r"^(https?:)?(\/\/)?(dx\.)?doi\.org\/?(.*)$")
-    if doi_pattern.search(string):
-        # remove the matching part:
-        string = doi_pattern.search(string).group(4)
-        string_type = "doi"
-        # print("DOI: " + doi)
-    elif string.startswith("10."):
-        # if the string starts with "10." the whole thing is a DOI:
-        string_type = "doi"
-        # print("DOI: " + doi)
-        # proceed to generate an identifier node for the doi:
-    else:
-        # doi = None
-        # check for validity of url using a regex:
-        url_pattern = re.compile(
-            r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
-            re.IGNORECASE,
-        )
-        if url_pattern.search(string):
-            # if it's a nonstandard url starting with "//", add a "http:" protocol to the start:
-            if string.startswith("//"):
-                string = "http:" + string
-                # or if it starts with a letter (like osf.io/), add "http://" to the start:
-            elif string[0].isalpha() and not string.startswith("http"):
-                string = "http://" + string
-            string_type = "url"
-            # print("URL: " + datac_url)
-        else:
-            # url = None
-            string_type = "unknown"
-            # print("Das ist weder eine DOI noch eine URL: " + string)
-    return string, string_type
-
-
-# %% [markdown]
-# ### Building identifier nodes for DOIs
-#
-# Should probably refactor to be more general, so we can use it for other identifiers as well. Needs a parameter for the identifier type.
-
-
-# %%
-def build_doi_identifier_node(instance, doi):
-    # print(f"bf:identifiedBy > bf:Doi > rdf:value: {doi}.")
-    # we use the doi itself as part of the doi node uri to make it a unique node,
-    # otherwise all doi values will be added to the same node.
-    # make node for the identifier:
-    identifier_node = URIRef("https://doi.org/" + doi)
-    # give it class bf:Doi:
-    records_bf.add((identifier_node, RDF.type, BF.Doi))
-    # give it the doi as a literal value:
-    records_bf.add((identifier_node, RDF.value, Literal(doi)))
-    # attach it to the instance with bf:identifiedBy:
-    records_bf.add((instance, BF.identifiedBy, identifier_node))
-
-
-# ### Building "Links" as electronic locator nodes for an instance
-
-
-def build_electronic_locator_node(instance, url):
-    # make it a uri that we can add directly! example: https://id.loc.gov/ontologies/bibframe.html#p_electronicLocator
-    locator_node = URIRef(url)
-    # add it to the instance_node of relationship_node via bf:electronicLocator
-    # directly as a uri! No intermediary class node with a rdf:value
-    # records_bf.set((locator_node, RDF.value, Literal(url, datatype=XSD.anyURI)))
-    # attach it to the instance with bf:electronicLocator:
-    records_bf.set((instance, BF.electronicLocator, locator_node))
-
-
-# %% [markdown]
 # ### Building generic bf:Note nodes
 #
 # Will probably also need this later for other kinds of notes, such as the ones in field BN.
@@ -2354,14 +2235,18 @@ def get_bf_preregistrations(work_uri, record):
                 # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
                 # as a doi or url:
                 # if it is a doi, run a function to generate a doi identifier node
-                if subfield is not None and check_for_url_or_doi(subfield)[1] == "doi":
+                if (
+                    subfield is not None
+                    and helpers.check_for_url_or_doi(subfield)[1] == "doi"
+                ):
                     # add the doi to a list:
-                    doi_set.add(check_for_url_or_doi(subfield)[0])
+                    doi_set.add(helpers.check_for_url_or_doi(subfield)[0])
                     # build_doi_identifier_node(instance, check_for_url_or_doi(subfield)[0])
                 elif (
-                    subfield is not None and check_for_url_or_doi(subfield)[1] == "url"
+                    subfield is not None
+                    and helpers.check_for_url_or_doi(subfield)[1] == "url"
                 ):
-                    url_set.add(check_for_url_or_doi(subfield)[0])
+                    url_set.add(helpers.check_for_url_or_doi(subfield)[0])
                     # build_electronic_locator_node(instance, check_for_url_or_doi(subfield)[0])
                     # if the returned typ is something else - "unknown", do nothing with it:
                 else:
@@ -2369,11 +2254,11 @@ def get_bf_preregistrations(work_uri, record):
                     # build_note_node(instance, check_for_url_or_doi(subfield)[0])
                     if (
                         subfield is not None
-                        and check_for_url_or_doi(subfield)[0] is not None
-                        and check_for_url_or_doi(subfield)[0] != ""
+                        and helpers.check_for_url_or_doi(subfield)[0] is not None
+                        and helpers.check_for_url_or_doi(subfield)[0] != ""
                     ):
                         # add a variable
-                        unknown_field_content = check_for_url_or_doi(subfield)[
+                        unknown_field_content = helpers.check_for_url_or_doi(subfield)[
                             0
                         ].strip()
                         print(
@@ -2399,9 +2284,9 @@ def get_bf_preregistrations(work_uri, record):
                     url_set.remove(url)
         # now build the doi identifier nodes for any DOIs in the set we collected:
         for doi in doi_set:
-            build_doi_identifier_node(instance, doi)
+            identifiers.build_doi_identifier_node(instance, doi, records_bf)
         for url in url_set:
-            build_electronic_locator_node(instance, url)
+            identifiers.build_electronic_locator_node(instance, url, records_bf)
         # for the text in the |i subfield, build a note without further processing:
         try:
             preregistration_note = helpers.get_subfield(prregfield, "i")
@@ -3001,9 +2886,9 @@ def get_urlai(work_uri, record):
 
         # loop through the set to build doi nodes, so we won't have duplicates:
         for doi in doi_set:
-            build_doi_identifier_node(instance, doi)
+            identifiers.build_doi_identifier_node(instance, doi, records_bf)
         for url in url_set:
-            build_electronic_locator_node(instance, url)
+            identifiers.build_electronic_locator_node(instance, url, records_bf)
 
         # now attach the finished node for the relationship to the work:
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
@@ -3040,23 +2925,27 @@ def get_datac(work_uri, record):
                 # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
                 # as a doi or url:
                 # if it is a doi, run a function to generate a doi identifier node
-                if subfield is not None and check_for_url_or_doi(subfield)[1] == "doi":
+                if (
+                    subfield is not None
+                    and helpers.check_for_url_or_doi(subfield)[1] == "doi"
+                ):
                     # add the doi to a list:
-                    doi_set.add(check_for_url_or_doi(subfield)[0])
+                    doi_set.add(helpers.check_for_url_or_doi(subfield)[0])
                     # build_doi_identifier_node(instance, check_for_url_or_doi(subfield)[0])
                 elif (
-                    subfield is not None and check_for_url_or_doi(subfield)[1] == "url"
+                    subfield is not None
+                    and helpers.check_for_url_or_doi(subfield)[1] == "url"
                 ):
                     # add the url to a list:
-                    url_set.add(check_for_url_or_doi(subfield)[0])
+                    url_set.add(helpers.check_for_url_or_doi(subfield)[0])
                     # build_electronic_locator_node(instance, check_for_url_or_doi(subfield)[0])
                     # if the returned typ is something else "unknown", do nothing with it:
                 else:
                     # print("bf:note > bf:Note > rdfs:label: " + subfield)
                     if (
                         subfield is not None
-                        and check_for_url_or_doi(subfield)[0] is not None
-                        and check_for_url_or_doi(subfield)[0] != ""
+                        and helpers.check_for_url_or_doi(subfield)[0] is not None
+                        and helpers.check_for_url_or_doi(subfield)[0] != ""
                     ):
                         # add a variable
                         unknown_field_content = check_for_url_or_doi(subfield)[
@@ -3082,9 +2971,9 @@ def get_datac(work_uri, record):
                     )
                     url_set.remove(url)
         for doi in doi_set:
-            build_doi_identifier_node(instance, doi)
+            identifiers.build_doi_identifier_node(instance, doi, records_bf)
         for url in url_set:
-            build_electronic_locator_node(instance, url)
+            identifiers.build_electronic_locator_node(instance, url, records_bf)
         # now attach the finished node for the relationship to the work:
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
@@ -3122,8 +3011,8 @@ def get_datac(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-# for record in root.findall("Record"):
-for record in root.findall("Record")[0:100]:
+for record in root.findall("Record"):
+    # for record in root.findall("Record")[0:200]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3198,7 +3087,7 @@ for record in root.findall("Record")[0:100]:
     )  # adds a bf:contribution >> pxc:ConferenceReference node to the work
 
     ## Add research data links from fields URLAI and DATAC to the work:
-    get_datac(work_uri, record)  # adds the generated bfls:Relationship node to the work
+    get_datac(work_uri, record)  # adds the generated bflc:Relationship node to the work
     # switched off for performance reasons
 
     ### Adding Preregistration links to the work (from field <PREREG>):
@@ -3250,6 +3139,15 @@ for record in root.findall("Record")[0:100]:
     # (possibly) different publication dates to this node, too.
     # So TODO: add a copy of this bf:Publication node to each instance, adding the instance's unique publication date to it.
     add_publication_info(instance_bundle_uri, record)
+
+    # add doi of the record to the instancebundle (should really add to the electronic instance itself):
+    instance_source_ids.get_instance_doi(instance_bundle_uri, record, records_bf)
+
+    # add the url of the record to the instancebundle (should really add to the electronic instance itself):
+    instance_source_ids.get_instance_url(instance_bundle_uri, record, records_bf)
+
+    # add the urn of the record to the instancebundle (should really add to the electronic instance itself):
+    instance_source_ids.get_instance_urn(instance_bundle_uri, record, records_bf)
 
     # Add a second instance to the work and instancebundle, if there is a second mediatype in the record:
     if record.find("MT2") is not None:
