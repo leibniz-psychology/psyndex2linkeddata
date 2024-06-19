@@ -322,16 +322,19 @@ def add_work_genres(work_uri, record, dfk, records_bf):
         or "Diss".casefold() in didh.casefold()
         or "Dissertation".casefold() in bibliographic_note.casefold()
     ):
-        genres.append("ThesisDoctoral")
+        if "kumulative".casefold() in bibliographic_note.casefold():
+            genres.append("CompilationThesisDoctoral")
+        else:
+            genres.append("ThesisDoctoral")
     ## Habilitation Thesis:
     elif (
         "habil".casefold() in didh.casefold()
         or "habilitationsschrift".casefold() in bibliographic_note.casefold()
     ):
-        genres.append("ThesisHabilitation")
-    ## cumulative/compilation theses:
-    if "kumulative".casefold() in bibliographic_note.casefold():
-        genres.append("CompilationThesis")
+        if "kumulative".casefold() in bibliographic_note.casefold():
+            genres.append("CompilationThesisHabilitation")
+        else:
+            genres.append("ThesisHabilitation")
     # if any method _starts with_  "|c 10" add "ResearchPaper" to genres
     # remeber it has to start with "|c 10" and not just contain it:
     # or if it is exactly one of the following: 11100 (method. study),12100 (theor. study), 13100 (literature review),13110 (systematic review)
@@ -403,20 +406,25 @@ def add_work_genres(work_uri, record, dfk, records_bf):
         # class bf:GenreForm
         records_bf.set((genre_node, RDF.type, BF.GenreForm))
         # get the label from skosmos:
-        german_label = localapi.get_preflabel_from_skosmos(
-            genre_node, "genres", "de"
-        ).strip()
-        english_label = localapi.get_preflabel_from_skosmos(
-            genre_node, "genres", "en"
-        ).strip()
-        # add as prefLabel:
-        records_bf.add((genre_node, SKOS.prefLabel, Literal(german_label, "de")))
-        records_bf.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
-        records_bf.add((genre_node, RDFS.label, Literal(english_label)))
-        # add it to the work:
-        records_bf.add((work_uri, BF.genreForm, genre_node))
-        # add a label: no need for first migration! Get from skosmos api later.
-        # records_bf.set((genre_node, RDFS.label, Literal(genre)))
+        try:
+            german_label = localapi.get_preflabel_from_skosmos(
+                genre_node, "genres", "de"
+            ).strip()
+            english_label = localapi.get_preflabel_from_skosmos(
+                genre_node, "genres", "en"
+            ).strip()
+            # add as prefLabel:
+            records_bf.add((genre_node, SKOS.prefLabel, Literal(german_label, "de")))
+            records_bf.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
+            records_bf.add((genre_node, RDFS.label, Literal(english_label)))
+        except:
+            print("no label found for genre " + genre)
+            # keeping the genre without label for now
+        finally:
+            # add it to the work:
+            records_bf.add((work_uri, BF.genreForm, genre_node))
+            # add a label: no need for first migration! Get from skosmos api later.
+            # records_bf.set((genre_node, RDFS.label, Literal(genre)))
 
 
 def get_issuance_type(instance_bundle_uri, record, graph):
