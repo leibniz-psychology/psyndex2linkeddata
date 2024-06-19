@@ -69,3 +69,86 @@ langid.set_languages(["de", "en"])
 
 def guess_language(string_in_language):
     return langid.classify(string_in_language)[0]
+
+
+# ### Getting URLs and DOIs from a field
+# Converting http-DOIs to pure ones, checking if what looks like url really is one.
+def check_for_url_or_doi(string):
+    """checks if the content of the string is a doi or url or something else.
+    Returns the a string and a string_type (doi, url, unknown). The given string
+    is sanitized, eg. missing http protocol is added for urls; dois are stripped
+    of web protocols and domain/subdomains like dx, doi.org).
+    Pass any string where you suspect it might be a url or doi,
+    returns the cleaned up string (for urls and dois; because STAR messes then up and indexers make mistakes and are inconsistent) and a string type (doi, url, or unknown).
+    """
+    # use a regex: if string starts with "DOI " or "DOI:" or "DOI: " (case insensitive), remove that and strip again:
+    doi_error_pattern = re.compile(r"^(DOI:|DOI |DOI: )", re.IGNORECASE)
+    string = doi_error_pattern.sub("", string).strip()
+
+    # find any stray characters at the start of the field with spaces around them and remove them:
+    # "^ . " - this will catch :, but also |u fields marked with "x" for empty:
+    error_pattern2 = re.compile(r"^(. )")
+    string = error_pattern2.sub("", string).strip()
+    # and also remove the words "PsychOpen GOLD" from the start of the field:
+    string = re.sub(r"PsychOpen GOLD", "", string)
+
+    # replace double spaces with single space
+    string = re.sub(" {2,}", " ", string)
+
+    # Fix spaces in common urls:
+    # use this regex: "(.*\.) ((io)|(org)|(com)|(net)|(de))\b"
+    # and replace with: group1, group2:
+    url_error_pattern = re.compile(r"(.*\.) ((io)|(org)|(com)|(net)|(de))\b")
+    string = url_error_pattern.sub(r"\1\2", string)
+
+    # replace spaces after slashes (when followed by a letter or a digit a question mark, eg "osf.io/ abc"):
+    # use this regex: (.*/) ([a-z]) and replace with group1, group2:
+    # example: "osf.io/ abc" -> "osf.io/abc", "https:// osf.io/ abc" -> "https://osf.io/abc"
+    url_error_pattern3 = re.compile(r"(.*/) ([a-z]|[0-9]|\?)")
+    string = url_error_pattern3.sub(r"\1\2", string)
+
+    # and now spaces before slashes:
+    # use this regex: (.*) (/) and replace with group1, group2:
+    # example: "https: //", "http://domain.org/blabla /"
+    url_error_pattern4 = re.compile(r"(.*) (/)")
+    string = url_error_pattern4.sub(r"\1\2", string)
+
+    # replace single space with underscore,
+    # fixing a known STAR bug that replaces underscores with spaces,
+    # which is especially bad for urls.  (In other text,
+    # we can't really fix it, since usually a space was intended):
+    string = re.sub(" ", "_", string)
+
+    # now check for doi or url:
+    doi_pattern = re.compile(r"^(https?:)?(\/\/)?(dx\.)?doi\.org\/?(.*)$")
+    if doi_pattern.search(string):
+        # remove the matching part:
+        string = doi_pattern.search(string).group(4)
+        string_type = "doi"
+        # print("DOI: " + doi)
+    elif string.startswith("10."):
+        # if the string starts with "10." the whole thing is a DOI:
+        string_type = "doi"
+        # print("DOI: " + doi)
+        # proceed to generate an identifier node for the doi:
+    else:
+        # doi = None
+        # check for validity of url using a regex:
+        url_pattern = re.compile(
+            r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
+            re.IGNORECASE,
+        )
+        if url_pattern.search(string):
+            # if it's a nonstandard url starting with "//", add a "http:" protocol to the start:
+            if string.startswith("//"):
+                string = "http:" + string
+                # or if it starts with a letter (like osf.io/), add "http://" to the start:
+            elif string[0].isalpha() and not string.startswith("http"):
+                string = "http://" + string
+            string_type = "url"
+            # print("URL: " + datac_url)
+        else:
+            # url = None
+            string_type = "unknown"
+            # print("Das ist weder eine DOI noch eine URL: " + string)
+    return string, string_type
