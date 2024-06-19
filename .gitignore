@@ -3,3 +3,8 @@
 .vscode/settings.json
 normkoerperschaften/.cache/requests.sqlite
 .env
+.cache/requests_annif.sqlite
+.cache/requests_fundref.sqlite
+.cache/requests_ror.sqlite
+.cache/requests_skosmos.sqlite
+.cache_backup/requests.sqlite
