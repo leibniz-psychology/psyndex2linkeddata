@@ -131,7 +131,15 @@ def add_controlled_terms(work_uri, record, records_bf):
                 Literal(controlled_term_string_german, lang="de"),
             )
         )
-        records_bf.add((controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri)))
+        if controlled_term_uri is not None:
+            records_bf.add(
+                (controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri))
+            )
+        else:
+            print(
+                "no uri found in skosmos for Controlled term: "
+                + controlled_term_string_english
+            )
 
         # attach the controlled term node to the work node:
         records_bf.add((work_uri, BF.subject, controlled_term_node))
