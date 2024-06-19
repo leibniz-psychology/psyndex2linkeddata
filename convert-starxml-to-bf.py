@@ -4,6 +4,7 @@
 
 import datetime
 import dateparser
+from numpy import rec
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
@@ -17,6 +18,7 @@ import modules.mappings as mappings
 import modules.publication_types as publication_types
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
+import modules.terms as terms
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science
@@ -2254,113 +2256,6 @@ def get_bf_secondary_abstract(work_uri, record, abstract_blocked):
 
 
 # %% [markdown]
-# ## Function: Create Topics, Weighted Topics and Classifications from CT, SH
-#
-# CTs - controlled terms from our own thesaurus - are added like this. Some are always weighted (=more important) and have an added class pxc:WeightedTopic (a subclass of bf:Topic), some are not.
-#
-# Currently, we don't export the concept uri, since the export files we use have no code info (which we use to construct concept uris). But at least we have a source uri for the concept scheme (which is the same for all concepts in the file).
-#
-#
-# ```turtle
-# <Work> a bf:Work;
-#     bf:subject [a bf:Topic, pxc:WeightedTopic;  # topic, weighted
-#         # a skos:Concept;
-#         # owl:sameAs <https://w3id.org/zpid/vocabs/terms/35365>;
-#         rdfs:label "Ontologies"@en, "Ontologien"@de;
-#         bf:source <https://w3id.org/zpid/vocabs/terms>;
-#     ];
-#     bf:subject [a bf:Topic;  # a non-weighted topic
-#         # a skos:Concept;
-#         # owl:sameAs <https://w3id.org/zpid/vocabs/terms/60135>;
-#         rdfs:label "Semantic Networks"@en, "Semantische Netzwerke"@de;
-#         bf:source <https://w3id.org/zpid/vocabs/terms>;
-#     ];
-#     # PSYNDEX subject heading classification - not done yet
-#     bf:classification [ a bf:Classification, pxc:SubjectHeading, skos:Concept;
-#         rdfs:label "Professional Psychological & Health Personnel Issues"@en;
-#         bf:code "3400";
-#         owl:sameAs <https://w3id.org/zpid/vocabs/class/3400>;
-#         bf:source <https://w3id.org/zpid/vocabs/class>;
-#     ].
-# ```
-
-
-# %%
-def add_controlled_terms(work_uri, record):
-    # get the controlled terms from the field CT:
-    topiccount = 0
-    for topic in record.findall("CT"):
-        # get the content of the CT field:
-        controlled_term_string = mappings.replace_encodings(topic.text.strip())
-        # we need to split the string into these possible parts:
-        # "|e English Label" for the English label,
-        # "|d Deutsches Label" for the German label, and
-        # "|g x", which, if it exists, indicates that this Topic is also weighted and should get an additional class (beside bf:Topic) of either "PXC.WeightedTopic"
-        # we will use the get_Subfield function, which takes the subfield name as the parameter and returns the content of that subfield if it exists, or None if it doesn't.
-        # initialize variables for the controlled term string parts:
-        controlled_term_string_english = helpers.get_subfield(
-            controlled_term_string, "e"
-        )
-        controlled_term_string_german = helpers.get_subfield(
-            controlled_term_string, "d"
-        )
-        term_weighting = helpers.get_subfield(controlled_term_string, "g")
-        if term_weighting is not None and term_weighting == "x":
-            controlled_term_weighted = True
-        else:
-            controlled_term_weighted = False
-        topiccount += 1
-        # create a blank node for the controlled term and make it a class bf:Topic:
-        controlled_term_node = URIRef(str(work_uri) + "#topic" + str(topiccount))
-        # a ct node is a bf:Topic (and a skos:Concept - albeit without a uri identifier, because the CT "code" is not exported, only the labels); sometimes it is also a pxc:WeightedTopic:
-        records_bf.add((controlled_term_node, RDF.type, BF.Topic))
-        # records_bf.add((controlled_term_node, RDF.type, SKOS.Concept))
-        # add source to the controlled term node (bf:source <https://w3id.org/zpid/vocabs/terms>):
-        # records_bf.add(
-        #     (
-        #         controlled_term_node,
-        #         BF.source,
-        #         URIRef("https://w3id.org/zpid/vocabs/terms"),
-        #     )
-        # )
-        # get uri from lookup in skosmos api:
-        try:
-            controlled_term_uri = localapi.get_concept_uri_from_skosmos(
-                controlled_term_string_english, "terms"
-            )
-        except:
-            controlled_term_uri = None
-        if controlled_term_weighted:
-            records_bf.add((controlled_term_node, RDF.type, PXC.WeightedTopic))
-        # add the controlled term string to the controlled term node:
-        records_bf.add(
-            (
-                controlled_term_node,
-                RDFS.label,
-                Literal(controlled_term_string_english),
-            )
-        )
-        records_bf.add(
-            (
-                controlled_term_node,
-                SKOS.prefLabel,
-                Literal(controlled_term_string_english, lang="en"),
-            )
-        )
-        records_bf.add(
-            (
-                controlled_term_node,
-                SKOS.prefLabel,
-                Literal(controlled_term_string_german, lang="de"),
-            )
-        )
-        records_bf.add((controlled_term_node, OWL.sameAs, URIRef(controlled_term_uri)))
-
-        # attach the controlled term node to the work node:
-        records_bf.add((work_uri, BF.subject, controlled_term_node))
-
-
-# %% [markdown]
 # ## TODO: Function: Create nodes for Population Age Group (AGE) and Population Location (PLOC)
 #
 # Use this scheme:
@@ -3228,7 +3123,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 # for record in root.findall("Record"):
-for record in root.findall("Record")[0:200]:
+for record in root.findall("Record")[0:100]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3285,7 +3180,8 @@ for record in root.findall("Record")[0:200]:
         get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
     # Adding CTs to the work, including skosmos lookup for the concept uris:
-    add_controlled_terms(work_uri, record)
+    # add_controlled_terms(work_uri, record)
+    terms.add_controlled_terms(work_uri, record, records_bf)
 
     ## TODO: add all the other controlled keywords from the record to the work - SH, CM, AGE, SAM, PLOC
     # including skosmos lookups.
@@ -3419,7 +3315,7 @@ for record in root.findall("Record")[0:200]:
         record, dfk, work_uri, instance_bundle_uri, records_bf
     )
     # add genres to the work:
-    # publication_types.add_work_genres(work_uri, record, dfk, records_bf)
+    publication_types.add_work_genres(work_uri, record, dfk, records_bf)
 
     ## adding ISBNs:
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong.
