@@ -49,6 +49,7 @@ def get_instance_doi(instance, record, graph):
             print(f"Warning: DOI {doi_field} is not a valid DOI.")
             # should probably check if it is a valid url and then use it as a url?
         if doi is not None:
+            # add it as an identifier of class bf:Doi
             identifiers.build_doi_identifier_node(instance, doi, graph)
 
 
