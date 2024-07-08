@@ -1,3 +1,5 @@
+import dateparser
+from dateparser.search import search_dates
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, Namespace
 
@@ -254,23 +256,43 @@ for person_id in persons:
     # split strings into one combined list "auszeichnungen" (separator is "\r")
     auszeichnungen = auszeichnung_liststring.split("\r")
     auszeichnungen.extend(int_auszeichnung_liststring.split("\r"))
+    award_count = 0
     try:
         for auszeichnung in auszeichnungen:
             if auszeichnung is not None and auszeichnung != "":
-                psychauthors.add(
-                    (person_uri, SCHEMA.award, Literal(auszeichnung.strip()))
-                )
-        # if auszeichnung_liststring is not None and auszeichnung_liststring != "":
-        #     psychauthors.add(
-        #         (person_uri, SCHEMA.award, Literal(auszeichnung_liststring))
-        #     )
-        # if (
-        #     int_auszeichnung_liststring is not None
-        #     and int_auszeichnung_liststring != ""
-        # ):
-        #     psychauthors.add(
-        #         (person_uri, SCHEMA.award, Literal(int_auszeichnung_liststring))
-        #     )
+                award_count += 1
+                # strip any preceding "-":
+                auszeichnung = re.sub(r"^-", "", auszeichnung.strip())
+                # strip whitespace around the string:
+                auszeichnung = auszeichnung.strip()
+                # get startdate, if possible, using dateparser:
+                try:
+                    startdate = search_dates(
+                        auszeichnung,
+                        languages=["de", "en"],
+                        settings={
+                            "PREFER_MONTH_OF_YEAR": "first",
+                            "PREFER_DAY_OF_MONTH": "first",
+                            "PREFER_DATES_FROM": "past",
+                            "REQUIRE_PARTS": ["year"],
+                        },
+                    )[0][1].strftime("%Y")
+                    # print(startdate)
+                except:
+                    startdate = None
+                # use schema:Role reification:
+                award_node = URIRef(person_uri + "#award" + str(award_count))
+                psychauthors.set((award_node, RDF.type, SCHEMA.Role))
+                psychauthors.add((award_node, SCHEMA.award, Literal(auszeichnung)))
+                if startdate is not None:
+                    psychauthors.add(
+                        (
+                            award_node,
+                            SCHEMA.startDate,
+                            Literal(startdate, datatype=XSD.gYear),
+                        )
+                    )
+                psychauthors.add((person_uri, SCHEMA.award, award_node))
     except:
         pass
 
