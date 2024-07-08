@@ -3012,7 +3012,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 for record in root.findall("Record"):
-    # for record in root.findall("Record")[0:200]:
+# for record in root.findall("Record")[0:200]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3140,15 +3140,6 @@ for record in root.findall("Record"):
     # So TODO: add a copy of this bf:Publication node to each instance, adding the instance's unique publication date to it.
     add_publication_info(instance_bundle_uri, record)
 
-    # add doi of the record to the instancebundle (should really add to the electronic instance itself):
-    instance_source_ids.get_instance_doi(instance_bundle_uri, record, records_bf)
-
-    # add the url of the record to the instancebundle (should really add to the electronic instance itself):
-    instance_source_ids.get_instance_url(instance_bundle_uri, record, records_bf)
-
-    # add the urn of the record to the instancebundle (should really add to the electronic instance itself):
-    instance_source_ids.get_instance_urn(instance_bundle_uri, record, records_bf)
-
     # Add a second instance to the work and instancebundle, if there is a second mediatype in the record:
     if record.find("MT2") is not None:
         instance_uri_2 = URIRef(
@@ -3220,6 +3211,45 @@ for record in root.findall("Record"):
     # that is hard and very slow. MAybe we should do this in a separate sparql query afterwards?
     # For now, we get the isbns from <PU> subfield |i and |e and add them to the instancebundle first:
     add_isbns(record, instance_bundle_uri)
+
+    # if the instancebundle has an instance that is electronic, add the doi, url and urn to it: (note: currently, if there are no electronic instances, but a doi, url, urn, they are dropped!!!)
+    if (
+        record.find("DOI") is not None
+        or record.find("URLI") is not None
+        or record.find("URN") is not None
+    ):
+        # make a list of all instances in the instancebundle:
+        instances = list(records_bf.objects(instance_bundle_uri, BF.hasPart))
+        # if there is only one instance, add the doi, url and urn to that:
+        if len(instances) == 1:
+            print(
+                "only one instance in bundle, adding doi, url, urn to it, regardless of mediatype"
+            )
+            # get the instance:
+            instance = instances[0]
+            # add doi of the record to the instance:
+            instance_source_ids.get_instance_doi(instance, record, records_bf)
+            # add the url of the record to the instance:
+            instance_source_ids.get_instance_url(instance, record, records_bf)
+            # add the urn of the record to the instance:
+            instance_source_ids.get_instance_urn(instance, record, records_bf)
+        # otherwise, if there are two (or more) instances, add the doi, url and urn to the first electronic instance we can find:
+        elif len(instances) > 1:
+            print(
+                "several instances found, checking for mediatype before adding doi etc."
+            )
+            # check if either the first or the second from the list are pxp:mediaCarrier pmt:Online:
+            for instance in records_bf.objects(instance_bundle_uri, BF.hasPart):
+                # get the mediatype of the instance:
+                mediacarrier_type = records_bf.value(instance, PXP.mediaCarrier)
+                if mediacarrier_type == PMT.Online:
+                    # add doi of the record to the instance:
+                    instance_source_ids.get_instance_doi(instance, record, records_bf)
+                    # add the url of the record to the instance:
+                    instance_source_ids.get_instance_url(instance, record, records_bf)
+                    # add the urn of the record to the instance:
+                    instance_source_ids.get_instance_urn(instance, record, records_bf)
+            #     # if there are two or more, but we can't find any electronic instance among them? That would be an error, but what can be done to still catch it?
 
 
 # add a Literal for the count of records:
