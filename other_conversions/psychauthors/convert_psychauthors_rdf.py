@@ -1,4 +1,8 @@
+from datetime import timedelta
+from tqdm.auto import tqdm
 import dateparser
+import requests_cache
+import modules.dicts as dicts
 from dateparser.search import search_dates
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, Namespace
@@ -10,10 +14,53 @@ from rdflib import URIRef
 import re
 import csv
 
+ROR_API_URL = "https://api.ror.org/organizations?affiliation="
+
+# a cache for ror requests
+
+urls_expire_after = {
+    # Custom cache duration per url, 0 means "don't cache"
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/09183&lang=de': 0,
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/': 0,
+}
+session_ror = requests_cache.CachedSession(
+    ".cache/requests_ror",
+    allowable_codes=[200, 404],
+    expire_after=timedelta(days=30),
+    urls_expire_after=urls_expire_after,
+)
+
+
+def get_ror_id_from_api(orgname_string):
+    # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
+    ror_api_url = ROR_API_URL + orgname_string
+    # make a request to the ror api:
+    # ror_api_request = requests.get(ror_api_url)
+    # make request to api with caching:
+    ror_api_request = session_ror.get(ror_api_url, timeout=20)
+    # if the request was successful, get the json response:
+    if ror_api_request.status_code == 200:
+        print("we have a response: " + str(ror_api_request.status_code))
+        ror_api_response = ror_api_request.json()
+        # check if the response has any hits:
+        if len(ror_api_response["items"]) > 0:
+            print("number of hits: " + len(ror_api_response["items"]))
+            # if so, get the item with a key value pair of "chosen" and "true" and return its id:
+            for item in ror_api_response["items"]:
+                if item["chosen"] == True:
+                    return item["organization"]["id"], item["organization"]["name"]
+        else:
+            print("no hits")
+            return None
+    else:
+        print("no 200 response")
+        return None
+
 
 # Namespaces
 PERSONS = Namespace("https://w3id.org/zpid/resources/authorities/persons/")
 LOCID = Namespace("http://id.loc.gov/vocabulary/identifiers/")
+QUAL = Namespace("https://w3id.org/zpid/vocabs/qualifications/")
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 SCHEMA = Namespace("https://schema.org/")
 GNDO = Namespace("https://d-nb.info/standards/elementset/gnd")
@@ -37,6 +84,8 @@ psychauthors.bind("gndo", GNDO)
 psychauthors.bind("pxc", PXC)
 psychauthors.bind("pxp", PXP)
 psychauthors.bind("gender", GENDER)
+psychauthors.bind("qualifications", QUAL)
+
 
 # create a dictionary of all persons with their ID as key
 persons = {}
@@ -49,33 +98,12 @@ with open(
     for row in reader:
         # add the row to the dictionary:
         persons[row["id"]] = row
-        # print the id:
-# create a dictionary of all institutions with their ID as key
-# institutions = {}
-# with open('source_tables/psychauthors-dump-2022-02/psychauthors.institut.csv', newline='', encoding='utf-8') as csvfile:
-#     reader = csv.DictReader(csvfile, delimiter=';')
-#     for row in reader:
-#         institutions[row['id']] = row
 
-
-# create a dictionary of all titles with their ID as key
-# titles = {}
-# with open('source_tables/psychauthors-dump-2022-02/psychauthors.titel.csv', newline='', encoding='utf-8') as csvfile:
-#     reader = csv.DictReader(csvfile, delimiter=';')
-#     for row in reader:
-#         titles[row['id']] = row
-
-# create a dictionary of all cities in stadt.csv with their ID as key
-# cities = {}
-# with open('source_tables/psychauthors-dump-2022-02/psychauthors.stadt.csv', newline='', encoding='utf-8') as csvfile:
-#     reader = csv.DictReader(csvfile, delimiter=';')
-#     for row in reader:
-#         cities[row['id']] = row
 
 # walk through all persons and create a person node for each person
 
 # for all of them:
-for person_id in persons:
+for person_id in tqdm(persons):
     # get the psychauthors ID of the person from field 'code':
     psychauthorsId = persons[person_id]["code"]
 
@@ -293,6 +321,187 @@ for person_id in persons:
                         )
                     )
                 psychauthors.add((person_uri, SCHEMA.award, award_node))
+    except:
+        pass
+
+    ## add academic qualifications:
+    try:
+        qualifications_liststring = persons[person_id]["qualifikation"]
+    except:
+        qualifications_liststring = None
+    # split strings into one combined list "qualifications" (separator is "\r")
+    qualifications = qualifications_liststring.split("\r")
+    # attach as a schema:aluminiOf construct where the text becomes schema:description of the schema:CollegeOrUniversity
+    qualification_count = 0
+    try:
+        for qualification in qualifications:
+            college = None
+            if qualification is not None and qualification != "":
+                qualification_count += 1
+                qualification = qualification.strip()
+                # get startdate, if possible, using dateparser:
+                try:
+                    startdate = search_dates(
+                        qualification,
+                        languages=["de", "en"],
+                        settings={
+                            "PREFER_MONTH_OF_YEAR": "first",
+                            "PREFER_DAY_OF_MONTH": "first",
+                            "PREFER_DATES_FROM": "past",
+                            "REQUIRE_PARTS": ["year"],
+                        },
+                    )[0][1].strftime("%Y")
+                    # print(enddate)
+                except:
+                    startdate = None
+
+                # try to recognize some degree types:
+                # degree = None
+                # try:
+                #     if (
+                #         "Bachelor" in qualification
+                #         or "Vordiplom" in qualification
+                #         or "B.Ed." in qualification
+                #         or "BA" in qualification
+                #         or "B.A." in qualification
+                #     ):
+                #         degree = "bachelorLevel"
+                #     elif (
+                #         "Diplom" in qualification
+                #         or "Diolom" in qualification
+                #         or "diplom" in qualification
+                #         or "Dipl." in qualification
+                #         or "Master" in qualification
+                #         or "Lizenziat" in qualification
+                #         or "Lizentiat" in qualification
+                #         or "Licentiat" in qualification
+                #         or "Lic." in qualification
+                #         or "Magist" in qualification
+                #         or "Mag." in qualification
+                #         or "M.A." in qualification
+                #         or "MA" in qualification
+                #         or "MSc" in qualification
+                #         or "M.Sc." in qualification
+                #     ):
+                #         degree = "masterLevel"
+                #     elif (
+                #         "Habilitation" in qualification
+                #         or "Habitilation" in qualification
+                #         or "Habilitand" in qualification
+                #         or "Habilitaion" in qualification
+                #         or "Habilation" in qualification
+                #         or "Habiliation" in qualification
+                #         or "Habililtation" in qualification
+                #         or "Habillitation" in qualification
+                #         or "Venia" in qualification
+                #         or "venia" in qualification
+                #         or "Professur" in qualification
+                #         or "Professor" in qualification
+                #         or "Erstberufung" in qualification
+                #     ):
+                #         degree = "habilitationLevel"
+                #     elif (
+                #         "Promotion" in qualification
+                #         or "Promotin" in qualification
+                #         or "Promoion" in qualification
+                #         or "Promition" in qualification
+                #         or "Dissertation" in qualification
+                #         or "Doctor" in qualification
+                #         or "Doktor" in qualification
+                #         or "Dr." in qualification
+                #         or "Ph." in qualification
+                #         or "PhD" in qualification
+                #         or "Phd" in qualification
+                #     ):
+                #         degree = "doctoralLevel"
+
+                #     elif "Approbation" in qualification or "therapeut" in qualification:
+                #         degree = "therapistApprobation"
+                #     else:
+                #         degree = "other"
+                # except:
+                #     degree = "other"
+
+                # or using the degree_lookup dict in modules/dicts.py:
+                degree = None
+                try:
+                    for degree_dict in dicts.degree_lookup:
+                        for synonym in degree_dict["synonyms"]:
+                            if synonym in qualification:
+                                degree = degree_dict["name"]
+                            else:
+                                degree = "other"
+                except:
+                    degree = None
+
+                # try to recognize some institutions:
+                # use data from dicts.py to get a string and ror uri for the college:
+                college = None
+                college_ror = None
+                try:
+                    for college_dict in dicts.college_lookup:
+                        for synonym in college_dict["synonyms"]:
+                            if synonym in qualification:
+                                college = college_dict["name"]
+                                if college_dict["ror"] is not None:
+                                    college_ror = college_dict["ror"]
+                except:
+                    pass
+                # use ror api instead (get_ror_id_from_api function):
+                # try:
+                #     college, college_ror = get_ror_id_from_api(qualification)
+                # except:
+                #     college = None
+                #     college_ror = None
+
+                qualification_node = URIRef(
+                    person_uri + "#qualification" + str(qualification_count)
+                )
+                psychauthors.set(
+                    (qualification_node, RDF.type, SCHEMA.OrganizationRole)
+                )
+                # add a college node:
+                college_node = URIRef(qualification_node + "#org")
+                psychauthors.set((qualification_node, SCHEMA.alumniOf, college_node))
+                psychauthors.set((college_node, RDF.type, SCHEMA.CollegeOrUniversity))
+                psychauthors.add(
+                    (qualification_node, SCHEMA.description, Literal(qualification))
+                )
+                if startdate is not None:
+                    psychauthors.add(
+                        (
+                            qualification_node,
+                            SCHEMA.startDate,
+                            Literal(startdate, datatype=XSD.gYear),
+                        )
+                    )
+                if degree is not None:
+                    psychauthors.add(
+                        (qualification_node, SCHEMA.hasCredential, URIRef(QUAL[degree]))
+                    )
+                if college is not None:
+                    psychauthors.add((college_node, SCHEMA.name, Literal(college)))
+                if college_ror is not None:
+                    psychauthors.add((college_node, SCHEMA.sameAs, URIRef(college_ror)))
+
+                psychauthors.add((person_uri, SCHEMA.alumniOf, qualification_node))
+    except:
+        pass
+
+    # get degree/titles string in field "titel" and attach via gnd:academicDegree:
+    try:
+        titles_int = persons[person_id]["titel"]
+        # look up this int in the academic_titles array of dicts in modules/dicts.py to get a string - use the int as the value for the "number" key, get the value in dict in the key "name":
+        titles_string = dicts.academic_titles[int(titles_int)]["name"]
+        # print(titles_int)
+        # if it exists, add it to the graph as a schema:academicDegree
+
+    except:
+        titles_int = None
+        titles_string = None
+    try:
+        if titles_string is not None and titles_string != "":
+            psychauthors.add((person_uri, GNDO.academicDegree, Literal(titles_string)))
     except:
         pass
 
