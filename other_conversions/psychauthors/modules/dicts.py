@@ -221,6 +221,7 @@ college_lookup = [
             "FU Berlin",
             "Berlin FU",
             "Free University Berlin",
+            "Freien Universität Berlin",
         ],
     },
     {
@@ -352,6 +353,7 @@ college_lookup = [
         "name": "Ludwig-Maximilians-Universität München (LMU)",
         "ror": "https://ror.org/02y2zjx62",
         "synonyms": [
+            " München",
             "Universität München",
             "Uni München",
             "LMU München",
@@ -418,6 +420,170 @@ college_lookup = [
         "ror": "https://ror.org/00mx91s63",
         "synonyms": ["Eichstätt"],
     },
+    {
+        "name": "Friedrich-Alexander-Universität Erlangen-Nürnberg",
+        "ror": "https://ror.org/00f7hpc57",
+        "synonyms": ["Erlangen"],
+    },
+    {
+        "name": "Stiftung Universität Hildesheim",
+        "ror": "https://ror.org/02f9det96",
+        "synonyms": ["Hildesheim"],
+    },
+    {
+        "name": "Leuphana Universität Lüneburg",
+        "ror": "https://ror.org/02w2y2t16",
+        "synonyms": ["Lüneburg"],
+    },
+    {
+        "name": "Universität Witten/Herdecke",
+        "ror": "https://ror.org/00yq55g44",
+        "synonyms": ["Herdecke"],
+    },
+    {
+        "name": "Universität Hohenheim",
+        "ror": "https://ror.org/00b1c9541",
+        "synonyms": ["Hohenheim"],
+    },
+    {
+        "name": "Technische Universität Dortmund",
+        "ror": "https://ror.org/01k97gp34",
+        "synonyms": ["Dortmund"],
+    },
+    {
+        "name": "Eidgenössische Technische Hochschule Zürich",
+        "ror": "https://ror.org/05a28rw58",
+        "synonyms": ["ETH Zürich"],
+    },
+    {
+        "name": "Universität Zürich",
+        "ror": "https://ror.org/02crff812",
+        "synonyms": [
+            ", Zürich",
+            "Uni Zürich",
+            "Universität Zürich",
+            "University of Zurich",
+        ],
+    },
+    {
+        "name": "FernUniversität in Hagen",
+        "ror": "https://ror.org/04tkkr536",
+        "synonyms": ["Hagen"],
+    },
+    {
+        "name": "Universität Passau",
+        "ror": "https://ror.org/05ydjnb78",
+        "synonyms": ["Passau"],
+    },
+    {
+        "name": "Universität Vechta",
+        "ror": "https://ror.org/045y6d111",
+        "synonyms": ["Vechta"],
+    },
+    {
+        "name": "Universität Siegen",
+        "ror": "https://ror.org/02azyry73",
+        "synonyms": ["Siegen"],
+    },
+    {
+        "name": "Universität Rostock",
+        "ror": "https://ror.org/03zdwsf69",
+        "synonyms": ["Rostock"],
+    },
+    {
+        "name": "Universität Bayreuth",
+        "ror": "https://ror.org/0234wmv40",
+        "synonyms": ["Bayreuth"],
+    },
+    {
+        "name": "Universität zu Köln",
+        "ror": "https://ror.org/00rcxh774",
+        "synonyms": [
+            "Uni Köln",
+            "Universität Köln",
+            "Erstberufung Köln",
+            "Promotion Köln",
+            ", Köln",
+            "Univ. zu Köln",
+            "Universität zu Köln",
+        ],
+    },
+    {
+        "name": "Constructor University Bremen",
+        "ror": "https://ror.org/02yrs2n53",
+        "synonyms": ["Jacobs Universität Bremen", "Jacobs University Bremen"],
+    },
+    {
+        "name": "Universität Bremen",
+        "ror": "https://ror.org/04ers2y35",
+        "synonyms": [", Bremen", "Universität Bremen", "Uni Bremen"],
+    },
+    {
+        "name": "Technische Universität München",
+        "ror": "https://ror.org/02kkvpp62",
+        "synonyms": ["TU München"],
+    },
+    {
+        "name": "Albert-Ludwigs-Universität Freiburg",
+        "ror": "https://ror.org/0245cg223",
+        "synonyms": [" Freiburg", "Uni Freiburg", "Universität Freiburg"],
+    },
+    {
+        "name": "Gottfried Wilhelm Leibniz Universität Hannover",
+        "ror": "https://ror.org/0304hq317",
+        "synonyms": [", Hannover", "Uni Hannover", "Universität Hannover"],
+    },
+    {
+        "name": "Universität Paderborn",
+        "ror": "https://ror.org/058kzsd48",
+        "synonyms": [", Paderborn", "Uni Paderborn", "Universität Paderborn"],
+    },
+    {
+        "name": "Universität Hamburg",
+        "ror": "https://ror.org/00g30e956",
+        "synonyms": [", Hamburg", "Uni Hamburg", "Universität Hamburg"],
+    },
+    {
+        "name": "Ruprecht-Karls-Universität Heidelberg",
+        "ror": "https://ror.org/038t36y30",
+        "synonyms": [
+            " Heidelberg",
+            " heidelberg",
+            "Uni Heidelberg",
+            "Universität Heidelberg",
+        ],
+    },
+    {
+        "name": "Universität Wien",
+        "ror": "https://ror.org/03prydq77",
+        "synonyms": [", Wien", "Universität Wien", "Uni Wien"],
+    },
+    {
+        "name": "Universität Graz",
+        "ror": "https://ror.org/01faaaf77",
+        "synonyms": [", Graz", "Uni Graz", "Universität Graz"],
+    },
+    {
+        "name": "Universität Klagenfurt",
+        "ror": "https://ror.org/05q9m0937",
+        "synonyms": [", Klagenfurt", "Uni Klagenfurt", "Universität Klagenfurt"],
+    },
+    {
+        "name": "",
+        "ror": "https://ror.org/022fs9h90",
+        "synonyms": [", Fribourg", "Universität Fribourg"],
+    },
+    {
+        "name": "Universität Koblenz-Landau",
+        "ror": "https://ror.org/01j9f6752",
+        "synonyms": ["Koblenz", "Landau"],
+    },
+    {
+        "name": "Universität Basel",
+        "ror": "https://ror.org/02s6k3f65",
+        "synonyms": [", Basel", "Uni Basel", "Universität Basel"],
+    },
+    # {"name": "", "ror": "", "synonyms": [""]},
 ]
 
 
@@ -470,7 +636,12 @@ degree_lookup = [
             "venia",
             "Professur",
             "Professor",
+            "Pofessor",
             "Erstberufung",
+            "Erstruf",
+            "Ruf",
+            "professorship",
+            "Univ.-Prof.",
         ],
     },
     {
@@ -491,6 +662,6 @@ degree_lookup = [
     },
     {
         "name": "therapistApprobation",
-        "synonyms": ["Approbation", "therapeut"],
+        "synonyms": ["Approbation", "therapeut", "Anerkennung"],
     },
 ]
