@@ -40,14 +40,15 @@ def get_ror_id_from_api(orgname_string):
     ror_api_request = session_ror.get(ror_api_url, timeout=20)
     # if the request was successful, get the json response:
     if ror_api_request.status_code == 200:
-        print("we have a response: " + str(ror_api_request.status_code))
+        # print("we have a response: " + str(ror_api_request.status_code))
         ror_api_response = ror_api_request.json()
         # check if the response has any hits:
         if len(ror_api_response["items"]) > 0:
-            print("number of hits: " + len(ror_api_response["items"]))
+            # print("there are some hits")
             # if so, get the item with a key value pair of "chosen" and "true" and return its id:
             for item in ror_api_response["items"]:
                 if item["chosen"] == True:
+                    # print("it's chosen")
                     return item["organization"]["id"], item["organization"]["name"]
         else:
             print("no hits")
@@ -355,75 +356,7 @@ for person_id in tqdm(persons):
                 except:
                     startdate = None
 
-                # try to recognize some degree types:
-                # degree = None
-                # try:
-                #     if (
-                #         "Bachelor" in qualification
-                #         or "Vordiplom" in qualification
-                #         or "B.Ed." in qualification
-                #         or "BA" in qualification
-                #         or "B.A." in qualification
-                #     ):
-                #         degree = "bachelorLevel"
-                #     elif (
-                #         "Diplom" in qualification
-                #         or "Diolom" in qualification
-                #         or "diplom" in qualification
-                #         or "Dipl." in qualification
-                #         or "Master" in qualification
-                #         or "Lizenziat" in qualification
-                #         or "Lizentiat" in qualification
-                #         or "Licentiat" in qualification
-                #         or "Lic." in qualification
-                #         or "Magist" in qualification
-                #         or "Mag." in qualification
-                #         or "M.A." in qualification
-                #         or "MA" in qualification
-                #         or "MSc" in qualification
-                #         or "M.Sc." in qualification
-                #     ):
-                #         degree = "masterLevel"
-                #     elif (
-                #         "Habilitation" in qualification
-                #         or "Habitilation" in qualification
-                #         or "Habilitand" in qualification
-                #         or "Habilitaion" in qualification
-                #         or "Habilation" in qualification
-                #         or "Habiliation" in qualification
-                #         or "Habililtation" in qualification
-                #         or "Habillitation" in qualification
-                #         or "Venia" in qualification
-                #         or "venia" in qualification
-                #         or "Professur" in qualification
-                #         or "Professor" in qualification
-                #         or "Erstberufung" in qualification
-                #     ):
-                #         degree = "habilitationLevel"
-                #     elif (
-                #         "Promotion" in qualification
-                #         or "Promotin" in qualification
-                #         or "Promoion" in qualification
-                #         or "Promition" in qualification
-                #         or "Dissertation" in qualification
-                #         or "Doctor" in qualification
-                #         or "Doktor" in qualification
-                #         or "Dr." in qualification
-                #         or "Ph." in qualification
-                #         or "PhD" in qualification
-                #         or "Phd" in qualification
-                #     ):
-                #         degree = "doctoralLevel"
-
-                #     elif "Approbation" in qualification or "therapeut" in qualification:
-                #         degree = "therapistApprobation"
-                #     else:
-                #         degree = "other"
-                # except:
-                #     degree = "other"
-
-                # or using the degree_lookup dict in modules/dicts.py:
-                degree = None
+                # using the degree_lookup dict in modules/dicts.py:
                 try:
                     for degree_dict in dicts.degree_lookup:
                         for synonym in degree_dict["synonyms"]:
