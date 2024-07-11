@@ -357,15 +357,16 @@ for person_id in tqdm(persons):
                     startdate = None
 
                 # using the degree_lookup dict in modules/dicts.py:
+                degree = "other"
                 try:
                     for degree_dict in dicts.degree_lookup:
                         for synonym in degree_dict["synonyms"]:
                             if synonym in qualification:
+                                # print(synonym + " - " + qualification)
                                 degree = degree_dict["name"]
-                            else:
-                                degree = "other"
+                                # print("degree is: " + degree)
                 except:
-                    degree = None
+                    degree = "other"
 
                 # try to recognize some institutions:
                 # use data from dicts.py to get a string and ror uri for the college:
