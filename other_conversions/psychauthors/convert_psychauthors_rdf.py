@@ -381,12 +381,14 @@ for person_id in tqdm(persons):
                                     college_ror = college_dict["ror"]
                 except:
                     pass
-                # use ror api instead (get_ror_id_from_api function):
-                # try:
-                #     college, college_ror = get_ror_id_from_api(qualification)
-                # except:
-                #     college = None
-                #     college_ror = None
+                ## for any that were not matched (college still None), use the ror api:
+                if college is None:
+                    try:
+                        print("no ror found for " + qualification)
+                        college_ror, college = get_ror_id_from_api(qualification)
+                    except:
+                        college = None
+                        college_ror = None
 
                 qualification_node = URIRef(
                     person_uri + "#qualification" + str(qualification_count)
