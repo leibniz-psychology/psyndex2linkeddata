@@ -5,8 +5,10 @@
     and the RDA ones (single unit etc.)
 """
 
+from hmac import new
 import xml.etree.ElementTree as ET
 from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
+import modules.mappings as mappings
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 
@@ -121,7 +123,8 @@ def generate_content_type(record, dfk, work_node, graph):
 
 def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
     """
-    Reads any CM fields in the record and generates bf:classification nodes for the Work based on it. Includes a link to the vocabs/methods/ vocabulary in our Skosmos.
+    Reads any CM fields in the record and maps them to a new method, a new genre, or both. In a few cases, also adds new subjects and classifications. Then generates bf:classification and other nodes for the Work based on it. Includes a link to the vocabs/methods/ vocabulary in our Skosmos.
+
     Args:
         record: the record to read the CM fields from
         dfk: the DFK of the record
@@ -204,29 +207,30 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         # add the method suggestion to the methods list:
         if method_suggestion is not None:
             methods.append(method_suggestion)
+
     # go through the list of methods and add them to the work (but only if they arent a genre, too):
     method_count = 0
-    genres = []
     for method_code in methods:
-        # first, check if the code is also the notation of a genre in our skosmos.
-        # if so, remove it from the methods list and put it into a genres list.
-        # otherwise, add it as a method.
-        # look up the method in skosmos genres:
+        # first, look up the code in the mappings.cm_lookup data structure. If it is in there under "old_cm", add any new_cm, new_genre, ct, it to the lists.
+        # later, go through the lists and add the new methods and genres to the graph.
+        new_methods = []
+        new_genres = []
         try:
-            genre_cm = localapi.search_in_skosmos(method_code, "genres")
+            # print("checking for " + method_code + " in mappings")
+            # check if the method_code is the value of any key "old_cm" in the mappings.cm_lookup list of dicts:
+            for cm in mappings.cm_mapping_lookup:
+                # print("checking for " + method_code + " in mappings")
+                if method_code in cm["old_cm"]:
+                    # print("found " + method_code + " in mappings")
+                    # if it is, add the new_cm, new_genre, ct, it to the lists:
+                    if cm["new_cm"] is not None and cm["new_cm"] != "":
+                        new_methods.append(cm["new_cm"])
+                    if cm["new_genre"] is not None and cm["new_genre"] != "":
+                        new_genres.append(cm["new_genre"])
         except:
-            genre_cm = None
-            print("study type " + method_code + "not a skosmos genre")
-        if genre_cm is not None:
-            genres.append(genre_cm)
-            print(
-                f"Method {method_code} is also a genre: {genre_cm}; removing from methods."
-            )
-        # also don't add the followng notations:
-        # elif method_code in []:
-        #     print(f"Method {method_code} is not a study type; removing from methods.")
-
-        else:
+            print("no new methods or genres found in mappings for " + method_code)
+        # now go through the lists and add the new methods and genres to the graph:
+        for method in new_methods:
             method_count += 1
             # method_node = URIRef(METHODS[method_code])
             # make a hashed uri from work:
@@ -244,7 +248,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 (
                     method_node,
                     OWL.sameAs,
-                    URIRef(METHODS[method_code]),
+                    URIRef(METHODS[method]),
                 )
             )
 
@@ -265,10 +269,43 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                     method_node,
                 )
             )
-            # add labels we got from skosmos:
-            #
 
-    # print(f"Methods found in {dfk}: {methods}")
+        ## TODO: if both ScholarlyWork AND ResearchPaper are added due to this conversion, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
+        # So: check if the new_genres List contains both ScholarlyWork and ResearchPaper, and if so, remove ScholarlyWork.
+
+        if "ScholarlyWork" in new_genres and "ResearchPaper" in new_genres:
+            print("removed ScholarlyWork genre from ResearchPaper work " + work_node)
+            new_genres.remove("ScholarlyWork")
+        for genre in new_genres:
+            genre_node = URIRef(GENRES[genre])
+            graph.add(
+                (
+                    genre_node,
+                    RDF.type,
+                    BF.GenreForm,
+                )
+            )
+            graph.add(
+                (
+                    work_node,
+                    BF.genreForm,
+                    genre_node,
+                )
+            )
+            try:
+                german_label = localapi.get_preflabel_from_skosmos(
+                    genre_node, "genres", "de"
+                ).strip()
+                english_label = localapi.get_preflabel_from_skosmos(
+                    genre_node, "genres", "en"
+                ).strip()
+                # add as prefLabel:
+                graph.add((genre_node, SKOS.prefLabel, Literal(german_label, "de")))
+                graph.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
+                graph.add((genre_node, RDFS.label, Literal(english_label)))
+            except:
+                print("no label found for genre " + genre)
+                # keeping the genre without label for now
 
 
 def add_work_genres(work_uri, record, dfk, records_bf):
@@ -338,22 +375,21 @@ def add_work_genres(work_uri, record, dfk, records_bf):
     # if any method _starts with_  "|c 10" add "ResearchPaper" to genres
     # remeber it has to start with "|c 10" and not just contain it:
     # or if it is exactly one of the following: 11100 (method. study),12100 (theor. study), 13100 (literature review),13110 (systematic review)
-    if any(notation.startswith("101") for notation in methods) or any(
-        notation in ["11100", "10200", "10300", "12100", "13100", "13110"]
-        for notation in methods
-    ):
-        # but only if it isn't already a thesis:
-        if "ThesisDoctoral" not in genres and "ThesisHabilitation" not in genres:
-            genres.append("ResearchPaper")
+    # if any(notation.startswith("101") for notation in methods) or any(
+    #     notation in ["10200", "10300", "13100", "13110"] for notation in methods
+    # ):
+    #     # but only if it isn't already a thesis:
+    #     if "ThesisDoctoral" not in genres and "ThesisHabilitation" not in genres:
+    #         genres.append("ResearchPaper")
 
     # if any are 11200 or 11300 and also bibliographic level is "UZ", also add ResearchPaper:
-    if (
-        any(notation in ["11200", "11300"] for notation in methods)
-        and bibliographic_level == "UZ"
-    ):
-        genres.append("ResearchPaper")
+    # if (
+    #     any(notation in ["11200", "11300"] for notation in methods)
+    #     and bibliographic_level == "UZ"
+    # ):
+    #     genres.append("ResearchPaper")
 
-    # for any that are 18650 (workshop) and also have specific DFKs, treat them before, then go through the rest to make them either MeetingReport or CourseMaterial:
+    # for any that are 18650 (workshop) and also have specific DFKs, treat them before, then go through the rest to make them ~~either MeetingReport or~~ CourseMaterial:
     if any(notation in ["18650"] for notation in methods):
         ## Special cases wrongly tagged as "workshop":
         # DFK = 0369284 -> "ConferenceProceedings"
@@ -369,36 +405,34 @@ def add_work_genres(work_uri, record, dfk, records_bf):
         ):
             genres.append("PaperCollection")
         # for any that are 18650 (workshop) and also BE=UZ, UR, US, add "MeetingReport"
-        elif bibliographic_level in [
-            "UZ",
-            "UR",
-            "US",
-        ]:
-            genres.append("MeetingReport")
+        # elif bibliographic_level in [
+        #     "UZ",
+        #     "UR",
+        #     "US",
+        # ]:
+        #     genres.append("MeetingReport")
         # for any that are 18650 (workshop) and BE=AV, add "CourseMaterial"
         elif bibliographic_level == "AV":
             genres.append("CourseMaterial")
 
-    # for any that are 13600 (educational audiovisual material) add "CourseMaterial"
-    if any(notation in ["18650"] for notation in methods):
-        genres.append("CourseMaterial")
-    if any(notation in ["13600"] for notation in methods):
-        genres.append("CourseMaterial")
+    # for any that are 18650 (workshop) add "CourseMaterial"
+    # if any(notation in ["18650"] for notation in methods):
+    #     genres.append("CourseMaterial")
 
     # if this record has a DFK from the following list, add "Bibliography": 0308189, 0179058, 0406548 (Manfred's testverzeichnisse)
     if dfk in ["0308189", "0179058", "0406548"]:
         genres.append("Bibliography")
 
     # if any method can be found via a search in skosmos, add it to genres as the skosmos concept you found:
-    for notation in methods:
-        try:
-            # print("searching for " + notation + " in skosmos")
-            genre_cm = localapi.search_in_skosmos(notation, "genres")
-        except:
-            genre_cm = None
-            print("failed searching for " + notation + " in skosmos")
-        if genre_cm is not None:
-            genres.append(genre_cm)
+    # for notation in methods:
+    #     try:
+    #         # print("searching for " + notation + " in skosmos")
+    #         genre_cm = localapi.search_in_skosmos(notation, "genres")
+    #     except:
+    #         genre_cm = None
+    #         print("failed searching for " + notation + " in skosmos")
+    #     if genre_cm is not None:
+    #         genres.append(genre_cm)
 
     # # create node for each genre:
     for genre in genres:
@@ -425,6 +459,72 @@ def add_work_genres(work_uri, record, dfk, records_bf):
             records_bf.add((work_uri, BF.genreForm, genre_node))
             # add a label: no need for first migration! Get from skosmos api later.
             # records_bf.set((genre_node, RDFS.label, Literal(genre)))
+
+
+def clean_up_genres(work_uri, graph):
+    # remove any genres:ResearchPaper node when the work already has a variation of genre:Thesis:
+    if (
+        (
+            work_uri,
+            BF.genreForm,
+            URIRef(GENRES["ThesisDoctoral"]),
+        )
+        in graph
+        or (
+            work_uri,
+            BF.genreForm,
+            URIRef(GENRES["CompilationThesisDoctoral"]),
+        )
+        in graph
+        or (
+            work_uri,
+            BF.genreForm,
+            URIRef(GENRES["ThesisHabilitation"]),
+        )
+        in graph
+        or (
+            work_uri,
+            BF.genreForm,
+            URIRef(GENRES["CompilationThesisHabilitation"]),
+        )
+        in graph
+    ):
+        print("we have a thesis!")
+        if ((work_uri, BF.genreForm, URIRef(GENRES["ResearchPaper"]))) in graph:
+            # print("removed ResearchPaper genre from Thesis work " + work_uri)
+            graph.remove(
+                (
+                    work_uri,
+                    BF.genreForm,
+                    URIRef(GENRES["ResearchPaper"]),
+                )
+            )
+        if ((work_uri, BF.genreForm, URIRef(GENRES["ScholarlyWork"]))) in graph:
+            # print("removed ScholarlyWork genre from Thesis work " + work_uri)
+            graph.remove(
+                (
+                    work_uri,
+                    BF.genreForm,
+                    URIRef(GENRES["ScholarlyWork"]),
+                )
+            )
+    # also, if both ScholarlyWork AND ResearchPaper exist, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
+    if (
+        work_uri,
+        BF.genreForm,
+        URIRef(GENRES["ResearchPaper"]),
+    ) in graph and (
+        work_uri,
+        BF.genreForm,
+        URIRef(GENRES["ScholarlyWork"]),
+    ) in graph:
+        graph.remove(
+            (
+                work_uri,
+                BF.genreForm,
+                URIRef(GENRES["ScholarlyWork"]),
+            )
+        )
 
 
 def get_issuance_type(instance_bundle_uri, record, graph):
