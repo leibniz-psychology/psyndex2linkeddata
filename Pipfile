@@ -18,6 +18,8 @@ linkml = "*"
 truecase = "*"
 openai = "*"
 dateparser = "*"
+tqdm = "*"
+python-decouple = "*"
 
 [dev-packages]
 

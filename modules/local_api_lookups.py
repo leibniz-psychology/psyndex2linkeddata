@@ -1,4 +1,6 @@
+from urllib.parse import urlencode
 import requests_cache
+from decouple import config
 from datetime import timedelta
 
 ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
@@ -8,8 +10,10 @@ ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
 # psyndex-methods-de + /suggest
 
 # skosmos api url for looking up concepts in CT, SH, and other controlled vocabs:
-SKOSMOS_API_URL = "https://skosmos.stg.zpid.org/rest/v1/"
-
+SKOSMOS_URL = config("SKOSMOS_URL")
+SKOSMOS_API_URL = SKOSMOS_URL + "/rest/v1/"
+SKOSMOS_USER = config("SKOSMOS_USER")
+SKOSMOS_PASSWORD = config("SKOSMOS_PASSWORD")
 # annif api caching:
 ## Caching requests:
 urls_expire_after = {
@@ -31,6 +35,8 @@ session_skosmos = requests_cache.CachedSession(
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
 )
+
+session_skosmos.auth = (SKOSMOS_USER, SKOSMOS_PASSWORD)
 
 
 def get_annif_method_suggestion(text, language):
@@ -95,7 +101,7 @@ def get_concept_uri_from_skosmos(concept_label, vocid):
             print("no uri found for " + concept_label)
             return None
     else:
-        print("skosmos request failed for " + concept_label)
+        print("1. skosmos request failed for " + concept_label)
         return None
 
 
@@ -125,7 +131,7 @@ def get_preflabel_from_skosmos(uri, vocid, lang="de"):
             print("no label found for " + uri)
             return None
     else:
-        print("skosmos request failed for " + uri)
+        print("2. skosmos request failed for " + str(uri))
         return None
 
 
@@ -146,5 +152,5 @@ def search_in_skosmos(search_term, vocid):
             # print("no concept found for " + search_term)
             return None
     else:
-        print("skosmos request failed for " + search_term)
+        print("3. skosmos request failed for " + search_term)
         return None

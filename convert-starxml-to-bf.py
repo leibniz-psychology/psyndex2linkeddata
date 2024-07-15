@@ -12,6 +12,7 @@ from rdflib import URIRef
 import xml.etree.ElementTree as ET
 import re
 import html
+from tqdm.auto import tqdm
 
 
 import modules.mappings as mappings
@@ -3011,8 +3012,8 @@ def get_datac(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-for record in root.findall("Record"):
-# for record in root.findall("Record")[0:200]:
+for record in tqdm(root.findall("Record")):
+    # for record in tqdm(root.findall("Record"))[0:200]:
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3198,13 +3199,15 @@ for record in root.findall("Record"):
                 get_bf_translated_title(instance_bundle_uri, record),
             )
         )
-
     # add methods (needs title and abstract already in graph, so do it after all the other stuff):
     publication_types.add_work_studytypes(
         record, dfk, work_uri, instance_bundle_uri, records_bf
     )
-    # add genres to the work:
+    # add other genres (not based on study type/method) to the work (such as Thesis):
     publication_types.add_work_genres(work_uri, record, dfk, records_bf)
+
+    # clean up genres; remove any genres:ResearchPaper node when the work already has genre:ThesisDoctoral:
+    publication_types.clean_up_genres(work_uri, records_bf)
 
     ## adding ISBNs:
     # after we've added everything, we can go through the isbns and other stuff and put them into the instances where they belong.
@@ -3271,7 +3274,7 @@ records_bf.add(
     (
         records_bf_admin_metadata_root,
         BF.generationProcess,
-        Literal("Converted from STAR XML to BIBFRAME 2.3 using Python scripts"),
+        Literal("Converted from STAR XML to BIBFRAME 2.3 using Python/RDFLib"),
     )
 )
 # # add a bf:generationDate to the admin metadata node:
