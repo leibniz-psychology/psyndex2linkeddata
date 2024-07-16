@@ -1,0 +1,32 @@
+# this query will list all pxp:MainWork nodes that have more than just one a bf:genreForm.
+
+
+PREFIX works: <https://w3id.org/zpid/resources/works/>
+PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
+PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
+PREFIX pxp: <https://w3id.org/zpid/ontology/properties/>
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX bflc: <http://id.loc.gov/ontologies/bflc/>
+PREFIX locid: <http://id.loc.gov/vocabulary/identifiers/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?work ?dfk ?genre1 ?genre2
+WHERE {
+  ?work a pxc:MainWork.
+  ?work pxp:hasInstanceBundle/bf:identifiedBy ?dfk_uri .
+  ?dfk_uri a pxc:DFK; rdf:value ?dfk .
+  # get all genreForms for the work
+    ?work bf:genreForm ?genre1, ?genre2 .
+    FILTER (?genre1 != ?genre2)
+}
+
+# call with: 
+# arq --data ttl-data/bibframe_records.ttl --query testing/genreForm/works_with_several_genres.rq  --results=TSV > testing/genreForm/works_with_several_genres.tsv
