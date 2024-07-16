@@ -3301,7 +3301,7 @@ records_bf.serialize(
     index=True,
 )
 # also serialize as xml
-records_bf.serialize("ttl-data/bibframe_records.xml", format="pretty-xml")
+#records_bf.serialize("ttl-data/bibframe_records.xml", format="pretty-xml")
 
 # print a count the triples we generated:
 print(len(records_bf), "triples")
