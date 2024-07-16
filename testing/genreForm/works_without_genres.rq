@@ -1,9 +1,6 @@
-# this query will count the number of bf:Contributions in a given 
-# test file of records haven been created that have bf:Person as the bf:agent.
-# for comparing to the number auf AUP fields in the source xml file.
+# this query will list all pxp:MainWork nodes that do not have a bf:genreForm.
 
-# this means: just count if we made nodes for each AUP. Not yet included:
-# if they all have affiliations, countries, email, orcid, paup, or even names/labels.
+
 PREFIX works: <https://w3id.org/zpid/resources/works/>
 PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
 PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
@@ -21,11 +18,15 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT (COUNT(?contribution) AS ?count) 
+SELECT ?work ?dfk
 WHERE {
-  ?work a bf:Work ;
-    bf:contribution ?contribution .
-  ?contribution a bf:Contribution ;
-    bf:agent ?agent .
-  ?agent a bf:Person .
+  ?work a pxc:MainWork.
+  ?work pxp:hasInstanceBundle/bf:identifiedBy ?dfk_uri .
+  ?dfk_uri a pxc:DFK; rdf:value ?dfk .
+  FILTER NOT EXISTS {
+    ?work bf:genreForm ?genre .
+  }
 }
+
+# call with: 
+# arq --data ttl-data/bibframe_records.ttl --query testing/genreForm/works_without_genres.rq  --results=TSV > testing/genreForm/works_without_genres.tsv

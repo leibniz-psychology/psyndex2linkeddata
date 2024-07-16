@@ -1,0 +1,57 @@
+# this query will list all pxp:MainWork nodes with more than one bf:classification of pxc:ControlledMethod where one is "10000" (nonempirical) (or one of its subconcepts) and the other is "10100" (empirical) or one of its subtypes
+
+PREFIX works: <https://w3id.org/zpid/resources/works/>
+PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
+PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
+PREFIX pxp: <https://w3id.org/zpid/ontology/properties/>
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX bflc: <http://id.loc.gov/ontologies/bflc/>
+PREFIX locid: <http://id.loc.gov/vocabulary/identifiers/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?dfk ?cm1 ?cm2
+WHERE {
+    ?work a pxc:MainWork.
+    #get DFK for referencing in xml file
+    ?work pxp:hasInstanceBundle/bf:identifiedBy ?dfk_uri .
+    ?dfk_uri a pxc:DFK; rdf:value ?dfk .
+
+    # get the methods:
+    ?work bf:classification ?cm1_uri .
+    ?work bf:classification ?cm2_uri .
+# they should be different:
+    FILTER (?cm1 != ?cm2)
+    ?cm1_uri a pxc:ControlledMethodWeighted .
+    # get the uri of the sameas:
+    ?cm1_uri owl:sameAs ?cm1 .
+    ?cm2_uri a pxc:ControlledMethod .
+# the other should not be a weighted method:
+    FILTER NOT EXISTS {
+        ?cm2_uri a pxc:ControlledMethodWeighted .
+    }
+   # get the uri of the sameas:
+   ?cm2_uri owl:sameAs ?cm2 .
+# does uri of cm1 contain "methods/100"?
+    FILTER regex(str(?cm1), "methods/100")
+# does uri of cm2 contain "methods/100"?
+    FILTER regex(str(?cm2), "methods/101")
+
+    
+
+
+#   FILTER NOT EXISTS {
+#     ?work bf:genreForm ?genre .
+#   }
+}
+
+# call with: 
+# arq --data ttl-data/bibframe_records.ttl --query testing/CM/works_with_conflicting_methods.rq  --results=TSV > testing/CM/works_with_conflicting_methods.tsv
