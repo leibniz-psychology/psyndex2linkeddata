@@ -64,7 +64,7 @@ LOCID = Namespace("http://id.loc.gov/vocabulary/identifiers/")
 QUAL = Namespace("https://w3id.org/zpid/vocabs/qualifications/")
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 SCHEMA = Namespace("https://schema.org/")
-GNDO = Namespace("https://d-nb.info/standards/elementset/gnd")
+GNDO = Namespace("https://d-nb.info/standards/elementset/gnd#")
 PXC = Namespace("https://w3id.org/zpid/ontology/classes/")
 PXP = Namespace("https://w3id.org/zpid/ontology/properties/")
 GENDER = Namespace("https://w3id.org/zpid/vocabs/gender/")
@@ -471,3 +471,10 @@ psychauthors.add(
 
 # serialize the graph as turtle:
 psychauthors.serialize(destination="psychauthors.ttl", format="turtle")
+psychauthors.serialize(
+    destination="psychauthors.json",
+    format="json-ld",
+    auto_compact=False,
+    sort_keys=True,
+    index=True,
+)
