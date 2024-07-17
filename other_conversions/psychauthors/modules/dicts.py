@@ -569,7 +569,7 @@ college_lookup = [
         "synonyms": [", Klagenfurt", "Uni Klagenfurt", "Universität Klagenfurt"],
     },
     {
-        "name": "",
+        "name": "Universität Fribourg",
         "ror": "https://ror.org/022fs9h90",
         "synonyms": [", Fribourg", "Universität Fribourg"],
     },
