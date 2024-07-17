@@ -4,7 +4,6 @@
 
 import datetime
 import dateparser
-from numpy import rec
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
 from rdflib import BNode
@@ -2949,13 +2948,15 @@ def get_datac(work_uri, record):
                         and helpers.check_for_url_or_doi(subfield)[0] != ""
                     ):
                         # add a variable
-                        unknown_field_content = check_for_url_or_doi(subfield)[
+                        unknown_field_content = helpers.check_for_url_or_doi(subfield)[
                             0
                         ].strip()
                         print(
                             f"unknown type: {unknown_field_content}. Adding as a note."
                         )
-                        build_note_node(instance, check_for_url_or_doi(subfield)[0])
+                        build_note_node(
+                            instance, helpers.check_for_url_or_doi(subfield)[0]
+                        )
         # first, compare all the dois in the doi_set to each item in the url set. If the url contains the doi, remove it from the url set:
         for doi in doi_set:
             for url in url_set.copy():
@@ -3013,7 +3014,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 for record in tqdm(root.findall("Record")):
-    # for record in tqdm(root.findall("Record"))[0:200]:
+    # for record in tqdm(root.findall("Record")[0:200]):
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3301,7 +3302,7 @@ records_bf.serialize(
     index=True,
 )
 # also serialize as xml
-#records_bf.serialize("ttl-data/bibframe_records.xml", format="pretty-xml")
+# records_bf.serialize("ttl-data/bibframe_records.xml", format="pretty-xml")
 
 # print a count the triples we generated:
 print(len(records_bf), "triples")

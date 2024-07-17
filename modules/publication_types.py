@@ -509,22 +509,109 @@ def clean_up_genres(work_uri, graph):
                 )
             )
     # also, if both ScholarlyWork AND ResearchPaper exist, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
-    if (
-        work_uri,
-        BF.genreForm,
-        URIRef(GENRES["ResearchPaper"]),
-    ) in graph and (
-        work_uri,
-        BF.genreForm,
-        URIRef(GENRES["ScholarlyWork"]),
-    ) in graph:
-        graph.remove(
-            (
-                work_uri,
-                BF.genreForm,
-                URIRef(GENRES["ScholarlyWork"]),
-            )
+    # if (
+    #     work_uri,
+    #     BF.genreForm,
+    #     URIRef(GENRES["ResearchPaper"]),
+    # ) in graph and (
+    #     work_uri,
+    #     BF.genreForm,
+    #     URIRef(GENRES["ScholarlyWork"]),
+    # ) in graph:
+    #     graph.remove(
+    #         (
+    #             work_uri,
+    #             BF.genreForm,
+    #             URIRef(GENRES["ScholarlyWork"]),
+    #         )
+    #     )
+    # generally: if there is already a genre that is a subconcept of another genre, remove the more general one.
+    # check this using the skosmos api
+    # first, get all genres of the work:
+    genres = graph.objects(work_uri, BF.genreForm)
+    genre_count = len(list(genres))
+
+    if genre_count > 1:
+        print(
+            str(work_uri)
+            + " has several genres, checking for hierarchy sanity: "
+            + str(genre_count)
         )
+        # print the genres, iterating through the generator again:
+        # print(type(genres))
+        # iterate the generator genres:
+        genres = graph.objects(work_uri, BF.genreForm)
+        # then, for each genre, check if it is a subconcept of another genre:
+        for genre in list(genres):
+            print(str(genre))
+            # get the broaderTransitive of the genre from skosmos:
+            try:
+                broader = localapi.get_broader_transitive("genres", genre)
+                # print("got broaderTransitive for " + str(genre))
+            except:
+                print("could not get broaderTransitive for " + str(genre))
+                broader = None
+            if broader is not None:
+                # turn the whole thing into a list, but only the content of the "broaderTransitive" key:
+                broader_list = list(broader["broaderTransitive"].keys())
+                # print(
+                #     str(work_uri)
+                #     + " genre: "
+                #     + str(genre)
+                #     + " - broader_list: "
+                #     + str(broader_list)
+                # )
+                # go through this list of broader concepts, but first remove the one that is the same as the genre itself:
+                try:
+                    # print("removing " + str(genre) + " itself from broader list.")
+                    broader_list.remove(str(genre))
+                except:
+                    pass
+                # also remove any top-level concepts from the list (https://w3id.org/zpid/vocabs/genres/InformationalWork, https://w3id.org/zpid/vocabs/genres/InstructionalOrEducationalWork, https://w3id.org/zpid/vocabs/genres/DiscursiveWork, https://w3id.org/zpid/vocabs/genres/WorkCollection, https://w3id.org/zpid/vocabs/genres/WorkCollectionStatic, https://w3id.org/zpid/vocabs/genres/PaperCollection), if they exist:
+                top_level_genres = [
+                    str(URIRef(GENRES["InformationalWork"])),
+                    str(URIRef(GENRES["InstructionalOrEducationalWork"])),
+                    str(URIRef(GENRES["DiscursiveWork"])),
+                    str(URIRef(GENRES["WorkCollection"])),
+                    str(URIRef(GENRES["WorkCollectionStatic"])),
+                    str(URIRef(GENRES["PaperCollection"])),
+                ]
+                try:
+                    for top_level_genre in top_level_genres:
+                        if top_level_genre in broader_list:
+                            # print(
+                            #     "removing " + str(top_level_genre) + " from broader list."
+                            # )
+                            broader_list.remove(top_level_genre)
+                    # print("broader_list: " + str(broader_list))
+                except:
+                    print("could not remove top-level genres from broader list.")
+
+                # then, for each broader concept, check if the work already has any of these broader concepts as a genre:
+                for broader_genre in broader_list:
+                    # remember that "genres" is a list of uris and broader_genre is just a string, so we need to recast it:
+                    broader_genre = URIRef(broader_genre)
+                    if broader_genre in graph.objects(work_uri, BF.genreForm):
+                        print(
+                            str(work_uri)
+                            + " has a broader ("
+                            + str(broader_genre)
+                            + ") that is also in the list of the work's genres."
+                        )
+                        # if it does, remove the genre from the work:
+                        try:
+                            graph.remove(
+                                (
+                                    work_uri,
+                                    BF.genreForm,
+                                    broader_genre,
+                                )
+                            )
+                            # print("removed " + str(broader_genre) + " from work.")
+                        except:
+                            print(
+                                "could not remove " + str(broader_genre) + " from work."
+                            )
 
 
 def get_issuance_type(instance_bundle_uri, record, graph):

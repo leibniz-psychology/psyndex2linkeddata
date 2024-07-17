@@ -154,3 +154,18 @@ def search_in_skosmos(search_term, vocid):
     else:
         print("3. skosmos request failed for " + search_term)
         return None
+
+
+def get_broader_transitive(vocid, concept_uri):
+    """Get the broader transitive relations from skosmos for the CT vocabulary."""
+    query = SKOSMOS_API_URL + "/" + vocid + "/" + "broaderTransitive?uri=" + concept_uri
+    skosmos_request = session_skosmos.get(
+        query,
+        timeout=20,
+    )
+    if skosmos_request.status_code == 200:
+        skosmos_response = skosmos_request.json()
+        return skosmos_response
+    else:
+        print("4. skosmos request failed for broaderTransitive")
+        return None
