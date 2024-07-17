@@ -1,0 +1,223 @@
+{
+    "@context": {
+        "@version": 1.1,
+        "pxp": "https://w3id.org/zpid/ontology/properties/",
+        "pxc": "https://w3id.org/zpid/ontology/classes/",
+        "schema": "https://schema.org/",
+        "locid": "http://id.loc.gov/vocabulary/identifiers/",
+        "bf": "http://id.loc.gov/ontologies/bibframe/",
+        "bflc": "http://id.loc.gov/ontologies/bflc/",
+        "mads": "http://www.loc.gov/mads/rdf/v1#",
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "gndo": "https://d-nb.info/standards/elementset/gnd#",
+        "type": {
+            "@id": "@type",
+            "@container": "@set"
+        },
+        "id": {
+            "@id": "@id"
+        },
+        "lang": {
+            "@id": "@language"
+        },
+        "val": {
+            "@id": "@value"
+        },
+        "anyURI": "xsd:anyURI",
+        "Person": "schema:Person",
+        "Organization": "schema:Organization",
+        "hasCredential": "schema:hasCredential",
+        "Role": "schema:Role",
+        "OrganizationRole": "schema:OrganizationRole",
+        "RorId": "locid:ror",
+        "ORCID": "locid:orcid",
+        "description": "schema:description",
+        "name": "schema:name",
+        "NameOfThePerson": "gndo:NameOfThePerson",
+        "preferredNameEntityForThePerson": "gndo:preferredNameEntityForThePerson",
+        "alternateName": "schema:alternateName",
+        "variantNameEntityForThePerson": "gndo:variantNameEntityForThePerson",
+        "birthDate": "schema:birthDate",
+        "endDate": "schema:endDate",
+        "academicDegree": "gndo:academicDegree",
+        "gender": "schema:gender",
+        "award": {
+            "@id": "schema:award",
+            "@container": "@set"
+        },
+        "member": {
+            "@id": "schema:member",
+            "@container": "@set"
+        },
+        "worksFor": {
+            "@id": "schema:worksFor",
+            "@container": "@set"
+        },
+        "startDate": "schema:startDate",
+        "deathDate": "schema:deathDate",
+        "email": "schema:email",
+        "url": {
+            "@id": "schema:url",
+            "@container": "@set"
+        },
+        "alumniOf": {
+            "@id": "schema:alumniOf",
+            "@container": "@set"
+        },
+        "mainEntityOfPage": {
+            "@id": "schema:mainEntityOfPage",
+            "@type": "@id"
+        },
+        "sameAs": {
+            "@id": "schema:sameAs",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "value": "rdf:value",
+        "Doi": "bf:Doi",
+        "Concept": "skos:Concept",
+        "CollegeOrUniversity": "schema:CollegeOrUniversity",
+        "AdminMetadata": "bf:AdminMetadata",
+        "Agent": "bf:Agent",
+        "City": "mads:City",
+        "DescriptionAuthentication": "bf:DescriptionAuthentication",
+        "DescriptionConventions": "bf:DescriptionConventions",
+        "EncodingLevel": "bflc:EncodingLevel",
+        "GenerationProcess": "bf:GenerationProcess",
+        "Geographic": "mads:Geographic",
+        "GeographicCoverage": "bf:GeographicCoverage",
+        "HierarchicalGeographic": "mads:HierarchicalGeographic",
+        "Identifier": "bf:Identifier",
+        "Language": "bf:Language",
+        "Local": "bf:Local",
+        "MetadataLicensor": "bflc:MetadataLicensor",
+        "PsychAuthorsID": "pxc:PsychAuthorsID",
+        "Thing": "owl:Thing",
+        "adminMetadata": "bf:adminMetadata",
+        "assigner": {
+            "@id": "bf:assigner",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "authoritativeLabel": "mads:authoritativeLabel",
+        "changeDate": {
+            "@id": "bf:changeDate",
+            "@type": "xsd:dateTime"
+        },
+        "componentList": {
+            "@id": "mads:componentList",
+            "@container": "@list"
+        },
+        "creationDate": {
+            "@id": "bf:creationDate",
+            "@type": "xsd:date"
+        },
+        "classification": {
+            "@id": "bf:classification",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "code": "bf:code",
+        "coordinates": "bf:coordinates",
+        "creatorCharacteristic": {
+            "@id": "bflc:creatorCharacteristic",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "count": "bf:count",
+        "credits": "bf:credits",
+        "dataSource": {
+            "@id": "bf:dataSource",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "date": "bf:date",
+        "degree": "bf:degree",
+        "descriptionAuthentication": {
+            "@id": "bf:descriptionAuthentication",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "descriptionConventions": {
+            "@id": "bf:descriptionConventions",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "descriptionLanguage": {
+            "@id": "bf:descriptionLanguage",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "descriptionModifier": {
+            "@id": "bf:descriptionModifier",
+            "@container": "@set"
+        },
+        "electronicLocator": {
+            "@id": "bf:electronicLocator",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "encodingLevel": {
+            "@id": "bflc:encodingLevel",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "generationProcess": {
+            "@id": "bf:generationProcess",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "givenName": {
+            "@id": "schema:givenName"
+        },
+        "familyName": {
+            "@id": "schema:familyName"
+        },
+        "grantingInstitution": {
+            "@id": "bf:grantingInstitution",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "hierarchicalLevel": "bf:hierarchicalLevel",
+        "identifiedBy": {
+            "@id": "bf:identifiedBy",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "label": {
+            "@id": "rdfs:label"
+        },
+        "prefLabel": {
+            "@id": "skos:prefLabel"
+        },
+        "altLabel": {
+            "@id": "skos:altLabel"
+        },
+        "language": {
+            "@id": "bf:language",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "metadataLicensor": {
+            "@id": "bflc:metadataLicensor",
+            "@container": "@set"
+        },
+        "originDate": "bf:originDate",
+        "status": {
+            "@id": "bf:status",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "usageAndAccessPolicy": {
+            "@id": "bf:usageAndAccessPolicy",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "UsePolicy": "bf:UsePolicy",
+        "version": "bf:version"
+    }
+}
