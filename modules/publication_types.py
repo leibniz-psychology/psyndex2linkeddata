@@ -5,7 +5,7 @@
     and the RDA ones (single unit etc.)
 """
 
-from hmac import new
+
 import xml.etree.ElementTree as ET
 from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
 import modules.mappings as mappings
