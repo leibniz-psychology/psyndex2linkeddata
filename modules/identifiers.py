@@ -49,6 +49,35 @@ def build_doi_identifier_node(instance, doi, graph):
     graph.add((instance, BF.identifiedBy, identifier_node))
 
 
+def build_articleno_identifier_node(resource_node, article_number, graph):
+    # print(f"bf:identifiedBy > pxc:ArticleNumber > rdf:value: {article_number}.")
+
+    # make node for the identifier:
+    identifier_node = URIRef(resource_node + "_" + "article_number")
+    # give it class pxc:ArticleNumber:
+    graph.add((identifier_node, RDF.type, PXC.ArticleNumber))
+    # give it the doi as a literal value:
+    graph.add((identifier_node, RDF.value, Literal(article_number)))
+    # attach it to the instance with bf:identifiedBy:
+    graph.add((resource_node, BF.identifiedBy, identifier_node))
+
+
+def build_issn_identifier_node(resource_node, issn, issn_type, graph):
+    # print(f"bf:identifiedBy > bf:Issn > rdf:value: {issn}.")
+    # issn_type: either "online", "print" or None
+    # make node for the identifier:
+    identifier_node = URIRef(str(resource_node) + "_issn" + issn_type)
+    # give it class bf:Issn:
+    graph.add((identifier_node, RDF.type, BF.Issn))
+    # give it the issn as a literal value:
+    graph.add((identifier_node, RDF.value, Literal(issn)))
+    # add qualifier:
+    if issn_type is not None:
+        graph.add((identifier_node, BF.qualifier, Literal(issn_type)))
+    # attach it to the instance with bf:identifiedBy:
+    graph.add((resource_node, BF.identifiedBy, identifier_node))
+
+
 def build_urn_identifier_node(instance, urn, graph):
     # print(f"bf:identifiedBy > bf:Urn > rdf:value: {urn}.")
     # we use the urn itself as part of the urn node uri to make it a unique node,
