@@ -26,7 +26,7 @@
     "val": {
       "@id": "@value"
     },
-    "anyURL": "xsd:anyURI",
+    "anyURI": "xsd:anyURI",
     "hasAffiliation": {
       "@id": "mads:hasAffiliation",
       "@container": "@set"
@@ -83,6 +83,7 @@
     "MainWork": "pxc:MainWork",
     "Isbn": "bf:Isbn",
     "Doi": "bf:Doi",
+    "Urn": "bf:Urn",
     "ResearchDataRelationship": "pxc:ResearchDataRelationship",
     "PreregistrationRelationship": "pxc:PreregistrationRelationship",
     "blockedAbstract": "pxp:blockedAbstract",
@@ -393,6 +394,12 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "seriesStatement": "bf:seriesStatement",
+    "seriesEnumeration": "bf:seriesEnumeration",
+    "Hub": "bf:Hub",
+    "Serial": "bf:Serial",
+    "Series": "bf:Series",
+    "Uncontrolled": "bflc:Uncontrolled",
     "hierarchicalLevel": "bf:hierarchicalLevel",
     "identifiedBy": {
       "@id": "bf:identifiedBy",
