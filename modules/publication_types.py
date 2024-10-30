@@ -5,7 +5,6 @@
     and the RDA ones (single unit etc.)
 """
 
-
 import xml.etree.ElementTree as ET
 from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
 import modules.mappings as mappings
@@ -213,7 +212,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
     for method_code in methods:
         # first, look up the code in the mappings.cm_lookup data structure. If it is in there under "old_cm", add any new_cm, new_genre, ct, it to the lists.
         # later, go through the lists and add the new methods and genres to the graph.
-        new_methods = []
+        new_methods = []  # # array of methods with keys "cm" and "label"
         new_genres = []
         try:
             # print("checking for " + method_code + " in mappings")
@@ -224,17 +223,35 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                     # print("found " + method_code + " in mappings")
                     # if it is, add the new_cm, new_genre, ct, it to the lists:
                     if cm["new_cm"] is not None and cm["new_cm"] != "":
-                        new_methods.append(cm["new_cm"])
+                        # new_methods.append(cm["new_cm"])
+                        if cm["new_cm_label"] is not None and cm["new_cm_label"] != "":
+                            # make a new dict in the array, and add the new_cm value under the key "cm":
+                            # construct a dict:
+                            cm_dict = dict(code=cm["new_cm"], label=cm["new_cm_label"])
+                        else:
+                            cm_dict = dict(code=cm["new_cm"])
+                        new_methods.append(cm_dict)
                     if cm["new_genre"] is not None and cm["new_genre"] != "":
                         new_genres.append(cm["new_genre"])
         except:
             print("no new methods or genres found in mappings for " + method_code)
+        # TODO: clean up the list of methods: only keep the lowest!
+        # - if a work already has something starting with "101" (a subtype of experimental), remove "10000"
+        # - if it already has something starting with 200[1-9] (subtypes of nonempirical), remove "20000"
+        # ALSO: if it already has a 100[0-9] code (empirical and subtypes), remove any "20000" (nonempirical)
+        # for method in new_methods:
+        #     if method["code"] == "10000" and any(
+        #         m["code"].startswith("101") for m in new_methods if m != method
+        #     ):
+        #         print("removed 10000 from " + work_node)
+        #         new_methods.remove(method)
+        # elif method["code"] == "20000" and any in new_methods["code"].startswith("")
         # now go through the lists and add the new methods and genres to the graph:
         for method in new_methods:
             method_count += 1
             # method_node = URIRef(METHODS[method_code])
             # make a hashed uri from work:
-            method_node = URIRef(work_node + "#studytype" + str(method_count))
+            method_node = URIRef(work_node + "#controlledmethod" + str(method_count))
             # give it class pxc:ControlledMethod:
             graph.add(
                 (
@@ -248,9 +265,18 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 (
                     method_node,
                     OWL.sameAs,
-                    URIRef(METHODS[method]),
+                    URIRef(METHODS[method["code"]]),
                 )
             )
+            # if there is a label, add that:
+            if method["label"] is not None:
+                graph.add(
+                    (
+                        method_node,
+                        RDFS.label,
+                        Literal(method["label"]),
+                    )
+                )
 
             # if this is the first method in the list, add a class pxc:ControlledMethodWeighted to the work:
             if method_count == 1:
@@ -270,7 +296,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 )
             )
 
-        ## TODO: if both ScholarlyWork AND ResearchPaper are added due to this conversion, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
+        ## if both ScholarlyWork AND ResearchPaper are added due to this conversion, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
         # So: check if the new_genres List contains both ScholarlyWork and ResearchPaper, and if so, remove ScholarlyWork.
 
         if "ScholarlyWork" in new_genres and "ResearchPaper" in new_genres:
