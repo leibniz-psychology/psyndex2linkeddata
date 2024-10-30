@@ -21,6 +21,7 @@ import modules.local_api_lookups as localapi
 import modules.terms as terms
 import modules.identifiers as identifiers
 import modules.instance_source_ids as instance_source_ids
+import modules.instance_sources as instance_sources
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science
@@ -1340,7 +1341,31 @@ def add_publication_info(instance_uri, record):
     # make it class bf:Publication:
     records_bf.set((publication_node, RDF.type, BF.Publication))
     if publication_date is not None:
-        records_bf.add((publication_node, BFLC.simpleDate, Literal(publication_date)))
+        # add as bf:date (with xsd:date type)
+        if len(publication_date) > 4:
+            records_bf.add(
+                (
+                    publication_node,
+                    BF.date,
+                    Literal(publication_date, datatype=XSD.date),
+                )
+            )
+            # and also just the first 4 characters as simpleDate year:
+            records_bf.add(
+                (publication_node, BFLC.simpleDate, Literal(publication_date[0:4]))
+            )
+        else:
+            records_bf.add(
+                (
+                    publication_node,
+                    BF.date,
+                    Literal(publication_date, datatype=XSD.gYear),
+                )
+            )
+            # and also just the year as simpledate:
+            records_bf.add(
+                (publication_node, BFLC.simpleDate, Literal(publication_date))
+            )
 
     if pu is not None and pu.text != "":
         pufield = html.unescape(pu.text.strip())
@@ -1697,7 +1722,7 @@ def get_bf_title(resource_uri, record):
         )  # sanitize encoding and remove extraneous spaces
         # concatenate a full title from main- and subtitle,
         # separated with a : and overwrite fulltitle with that
-        fulltitle = fulltitle + ": " + subtitle
+        fulltitle = fulltitle + ". " + subtitle
         # get language of subtitle - it is in field TIUL, but sometimes that is missing...:
         #  # get language of subtitle:
         if record.find("TIUL") is not None:
@@ -2980,35 +3005,6 @@ def get_datac(work_uri, record):
         records_bf.add((work_uri, BFLC.relationship, relationship_node))
 
 
-# ## TODO: Function: Get Series info for Books (field SE)
-#
-# Books (their Instances) can pe part of a monographic series - or even part of more than one series (usually that is a subseries of a bigger series). We currently store the title of that series, along with the volume number of the current book within that series, in field SE. Numbering is usually separated with a comma (but not always, sigh.)
-# Also, there are cases where there is no numbering at all, or a strange one that is actually the issue and volume like from a journal?
-#
-# What we want is something like this - a regular case where there is a series title and a volume number that follows the title after a comma:
-#
-# ```r
-# Works:0396715_work a bf:Work;
-#     # omitted: info about the work of the book itself (contributions, abstract, topics etc.)
-# pxp:hasInstanceBundle
-#     [
-#         # omitted: info about the instance of the book itself (publisher, date, etc.)
-#         bflc:relationship [a bflc:Relationship;
-#         bf:hasSeries [
-#                 a bf:Instance;
-#                 bf:title [ a bf:Title; bf:mainTitle "Psychologie im Schulalltag"];
-#                 # we don't index the series itself - so no local identifiers and no work except to say that
-#                 # the work is of subclass series and it is uncontrolled/not indexed.
-#                 bf:instanceOf [a bf:Series, bflc:Uncontrolled];
-#             ];
-#             # volume in series belongs into the relationship, not the series instance:
-#             # based on https://github.com/lcnetdev/bibframe-ontology/issues/100
-#             bf:seriesEnumeration "Band 5";
-#         ];
-#     ] .
-# ```
-#
-
 #### # ----- The Loop! -------------- # ####
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
@@ -3141,6 +3137,54 @@ for record in tqdm(root.findall("Record")):
     # (possibly) different publication dates to this node, too.
     # So TODO: add a copy of this bf:Publication node to each instance, adding the instance's unique publication date to it.
     add_publication_info(instance_bundle_uri, record)
+
+    # fetch journal info from the record and add it to the instancebundle:
+    (
+        journal_title,
+        journal_volume,
+        journal_issue,
+        page_start,
+        page_end,
+        extent,
+        article_no,
+        issn,
+        eissn,
+    ) = instance_sources.fetch_journal_info(record)
+    instance_sources.build_journal_relationship(
+        instance_bundle_uri,
+        records_bf,
+        journal_title,
+        journal_volume,
+        journal_issue,
+        page_start,
+        page_end,
+        article_no,
+        issn,
+        eissn,
+    )
+
+    # fetch book series info from the record and add it to the instancebundle:
+    (series_title, series_volume) = instance_sources.fetch_book_series_info(record)
+    instance_sources.build_series_relationship(
+        instance_bundle_uri, records_bf, series_title, series_volume
+    )
+
+    # fetch surrounding book info for chapters from the record and add it to the instancebundle:
+    # only do this if BE is US or UR!
+    if record.find("BE").text in ["US", "UR"]:
+        (book_dfk, book_title, page_start, page_end, extent, article_number) = (
+            instance_sources.fetch_surrounding_book_info(record)
+        )
+        instance_sources.build_book_relationship(
+            instance_bundle_uri,
+            records_bf,
+            book_dfk,
+            book_title,
+            page_start,
+            page_end,
+            extent,
+            article_number,
+        )
 
     # Add a second instance to the work and instancebundle, if there is a second mediatype in the record:
     if record.find("MT2") is not None:
