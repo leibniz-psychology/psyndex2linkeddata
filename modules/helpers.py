@@ -64,7 +64,7 @@ def get_mainfield(field_fullstring):
 
 import langid
 
-langid.set_languages(["de", "en"])
+# langid.set_languages(["de", "en", "fr", "it", "pl"])
 
 
 def guess_language(string_in_language):
@@ -152,3 +152,20 @@ def check_for_url_or_doi(string):
             string_type = "unknown"
             # print("Das ist weder eine DOI noch eine URL: " + string)
     return string, string_type
+
+
+def check_issn_format(issn):
+    """Checks if the ISSN is in the correct format, returns True or False."""
+    # first, strip any spaces from the string and convert to uppercase so the X will be recognized:
+    issn = issn.strip().upper()
+    # then check for any DD-Codes using the appropriate function:
+    issn = html.unescape(mappings.replace_encodings(issn))
+    # also remove ^DDS and replace with -
+    issn = re.sub(r"\^DDS", "-", issn)
+    # check if the ISSN is in the correct format:
+    issn_pattern = re.compile(r"^\d{4}-\d{3}[\dxX]$")
+    if issn_pattern.match(issn):
+        return True, issn
+    else:
+        # we might fix some more obvious errors here, like missing hyphen (we can add it):
+        return False, issn
