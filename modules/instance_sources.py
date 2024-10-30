@@ -4,6 +4,34 @@
 # - for Chapters: Book title and other reference data about the encompassing book
 # """
 
+
+# Books (their Instances) can pe part of a monographic series - or even part of more than one series (usually that is a subseries of a bigger series). We currently store the title of that series, along with the volume number of the current book within that series, in field SE. Numbering is usually separated with a comma (but not always, sigh.)
+# Also, there are cases where there is no numbering at all, or a strange one that is actually the issue and volume like from a journal?
+#
+# What we want is something like this - a regular case where there is a series title and a volume number that follows the title after a comma:
+#
+# ```r
+# Works:0396715_work a bf:Work;
+#     # omitted: info about the work of the book itself (contributions, abstract, topics etc.)
+# pxp:hasInstanceBundle
+#     [
+#         # omitted: info about the instance of the book itself (publisher, date, etc.)
+#         bflc:relationship [a bflc:Relationship;
+#         bf:hasSeries [
+#                 a bf:Instance;
+#                 bf:title [ a bf:Title; bf:mainTitle "Psychologie im Schulalltag"];
+#                 # we don't index the series itself - so no local identifiers and no work except to say that
+#                 # the work is of subclass series and it is uncontrolled/not indexed.
+#                 bf:instanceOf [a bf:Series, bflc:Uncontrolled];
+#             ];
+#             # volume in series belongs into the relationship, not the series instance:
+#             # based on https://github.com/lcnetdev/bibframe-ontology/issues/100
+#             bf:seriesEnumeration "Band 5";
+#         ];
+#     ] .
+# ```
+#
+
 from ast import expr
 import re
 import xml.etree.ElementTree as ET
@@ -16,6 +44,7 @@ import modules.local_api_lookups as localapi
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 BFLC = Namespace("http://id.loc.gov/ontologies/bflc/")
 WORKS = Namespace("https://w3id.org/zpid/resources/works/")
+INSTANCEBUNDLES = Namespace("https://w3id.org/zpid/resources/instancebundles/")
 CONTENTTYPES = Namespace("https://w3id.org/zpid/vocabs/contenttypes/")
 GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
 CM = Namespace("https://w3id.org/zpid/vocabs/carriermedia/")
@@ -36,6 +65,7 @@ graph.bind("bflc", BFLC)
 graph.bind("pxc", PXC)
 graph.bind("pxp", PXP)
 graph.bind("works", WORKS)
+graph.bind("instancebundles", INSTANCEBUNDLES)
 graph.bind("contenttypes", CONTENTTYPES)
 graph.bind("genres", GENRES)
 graph.bind("pmt", PMT)
@@ -189,8 +219,8 @@ def build_journal_relationship(
         # the journal itself, including title and issns:
         journal_node = URIRef(relationship_node + "_journal")
         graph.add((relationship_node, BF.relatedTo, journal_node))
-        graph.set((journal_node, RDF.type, BF.Serial))
-        graph.set((journal_node, RDF.type, BF.Hub))
+        graph.add((journal_node, RDF.type, BF.Serial))
+        graph.add((journal_node, RDF.type, BF.Hub))
         # graph.set((journal_node, RDF.type, BF.Uncontrolled))
         title_node = URIRef(journal_node + "_title")
         graph.add((journal_node, BF.title, title_node))
@@ -254,29 +284,130 @@ def fetch_book_series_info(record):
     # get SE and split into series_title and series_volume
     # examples:
     #
-    pass
+    try:
+        series_title_volume = record.find("SE").text
+        if series_title_volume is not None and series_title_volume != "":
+            try:
+                series_title, series_volume = split_series_title_volume(
+                    series_title_volume
+                )
+            except:
+                series_title = None
+                series_volume = None
+    except:
+        series_title_volume = None
+        series_title = None
+        series_volume = None
+    return (series_title, series_volume)
 
 
-def build_series_relationship(node, graph, series_title, series_volume):
-    pass
+def build_series_relationship(resource_node, graph, series_title, series_volume):
+    if series_title is not None:
+        series_statement = series_title
+        graph.add((resource_node, BF.seriesStatement, Literal(series_statement)))
+        relationship_node = URIRef(resource_node + "#seriesrel")
+        graph.add((resource_node, BFLC.relationship, relationship_node))
+        graph.set((relationship_node, RDF.type, BFLC.Relationship))
+        # the series itself:
+        series_node = URIRef(relationship_node + "_series")
+        graph.add((relationship_node, BF.relatedTo, series_node))
+        graph.add((series_node, RDF.type, BF.Series))
+        graph.add((series_node, RDF.type, BF.Hub))
+        # graph.add((series_node, RDF.type, BF.Uncontrolled))
+        title_node = URIRef(series_node + "_title")
+        graph.add((series_node, BF.title, title_node))
+        graph.set((title_node, RDF.type, BF.Title))
+        graph.set((title_node, BF.mainTitle, Literal(series_title)))
+        if series_volume is not None:
+            graph.add((relationship_node, BF.seriesEnumeration, Literal(series_volume)))
 
 
 def fetch_surrounding_book_info(record):
     # PAGE, split into page_start, page_end using split_pages() function
+
+    try:
+        page_string = record.find("PAGE").text
+        try:
+            page_start, page_end, extent, article_number = split_pages(page_string)
+        except:
+            page_start = None
+            page_end = None
+            extent = None
+            article_number = None
+    except:
+        page_string = None
     # SSDFK, if it exists (then link to book without writing all the editors etc in here)
+    try:
+        book_dfk = record.find("SSDFK").text
+    except:
+        book_dfk = None
     # if no SSDFK:
+    # if book_dfk is None: nope, we'll always export the title, even if we link to a real instancebundle via dfk (because it might not be in our current dataset package)
+    try:
+        book_title = record.find("BIP").text
+    except:
+        book_title = None
     # - BIP as book_title
     # - SSSE (series title and volume)
     # - SSNE (edition)
     # - EDRPs (no affil in this field), EDRKs -> contributors with role editor, either Person or Org
     # - SSPU (wie PU)
     # - MT, MT2
-    pass
+    return (
+        book_dfk,
+        book_title,
+        page_start,
+        page_end,
+        extent,
+        article_number,
+    )
 
 
-def build_book_relationship(node, graph, book_dfk, book_title, pisbn, eisbn):
-    # if book_dfk, add a relationship (owl:sameAs?) to instancebundles:book_dfk!
-    pass
+def build_book_relationship(
+    resource_node,
+    graph,
+    book_dfk,
+    book_title,
+    page_start,
+    page_end,
+    extent,
+    article_number,
+):
+
+    relationship_node = URIRef(resource_node + "#bookrel")
+    graph.add((resource_node, BFLC.relationship, relationship_node))
+    graph.set((relationship_node, RDF.type, BFLC.Relationship))
+    # the book itself:
+    book_node = URIRef(relationship_node + "_book")
+    graph.add((relationship_node, BF.relatedTo, book_node))
+    graph.add((book_node, RDF.type, PXC.InstanceBundle))
+    if book_dfk is not None:
+        # add the book_dfk_node as an owl:sameAs to the book_node
+        book_dfk_node = URIRef(INSTANCEBUNDLES[book_dfk])
+        graph.add((book_node, OWL.sameAs, book_dfk_node))
+        # add class pxc:InstanceBundle to the book_dfk_node
+        graph.add((book_dfk_node, RDF.type, PXC.InstanceBundle))
+    else:
+        graph.add((book_node, RDF.type, BFLC.Uncontrolled))
+
+    # if no book_dfk, add the book title to the instancebundle
+    if book_title is not None:
+        title_node = URIRef(book_node + "_title")
+        # give bf:Title class to the title node
+        graph.add((title_node, RDF.type, BF.Title))
+        graph.add((title_node, BF.mainTitle, Literal(book_title)))
+        graph.add((book_node, BF.title, title_node))
+    # add page_start, page_end, extent, article_number
+    if page_start is not None:
+        graph.add((relationship_node, PXP.pageStart, Literal(page_start)))
+    if page_end is not None:
+        graph.add((relationship_node, PXP.pageEnd, Literal(page_end)))
+    if extent is not None:
+        graph.add((resource_node, PXP.extent, Literal(extent)))
+    if article_number is not None:
+        identifiers.build_articleno_identifier_node(
+            relationship_node, article_number, graph
+        )
 
 
 # print(split_pages("i-iii"))
