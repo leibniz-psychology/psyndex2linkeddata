@@ -46,6 +46,8 @@ broken_issn_replacements = {
     "1065-305": "1065-3058",
 }
 
+DOAJ_API_URL = "https://doaj.org/api/"
+
 OPENALEX_API_URL = "https://api.openalex.org/"
 
 urls_expire_after = {
@@ -56,6 +58,13 @@ urls_expire_after = {
 
 session_openalex = requests_cache.CachedSession(
     ".cache/requests_openalex",
+    allowable_codes=[200, 404],
+    expire_after=timedelta(days=30),
+    urls_expire_after=urls_expire_after,
+)
+
+session_doaj = requests_cache.CachedSession(
+    ".cache/requests_doaj",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
@@ -713,24 +722,22 @@ class Journal:
         # if the JTRVK field exists, set the review policy to "peer review" (it is always "Reviewed") in the field
         try:
             if record.find("JTRVK").text == "Reviewed":
-                self.review_policy = self.reviewstatus_prefix + "peerreviewed"
+                self.review_policy = "peerreviewed"
         except AttributeError:
             # if the JTRVK field does not exist, check the lookup table for the review status
             try:
-                self.review_policy = (
-                    self.reviewstatus_prefix + review_lookup[self.journalcode]
-                )
+                self.review_policy = review_lookup[self.journalcode]
             except KeyError:
                 # if the JTRVK field does not exist and the journal code is not in the lookup table, set the review policy to "unknown"
-                self.review_policy = self.reviewstatus_prefix + "unknown"
+                self.review_policy = "unknown"
                 print("No review policy found for journal " + str(self.journalcode))
 
     def build_review_policy_node(self, record, journalhub, journals_graph):
         # make a new node for the review policy of the journal, its uri should be the journalhub uri + "#reviewpolicy"
         # first fetch the review policy from the record
-        self.fetch_review_policy(record)
+        # self.fetch_review_policy(record)
         if self.review_policy is not None:
-            review_policy_node = URIRef(self.review_policy)
+            review_policy_node = URIRef(self.reviewstatus_prefix + self.review_policy)
             # add a class of PXC:ReviewPolicy
             journals_graph.add((review_policy_node, RDF.type, PXC.ReviewPolicy))
             # add the review policy to the graph
@@ -774,7 +781,7 @@ class Journal:
     def build_access_status_node(self, record, journalhub, journals_graph):
         # make a new node for the access status of the journal, its uri should be the https://w3id.org/zpid/vocabs/access/ + self.access_status
         # first fetch the access status from the record
-        self.fetch_access_status(record)
+        # self.fetch_access_status(record)
         if self.access_status is not None:
             access_status_node = URIRef(
                 "https://w3id.org/zpid/vocabs/access/" + self.access_status
@@ -955,7 +962,7 @@ class Journal:
                     (
                         contribution_node,
                         BF.role,
-                        URIRef("https://w3id.org/zpid/vocabs/roles/RED"),
+                        URIRef("https://w3id.org/zpid/vocabs/roles/RE"),
                     )
                 )
                 agent_node = URIRef(str(contribution_node) + "_agent")
@@ -1306,8 +1313,107 @@ class Journal:
                 # add the version to the graph
                 journals_graph.add((journalhub, BF.hasExpression, version_node))
 
-    def fetch_open_access_status(self, record):
-        # we'll use the API of DOAJ to check if the journal is in the DOAJ
+    def fetch_doaj_data(self):
+        # use issn to get a record from doaj:
+        # find the right issn to use: if both exist, use print, otherwise use what is available:
+        lookup_issn = None
+        oa_status = "unknown"
+        review_policy = "unknown"
+        if self.print_issn is not None:
+            lookup_issn = self.print_issn
+        elif self.online_issn is not None:
+            lookup_issn = self.online_issn
+
+        if lookup_issn is not None:
+            response = session_doaj.get(
+                DOAJ_API_URL + "/search/journals/issn:" + lookup_issn
+            )
+            if response.status_code == 200:
+                try:
+                    # get first hit in results[0].bibjson as doaj_journalrecord
+                    doaj_journalrecord = response.json()["results"][0]["bibjson"]
+                    # fetch open access status
+                    oa_status = (
+                        "gold"
+                        if doaj_journalrecord.get("apc", {}).get("has_apc", False)
+                        else "diamond"
+                    )
+                    print(f"DOAJ says the oa status of {lookup_issn} is: {oa_status}")
+                    # set oa status:
+                    if self.access_status == "unknown":
+                        self.access_status = oa_status
+                        print(
+                            f"DOAJ added a new access policy (previously unknown) for {lookup_issn}"
+                        )
+                    # fetch review policy
+                    review_processes = doaj_journalrecord.get("editorial", {}).get(
+                        "review_process", []
+                    )
+                    review_policy = "unknown"
+                    # unknown < unreviewed < reviewed < editorreview (editorial review) < peerreviewed (peer reviewed) < nonblindpeer (open peer review) < blindpeer (anonymous, single and double)
+                    for review_process in review_processes:
+                        review_process = review_process.lower()
+                        if "editorial review" in review_process:
+                            review_policy = "editorreviewed"
+                            break
+                        elif "peer review" == review_process:
+                            review_policy = "peerreviewed"
+                            break
+                        elif "open peer review" in review_process:
+                            review_policy = "nonblindpeer"
+                            break
+                        elif "anonymous peer review" in review_process:
+                            review_policy = "blindpeer"
+                    print(
+                        f"Review Policy of {lookup_issn} according to DOAJ: {review_policy}"
+                    )
+                    # set the policy, if not already set
+                    if (
+                        self.review_policy == "unknown"
+                        or self.review_policy == "reviewed"
+                        or self.review_policy == "peerreviewed"
+                    ):
+                        self.review_policy = review_policy
+                        print(
+                            f"added a review policy where we had none previously in {lookup_issn}"
+                        )
+                    # we can also get issuing body and publisher data from DOAJ, but we'll do that later...:
+                    # fetch institution/issuing body if not already set
+                    # if not self.issuing_body_list:
+                    #
+                    #     self.issuing_body_list = [
+                    #         doaj_journalrecord.get("institution", {}).get("name", "")
+                    #     ]
+                    # try:
+                    #     issuing_body = doaj_journalrecord.get("institution", {}).get(
+                    #         "name", ""
+                    #     )
+                    # except:
+                    #     issuing_body = None
+                    # print(f"issuing body: {issuing_body}")
+                    # fetch publisher if not already set
+                    # if not self.publisher_name:
+                    #     self.publisher_name = doaj_journalrecord.get("publisher", "")
+                except (KeyError, IndexError):
+                    print(f"DOAJ record not found for ISSN {lookup_issn}")
+
+        # doaj gives us:
+        # - institution/issuing body (fill if self.__isb None)
+        # - oa status: if apc.hasAPC is false: diamond, else gold
+        # - review policy: editorial.review_process:
+        #   - Double anonymous peer review -> blindpeer
+        #   - "Anonymous peer review" -> blindpeer
+        #   - contains "Editorial review" -> editorreviewed
+        #   - Post-publication peer review
+        #   - Open peer review ?
+        #   - "Peer Review" -> peerreviewed
+        #   - Open Peer Commentary
+        # - Publisher:
+
+    def fetch_issn_from_openalex(self):
+        # using title
+        # https://docs.openalex.org/api-entities/sources/search-sources -> https://api.openalex.org/sources?search=jacs (where "jacs" is an abbreviated title)
+        # https://docs.openalex.org/api-entities/sources/get-a-single-source
         pass
 
 
@@ -1316,7 +1422,7 @@ journal = Journal()
 
 # Gesamtzahl Records: 4.963 (-2, die hier unten ausgeschlossen werden) = 4.961
 for record in root.findall("Record"):
-    # for record in root.findall("Record")[:1000]:
+    # for record in root.findall("Record")[:100]:
     # leave out record with JTC 4884, because it has no title
     if record.find("JTC").text == "4884" or record.find("JTC").text == "5033":
         continue
@@ -1337,6 +1443,11 @@ for record in root.findall("Record"):
     screeningstatus = journal.build_screeningstatus_node(
         record, journalhub, journals_graph
     )
+    journal.fetch_review_policy(record)
+    journal.fetch_access_status(record)
+    # replace unknown values for access status and review policy with data from DOAJ:
+    doaj = journal.fetch_doaj_data()
+
     # add review policy/status to the graph:
     review_policy = journal.build_review_policy_node(record, journalhub, journals_graph)
 
@@ -1352,9 +1463,9 @@ for record in root.findall("Record"):
     issuing_bodies = journal.build_issuing_body_node(record, journalhub, journals_graph)
 
     # add all redaktion persons from RED field:
-    redaktion_persons = journal.build_redaktion_person_node(
-        record, journalhub, journals_graph
-    )
+    # redaktion_persons = journal.build_redaktion_person_node(
+    #     record, journalhub, journals_graph
+    # )
 
     # add bibliographic note to the graph:
     bibliographic_note = journal.build_bibliographic_note_node(
