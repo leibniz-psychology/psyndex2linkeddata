@@ -75,6 +75,11 @@
       "@type": "@id",
       "@container": "@set"
     },
+    "inVolume": "pxp:inVolume",
+    "inIssue": "pxp:inIssue",
+    "pageStart": "pxp:pageStart",
+    "pageEnd": "pxp:pageEnd",
+    "ArticleNumber": "pxc:ArticleNumber",
     "value": "rdf:value",
     "instanceOf": "bf:instanceOf",
     "tableOfContents": "bf:tableOfContents",

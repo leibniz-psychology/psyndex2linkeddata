@@ -1,4 +1,30 @@
 {
     "@type": "https://w3id.org/zpid/ontology/classes/MainWork",
-    "@embed": "@always"
+    "@embed": "@once",
+    "http://id.loc.gov/ontologies/bibframe/hasInstance": {
+        "@type": "http://id.loc.gov/ontologies/bibframe/Instance",
+        "@embed": "@never"
+    },
+    "https://w3id.org/zpid/ontology/properties/hasInstanceBundle": {
+        "https://w3id.org/zpid/ontology/properties/issuanceType": {
+            "@type": "https://w3id.org/zpid/ontology/classes/IssuanceType",
+            "@embed": "@always"
+        },
+        "http://id.loc.gov/ontologies/bflc/relationship": {
+            "@type": "http://id.loc.gov/ontologies/bflc/Relationship",
+            "@embed": "@always",
+            "http://id.loc.gov/ontologies/bibframe/relatedTo": {
+                "@type": [
+                    "https://w3id.org/zpid/ontology/classes/InstanceBundle",
+                    "http://id.loc.gov/ontologies/bibframe/Series",
+                    "http://id.loc.gov/ontologies/bibframe/Serial"
+                ],
+                "@embed": "@always",
+                "http://www.w3.org/2002/07/owl#sameAs": {
+                    "@type": "https://w3id.org/zpid/ontology/classes/InstanceBundle",
+                    "@embed": "@never"
+                }
+            }
+        }
+    }
 }
