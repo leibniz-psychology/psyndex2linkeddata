@@ -28,7 +28,19 @@
         "id": "f972ad48-7c9f-11ee-b962-0242ac12000" //the uuid of the issuing body in PSYNDEX (optional)
     },
     // peer review status
+    "reviewPolicy": {
+        "type": "ReviewPolicy",
+        "id": "https://w3id.org/zpid/vocabs/reviewstatus/peerreviewed", 
+        "label": "Peer Review", 
+        "source": "https://w3id.org/zpid/vocabs/reviewstatus"
+    },
     // open access status
+    "usageAndAccessPolicy": {
+        "type": "AccessPolicy",
+        "id": "https://w3id.org/zpid/vocabs/access/open", 
+        "label": "open access", 
+        "source": "https://w3id.org/zpid/vocabs/access" 
+    },
     "bibliographicNote": "Die Onlineausgabe erscheint durchgehend und wird ständig um neue Artikel erweitert, sobald diese den Peer-Review-Prozess duchlaufen haben (bis zum Ende des jeweiligen Jahres). Die Druckausgabe ist in Form von Jahresbänden als Buch mit ISBN im Waxmann-Verlag erhältlich (von den Jahresbänden gibt es bei Waxmann auch noch Ebooks).", // optional "Anmerkungen"/"Notes"
     "adminMetadata":{
         "catalogerOrCatalogerGroupId": "", // uuid of cataloger or cataloger group, mandatory

@@ -1,0 +1,130 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c> a bf:Hub ;
+    bflc:serialPubType <http://id.loc.gov/vocabulary/mserialpubtype/journal> ;
+    bflc:seriesTreatment <https://w3id.org/zpid/vocabs/seriesscreening/X> ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#adminmetadata> ;
+    bf:contribution <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_1>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_2>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ISB_1>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_1>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_2> ;
+    bf:hasExpression <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#issnL>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#uuid> ;
+    bf:note <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#note> ;
+    bf:title <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#title>,
+        <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#variant_title> ;
+    bf:usageAndAccessPolicy <https://w3id.org/zpid/vocabs/access/unknown> ;
+    pxp:reviewPolicy <https://w3id.org/zpid/vocabs/reviewstatus/peerreviewed> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#uuid> a bf:Local ;
+    rdf:value "9b2a9ef6-245f-484d-b153-f769adba038c" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#adminmetadata> a bf:AdminMetadata ;
+    bflc:catalogerId "Katja Trillitzsch" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#issnL> a bf:IssnL ;
+    rdf:value "1421-0185" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#note> a bf:Note,
+        <http://id.loc.gov/vocabulary/mnotetype/internal> ;
+    rdfs:label """Bis Band 45 erschienen unter dem Titel: Psychologie. Schweizerische Zeitschrift für Psychologie und ihre Anwendungen; bis Band 52 unter dem Titel: Schweizerische Zeitschrift für Psychologie. Bis 2015, Band 74, Heft 4 im Verlag Hans Huber erchienen. Ab 2016, Band 75, Heft 1 erscheint die Zeitschrift beim Hogrefe Verlag. Ab 2021 (80) erscheint die Zeitschrift unter dem Titel European Journal of Psychology Open
+- Preis (JTPR): EUR 97 p.a./EUR 40 Einzelheft
+- Qualitätsqualifikation (JTQU): 1
+- Erscheinungsweise (JTEW): 4 Hefte p.a.
+- Begutachtungsnotiz (JTRV): o.; 
+- (JTAT) Erfassungsstatus vor dem Einstellen der Erfassung: A""" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#title> a bf:Title ;
+    rdfs:label "Swiss Journal of Psychology" ;
+    bf:mainTitle "Swiss Journal of Psychology"@en .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#variant_title> a bf:VariantTitle ;
+    rdfs:label "Schweizerische Zeitschrift für Psychologie. Revue Suisse de Psychologie" ;
+    bf:mainTitle "Schweizerische Zeitschrift für Psychologie. Revue Suisse de Psychologie"@de .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online> a bf:Serial,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_instance> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_issn> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_instance> a bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/cr> ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/c> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_instance_publisher> ;
+    bf:publicationStatement "Göttingen: Hogrefe" ;
+    pxp:mediaCarrier <https://w3id.org/zpid/vocabs/mediacarriers/Online> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_instance_publisher> a bf:Publication ;
+    bflc:simpleAgent "Hogrefe" ;
+    bflc:simplePlace "Göttingen" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_online_issn> a bf:Issn ;
+    rdf:value "1662-0879" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print> a bf:Serial,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_instance> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_issn> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_instance> a bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/nc> ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/n> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_instance_publisher> ;
+    bf:publicationStatement "Göttingen: Hogrefe" ;
+    pxp:mediaCarrier <https://w3id.org/zpid/vocabs/mediacarriers/Print> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_instance_publisher> a bf:Publication ;
+    bflc:simpleAgent "Hogrefe" ;
+    bflc:simplePlace "Göttingen" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#version_print_issn> a bf:Issn ;
+    rdf:value "1421-0185" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_1> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_1_agent> ;
+    bf:role <https://w3id.org/zpid/vocabs/roles/ED> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_1_agent> rdfs:label "Rothen, Nicolas" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_2> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_2_agent> ;
+    bf:role <https://w3id.org/zpid/vocabs/roles/ED> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ED_2_agent> rdfs:label "Zimmermann, Grégoire" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ISB_1> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ISB_1_agent> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/isb> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#ISB_1_agent> rdfs:label "Swiss Academy of Humanities and Social Sciences" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_1> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_1_agent> ;
+    bf:role <https://w3id.org/zpid/vocabs/roles/RED> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_1_agent> rdfs:label "Rothen, Nicolas" .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_2> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_2_agent> ;
+    bf:role <https://w3id.org/zpid/vocabs/roles/RED> .
+
+<https://w3id.org/zpid/resources/seriesclusters/9b2a9ef6-245f-484d-b153-f769adba038c#RED_2_agent> rdfs:label "Schüpbach, Stefan" .
+
+
+<https://w3id.org/zpid/vocabs/seriesscreening/X> a bflc:SeriesAnalysis .
+
+<https://w3id.org/zpid/vocabs/reviewstatus/peerreviewed> a pxc:ReviewPolicy .
+
+<http://id.loc.gov/vocabulary/mserialpubtype/journal> a bflc:SerialPubType ;
+    rdfs:label "Zeitschrift"@de,
+        "Journal"@en .
+
+<https://w3id.org/zpid/vocabs/access/unknown> a bf:AccessPolicy .
