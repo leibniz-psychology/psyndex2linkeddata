@@ -1,0 +1,27 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?uuid ?title ?status WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+    # get the uuid:
+    ?hub bf:identifiedBy ?identifier. 
+    ?identifier rdf:type bf:Local .
+    ?identifier rdf:value ?uuid .
+    # get status for prioritization:
+    ?hub bflc:seriesTreatment ?status
+   FILTER NOT EXISTS { ?hub bf:hasExpression/bf:hasInstance/bf:publicationStatement ?publisher }
+} ORDER BY ?status
+
+# run query using arq:
+# arq --data=journals.ttl --query=testing/sparql/no_publisher.rq --results=tsv > testing/sparql/no_publisher.tsv
+
+# the results of this query can help us close gaps in our data. We should check all of these journals
+# and add publishers if we can find them!
+
+# another thing we should do is find a list of journals where both versions have different
+# publishers (which is currently not reflected in our data). Maybe with an API?

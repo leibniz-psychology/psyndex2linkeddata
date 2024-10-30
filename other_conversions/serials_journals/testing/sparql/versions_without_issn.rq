@@ -1,0 +1,23 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?title ?issn WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+  ?hub bf:hasExpression ?version .
+
+# now filter out those that have an ISSN:
+    FILTER NOT EXISTS { ?version bf:identifiedBy ?identifier . ?identifier a bf:Issn }
+
+    # ?version bf:identifiedBy ?identifier .
+    # ?identifier a bf:Issn .
+    # ?identifier rdf:value ?issn .
+
+}
+
+# run:
+# arq --data=journals.ttl --query=testing/sparql/versions_without_issn.rq --results=tsv > testing/sparql/versions_without_issn.tsv

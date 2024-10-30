@@ -1,0 +1,30 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?uuid ?title ?issnL ?status WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+  ?hub bf:identifiedBy ?identifier .
+    ?identifier rdf:type bf:IssnL .
+    ?identifier rdf:value ?issnL .
+      # get status for prioritization:
+    ?hub bflc:seriesTreatment ?status .
+    # get uuid
+    ?hub bf:identifiedBy ?identifier_uuid. 
+    ?identifier_uuid rdf:type bf:Local .
+    ?identifier_uuid rdf:value ?uuid .
+# all those titles of hubs where the ?issnL is the same as that of another hub
+    FILTER EXISTS { ?hub2 a bf:Hub; bf:title/rdfs:label ?title2 .
+        ?hub2 bf:identifiedBy ?identifier2 .
+        ?identifier2 rdf:type bf:IssnL .
+        ?identifier2 rdf:value ?issnL .
+        FILTER (?hub != ?hub2)
+    }
+} ORDER BY ?issnL ?status ?title
+
+# run:
+# arq --data=journals.ttl --query=testing/sparql/duplicate_lissn.rq --results=tsv > testing/sparql/duplicate_lissn.tsv

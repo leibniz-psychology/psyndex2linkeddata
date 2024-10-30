@@ -1,0 +1,22 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?uuid ?title ?status WHERE {
+    ?hub a bf:Hub; bf:title/bf:mainTitle ?title .
+    # get the uuid:
+    ?hub bf:identifiedBy ?identifier. 
+    ?identifier rdf:type bf:Local .
+    ?identifier rdf:value ?uuid .
+    # get status for prioritization:
+    ?hub bflc:seriesTreatment ?status
+    FILTER (CONTAINS(?title, "/") || (CONTAINS(?title, " - ") || CONTAINS(?title, "(") || CONTAINS(?title, ". ")))
+
+} ORDER BY ?status
+
+# run
+# arq --data=journals.ttl --query=testing/sparql/splittable_titles.rq --results=csv > testing/sparql/splittable_titles.csv

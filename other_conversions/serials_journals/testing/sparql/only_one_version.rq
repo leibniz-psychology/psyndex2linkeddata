@@ -1,0 +1,26 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?title WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+  ?hub bf:hasExpression ?version .
+# i want all those where only one version exists (bf:hasExpression ?version)
+   FILTER NOT EXISTS { ?hub bf:hasExpression ?version2 . FILTER (?version != ?version2) }
+}
+
+# the result should be the inverse of records with an MT2 field (those are the ones that have two versions) - which is 2578 out of 4963 = 2385 that have only one version in the base records.
+# looking at the query output, it is 2.793 with only one version, wich is 215 more! How can this be? Probably because one of the versions had no ISSN. I made the versions based on two different issns existing, not making a version when there was no issn. We have apparently 215 records where two versions exist, but we have an issn for only one of them.
+# ne output after making some changes: only 2204 have only one versions, while in the raw data, it is 2578. So now we have more in the new data than before. Which is (probably) a good thing. It means we found (over 300) more second versions than MT2 fields were filled, due to having two different issns available.
+
+# In general, the results of this query can be helpful for making corrections:
+# I've found that sometimes we have an ISSN (so, print), with no EISSN, and the only version given in MT is Online. In that case, checking shows that the given ISSN is actually for the print version, and not the Online version that was given in MT!
+# I correct for this already by always making a Print version if there is only an ISSN. So at least in this case, the version media type is correct. However, there does exist an online version, but we don't really have it in our data!
+# should we somehow check some API to verify and add an online version where none exists, but should?
+
+# run query using arq:
+# arq --data=journals.ttl --query=testing/sparql/only_one_version.rq > testing/sparql/only_one_version.txt

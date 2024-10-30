@@ -1,0 +1,15 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?title WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+   FILTER NOT EXISTS { ?hub bf:hasExpression ?version }
+}
+
+# run query using arq:
+# arq --data=journals.ttl --query=testing/sparql/no_versions.rq > testing/sparql/no_versions.txt

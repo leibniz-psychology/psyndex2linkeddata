@@ -1,0 +1,25 @@
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# count the number of hubs per unique publisher:
+SELECT distinct ?publisher (COUNT(?hub) as ?count)
+WHERE {
+  ?hub a bf:Hub.
+    # bf:title/rdfs:label ?title .
+    # get the uuid:
+    #?hub bf:identifiedBy ?identifier. 
+    #?identifier rdf:type bf:Local .
+    #?identifier rdf:value ?uuid .
+    # get status for prioritization:
+    # ?hub bflc:seriesTreatment ?status
+    ?hub bf:hasExpression/bf:hasInstance/bf:publicationStatement ?publisher 
+} GROUP BY ?publisher
+ORDER BY ?count ?publisher
+
+# run query using arq:
+# arq --data=journals.ttl --query=testing/sparql/unique_publishers.rq --results=tsv > testing/sparql/unique_publishers.tsv

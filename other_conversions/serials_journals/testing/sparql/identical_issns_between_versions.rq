@@ -1,0 +1,27 @@
+# are there any journals that have the same ISSN in both versions?
+prefix bd: <http://www.bigdata.com/rdf#>
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?uuid ?title ?issn ?status WHERE {
+  ?hub a bf:Hub; bf:title/rdfs:label ?title .
+  ?hub bf:hasExpression ?version .
+    ?version bf:identifiedBy ?identifier .
+    ?identifier a bf:Issn .
+    ?identifier rdf:value ?issn .
+      # get status for prioritization:
+    ?hub bflc:seriesTreatment ?status
+        # get the uuid:
+    ?hub bf:identifiedBy ?identifier. 
+    ?identifier rdf:type bf:Local .
+    ?identifier rdf:value ?uuid .
+# i want all those where the hub has another version with the same ISSN
+    FILTER EXISTS { ?hub bf:hasExpression ?version2 . ?version2 bf:identifiedBy ?identifier2 . ?identifier2 rdf:value ?issn . FILTER (?version != ?version2) }
+} ORDER BY ?issn
+
+# run:
+# arq --data=journals.ttl --query=testing/sparql/identical_issns_between_versions.rq --results=tsv > testing/sparql/identical_issns_between_versions.tsv
