@@ -1,4 +1,3 @@
-prefix bd: <http://www.bigdata.com/rdf#>
 prefix bf: <http://id.loc.gov/ontologies/bibframe/>
 prefix bflc: <http://id.loc.gov/ontologies/bflc/>
 prefix pxc: <https://w3id.org/zpid/ontology/classes/>

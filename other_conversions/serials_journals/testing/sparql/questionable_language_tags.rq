@@ -1,0 +1,22 @@
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# we have a language gesser that guesses the title language, but it is not always correct.
+# here are some that are neither english nor german and thus may be quite wrong.
+
+SELECT ?uuid ?title WHERE {
+  ?hub a bf:Hub; bf:title/bf:mainTitle ?title .
+# add the uuid:
+    ?hub bf:identifiedBy ?identifier .
+    ?identifier rdf:type bf:Local .
+    ?identifier rdf:value ?uuid .
+
+    FILTER (lang(?title) != "en" && lang(?title) != "de")
+}
+
+# run query using arq:
+# arq --data=journals.ttl --query=testing/sparql/questionable_language_tags.rq --results=tsv> testing/sparql/questionable_language_tags.tsv
