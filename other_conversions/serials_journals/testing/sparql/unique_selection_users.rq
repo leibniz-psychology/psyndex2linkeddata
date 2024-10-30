@@ -1,0 +1,16 @@
+prefix bf: <http://id.loc.gov/ontologies/bibframe/>
+prefix bflc: <http://id.loc.gov/ontologies/bflc/>
+prefix pxc: <https://w3id.org/zpid/ontology/classes/>
+prefix pxp: <https://w3id.org/zpid/ontology/properties/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# list all the unique strings in bflc:catalogerId
+
+SELECT distinct ?personname WHERE 
+{
+    ?thing bflc:catalogerId ?personname .
+}
+
+# run:
+# arq --data=journals.ttl --query=testing/sparql/unique_selection_users.rq --results=tsv > testing/sparql/unique_unique_selection_users.tsv
