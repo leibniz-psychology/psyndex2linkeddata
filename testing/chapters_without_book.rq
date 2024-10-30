@@ -1,0 +1,37 @@
+# this query will find any works whose instancebundle's issuanceType is Chapter, but who have no relationship to an encompassing book
+
+PREFIX works: <https://w3id.org/zpid/resources/works/>
+PREFIX issuances: <https://w3id.org/zpid/vocabs/issuances/>
+PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
+PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
+PREFIX pxp: <https://w3id.org/zpid/ontology/properties/>
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX bflc: <http://id.loc.gov/ontologies/bflc/>
+PREFIX locid: <http://id.loc.gov/vocabulary/identifiers/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?work ?dfk
+WHERE {
+    ?work a pxc:MainWork.
+    ?work pxp:hasInstanceBundle ?instancebundle .
+    ?instancebundle pxp:issuanceType ?issuanceType .
+    FILTER (?issuanceType = issuances:Chapter)
+    #get DFK for referencing
+    ?work pxp:hasInstanceBundle/bf:identifiedBy ?dfk_uri .
+    ?dfk_uri a pxc:DFK; rdf:value ?dfk .
+    FILTER NOT EXISTS {
+        ?work pxp:hasInstanceBundle/bflc:relationship ?book .
+    }
+}
+
+# call with:
+# arq --data ttl-data/bibframe_records.ttl --query testing/chapters_without_book.rq  --results=TSV > testing/chapters_without_book.tsv

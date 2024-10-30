@@ -28,22 +28,23 @@ WHERE {
     # get the methods:
     ?work bf:classification ?cm1_uri .
     ?work bf:classification ?cm2_uri .
-# they should be different:
-    FILTER (?cm1 != ?cm2)
-    ?cm1_uri a pxc:ControlledMethodWeighted .
-    # get the uri of the sameas:
+
+    # ?cm1_uri a pxc:ControlledMethodWeighted .
+    # # get the uri of the sameas:
     ?cm1_uri owl:sameAs ?cm1 .
-    ?cm2_uri a pxc:ControlledMethod .
+    # ?cm2_uri a pxc:ControlledMethod .
 # the other should not be a weighted method:
-    FILTER NOT EXISTS {
-        ?cm2_uri a pxc:ControlledMethodWeighted .
-    }
+    # FILTER NOT EXISTS {
+    #     ?cm2_uri a pxc:ControlledMethodWeighted .
+    # }
    # get the uri of the sameas:
    ?cm2_uri owl:sameAs ?cm2 .
-# does uri of cm1 contain "methods/10"?
-    FILTER regex(str(?cm1), "methods/10")
-# does uri of cm2 contain "methods/20"?
-    FILTER regex(str(?cm2), "methods/20")
+# they should be different:
+    FILTER (?cm1 != ?cm2)
+# # does uri of cm1 contain "methods/10"?
+#     FILTER regex(str(?cm1), "methods/10")
+# # does uri of cm2 contain "methods/20"?
+#     FILTER regex(str(?cm2), "methods/20")
 
     
 
@@ -54,4 +55,4 @@ WHERE {
 }
 
 # call with: 
-# arq --data ttl-data/bibframe_records.ttl --query testing/CM/works_with_conflicting_methods.rq  --results=TSV > testing/CM/works_with_conflicting_methods.tsv
+# arq --data ttl-data/bibframe_records.ttl --query testing/CM/works_with_several_methods.rq  --results=TSV > testing/CM/works_with_several_methods.tsv
