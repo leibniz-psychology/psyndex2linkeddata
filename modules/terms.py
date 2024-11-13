@@ -29,6 +29,7 @@
 # ```
 
 
+import re
 import xml.etree.ElementTree as ET
 from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
 import modules.helpers as helpers
@@ -62,10 +63,9 @@ graph.bind("pmt", PMT)
 graph.bind("methods", METHODS)
 
 
-def add_controlled_terms(work_uri, record, records_bf):
-    # get the controlled terms from the field CT:
-    topiccount = 0
-    for topic in record.findall("CT"):
+def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter):
+    # get the controlled terms from the field CT and IT:
+    for topic in record.findall(termtype):
         # get the content of the CT field:
         controlled_term_string = mappings.replace_encodings(topic.text.strip())
         # we need to split the string into these possible parts:
@@ -85,9 +85,10 @@ def add_controlled_terms(work_uri, record, records_bf):
             controlled_term_weighted = True
         else:
             controlled_term_weighted = False
-        topiccount += 1
+        # increment the counter for the controlled terms:
+        counter += 1
         # create a blank node for the controlled term and make it a class bf:Topic:
-        controlled_term_node = URIRef(str(work_uri) + "#topic" + str(topiccount))
+        controlled_term_node = URIRef(str(work_uri) + "#topic" + str(counter))
         # a ct node is a bf:Topic (and a skos:Concept - albeit without a uri identifier, because the CT "code" is not exported, only the labels); sometimes it is also a pxc:WeightedTopic:
         records_bf.add((controlled_term_node, RDF.type, BF.Topic))
         # records_bf.add((controlled_term_node, RDF.type, SKOS.Concept))
@@ -97,13 +98,13 @@ def add_controlled_terms(work_uri, record, records_bf):
         #     (
         #         controlled_term_node,
         #         BF.source,
-        #         URIRef("https://w3id.org/zpid/vocabs/terms"),
+        #         URIRef("https://w3id.org/zpid/vocabs/" + vocid),
         #     )
         # )
         # get uri from lookup in skosmos api:
         try:
             controlled_term_uri = localapi.get_concept_uri_from_skosmos(
-                controlled_term_string_english, "terms"
+                controlled_term_string_english, vocid
             )
         except:
             controlled_term_uri = None
@@ -142,3 +143,5 @@ def add_controlled_terms(work_uri, record, records_bf):
 
         # attach the controlled term node to the work node:
         records_bf.add((work_uri, BF.subject, controlled_term_node))
+    return counter
+        

@@ -3068,7 +3068,11 @@ for record in tqdm(root.findall("Record")):
 
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     # add_controlled_terms(work_uri, record)
-    terms.add_controlled_terms(work_uri, record, records_bf)
+    # i need a counter that will count up for both the CT and IT fields, so i can add the position of the term in the list as a property to the term node:
+    term_counter = 0
+    # then to count the counter up in each function that adds a term:
+    term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "CT", "terms", counter=term_counter)
+    term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "IT", "addterms", counter=term_counter)
 
     ## TODO: add all the other controlled keywords from the record to the work - SH, CM, AGE, SAM, PLOC
     # including skosmos lookups.
