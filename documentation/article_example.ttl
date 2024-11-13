@@ -627,7 +627,7 @@ works:0388777_work a bf:Text,
     bf:title <https://w3id.org/zpid/resources/instancebundles/0388777#title>,
         <https://w3id.org/zpid/resources/instancebundles/0388777#translatedtitle> ;
     # instance.license:
-    bf:usageAndAccessPolicy licenses:CC_BY_4.0 ;
+    bf:usageAndAccessPolicy licenses:CC_BY_4_0 ;
     # instance.publicationType:
     pxp:issuanceType issuances:JournalArticle .
 
