@@ -2874,24 +2874,24 @@ def get_urlai(work_uri, record):
         url_set = set()
         doi_set = set()
         # if it is a doi, run a function to generate a doi identifier node
-        if check_for_url_or_doi(urlai_field)[1] == "doi":
+        if helpers.check_for_url_or_doi(urlai_field)[1] == "doi":
             # build_doi_identifier_node(instance,check_for_url_or_doi(urlai_field)[0])
-            doi_set.add(check_for_url_or_doi(urlai_field)[0])
-        elif check_for_url_or_doi(urlai_field)[1] == "url":
+            doi_set.add(helpers.check_for_url_or_doi(urlai_field)[0])
+        elif helpers.check_for_url_or_doi(urlai_field)[1] == "url":
             # build_electronic_locator_node(instance, check_for_url_or_doi(urlai_field)[0])
-            url_set.add(check_for_url_or_doi(urlai_field)[0])
+            url_set.add(helpers.check_for_url_or_doi(urlai_field)[0])
         # if the returned typ is something else "unknown", do nothing with it:
         else:
             # print("bf:note > bf:Note > rdfs:label: " + urlai_field)
             if (
                 urlai_field is not None
-                and check_for_url_or_doi(urlai_field)[0] is not None
-                and check_for_url_or_doi(urlai_field)[0] != ""
+                and helpers.check_for_url_or_doi(urlai_field)[0] is not None
+                and helpers.check_for_url_or_doi(urlai_field)[0] != ""
             ):
                 # add a variable
-                unknown_field_content = check_for_url_or_doi(urlai_field)[0].strip()
+                unknown_field_content = helpers.check_for_url_or_doi(urlai_field)[0].strip()
                 print(f"unknown type: {unknown_field_content}. Adding as a note.")
-                build_note_node(instance, check_for_url_or_doi(urlai_field)[0])
+                build_note_node(instance, helpers.check_for_url_or_doi(urlai_field)[0])
 
         # compare all the dois in the doi_set to each item in the url set. If the url contains the doi, remove it from the url set:
         for doi in doi_set:
@@ -3009,8 +3009,9 @@ def get_datac(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
-for record in tqdm(root.findall("Record")):
-    # for record in tqdm(root.findall("Record")[0:200]):
+
+#for record in tqdm(root.findall("Record")):
+for record in tqdm(root.findall("Record")[0:200]):
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
     record_count += 1
@@ -3040,6 +3041,8 @@ for record in tqdm(root.findall("Record")):
     conferencereference_counter = 0
     researchdatalink_counter = 0
     preregistrationlink_counter = 0
+
+    
     add_bf_contributor_person(work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
     match_CS_COU_affiliations_to_first_contribution(work_uri, record)
