@@ -1,0 +1,703 @@
+# This example work is for a journal article with:
+# - bibliographic note
+# - genre
+# - content type
+# - language
+# - license
+# - two tests, one uncontrolled and one controlled (in the test database)
+# - a preregistration relationship
+# - a fundingreference contribution with two grants from this funder
+# - method classification
+# - subject classifications
+# - controlled keywords
+# - uncontrolled keywords
+# - author keywords
+# - articleNumber (not no pageStart, pageEnd or pageCount because of that)
+# - ageGroups
+# - populationLocation
+# - sampleCharacteristics
+# - online one formatinstance (bf:Instance) (with mediaCarrier Online) in the instance (pxc:InstanceBundle)
+
+
+# note: some of these were added artificially to show the structure of the data. This record/paper exists, but does not necessarily have these keywords or test.
+
+
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
+@prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix licenses: <https://w3id.org/zpid/vocabs/licenses/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pmt: <https://w3id.org/zpid/vocabs/mediacarriers/> .
+@prefix sam: <https://w3id.org/zpid/vocabs/sam/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix roles: <https://w3id.org/zpid/vocabs/roles/> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+works:0388777_work a bf:Text,
+        bf:Work,
+        pxc:MainWork ;
+    bflc:relationship 
+        # preregisteredStudies:
+        <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1>, 
+        # relatedTestOrMeasures:
+        <https://w3id.org/zpid/resources/works/0388777_work#testrel1>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#testrel2>;
+    bf:classification 
+    # methodClassifications:
+    <https://w3id.org/zpid/resources/works/0388777_work#controlledmethod1>, 
+    # subjectClassifications
+    <https://w3id.org/zpid/resources/works/0388777_work#subjectheading1>, 
+    <https://w3id.org/zpid/resources/works/0388777_work#subjectheading2>;
+    #contentType: 
+    bf:content <https://w3id.org/zpid/vocabs/contenttypes/text> ;
+    bf:contribution 
+        # contributingPersons & contributingCorporateBodies:
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution1>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution2>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution3>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution4>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution5>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution6>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution7>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution8>,
+        <https://w3id.org/zpid/resources/works/0388777_work#contribution9>,
+        # funder/fundingreference:
+        <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1> ;
+    # genre:
+    bf:genreForm genres:StudyProtocol ;
+    # bibliographicNote:
+    bf:note <https://w3id.org/zpid/resources/works/0388777_work#note> ;
+    bf:hasInstance <https://w3id.org/zpid/resources/instances/0388777#1> ;
+    bf:language lang:eng ;
+    # controlledKeywords:
+    bf:subject <https://w3id.org/zpid/resources/works/0388777_work#topic1>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic2>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic3>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic4>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic5>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic6>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic7>,
+        <https://w3id.org/zpid/resources/works/0388777_work#topic8> ;
+    # authorKeywords:
+    bf:subject <https://w3id.org/zpid/resources/works/0388777_work#authorkeywords> ;
+    # uncontrolledKeywords:
+    bf:subject <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword1>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword2>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword3>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword4>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword5>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword6>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword7>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword8>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword9>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword10>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword11>, 
+        <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword12> ;
+    # ageGroups:
+    bflc:demographicGroup <https://w3id.org/zpid/resources/works/0388777_work#agegroup1> ; 
+    # populationLocation Place, simplePopulationLocation:
+    bf:geographicCoverage <https://w3id.org/zpid/resources/works/0388777_work#populationlocation1> ; 
+    # sampleCharacateristics:
+    pxp:sampleCharacteristic sam:Human ;
+    # germanAbstract, englishAbstract:
+    bf:summary <https://w3id.org/zpid/resources/works/0388777_work#abstract>, <https://w3id.org/zpid/resources/works/0388777_work#secondaryabstract> ;
+    pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0388777> ;
+    .
+
+<https://w3id.org/zpid/resources/works/0388777_work#authorkeywords> a pxc:AuthorKeywords; rdfs:label "Effectiveness; Non-randomised; Quasi-experimental; Community trial; Youth; Problem behaviour; Capacity building; Intersectoral collaboration; Risk factors; Protective factors".
+
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword1> a pxc:UncontrolledTopic; rdfs:label "effectiveness".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword2> a pxc:UncontrolledTopic; rdfs:label "non-randomised".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword3> a pxc:UncontrolledTopic; rdfs:label "quasi-experimental". 
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword4> a pxc:UncontrolledTopic; rdfs:label "community trial". 
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword5>a pxc:UncontrolledTopic; rdfs:label "youth".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword6> a pxc:UncontrolledTopic; rdfs:label "problem behaviour".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword7> a pxc:UncontrolledTopic; rdfs:label "capacity building".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword8> a pxc:UncontrolledTopic; rdfs:label "intersectoral collaboration".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword9> a pxc:UncontrolledTopic; rdfs:label "risk factors".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword10> a pxc:UncontrolledTopic; rdfs:label "protective factors".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword11> a pxc:UncontrolledTopic; rdfs:label "communities that care".
+<https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword12> a pxc:UncontrolledTopic; rdfs:label "CTC".
+
+<https://w3id.org/zpid/resources/works/0388777_work#agegroup1> 
+        a pxc:AgeGroup; 
+        owl:sameAs <https://w3id.org/zpid/vocabs/age/adulthood> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#populationlocation1>
+        a pxc:PopulationLocation; 
+        rdfs:label "Germany"; bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#populationlocation1_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#populationlocation1_geonamesid> a locid:geonamesid; rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#note> a bf:Note ;
+    rdfs:label "Supplemental material for this article can be found online at https://doi.org/10.24989/dp.v1i1.1809" ;
+.
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel1> a bflc:Relationship ;
+    bf:relatedTo <https://w3id.org/zpid/resources/works/0388777_work#testrel1_test> ;
+    bflc:relation relations:usesTest ; 
+    pxp:allItemsInWork false ;
+    bf:note <https://w3id.org/zpid/resources/works/0388777_work#testrel1_note> ;
+.
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel1_test> a pxc:Test, bflc:Uncontrolled ;
+    bf:title <https://w3id.org/zpid/resources/works/0388777_work#testrel1_test_shortname>, <https://w3id.org/zpid/resources/works/0388777_work#testrel1_test_longname> ;
+.
+<https://w3id.org/zpid/resources/works/0388777_work#testrel1_test_shortname> a bf:AbbreviatedTitle ; bf:mainTitle "NSS" .
+<https://w3id.org/zpid/resources/works/0388777_work#testrel1_test_longname> a bf:Title ; bf:mainTitle "Narcissim Spectrum Scale [Quirk et al. , 2015]" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel1_note> a bf:Note ; rdfs:label "Watt, H. M. G., Richardson, P. W., Klusmann, U., Kunter, M., Beyer, B., Trautwein, U. & Baumert, J. (2012). Motivations for choosing teaching as a career: An international comparison using the FIT-Choice scale. Teaching and Teacher Education, 28(6), 791 - 805. https://doi.org/10.1016/j.tate.2012.03.003" .
+
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel2> a bflc:Relationship ;
+    bf:relatedTo <https://w3id.org/zpid/resources/works/0388777_work#testrel2_test> ;
+    bflc:relation relations:analyzesTest ;
+    pxp:allItemsInWork true ;
+.
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel2_test> a pxc:Test ;
+    bf:title <https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_shortname>, <https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_longname> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_psytkomid>
+    .
+<https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_shortname> a bf:AbbreviatedTitle ; bf:mainTitle "SWE".
+<https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_longname> a bf:Title ; bf:mainTitle "Skala zur Allgemeinen Selbstwirksamkeitserwartung" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#testrel2_test_psytkomid> a pxc:PsytkomTestId ;
+        rdf:value "1003" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1> a pxc:PreregistrationRelationship ;
+    bflc:relation relations:hasPreregistration ;
+    bf:note <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_note> ;
+    bf:supplement <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_note> a bf:Note ;
+    rdfs:label "DRKS00022819" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work_instance> a bf:Instance ;
+    bf:electronicLocator <https://drks.de/search/en/trial/DRKS00022819> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work_instance_trialnumber> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1_work_instance_trialnumber> a pxc:TrialNumber ;
+    bf:assigner <https://w3id.org/zpid/vocabs/trialregs/drks> ;
+    rdf:value "DRKS00022819" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#abstract> a pxc:Abstract ;
+    rdfs:label "Background: The Communities That Care (CTC) prevention planning and implementation system trains communities throughout a five-phase cycle to (1) build capacity for prevention, (2) adopt science-based prevention, (3) assess the prevention needs of adolescents living in the community, (4) select, and (5) implement evidence-based programs according to their needs. After CTC proved to be effective and cost-effective in the U.S., it is being used by an increasing number of communities in Germany. The aim of this study is to evaluate the effectiveness and cost-effectiveness of CTC in Germany. Methods: Communities in CTC-phases 1 to 3 (n = 21) and individually-matched comparison communities (n = 21) were recruited for a non-randomised trial. To assess long-term outcomes, (1) a cohort of 5th Grade students will be surveyed biennially concerning behaviours (antisocial behaviour and substance use) and well-being as well as risk and protective factors. Additionally, (2) biennial cross-sectional surveys will be conducted in 6th, 8th, 10th, and 11th Grade in each community. To assess short-term outcomes, a cohort of ten key informants per community will be surveyed biennially concerning adoption of science-based prevention, collaboration, community support and community norms. (4) In a cross-sectional design, all ongoing prevention programs and activities in the communities will be assessed biennially and data will be collected about costs, implementation and other characteristics of the programs and activities. (5) To monitor the CTC implementation, the members of the local CTC-boards will be surveyed annually (cross-sectional design) about team functioning and coalition capacity. Data analysis will include general and generalised mixed models to assess the average treatment effect of CTC. Mediation analyses will be performed to test the logical model, e.g., adoption of science-based prevention as a mediator for the effectiveness of the CTC approach. Discussion: This is the first controlled study to evaluate the effectiveness of a comprehensive community prevention approach in Germany. Evaluating the effectiveness of CTC in Germany is an important prerequisite for further diffusion of the CTC approach."@en ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0388777_work#abstract_source> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#secondaryabstract> a pxc:SecondaryAbstract ;
+    rdfs:label "Hintergrund: Das Präventionsplanungs- und Umsetzungssystem Communities That Care (CTC) schult Gemeinden in einem Fünf-Phasen-Zyklus darin, (1) Präventionskapazitäten aufzubauen, (2) wissenschaftlich fundierte Präventionsmaßnahmen einzuführen, (3) die Präventionsbedürfnisse der in der Gemeinde lebenden Jugendlichen zu ermitteln, (4) evidenzbasierte Programme auszuwählen und (5) sie entsprechend ihren Bedürfnissen umzusetzen. Nachdem sich CTC in den USA als wirksam und kosteneffizient erwiesen hat, wird es auch in Deutschland von immer mehr Gemeinden eingesetzt. Ziel dieser Studie ist es, die Effektivität und Kosteneffektivität von CTC in Deutschland zu evaluieren. Methoden: Gemeinden der CTC-Phasen 1 bis 3 (n = 21) und individuell angepasste Vergleichsgemeinden (n = 21) wurden für eine nicht-randomisierte Studie rekrutiert. Zur Bewertung der langfristigen Ergebnisse wird (1) eine Kohorte von Schülern der 5. Klasse alle zwei Jahre zu Verhaltensweisen (antisoziales Verhalten und Substanzkonsum) und Wohlbefinden sowie zu Risiko- und Schutzfaktoren befragt. Zusätzlich werden (2) alle zwei Jahre Querschnittserhebungen in der 6., 8., 10. und 11. Klasse in jeder Gemeinde durchgeführt. Zur Bewertung der kurzfristigen Ergebnisse wird eine Kohorte von zehn Schlüsselinformanten pro Gemeinde alle zwei Jahre zur Übernahme wissenschaftlich fundierter Präventionsmaßnahmen, zur Zusammenarbeit, zur Unterstützung durch die Gemeinde und zu den Normen der Gemeinde befragt. (4) In einem Querschnittsdesign werden alle laufenden Präventionsprogramme und -aktivitäten in den Gemeinden alle zwei Jahre bewertet und Daten zu Kosten, Umsetzung und anderen Merkmalen der Programme und Aktivitäten gesammelt. (5) Zur Überwachung der CTC-Implementierung werden die Mitglieder der lokalen CTC-Gremien jährlich (Querschnittsdesign) über die Arbeitsweise des Teams und die Kapazität der Koalition befragt. Die Datenanalyse wird allgemeine und verallgemeinerte gemischte Modelle umfassen, um den durchschnittlichen Behandlungseffekt von CTC zu bewerten. Es werden Mediationsanalysen durchgeführt, um das logische Modell zu testen, z. B. die Annahme wissenschaftlich fundierter Prävention als Vermittler für die Wirksamkeit des CTC-Ansatzes. Diskussion: Dies ist die erste kontrollierte Studie, die die Wirksamkeit eines umfassenden kommunalen Präventionsansatzes in Deutschland untersucht. Die Evaluierung der Wirksamkeit von CTC in Deutschland ist eine wichtige Voraussetzung für die weitere Verbreitung des CTC-Ansatzes."@de;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0388777_work#secondaryabstract_source>
+    .
+
+<https://w3id.org/zpid/resources/works/0388777_work#abstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0388777_work#secondaryabstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "DeepL" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent> ;
+    bf:qualifier "first" ;
+    bf:role roles:AU ;
+    mads:email <mailto:roeding.dominik@mh-hannover.de> ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1> ;
+    pxp:contributionPosition 1 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent> a bf:Person ;
+    rdfs:label "Röding, Dominik" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_orcid> ;
+    schema:familyName "Röding" ;
+    schema:givenName "Dominik" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution1_personagent_orcid> a locid:orcid ;
+    rdf:value "0000-0002-7621-5679" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1> ;
+    pxp:contributionPosition 2 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent> a bf:Person ;
+    rdfs:label "Soellner, Renate" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_psychauthorsid> ;
+    schema:familyName "Soellner" ;
+    schema:givenName "Renate" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "University of Hildesheim, Institute for Psychology" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/02f9det96" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution2_personagent_psychauthorsid> a pxc:PsychAuthorsID ;
+    rdf:value "p00306RS" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1> ;
+    pxp:contributionPosition 3 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent> a bf:Person ;
+    rdfs:label "Reder, Maren" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_orcid> ;
+    schema:familyName "Reder" ;
+    schema:givenName "Maren" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "University of Hildesheim, Institute for Psychology" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/02f9det96" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution3_personagent_orcid> a locid:orcid ;
+    rdf:value "0000-0001-8842-581X" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1> ;
+    pxp:contributionPosition 4 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent> a bf:Person ;
+    rdfs:label "Birgel, Vera" ;
+    schema:familyName "Birgel" ;
+    schema:givenName "Vera" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution4_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1> ;
+    pxp:contributionPosition 5 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent> a bf:Person ;
+    rdfs:label "Kleiner, Constantin" ;
+    schema:familyName "Kleiner" ;
+    schema:givenName "Constantin" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution5_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1> ;
+    pxp:contributionPosition 6 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent> a bf:Person ;
+    rdfs:label "Stolz, Maike" ;
+    schema:familyName "Stolz" ;
+    schema:givenName "Maike" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution6_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1> ;
+    pxp:contributionPosition 7 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent> a bf:Person ;
+    rdfs:label "Groeger-Roth, Frederick" ;
+    schema:familyName "Groeger-Roth" ;
+    schema:givenName "Frederick" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution7_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Crime Prevention Council of Lower Saxony, Hannover" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent> ;
+    bf:qualifier "middle" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1> ;
+    pxp:contributionPosition 8 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent> a bf:Person ;
+    rdfs:label "Krauth, Christian" ;
+    schema:familyName "Krauth" ;
+    schema:givenName "Christian" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution8_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9> a bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent> ;
+    bf:qualifier "last" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1> ;
+    pxp:contributionPosition 9 .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent> a bf:Person ;
+    rdfs:label "Walter, Ulla" ;
+    schema:familyName "Walter" ;
+    schema:givenName "Ulla" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Hannover Medical School; Institute for Epidemiology, Social Medicine and Health Systems Research" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#contribution9_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/00f2yqf98" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#controlledmethod1> a pxc:ControlledMethod,
+        pxc:ControlledMethodWeighted ;
+    rdfs:label "nonempirical work" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/methods/20000> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#subjectheading1> a pxc:SubjectHeading, pxc:SubjectHeadingWeighted;
+    rdfs:label "Health & Mental Health Services" ;
+    skos:prefLabel "Psychosoziale Dienste und Gesundheitsversorgung"@de,
+        "Health & Mental Health Services"@en ;
+    bf:code "3370" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/3370> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#subjectheading2> a pxc:SubjectHeading;
+    rdfs:label "Community & Social Services";
+    skos:prefLabel "Gemeindenahe und soziale Dienste"@de,
+        "Community & Social Services"@en ; 
+    bf:code "3370" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/3370> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1> a pxc:FundingReference ;
+    bf:agent <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_funder> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/spn> ;
+    pxp:grant <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant1>,
+        <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant2> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_funder> a bf:Agent,
+        pxc:Funder ;
+    rdfs:label "Federal Ministry of Education and Research (BMBF)" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_funder_funderid> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_funder_funderid> a pxc:FundRefDoi ;
+    rdf:value "10.13039/501100002347" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant1> a pxc:Grant ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant1_awardnumber> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant1_awardnumber> a pxc:GrantId ;
+    rdf:value "01EL2006A" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant2> a pxc:Grant ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant2_awardnumber> .
+
+<https://w3id.org/zpid/resources/works/0388777_work#fundingreference1_grant2_awardnumber> a pxc:GrantId ;
+    rdf:value "01EL2006B" .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic1> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Prevention" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/40290> ;
+    skos:prefLabel "Prävention"@de,
+        "Prevention"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic2> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Community Mental Health Services" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/10656> ;
+    skos:prefLabel "Gemeindenahe psychosoziale Dienste"@de,
+        "Community Mental Health Services"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic3> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Mental Health Programs" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/30820> ;
+    skos:prefLabel "Psychosoziale Gesundheitsprogramme"@de,
+        "Mental Health Programs"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic4> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Community Mental Health" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/10647> ;
+    skos:prefLabel "Psychosoziale Gesundheit in der Region"@de,
+        "Community Mental Health"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic5> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Mental Health Program Evaluation" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/30810> ;
+    skos:prefLabel "Evaluation psychosozialer Gesundheitsprogramme"@de,
+        "Mental Health Program Evaluation"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic6> a bf:Topic ;
+    rdfs:label "Youth Mental Health" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/76730> ;
+    skos:prefLabel "Psychische Gesundheit von Jugendlichen"@de,
+        "Youth Mental Health"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic7> a bf:Topic ;
+    rdfs:label "Protective Factors" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/41167> ;
+    skos:prefLabel "Protektive Faktoren"@de,
+        "Protective Factors"@en .
+
+<https://w3id.org/zpid/resources/works/0388777_work#topic8> a bf:Topic ;
+    rdfs:label "Risk Factors" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/44642> ;
+    skos:prefLabel "Risikofaktoren"@de,
+        "Risk Factors"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777> a pxc:InstanceBundle ;
+    bflc:relationship <https://w3id.org/zpid/resources/instancebundles/0388777#journalrel> ;
+    bf:hasPart <https://w3id.org/zpid/resources/instances/0388777#1> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0388777#dfk> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/instancebundles/0388777_publication> ;
+    bf:seriesStatement "BMC Public Health" ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0388777#title>,
+        <https://w3id.org/zpid/resources/instancebundles/0388777#translatedtitle> ;
+    # instance.license:
+    bf:usageAndAccessPolicy licenses:CC_BY_4.0 ;
+    # instance.publicationType:
+    pxp:issuanceType issuances:JournalArticle .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#dfk> a pxc:DFK ;
+    rdf:value "0388777" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#journalrel> a bflc:Relationship ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_article_number> ;
+    bf:relatedTo <https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal> ;
+    bflc:relation relations:isArticleInJournal ;
+    bf:seriesEnumeration "21(1), Article number: 1927" ;
+    pxp:inIssue "1" ;
+    pxp:inVolume "21" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_article_number> a pxc:ArticleNumber ;
+    rdf:value "1927" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal> a bf:Hub,
+        bf:Serial ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal_issnonline> ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal_title> .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal_issnonline> a bf:Issn ;
+    bf:qualifier "online" ;
+    rdf:value "1471-2458" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#journalrel_journal_title> a bf:Title ;
+    bf:mainTitle "BMC Public Health" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#title> a bf:Title ;
+    rdfs:label "Study protocol: A non-randomised community trial to evaluate the effectiveness of the communities that care prevention system in Germany" ;
+    bf:mainTitle "Study protocol: A non-randomised community trial to evaluate the effectiveness of the communities that care prevention system in Germany"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#translatedtitle> a pxc:TranslatedTitle ;
+    rdfs:label "Studienprotokoll: Eine nicht-randomisierte Gemeinschaftsstudie zur Bewertung der Wirksamkeit des Präventionssystems \"Communities That Care\" in Deutschland" ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/instancebundles/0388777#translatedtitle_source> ;
+    bf:mainTitle "Studienprotokoll: Eine nicht-randomisierte Gemeinschaftsstudie zur Bewertung der Wirksamkeit des Präventionssystems \"Communities That Care\" in Deutschland"@de .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777#translatedtitle_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "ZPID" .
+
+<https://w3id.org/zpid/resources/instancebundles/0388777_publication> a bf:Publication ;
+    bflc:simpleDate "2021" ;
+    bf:date "2021"^^xsd:gYear .
+
+
+<https://w3id.org/zpid/resources/instances/0388777#1> a bf:Electronic,
+        bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/cr> ;
+    # instance.formatInstance.doi:
+    bf:identifiedBy <https://doi.org/10.1186/s12889-021-11935-x> ;
+    bf:instanceOf works:0388777_work ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/c> ;
+    # instance.formatInstance.carrierType:
+    pxp:mediaCarrier pmt:Online .
+
+<https://doi.org/10.1186/s12889-021-11935-x> a bf:Doi ;
+    rdf:value "10.1186/s12889-021-11935-x" .
+
+
+<https://w3id.org/zpid/vocabs/contenttypes/text> a bf:Content .
+
+genres:StudyProtocol a bf:GenreForm ;
+    rdfs:label "Study Project/Protocol" ;
+    skos:prefLabel "Studienprojekt/-Protokoll"@de,
+        "Study Project/Protocol"@en .
+
+issuances:JournalArticle a pxc:IssuanceType ;
+    rdfs:label "Journal Article" .
+
+licenses:CC_BY_4.0 a bf:UsePolicy ;
+    rdfs:label "CC-BY-4.0: Creative Commons Attribution 4.0 International" ;
+    skos:prefLabel "CC-BY-4.0: Creative Commons Namensnennung 4.0 International"@de,
+        "CC-BY-4.0: Creative Commons Attribution 4.0 International"@en .
