@@ -12,14 +12,15 @@
 # - controlled keywords
 # - uncontrolled keywords
 # - author keywords
-# - articleNumber (not no pageStart, pageEnd or pageCount because of that)
 # - ageGroups
 # - populationLocation
 # - sampleCharacteristics
-# - online one formatinstance (bf:Instance) (with mediaCarrier Online) in the instance (pxc:InstanceBundle)
+# - only one formatinstance (bf:Instance) (with mediaCarrier Online) in the instance (pxc:InstanceBundle)
+# - doi for the formatinstance
+# - articleNumber (not no pageStart, pageEnd or pageCount because of that), volume, issue, journaltitle, journal issn
 
 
-# note: some of these were added artificially to show the structure of the data. This record/paper exists, but does not necessarily have these keywords or test.
+# note: some of these were added artificially to show the structure of the data. This record/paper exists, but does not necessarily have these keywords, samples or test.
 
 
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
