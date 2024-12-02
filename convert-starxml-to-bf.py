@@ -3069,6 +3069,8 @@ for record in tqdm(root.findall("Record")[0:200]):
     if record.find("ABN") is not None:
         get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
+
+    ### Adding controlled terms and subject classifications to the work: CT, IT, SH, AGE, PLOC
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     # add_controlled_terms(work_uri, record)
     # i need a counter that will count up for both the CT and IT fields, so i can add the position of the term in the list as a property to the term node:
@@ -3077,8 +3079,11 @@ for record in tqdm(root.findall("Record")[0:200]):
     term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "CT", "terms", counter=term_counter)
     term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "IT", "addterms", counter=term_counter)
 
-    ## TODO: add all the other controlled keywords from the record to the work - SH, CM, AGE, SAM, PLOC
-    # including skosmos lookups.
+    terms.add_subject_classification(work_uri, record, records_bf, "SH", "class")
+
+    terms.add_age_groups(work_uri, record, records_bf, "AGE", "age")
+    terms.add_population_location(work_uri, record, records_bf, "PLOC")
+
 
     ## TODO: add any uncontrolled keywords we have:
     # from fields KP - and if they exist, UTE and UTG
