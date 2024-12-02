@@ -1,0 +1,159 @@
+property	type	constraint	multiplicity	remarks
+language	string	{ISO-Code}	1..1	-
+isHidden	bool		1..1	-
+instances	Instance		1..n	-
+instance.publicationType	string	{ControlledTerm[group=issuances, collection=PSYNDEXLitIssuances]->id}	1..1	-
+instance.metadataOrigin	string	[MANUAL, REPORTED_BY_AUTHOR, PROVIDED_BY_PUBLISHER, WOS, DOAJ, SPRINGER, HOGREFE, THIEME, KARGER, DE_GRUYTER, PSYCHOSOZIAL]	0..1	-
+instance.dfk	string		0..1	-
+instance.license	string	{ControlledTerm[vocabularyId=licenses]->id}	0..1	-
+instance.openAccessStatus	string	{ControlledTerm[group=access, collection=PSYNDEXpublicationAccess]->id}	1..1	-
+instance.mainTitle	LocalizableTextNullable		1..1	-
+instance.subTitle	LocalizableTextNullable		0..1	-
+instance.translatedTitle	LocalizableTextNullable		0..1	-
+instance.translatedTitleOrigin	string	[ZPID, DeepL, Original]	0..1	-
+instance.journalTitle	string		0..1	-
+instance.containingJournal	Instance		0..1	-
+instance.journalVolume	string	{*Regex*:/^[0-9]+$/}	0..1	-
+instance.journalIssue	string	{*Regex*:/^(?:\d+(?:-\d+)?|Supp|S\d+)$/}	0..1	-
+instance.publisherName	string		0..1	-
+instance.publisherLink	PublishingHouse		0..1	-
+instance.seriesTitle	string		0..1	-
+instance.subSeriesTitle	string		0..1	-
+instance.seriesVolume	string	{*Regex*:/^[0-9]+$/}	0..1	-
+instance.normSeries	Series		0..1	-
+instance.bookEdition	string	{*Regex*:/^[0-9]+$/}	0..1	-
+instance.placeOfPublicationString	string		0..1	-
+instance.placeOfPublication	Place		0..1	-
+instance.containingBook	Instance		0..1	-
+instance.formatInstances	FormatInstance		0..n	-
+instance.formatInstance.date	FlexibleDateNullable		0..1	-
+instance.formatInstance.startPage	integer		0..1	-
+instance.formatInstance.endPage	integer		0..1	-
+instance.formatInstance.pageCount	integer		0..1	-
+instance.formatInstance.publicationUrl	string	{Url}	0..1	-
+instance.formatInstance.publicationUrn	string	{Url}	0..1	-
+instance.formatInstance.doi	string	{Doi}	0..1	-
+instance.formatInstance.isbn	string		0..1	-
+instance.formatInstance.issn	string		0..1	-
+instance.formatInstance.articleNumber	string		0..1	-
+instance.formatInstance.carrierType	string	{ControlledTerm[group=mediacarriers, collection=PSYNDEXpublicationMedia]->id}	1..1	-
+instance.files	File		0..n	darf niemals public sein
+instance.files.id	int		1..1	-
+instance.files.name	string		1..1	-
+instance.files.isRemote	bool		1..1	-
+instance.files.path	string		1..1	{Doctrine->Types:TEXT}
+instance.files.mimeType	string		0..1	-
+instance.files.host	string		0..1	-
+instance.files.protocol	string		1..1	-
+instance.files.remotePort	int		0..1	-
+publishingStatus	string	{PublishPublicationState->value}	1..1	-
+psyFoMoStatus	string	{PsyFoMoStatus->value}	1..1	-
+contributingPersons	ContributingPerson		0..n	-
+contributingPerson.isCorrespondingAuthor	bool		1..1	-
+contributingPerson.givenName	string		1..1	-
+contributingPerson.familyName	string		1..1	-
+contributingPerson.email	string	{Email}	0..1	-
+contributingPerson.normPerson	Person		0..1	-
+contributingPerson.contributorRole	string	{ControlledTerm[vocabularyId=roles]->id}	0..1	-
+contributingPerson.orcId	string	{*Regex*:/(\d{4}-){3,}\d{3}[\dX]/}	0..1	-
+contributingPerson.affiliations	Affiliation		0..n	-
+contributingPerson.affiliation.name	string		1..1	-
+contributingPerson.affiliation.rorId	string		0..1	-
+contributingPerson.affiliation.normCorporateBodyId	string	{CorporateBody->id}	0..1	-
+contributingPerson.affiliation.country	string		0..1	-
+contributingPerson.affiliation.normCountryId	string	{Place->id}	0..1	-
+contributingCorporateBodies	ContributingCorporateBody		0..n	-
+contributingCorporateBody.name	string		1..1	-
+contributingCorporateBody.contributorRole	string	{ControlledTerm[vocabularyId=roles]->id}	0..1	-
+contributingCorporateBody.rorId	string		0..1	-
+contributingCorporateBody.normCorporateBodyId	string	{CorporateBody->id}	0..1	-
+contributingCorporateBody.country	string		0..1	-
+contributingCorporateBody.normCountryId	string	{Place->id}	0..1	-
+concernedPersonIds	string	{Person->id}	0..n	-
+concernedCorporateBodyIds	string		0..n	-
+relatedWorks	RelatedWork		0..n	-
+relatedWork.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXrelRelations]->id}	1..1	-
+relatedWork.objectWork	Work		1..1	-
+relatedWork.doi	string	{Doi}	0..1	-
+relatedWork.citation	string		0..1	-
+relatedWork.url	string	{Url}	0..1	-
+relatedTestOrMeasures	RelatedTestOrMeasure		0..n	-
+relatedTestOrMeasure.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXtestRelations]->id}	1..1	-
+relatedTestOrMeasure.shortName	string		0..1	-
+relatedTestOrMeasure.longName	string		0..1	-
+relatedTestOrMeasure.test (test_id)	string		0..1	-
+relatedTestOrMeasure.itemsComplete	bool		1..1	-
+relatedTestOrMeasure.remark	string		0..1	-
+remarks	string		0..1	-
+englishAbstract	string		0..1	-
+englishAbstractOrigin	string	[ORIGINAL, ZPID, DEEP_L, GESIS, FIS, KRIM_Z]	0..1	-
+englishAbstractEditOrigin	string	[ORIGINAL, ZPID, DEEP_L, GESIS, FIS, KRIM_Z]	0..1	-
+englishAbstractNote	string{TEXT}		0..1	-
+germanAbstract	string		0..1	-
+germanAbstractOrigin	string	[ORIGINAL, ZPID, DEEP_L, GESIS, FIS, KRIM_Z]	0..1	-
+germanAbstractEditOrigin	string	[ORIGINAL, ZPID, DEEP_L, GESIS, FIS, KRIM_Z]	0..1	-
+germanAbstractNote	string{TEXT}		0..1	-
+toc	string		0..1	-
+tocUrl	string	{Url}	0..1	-
+englishShortPls	string		0..1	-
+englishShortPlsOrigin	string	[ORIGINAL, ZPID, DEEP_L, GESIS, FIS, KRIM_Z]	0..1	-
+longPlsDoi	string	{Doi}	0..1	-
+longPlsUrl	string	{Url}	0..1	-
+longPlsStatus	string	{PublishKlartextState->value}	1..1	-
+uncontrolledKeywords	string		0..n	-
+authorKeywords	string		1..1	-
+controlledKeywords	WeightedControlledTerm	{ControlledTerm[vocabularyId=terms]->id}	0..n	-
+subjectClassifications	WeightedControlledTerm	{ControlledTerm[vocabularyId=class]->id}	0..n	-
+methodClassifications	WeightedControlledTerm	{ControlledTerm[vocabularyId=method]->id}	0..n	-
+ageGroups	string	{ControlledTerm[vocabularyId=age]->id}	0..n	-
+simplePopulationLocations	string		0..n	-
+sampleCharacteristics	string	{ControlledTerm[vocabularyId=sam]->id}	0..n	-
+populationLocation	Place		0..n	-
+degreeGranted	string		0..1	-
+dateDegreeGranted	FlexibleDateNullable		0..1	-
+thesisAdvisorGivenName	string		0..1	-
+thesisAdvisorFamilyName	string		0..1	-
+thesisAdvisor	Person		0..1	-
+thesisReviewerGivenName	string		0..1	-
+thesisReviewerFamilyName	string		0..1	-
+thesisReviewer	Person		0..1	-
+[TRIAGE] referencedWorks	ReferencedWork		0..n	-
+[TRIAGE] referencedWork.authors	string		0..n	-
+[TRIAGE] referencedWork.title	string		1..1	-
+[TRIAGE] referencedWork.publicationYear	integer		0..1	-
+[TRIAGE] referencedWork.doi	string	{Doi}	0..1	-
+[TRIAGE] referencedWork.journalName	string		0..1	-
+[TRIAGE] referencedWork.journalVolume	string	{*Regex*:/^[0-9]+$/}	0..1	-
+[TRIAGE] referencedWork.journalIssue	string	{*Regex*:/^(?:\d+(?:-\d+)?|Supp|S\d+)$/}	0..1	-
+[TRIAGE] referencedWork.journalSites	string		0..1	-
+contentType	string	{ControlledTerm[vocabularyId=contenttypes]->id}	1..1	-
+genre	string	{ControlledTerm[vocabularyId=genres]->id}	1..1	-
+researchData	ResearchData		0..n	-
+researchData.relation	string	{ControlledTerm[group=relations, collection=PSYNDEXresearchDataRelations]->id}	1..1	-
+researchData.doi	string	{Doi}	0..1	-
+researchData.url	string	{Url}	0..1	-
+researchData.access	string	{ControlledTerm[group=access, collection=PSYNDEXresearchDataAccess]->id}	1..1	-
+funders	Funder		0..n	-
+funder.name	string		0..1	-
+funder.fundrefDoi	string	{Doi}	0..1	-
+funder.note	string		0..1	-
+funder.grants	Grant		0..n	-
+funder.grant.grantId	string		0..1	-
+funder.grant.doi	string	{Doi}	0..1	-
+conferenceReferences	ConferenceReference		0..n	-
+conferenceReference.name	string		0..1	-
+conferenceReference.doi	string	{Doi}	0..1	-
+conferenceReference.year	integer		0..1	-
+conferenceReference.place	string		0..1	-
+conferenceReference.note	string		0..1	-
+preregisteredStudies	PreregisteredStudy		0..n	-
+preregisteredStudy.doi	string	{Doi}	0..1	-
+preregisteredStudy.url	string	{Url}	0..1	-
+preregisteredStudy.trialNumber	string		0..1	-
+preregisteredStudy.trialRegistry	string	{ControlledTerm[group=trialregs, collection=allRegistriesCollection]->id}	0..1	-
+replicatedStudies	ReplicatedStudy		0..n	-
+replicatedStudy.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXoriginalDataRelations]->id}	1..1	-
+replicatedStudy.doi	string	{Doi}	0..1	-
+replicatedStudy.url	string	{Url}	0..1	-
+replicatedStudy.studyId	string	{Work->id}	0..1	-
+replicatedStudy.citation	string		0..1	-

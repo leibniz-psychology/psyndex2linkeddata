@@ -48,6 +48,8 @@
 works:0388777_work a bf:Text,
         bf:Work,
         pxc:MainWork ;
+    # internal publishingStatus, psyFoMoStatus:
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0388777_adminmetadata> ;
     bflc:relationship 
         # preregisteredStudies:
         <https://w3id.org/zpid/resources/works/0388777_work#PreregistrationRelationship1>, 
@@ -116,6 +118,16 @@ works:0388777_work a bf:Text,
     pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0388777> ;
     .
 
+<https://w3id.org/zpid/resources/works/0388777_adminmetadata> a bf:AdminMetadata ;
+    bf:status [
+        a pxc:PublishingStatus ;
+        rdfs:label "request_for_approval" ;
+    ],
+        [
+        a pxc:PsyFoMoStatus ;
+        rdfs:label "PsyPlus" ;
+    ] ;
+    .
 <https://w3id.org/zpid/resources/works/0388777_work#authorkeywords> a pxc:AuthorKeywords; rdfs:label "Effectiveness; Non-randomised; Quasi-experimental; Community trial; Youth; Problem behaviour; Capacity building; Intersectoral collaboration; Risk factors; Protective factors".
 
 <https://w3id.org/zpid/resources/works/0388777_work#uncontrolledkeyword1> a pxc:UncontrolledTopic; rdfs:label "effectiveness".
