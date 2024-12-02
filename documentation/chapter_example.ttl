@@ -1,0 +1,273 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
+@prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix licenses: <https://w3id.org/zpid/vocabs/licenses/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pmt: <https://w3id.org/zpid/vocabs/mediacarriers/> .
+@prefix sam: <https://w3id.org/zpid/vocabs/sam/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix roles: <https://w3id.org/zpid/vocabs/roles/> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# this is an example of a chapter in a book, where the book is "controlled", that is, we have a record with a DFK for the book. 
+# example for a chapter in a book for which we currently have no record/DFK is forthcoming. These books will have a secondary class of bflc:Uncontrolled beside pxc:InstanceBundle, as well as all the needed data to construct a "shadow" book - title, publication info, edition statement, series and volume info, editor contributors.
+
+works:0390013_work a bf:Text,
+        bf:Work,
+        pxc:MainWork ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390013_work#adminmetadata> ;
+    bf:classification <https://w3id.org/zpid/resources/works/0390013_work#controlledmethod1>,
+        <https://w3id.org/zpid/resources/works/0390013_work#subjectheading1> ;
+    # authorKeywords:
+    bf:subject <https://w3id.org/zpid/resources/works/0390013_work#authorkeywords> ;
+    # uncontrolledKeywords:
+    bf:subject <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword1>, 
+        <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword2>, 
+        <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword3>, 
+        <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword4>, 
+        <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword5> ;
+    bf:content <https://w3id.org/zpid/vocabs/contenttypes/text> ;
+    bf:contribution <https://w3id.org/zpid/resources/works/0390013_work#contribution1> ;
+    bf:genreForm genres:ResearchPaper ;
+    bf:hasInstance <https://w3id.org/zpid/resources/instances/0390013#1>,
+        <https://w3id.org/zpid/resources/instances/0390013#2> ;
+    bf:language lang:ger ;
+    bf:subject <https://w3id.org/zpid/resources/works/0390013_work#topic1>,
+        <https://w3id.org/zpid/resources/works/0390013_work#topic2>,
+        <https://w3id.org/zpid/resources/works/0390013_work#topic3>,
+        <https://w3id.org/zpid/resources/works/0390013_work#topic4>,
+        <https://w3id.org/zpid/resources/works/0390013_work#topic5> ;
+    bf:summary <https://w3id.org/zpid/resources/works/0390013_work#abstract>,
+        <https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract> ;
+    pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0390013> .
+
+
+<https://w3id.org/zpid/resources/works/0390013_work#adminmetadata> a bf:AdminMetadata ;
+    bf:status [
+        a pxc:PublishingStatus ;
+        rdfs:label "published" ;
+    ],
+        [
+        a pxc:PsyFoMoStatus ;
+        rdfs:label "PsyFoMo" ;
+    ] ;
+    .
+
+<https://w3id.org/zpid/resources/works/0390013_work#controlledmethod1> a pxc:ControlledMethod,
+        pxc:ControlledMethodWeighted ;
+    rdfs:label "nonempirical work" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/methods/20000> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#subjectheading1> a pxc:SubjectHeading,
+        pxc:SubjectHeadingWeighted ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/2930> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#authorkeywords> a pxc:AuthorKeywords; rdfs:label "Kulturvergleichende Psychologie, Paradigmen, Interkulturelle Psychologie, Kultur, Kulturvergleich".
+
+<https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword1> a pxc:UncontrolledTopic; rdfs:label "cross-cultural psychology".
+
+<https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword2> a pxc:UncontrolledTopic; rdfs:label "culture".
+
+<https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword3> a pxc:UncontrolledTopic; rdfs:label "cultural comparison".
+
+<https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword4> a pxc:UncontrolledTopic; rdfs:label "intercultural psychology".
+
+<https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword5> a pxc:UncontrolledTopic; rdfs:label "paradigms".
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent> ;
+    bf:qualifier "first" ;
+    bf:role roles:AU ;
+    mads:email <mailto:petia@genkova.de> ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1> ;
+    pxp:contributionPosition 1 .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent> a bf:Person ;
+    rdfs:label "Genkova, Petia" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_psychauthorsid> ;
+    schema:familyName "Genkova" ;
+    schema:givenName "Petia" .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Wirtschaftspsychologie, University of Applied Sciences Osnabrück" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/059vymd37" .
+
+<https://w3id.org/zpid/resources/works/0390013_work#contribution1_personagent_psychauthorsid> a pxc:PsychAuthorsID ;
+    rdf:value "p00775PG" .
+
+<https://w3id.org/zpid/resources/instances/0390013#1> a bf:Instance,
+        bf:Print ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/nc> ;
+    bf:instanceOf works:0390013_work ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/n> ;
+    pxp:mediaCarrier pmt:Print .
+
+<https://w3id.org/zpid/resources/instances/0390013#2> a bf:Electronic,
+        bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/cr> ;
+    bf:identifiedBy <https://doi.org/10.1007/978-3-658-27789-5_1> ;
+    bf:instanceOf works:0390013_work ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/c> ;
+    pxp:mediaCarrier pmt:Online .
+
+<https://w3id.org/zpid/resources/works/0390013_work#topic1> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Cross Cultural Psychology" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/12591> ;
+    skos:prefLabel "Kulturvergleichende Psychologie"@de,
+        "Cross Cultural Psychology"@en .
+
+<https://w3id.org/zpid/resources/works/0390013_work#topic2> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Cross Cultural Differences" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/12590> ;
+    skos:prefLabel "Interkulturelle Unterschiede"@de,
+        "Cross Cultural Differences"@en .
+
+<https://w3id.org/zpid/resources/works/0390013_work#topic3> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Culture (Anthropological)" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/12750> ;
+    skos:prefLabel "Kultur (Anthropologie)"@de,
+        "Culture (Anthropological)"@en .
+
+<https://w3id.org/zpid/resources/works/0390013_work#topic4> a bf:Topic ;
+    rdfs:label "Psychological Theories" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/41746> ;
+    skos:prefLabel "Psychologische Theorien"@de,
+        "Psychological Theories"@en .
+
+<https://w3id.org/zpid/resources/works/0390013_work#topic5> a bf:Topic ;
+    rdfs:label "Traditions" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/53725> ;
+    skos:prefLabel "Traditionen"@de,
+        "Traditions"@en .
+
+
+<https://w3id.org/zpid/resources/works/0390013_work#abstract> a pxc:Abstract ;
+    rdfs:label "Im Zuge der Globalisierung nehmen kulturvergleichende und interkulturelle Forschung stark zu. Für ein Verständnis der Methoden und Schlussfolgerungen dieser Studien ist ein Grundlegendes Verständnis der Paradigmen interkultureller Psychologie notwendig. Das folgende Kapitel beschreibt daher den Gegenstand, theoretische Konzepte und Perspektiven der Kulturvergleichenden Psychologie. Zu einen werden Kulturvergleichende und Kulturpsychologie als Perspektiven voneinander abgegrenzt. Des Weiteren wird diskutiert, inwiefern Kultur überhaupt als ein operationalisierbares Konstrukt betrachtet werden kann und die Ziele, sowie der generelle konzeptuelle Rahmen der kulturvergleichenden Psychologie erörtert. Daraus ergeben sich die zugrunde liegenden Paradigmen der kulturvergleichenden Psychologie. Das folgende Kapitel möchte damit eine Grundlage für das Verständnis interkultureller psychologischer Forschung schaffen."@de ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390013_work#abstract_source> ;
+    bf:usageAndAccessPolicy <https://w3id.org/zpid/resources/works/0390013_work#abstract_license> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#abstract_license> a bf:UsageAndAccessPolicy ;
+    rdfs:label "(c) Springer Fachmedien Wiesbaden GmbH" .
+
+<https://w3id.org/zpid/resources/works/0390013_work#abstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract> a pxc:Abstract,
+        pxc:SecondaryAbstract ;
+    rdfs:label "In the wake of globalization, cross-cultural and cross-cultural comparative research are proliferating. A basic understanding of the paradigms of cross-cultural psychology is necessary for an understanding of the methods and conclusions of these studies. Therefore, the following chapter describes the subject matter, theoretical concepts, and perspectives of comparative cultural psychology. First, comparative culture psychology and cultural psychology are distinguished as perspectives. Furthermore, the extent to which culture can be considered an operationalizable construct at all is discussed, as well as the goals, and the general conceptual framework of comparative cultural psychology. From this, the underlying paradigms of comparative cultural psychology emerge. The following chapter thus aims to provide a foundation for understanding cross-cultural psychological research."@en ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract_source> ;
+    bf:usageAndAccessPolicy <https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract_license> .
+
+<https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract_license> a bf:UsageAndAccessPolicy ;
+    rdfs:label "translated by DeepL" .
+
+<https://w3id.org/zpid/resources/works/0390013_work#secondaryabstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "DeepL" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013> a pxc:InstanceBundle ;
+    bflc:relationship <https://w3id.org/zpid/resources/instancebundles/0390013#bookrel> ;
+    bf:hasPart <https://w3id.org/zpid/resources/instances/0390013#1>,
+        <https://w3id.org/zpid/resources/instances/0390013#2> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0390013#dfk> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/instancebundles/0390013_publication> ;
+    bf:extent <https://w3id.org/zpid/resources/instancebundles/0390013_pagecount> ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0390013#title>,
+        <https://w3id.org/zpid/resources/instancebundles/0390013#translatedtitle> ;
+    bf:usageAndAccessPolicy licenses:PUBL ;
+    pxp:issuanceType issuances:Chapter .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#bookrel> a bflc:Relationship ;
+    bf:partOf <https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book> ;
+    pxp:pageEnd "30" ;
+    pxp:pageStart "3" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book> a pxc:InstanceBundle ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book_id> ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book_title> ;
+    owl:sameAs <https://w3id.org/zpid/resources/instancebundles/0388327> .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book_id> a pxc:DFK ;
+    rdf:value "0388327" . # aus SSDFK
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#bookrel_book_title> a bf:Title ;
+    bf:mainTitle "Handbuch Stress und Kultur. Interkulturelle und kulturvergleichende Perspektiven" . # aus BIP
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#dfk> a pxc:DFK ;
+    rdf:value "0390013" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#title> a bf:Title ;
+    rdfs:label "Kulturvergleichende Psychologie: Gegenstand, theoretische Konzepte und Perspektiven" ;
+    bf:mainTitle "Kulturvergleichende Psychologie: Gegenstand, theoretische Konzepte und Perspektiven"@de .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#translatedtitle> a pxc:TranslatedTitle ;
+    rdfs:label "Cross-cultural psychology: Topics, theoretical concepts, and perspectives" ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/instancebundles/0390013#translatedtitle_source> ;
+    bf:mainTitle "Cross-cultural psychology: Topics, theoretical concepts, and perspectives"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013#translatedtitle_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "ZPID" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013_publication> a bf:Publication ;
+    bflc:simpleDate "2021" ;
+    bf:date "2021"^^xsd:gYear .
+
+<https://w3id.org/zpid/resources/instancebundles/0390013_pagecount> 
+        a bf:Extent ;
+        bf:unit <http://rdaregistry.info/termList/RDACarrierEU/1023> ;
+        rdf:value "28" ;
+ .
+
+<https://doi.org/10.1007/978-3-658-27789-5_1> a bf:Doi ;
+    rdf:value "10.1007/978-3-658-27789-5_1" .
+
+genres:ResearchPaper a bf:GenreForm ;
+    rdfs:label "Research Paper" ;
+    skos:prefLabel "Forschungsaufsatz"@de,
+        "Research Paper"@en .
+
+licenses:PUBL a bf:UsePolicy ;
+    rdfs:label "PUBL: Full copyright with publisher or association" ;
+    skos:prefLabel "PUBL: Volles Urheberrecht des Verlags oder einer Körperschaft"@de,
+        "PUBL: Full copyright with publisher or association"@en .
+
+issuances:Chapter a pxc:IssuanceType ;
+    rdfs:label "Chapter" .
+
+<http://rdaregistry.info/termList/RDACarrierEU/1023> a bf:Unit;
+    rdfs:label "pages" ;
+    skos:prefLabel "Seiten"@de,
+        "pages"@en .
