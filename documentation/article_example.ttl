@@ -710,7 +710,7 @@ genres:StudyProtocol a bf:GenreForm ;
 issuances:JournalArticle a pxc:IssuanceType ;
     rdfs:label "Journal Article" .
 
-licenses:CC_BY_4.0 a bf:UsePolicy ;
+licenses:CC_BY_4_0 a bf:UsePolicy ;
     rdfs:label "CC-BY-4.0: Creative Commons Attribution 4.0 International" ;
     skos:prefLabel "CC-BY-4.0: Creative Commons Namensnennung 4.0 International"@de,
         "CC-BY-4.0: Creative Commons Attribution 4.0 International"@en .
