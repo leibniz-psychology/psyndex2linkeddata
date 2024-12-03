@@ -3,18 +3,17 @@ funding (GRANT), Conference (CF), Research Data (DATAC, ),
 Preregistrations (PRREG), Reanalyses, Replications (REPY).
 """
 
-from rdflib import Graph, Literal
-from rdflib.namespace import RDF, RDFS, Namespace
-from rdflib import BNode
-from rdflib import URIRef
-import requests_cache
-from datetime import timedelta
-import xml.etree.ElementTree as ET
 import html
 import re
-import modules.mappings as mappings
-import modules.helpers as helpers
+import xml.etree.ElementTree as ET
+from datetime import timedelta
 
+import requests_cache
+from rdflib import BNode, Graph, Literal, URIRef
+from rdflib.namespace import RDF, RDFS, Namespace
+
+import modules.helpers as helpers
+import modules.mappings as mappings
 
 # --- namespaces --- #
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")

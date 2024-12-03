@@ -10,6 +10,7 @@
 """
 import html
 import re
+
 import modules.mappings as mappings
 
 

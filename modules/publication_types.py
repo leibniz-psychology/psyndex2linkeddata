@@ -5,11 +5,14 @@
     and the RDA ones (single unit etc.)
 """
 
+import logging
 import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
-import modules.mappings as mappings
+
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
+import modules.mappings as mappings
 
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 WORKS = Namespace("https://w3id.org/zpid/resources/works/")
@@ -88,7 +91,7 @@ def generate_content_type(record, dfk, work_node, graph):
             content_type_string = bf_work_subclass = "MovingImage"
     # if no DT is given (rare, but bound to happen as an error): just assume text
     elif DT is None and DT2 is None:
-        print(f"No DT given in {dfk}, assuming text.")
+        logging.info(f"No DT given in {dfk}, assuming text.")
         content_type_string = bf_work_subclass = "Text"
     # print(content_type_string, bf_work_subclass)
     # create a node for the content type:
@@ -138,10 +141,12 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
             method_code = helpers.get_subfield(method.text, "c")
             methods.append(method_code)
     except:
-        print(f"No controlled methods found in {dfk}.")
+        logging.info(f"No controlled methods found in {dfk}.")
         methods = []
     if methods == []:
-        print(f"No controlled methods found in {dfk}. Getting a suggestion from Annif!")
+        logging.info(
+            f"No controlled methods found in {dfk}. Getting a suggestion from Annif!"
+        )
         # get a method suggestion from the Annif API:
         # get the title from instance bundle's bf:title > rdfs:label
         # get all titles, then use the one with class bf:Title, not the one with pxc:Translated Title:
@@ -153,9 +158,9 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         ):
             try:
                 title = graph.value(title_node, RDFS.label, None)
-                print(f"Title found")
+                logging.info(f"Title found")
             except:
-                print("exception: No title found.")
+                logging.info("exception: No title found.")
                 title = ""
         else:
             title = ""
@@ -166,10 +171,10 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
             and graph.value(abstract_node, RDF.type, None) != PXC.SecondaryAbstract
         ):
             abstract = graph.value(abstract_node, RDFS.label, None)
-            print(f"Abstract found!")
+            logging.info(f"Abstract found!")
         else:
             abstract = ""
-            print("No abstract found.")
+            logging.info("No abstract found.")
         # get the uncontrolled keywords from UTE or UTG:
 
         # concatenate title and abstract:
@@ -199,9 +204,9 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         # pass the text and language to the Annif API:
         try:
             method_suggestion = localapi.get_annif_method_suggestion(text, language)
-            print(f"Method suggestion from Annif: {method_suggestion}")
+            logging.info(f"Method suggestion from Annif: {method_suggestion}")
         except:
-            print(f"Could not get a method suggestion from Annif for {dfk}.")
+            logging.info(f"Could not get a method suggestion from Annif for {dfk}.")
             method_suggestion = None
         # add the method suggestion to the methods list:
         if method_suggestion is not None:
@@ -234,7 +239,9 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                     if cm["new_genre"] is not None and cm["new_genre"] != "":
                         new_genres.append(cm["new_genre"])
         except:
-            print("no new methods or genres found in mappings for " + method_code)
+            logging.info(
+                "no new methods or genres found in mappings for " + method_code
+            )
         # TODO: clean up the list of methods: only keep the lowest!
         # - if a work already has something starting with "101" (a subtype of experimental), remove "10000"
         # - if it already has something starting with 200[1-9] (subtypes of nonempirical), remove "20000"
@@ -300,7 +307,9 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         # So: check if the new_genres List contains both ScholarlyWork and ResearchPaper, and if so, remove ScholarlyWork.
 
         if "ScholarlyWork" in new_genres and "ResearchPaper" in new_genres:
-            print("removed ScholarlyWork genre from ResearchPaper work " + work_node)
+            logging.info(
+                "removed ScholarlyWork genre from ResearchPaper work " + work_node
+            )
             new_genres.remove("ScholarlyWork")
         for genre in new_genres:
             genre_node = URIRef(GENRES[genre])
@@ -330,7 +339,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 graph.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
                 graph.add((genre_node, RDFS.label, Literal(english_label)))
             except:
-                print("no label found for genre " + genre)
+                logging.info("no label found for genre " + genre)
                 # keeping the genre without label for now
 
 
@@ -375,7 +384,7 @@ def add_work_genres(work_uri, record, dfk, records_bf):
         # print("methods for record " + record.find("DFK").text + ": " + str(methods))
     except:
         methods = []
-        print("no methods found in record " + dfk)
+        logging.info("no methods found in record " + dfk)
 
     ## Doctoral Thesis:
     if (
@@ -478,7 +487,7 @@ def add_work_genres(work_uri, record, dfk, records_bf):
             records_bf.add((genre_node, SKOS.prefLabel, Literal(english_label, "en")))
             records_bf.add((genre_node, RDFS.label, Literal(english_label)))
         except:
-            print("no label found for genre " + genre)
+            logging.info("no label found for genre " + genre)
             # keeping the genre without label for now
         finally:
             # add it to the work:
@@ -515,7 +524,7 @@ def clean_up_genres(work_uri, graph):
         )
         in graph
     ):
-        print("we have a thesis!")
+        logging.info("we have a thesis!")
         if ((work_uri, BF.genreForm, URIRef(GENRES["ResearchPaper"]))) in graph:
             # print("removed ResearchPaper genre from Thesis work " + work_uri)
             graph.remove(
@@ -558,7 +567,7 @@ def clean_up_genres(work_uri, graph):
     genre_count = len(list(genres))
 
     if genre_count > 1:
-        print(
+        logging.info(
             str(work_uri)
             + " has several genres, checking for hierarchy sanity: "
             + str(genre_count)
@@ -569,13 +578,13 @@ def clean_up_genres(work_uri, graph):
         genres = graph.objects(work_uri, BF.genreForm)
         # then, for each genre, check if it is a subconcept of another genre:
         for genre in list(genres):
-            print(str(genre))
+            logging.info(str(genre))
             # get the broaderTransitive of the genre from skosmos:
             try:
                 broader = localapi.get_broader_transitive("genres", genre)
                 # print("got broaderTransitive for " + str(genre))
             except:
-                print("could not get broaderTransitive for " + str(genre))
+                logging.info("could not get broaderTransitive for " + str(genre))
                 broader = None
             if broader is not None:
                 # turn the whole thing into a list, but only the content of the "broaderTransitive" key:
@@ -611,14 +620,14 @@ def clean_up_genres(work_uri, graph):
                             broader_list.remove(top_level_genre)
                     # print("broader_list: " + str(broader_list))
                 except:
-                    print("could not remove top-level genres from broader list.")
+                    logging.info("could not remove top-level genres from broader list.")
 
                 # then, for each broader concept, check if the work already has any of these broader concepts as a genre:
                 for broader_genre in broader_list:
                     # remember that "genres" is a list of uris and broader_genre is just a string, so we need to recast it:
                     broader_genre = URIRef(broader_genre)
                     if broader_genre in graph.objects(work_uri, BF.genreForm):
-                        print(
+                        logging.info(
                             str(work_uri)
                             + " has a broader ("
                             + str(broader_genre)
@@ -635,7 +644,7 @@ def clean_up_genres(work_uri, graph):
                             )
                             # print("removed " + str(broader_genre) + " from work.")
                         except:
-                            print(
+                            logging.info(
                                 "could not remove " + str(broader_genre) + " from work."
                             )
 
@@ -677,7 +686,7 @@ def get_issuance_type(instance_bundle_uri, record, graph):
         # add a label:
         graph.set((issuance_node, RDFS.label, Literal(issuance_type)))
     except:
-        print("record has no valid bibliographic level!")
+        logging.warning("record has no valid bibliographic level!")
 
 
 # function to set mediaCarrier from a mediatype field (MT or MT2):
@@ -710,7 +719,7 @@ def generate_new_mediacarrier(mediatype):
         # what about nachlass? bf:Archival? brauchen wir da auch einen mediaCarrier? unmediated oder unterform manuscript?
         # what about "Schreibmaschinenfassung" in BN/BNDI? That would really be Manuscript, I suppose.
         case _:
-            print("no match for " + mediatype)
+            logging.info("no match for " + mediatype)
             return "Print", "Print"
         # TODO: if MT is Print, but BN or BNDI has "Schreibmaschinenfassung", it is actually a manuscript: https://w3id.org/zpid/vocabs/mediacarriers/Manuscript -> go over the graph again later!
         # and what about "Offsetdruck" in BN/BNDI? That would really be Print, I suppose.

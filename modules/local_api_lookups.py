@@ -1,7 +1,9 @@
+import logging
+from datetime import timedelta
 from urllib.parse import urlencode
+
 import requests_cache
 from decouple import config
-from datetime import timedelta
 
 ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
 
@@ -26,6 +28,7 @@ session_annif = requests_cache.CachedSession(
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
+    backend="redis",
 )
 
 # cache for skosmos requests:
@@ -34,6 +37,7 @@ session_skosmos = requests_cache.CachedSession(
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
+    backend="redis",
 )
 
 session_skosmos.auth = (SKOSMOS_USER, SKOSMOS_PASSWORD)
@@ -64,13 +68,15 @@ def get_annif_method_suggestion(text, language):
     try:
         response = session_annif.post(ANNIF_API_URL + backend + "/suggest", payload)
     except:
-        print(f"Warning: No response from annif!")
+        logging.warning(f"Warning: No response from annif!")
         return None
     # return the suggestion
     try:
         return response.json()["results"][0]["notation"]
     except:
-        print(f"Could not get a method suggestion from Annif - empty result list.")
+        logging.warning(
+            f"Could not get a method suggestion from Annif - empty result list."
+        )
         return None
 
 
@@ -98,10 +104,10 @@ def get_concept_uri_from_skosmos(concept_label, vocid):
             # print(skosmos_response["result"][0]["uri"])
             return skosmos_response["result"][0]["uri"]
         else:
-            print("no uri found for " + concept_label)
+            logging.warning("no uri found for " + concept_label)
             return None
     else:
-        print("1. skosmos request failed for " + concept_label)
+        logging.warning("1. skosmos request failed for " + concept_label)
         return None
 
 
@@ -128,10 +134,10 @@ def get_preflabel_from_skosmos(uri, vocid, lang="de"):
             # print(skosmos_response["labels"][0]["label"])
             return skosmos_response["prefLabel"]
         else:
-            print("no label found for " + uri)
+            logging.info("no label found for " + uri)
             return None
     else:
-        print("2. skosmos request failed for " + str(uri))
+        logging.warning("2. skosmos request failed for " + str(uri))
         return None
 
 
@@ -152,7 +158,7 @@ def search_in_skosmos(search_term, vocid):
             # print("no concept found for " + search_term)
             return None
     else:
-        print("3. skosmos request failed for " + search_term)
+        logging.warning("3. skosmos request failed for " + search_term)
         return None
 
 
@@ -167,5 +173,5 @@ def get_broader_transitive(vocid, concept_uri):
         skosmos_response = skosmos_request.json()
         return skosmos_response
     else:
-        print("4. skosmos request failed for broaderTransitive")
+        logging.warning("4. skosmos request failed for broaderTransitive")
         return None

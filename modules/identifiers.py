@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
+
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings

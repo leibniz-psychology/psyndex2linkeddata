@@ -1,11 +1,13 @@
 # Purpose: Convert STAR XML to Bibframe RDF
 
 import csv  # for looking up institutes from our csv of luxembourg authority institutes
-import datetime
+
+# import datetime
 import html
+import logging
 import re
 import xml.etree.ElementTree as ET
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import dateparser
 import requests
@@ -30,6 +32,10 @@ from modules.mappings import funder_names_replacelist
 # import modules.contributions as contributions
 # import modules.open_science as open_science
 
+logging.basicConfig(
+    filename=datetime.now().strftime("logs/convert-starxml-to-bf-%Y_%m_%d_%H%M%S.log"),
+    level=logging.INFO,
+)
 
 # TODO: new fuzzy compare: using the faster rapidfuzz as a drop-in replacement for fuzzywuzzy:
 # from rapidfuzz import fuzz
@@ -201,7 +207,7 @@ def get_ror_org_country(affiliation_ror_id):
         if "country" in ror_response:
             return ror_response["country"]["name"]
         else:
-            print("no country found for " + affiliation_ror_id)
+            logging.info("no country found for " + affiliation_ror_id)
             return None
 
 
@@ -289,7 +295,7 @@ def add_instance_license(resource_uri, record):
         elif license_code.startswith("OTHER"):
             license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "UnspecifiedOpenLicense")
         else:
-            print(
+            logging.info(
                 f"no license uri found for {license_code} in record {record.find('DFK').text}"
             )
             license_uri = None
@@ -305,14 +311,14 @@ def add_instance_license(resource_uri, record):
                     license_uri, "licenses", "de"
                 )
             except:
-                print(f"failed getting prefLabels for license {license_uri}")
+                logging.warning(f"failed getting prefLabels for license {license_uri}")
                 german_preflabel = None
             try:
                 english_preflabel = localapi.get_preflabel_from_skosmos(
                     license_uri, "licenses", "en"
                 )
             except:
-                print(f"failed getting prefLabels for license {license_uri}")
+                logging.warning(f"failed getting prefLabels for license {license_uri}")
                 english_preflabel = None
             # add the prefLabels to the license node:
             if german_preflabel is not None:
@@ -320,7 +326,7 @@ def add_instance_license(resource_uri, record):
                     (license_node, SKOS.prefLabel, Literal(german_preflabel, lang="de"))
                 )
             else:
-                print(f"no german prefLabel found for {license_uri}")
+                logging.warning(f"no german prefLabel found for {license_uri}")
             if english_preflabel is not None:
                 records_bf.add(
                     (
@@ -331,12 +337,14 @@ def add_instance_license(resource_uri, record):
                 )
                 records_bf.set((license_node, RDFS.label, Literal(english_preflabel)))
             else:
-                print(f"no english prefLabel found for {license_uri}")
+                logging.warning(f"no english prefLabel found for {license_uri}")
 
             # english_preflabel = localapi.get_preflabel_from_skosmos(license_uri, "licenses", "en")
             # TODO: get url for license itself from skosmos (e.g. creative commons deed url)
     else:
-        print(f"warning: record {record.find('DFK').text} has no valid license!")
+        logging.warning(
+            f"warning: record {record.find('DFK').text} has no valid license!"
+        )
 
 
 def add_work_classification(work_uri, record):
@@ -373,12 +381,18 @@ def get_publication_date(record):
             # parse and convert this to the yyyy-mm-dd format:
             date = dateparser.parse(date).strftime("%Y-%m-%d")
         except:
-            print("parsedate: couldn't parse " + str(date))
-            print("Data in PHIST looks like an unsalvagable mess, using PY insead!")
+            logging.warning(
+                f"parsedate: couldn't parse ${str(date)} for record ${record.find('DFK').text}"
+            )
+            logging.warning(
+                "Data in PHIST looks like an unsalvagable mess, using PY insead!"
+            )
             try:
                 date = record.find("PY").text
             except:
-                print("record has no valid publication date!")
+                logging.warning(
+                    f"record ${record.find('DFK').text} has no valid publication date!"
+                )
                 date = None
 
     else:
@@ -386,7 +400,9 @@ def get_publication_date(record):
         try:
             date = record.find("PY").text
         except:
-            print("record has no valid publication date!")
+            logging.warning(
+                f"record ${record.find('DFK').text} has no valid publication date!"
+            )
             date = None
     return date
 
@@ -499,7 +515,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                     break
         # after all loops, print a message if no match was found:
         else:
-            print(
+            logging.info(
                 "no match found for paup_id "
                 + paup_id
                 + " ("
@@ -547,7 +563,7 @@ def match_paups_to_contribution_nodes(work_uri, record):
                             records_bf.add((paup_id_node, RDF.value, Literal(paup_id)))
                             # add the identifier node to the agent node:
                             records_bf.add((agent, BF.identifiedBy, paup_id_node))
-                            print("paup_id added to agent: " + paup_id)
+                            logging.info("paup_id added to agent: " + paup_id)
 
 
 def match_orcids_to_contribution_nodes(work_uri, record):
@@ -559,7 +575,9 @@ def match_orcids_to_contribution_nodes(work_uri, record):
         # is the orcid well formed?
         # clean up the orcid_id by removing spaces that sometimes sneak in when entering them in the database:
         if orcid_id is not None and " " in orcid_id:
-            print("warning: orcid_id contains spaces, cleaning it up: " + orcid_id)
+            logging.warning(
+                "warning: orcid_id contains spaces, cleaning it up: " + orcid_id
+            )
         orcid_id = orcid_id.replace(" ", "")
         # by the way, here is a regex pattern for valid orcids:
         orcid_pattern = re.compile(
@@ -570,7 +588,7 @@ def match_orcids_to_contribution_nodes(work_uri, record):
             orcid_id = orcid_pattern.match(orcid_id).group(5)
         else:
             # warn if it doesn't match the pattern for well-formed orcids:
-            print(f"warning: invalid orcid: {orcid_id}")
+            logging.warning(f"warning: invalid orcid: {orcid_id}")
         # get the given and family part of the orcid name:
         # make sure we give an error message when we can't split:
         try:
@@ -579,7 +597,7 @@ def match_orcids_to_contribution_nodes(work_uri, record):
             orcid_givenname = orcid_split[1].strip()
             orcidname_normalized = normalize_names(orcid_familyname, orcid_givenname)
         except:
-            print(
+            logging.info(
                 "couldn't split orcid name into given and family name: "
                 + orcid_name
                 + " in record "
@@ -617,7 +635,7 @@ def match_orcids_to_contribution_nodes(work_uri, record):
                     break
         # after all loops, print a message if no match was found:
         else:
-            print(
+            logging.info(
                 "no match found for orcid_id "
                 + orcid_id
                 + " ("
@@ -686,7 +704,7 @@ def match_email_to_contribution_nodes(work_uri, record):
         )
         # check if email matches the regex in email_pattern:
         if not email_pattern.match(email):
-            print(
+            logging.warning(
                 f"warning: invalid email: {email} in record {record.find('DFK').text}"
             )
         email = "mailto:" + email
@@ -1200,7 +1218,7 @@ def add_bf_contributor_person(work_uri, record):
         except:
             familyname = personname
             givenname = ""
-            print(
+            logging.info(
                 "no comma in personname: "
                 + personname
                 + " in record "
@@ -2280,7 +2298,7 @@ def get_bf_preregistrations(work_uri, record):
                         unknown_field_content = helpers.check_for_url_or_doi(subfield)[
                             0
                         ].strip()
-                        print(
+                        logging.info(
                             f"unknown type: {unknown_field_content}. Adding as a note."
                         )
                         # add the string as a note to the instance:
@@ -2297,7 +2315,7 @@ def get_bf_preregistrations(work_uri, record):
                     and "OSF.IO/" in doi
                     and doi.split("/")[2].lower() in url
                 ):
-                    print(
+                    logging.info(
                         f"duplicate doi in url {url}: {doi.split('/')[2]} from {doi}. Removing url in favor of doi."
                     )
                     url_set.remove(url)
@@ -2470,7 +2488,7 @@ def add_trials_as_preregs(work_uri, prereg_string):
                         relation_type="preregistration",
                         count=preregistrationlink_counter,
                     )
-                    print(
+                    logging.info(
                         "adding new Preregistration node for trial number: "
                         + trialnumber[1]
                     )
@@ -2547,11 +2565,11 @@ def get_crossref_funder_id(funder_name):
     try:
         crossref_api_request = session_fundref.get(crossref_api_url, timeout=20)
     except:
-        print("fundref request failed at " + crossref_api_url)
+        logging.warning("fundref request failed at " + crossref_api_url)
     try:
         crossref_api_response = crossref_api_request.json()
     except:
-        print("fundref response not received for " + crossref_api_url)
+        logging.warning("fundref response not received for " + crossref_api_url)
     # result_count = int(crossref_api_response["message"]["total-results"])
     # if the request was successful, get the json response:
 
@@ -2575,11 +2593,11 @@ def get_crossref_funder_id(funder_name):
                 # print(f"fundref-api: nothing either for {funder_name}. Returning None.")
                 return None
     except KeyError:
-        print("Error: Missing key in crossref_api_response.")
+        logging.error("Error: Missing key in crossref_api_response.")
     except requests.exceptions.RequestException as e:
-        print(f"Error: Request failed - {e}")
+        logging.error(f"Error: Request failed - {e}")
     except Exception as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
 
 
 # function to build the nodes for preregistration links
@@ -2728,7 +2746,7 @@ def get_bf_conferences(work_uri, record):
                 conference_name = helpers.get_mainfield(conference_field)
             except:
                 conference_name = "MISSING CONFERENCE NAME"
-                print(
+                logging.warning(
                     "a conference in field CF has no name. DFK: "
                     + record.find("DFK").text
                 )
@@ -2886,7 +2904,9 @@ def get_urlai(work_uri, record):
                 unknown_field_content = helpers.check_for_url_or_doi(urlai_field)[
                     0
                 ].strip()
-                print(f"unknown type: {unknown_field_content}. Adding as a note.")
+                logging.info(
+                    f"unknown type: {unknown_field_content}. Adding as a note."
+                )
                 build_note_node(instance, helpers.check_for_url_or_doi(urlai_field)[0])
 
         # compare all the dois in the doi_set to each item in the url set. If the url contains the doi, remove it from the url set:
@@ -2900,7 +2920,7 @@ def get_urlai(work_uri, record):
                     and "OSF.IO/" in doi
                     and doi.split("/")[2].lower() in url
                 ):
-                    print(
+                    logging.info(
                         f"duplicate doi in url {url}: {doi.split('/')[2]} from {doi}. Removing url in favor of doi."
                     )
                     url_set.remove(url)
@@ -2972,7 +2992,7 @@ def get_datac(work_uri, record):
                         unknown_field_content = helpers.check_for_url_or_doi(subfield)[
                             0
                         ].strip()
-                        print(
+                        logging.info(
                             f"unknown type: {unknown_field_content}. Adding as a note."
                         )
                         build_note_node(
@@ -2989,7 +3009,7 @@ def get_datac(work_uri, record):
                     and "OSF.IO/" in doi
                     and doi.split("/")[2].lower() in url
                 ):
-                    print(
+                    logging.info(
                         f"duplicate doi in url {url}: {doi.split('/')[2]} from {doi}. Removing url in favor of doi."
                     )
                     url_set.remove(url)
@@ -3278,7 +3298,7 @@ for record in tqdm(records):
         instances = list(records_bf.objects(instance_bundle_uri, BF.hasPart))
         # if there is only one instance, add the doi, url and urn to that:
         if len(instances) == 1:
-            print(
+            logging.info(
                 "only one instance in bundle, adding doi, url, urn to it, regardless of mediatype"
             )
             # get the instance:
@@ -3291,7 +3311,7 @@ for record in tqdm(records):
             instance_source_ids.get_instance_urn(instance, record, records_bf)
         # otherwise, if there are two (or more) instances, add the doi, url and urn to the first electronic instance we can find:
         elif len(instances) > 1:
-            print(
+            logging.info(
                 "several instances found, checking for mediatype before adding doi etc."
             )
             # check if either the first or the second from the list are pxp:mediaCarrier pmt:Online:
@@ -3335,7 +3355,7 @@ records_bf.add(
     (
         records_bf_admin_metadata_root,
         BF.generationDate,
-        Literal(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+        Literal(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
     )
 )
 # # add the count as BF.count:

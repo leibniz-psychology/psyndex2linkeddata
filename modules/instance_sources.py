@@ -32,14 +32,17 @@
 # ```
 #
 
-from ast import expr
+import logging
 import re
 import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
-import modules.mappings as mappings
+from ast import expr
+
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+
 import modules.helpers as helpers
 import modules.identifiers as identifiers
 import modules.local_api_lookups as localapi
+import modules.mappings as mappings
 
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 BFLC = Namespace("http://id.loc.gov/ontologies/bflc/")
@@ -119,7 +122,7 @@ def split_pages(page_string):
             except:
                 article_number = None
     else:
-        print("couldn't properly parse PAGE field: " + page_string)
+        logging.warning("couldn't properly parse PAGE field: " + page_string)
     return page_start, page_end, extent, article_number
 
 

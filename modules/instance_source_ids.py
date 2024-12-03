@@ -1,9 +1,12 @@
+import logging
 import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
+
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+
 import modules.helpers as helpers
+import modules.identifiers as identifiers
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings
-import modules.identifiers as identifiers
 
 BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
 WORKS = Namespace("https://w3id.org/zpid/resources/works/")
@@ -46,7 +49,7 @@ def get_instance_doi(instance, record, graph):
         if helpers.check_for_url_or_doi(doi_field)[1] == "doi":
             doi = helpers.check_for_url_or_doi(doi_field)[0]
         else:
-            print(f"Warning: DOI {doi_field} is not a valid DOI.")
+            logging.warning(f"Warning: DOI {doi_field} is not a valid DOI.")
             # should probably check if it is a valid url and then use it as a url?
         if doi is not None:
             # add it as an identifier of class bf:Doi

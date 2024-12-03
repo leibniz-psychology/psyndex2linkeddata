@@ -29,9 +29,12 @@
 # ```
 
 
+import logging
 import re
 import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
+
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings
@@ -109,7 +112,7 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
             )
         except:
             controlled_term_uri = None
-            print(
+            logging.warning(
                 "no uri found in skosmos for Controlled term: "
                 + controlled_term_string_english
             )
@@ -145,7 +148,7 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
         # attach the controlled term node to the work node:
         records_bf.add((work_uri, BF.subject, controlled_term_node))
     return counter
-        
+
 
 def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
     # from fields SH, create a bf:Classification node for each subject heading classification:
@@ -153,7 +156,9 @@ def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
     heading_counter = 0
     for heading in record.findall(termtype):
         heading_counter += 1
-        classification_node = URIRef(str(work_uri) + "#subjectheading" + str(heading_counter))
+        classification_node = URIRef(
+            str(work_uri) + "#subjectheading" + str(heading_counter)
+        )
         records_bf.add((classification_node, RDF.type, PXC.SubjectHeading))
         # if it is the first heading, also add the class pxc:SubjectHeadingWeighted:
         if heading_counter == 1:
@@ -171,8 +176,8 @@ def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
         # initialize variables for the controlled term string parts:
         heading_string_english = helpers.get_subfield(heading_string, "e")
         heading_string_german = helpers.get_subfield(heading_string, "g")
-        heading_code = helpers.get_subfield(heading_string, "c")     
-        
+        heading_code = helpers.get_subfield(heading_string, "c")
+
         # records_bf.add(
         #     (
         #         classification_node,
@@ -211,6 +216,7 @@ def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
         # )
         records_bf.add((work_uri, BF.classification, classification_node))
 
+
 def add_age_groups(work_uri, record, records_bf, termtype, vocid):
     # get from field AGE the age groups:
     age_counter = 0
@@ -220,14 +226,20 @@ def add_age_groups(work_uri, record, records_bf, termtype, vocid):
         # remove whitespace and lowercase the first word, e.g. "Preschool Age" -> "preschoolAge":
         # first make the first word lowercase,
         # then pick the second word and capitalize it, but only if it exists:
-        age_string_list = age_string.split(" ") # results in a list of words
-        if len(age_string_list) > 1: # if that list has more than one word, capitalize the second word:
-            age_camelcased = str(age_string_list[0].lower()) + str(age_string_list[1].capitalize())
-        else: # it is only one word, so just lowercase it:
+        age_string_list = age_string.split(" ")  # results in a list of words
+        if (
+            len(age_string_list) > 1
+        ):  # if that list has more than one word, capitalize the second word:
+            age_camelcased = str(age_string_list[0].lower()) + str(
+                age_string_list[1].capitalize()
+            )
+        else:  # it is only one word, so just lowercase it:
             age_camelcased = str(age_string_list[0].lower())
         # remove whitespace:
         age_camelcased = re.sub(r"\s+", "", age_camelcased)
-        age_group_node = URIRef("https://w3id.org/zpid/vocabs/age/" + str(age_camelcased))
+        age_group_node = URIRef(
+            "https://w3id.org/zpid/vocabs/age/" + str(age_camelcased)
+        )
         records_bf.add((age_group_node, RDF.type, PXC.AgeGroup))
         # add it to the work node:
         records_bf.add((work_uri, BFLC.demographicGroup, URIRef(age_group_node)))
@@ -264,7 +276,6 @@ def add_age_groups(work_uri, record, records_bf, termtype, vocid):
         #         Literal(age_string_german, lang="de"),
         #     )
         # )
-
 
 
 def add_population_location(work_uri, record, records_bf, termtype):
