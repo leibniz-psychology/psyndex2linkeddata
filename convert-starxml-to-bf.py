@@ -1,46 +1,40 @@
 # Purpose: Convert STAR XML to Bibframe RDF
-# Import libraries:
 
-
+import csv  # for looking up institutes from our csv of luxembourg authority institutes
 import datetime
-import dateparser
-from rdflib import Graph, Literal
-from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL, Namespace
-from rdflib import BNode
-from rdflib import URIRef
-import xml.etree.ElementTree as ET
-import re
 import html
+import re
+import xml.etree.ElementTree as ET
+from datetime import timedelta
+
+import dateparser
+import requests
+import requests_cache
+
+# old fuzzy compare for reconciliations: using fuzzywuzzy
+from fuzzywuzzy import fuzz, process
+from rdflib import BNode, Graph, Literal, URIRef
+from rdflib.namespace import OWL, RDF, RDFS, SKOS, XSD, Namespace
 from tqdm.auto import tqdm
 
-
-import modules.mappings as mappings
-import modules.publication_types as publication_types
 import modules.helpers as helpers
-import modules.local_api_lookups as localapi
-import modules.terms as terms
 import modules.identifiers as identifiers
 import modules.instance_source_ids as instance_source_ids
 import modules.instance_sources as instance_sources
+import modules.local_api_lookups as localapi
+import modules.mappings as mappings
+import modules.publication_types as publication_types
+import modules.terms as terms
+from modules.mappings import funder_names_replacelist
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science
 
-import requests
-import requests_cache
-from datetime import timedelta
-
-# old fuzzy compare for reconciliations: using fuzzywuzzy
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
 
 # TODO: new fuzzy compare: using the faster rapidfuzz as a drop-in replacement for fuzzywuzzy:
 # from rapidfuzz import fuzz
 # from rapidfuzz import process
 
-import csv  # for looking up institutes from our csv of luxembourg authority institutes
-
-from modules.mappings import funder_names_replacelist
 
 # ror lookup api url for looking up organization contributors and the affiliations of persons:
 ROR_API_URL = "https://api.ror.org/organizations?affiliation="
@@ -1818,12 +1812,12 @@ def get_bf_translated_title(resource_uri, record):
 
 # %%
 from modules.mappings import (
+    abstract_origin_deepl,
+    abstract_origin_fis_bildung,
+    abstract_origin_gesis,
+    abstract_origin_krimz,
     abstract_origin_original,
     abstract_origin_zpid,
-    abstract_origin_deepl,
-    abstract_origin_gesis,
-    abstract_origin_fis_bildung,
-    abstract_origin_krimz,
 )
 
 
@@ -2889,7 +2883,9 @@ def get_urlai(work_uri, record):
                 and helpers.check_for_url_or_doi(urlai_field)[0] != ""
             ):
                 # add a variable
-                unknown_field_content = helpers.check_for_url_or_doi(urlai_field)[0].strip()
+                unknown_field_content = helpers.check_for_url_or_doi(urlai_field)[
+                    0
+                ].strip()
                 print(f"unknown type: {unknown_field_content}. Adding as a note.")
                 build_note_node(instance, helpers.check_for_url_or_doi(urlai_field)[0])
 
@@ -3010,7 +3006,7 @@ def get_datac(work_uri, record):
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 record_count = 0
 
-#for record in tqdm(root.findall("Record")):
+# for record in tqdm(root.findall("Record")):
 for record in tqdm(root.findall("Record")[0:200]):
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
@@ -3042,7 +3038,6 @@ for record in tqdm(root.findall("Record")[0:200]):
     researchdatalink_counter = 0
     preregistrationlink_counter = 0
 
-    
     add_bf_contributor_person(work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
     match_CS_COU_affiliations_to_first_contribution(work_uri, record)
@@ -3069,21 +3064,23 @@ for record in tqdm(root.findall("Record")[0:200]):
     if record.find("ABN") is not None:
         get_bf_secondary_abstract(work_uri, record, abstract_blocked)
 
-
     ### Adding controlled terms and subject classifications to the work: CT, IT, SH, AGE, PLOC
     # Adding CTs to the work, including skosmos lookup for the concept uris:
     # add_controlled_terms(work_uri, record)
     # i need a counter that will count up for both the CT and IT fields, so i can add the position of the term in the list as a property to the term node:
     term_counter = 0
     # then to count the counter up in each function that adds a term:
-    term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "CT", "terms", counter=term_counter)
-    term_counter = terms.add_controlled_terms(work_uri, record, records_bf, "IT", "addterms", counter=term_counter)
+    term_counter = terms.add_controlled_terms(
+        work_uri, record, records_bf, "CT", "terms", counter=term_counter
+    )
+    term_counter = terms.add_controlled_terms(
+        work_uri, record, records_bf, "IT", "addterms", counter=term_counter
+    )
 
     terms.add_subject_classification(work_uri, record, records_bf, "SH", "class")
 
     terms.add_age_groups(work_uri, record, records_bf, "AGE", "age")
     terms.add_population_location(work_uri, record, records_bf, "PLOC")
-
 
     ## TODO: add any uncontrolled keywords we have:
     # from fields KP - and if they exist, UTE and UTG
