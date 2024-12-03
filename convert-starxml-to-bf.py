@@ -3004,13 +3004,12 @@ def get_datac(work_uri, record):
 #### # ----- The Loop! -------------- # ####
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
-record_count = 0
 
+records = root.findall("Record")[0:200]
 # for record in tqdm(root.findall("Record")):
-for record in tqdm(root.findall("Record")[0:200]):
+for record in tqdm(records):
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
-    record_count += 1
 
     # Get the DFK identifier from the record - we need it for naming our URIs of works, instances and instancebundles:
     # note: actually adding it as an identifier is done below, to the instancebundle.
@@ -3343,7 +3342,7 @@ records_bf.add(
 # records_bf.add((records_bf_admin_metadata_root, PXP.recordCount, Literal(record_count)))
 
 
-print(record_count, "records")
+print(len(records), "records")
 
 # Serialize all the resulting triples as a turtle file and a jsonld file:
 records_bf.serialize("ttl-data/bibframe_records.ttl", format="turtle")
