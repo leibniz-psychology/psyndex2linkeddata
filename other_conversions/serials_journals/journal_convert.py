@@ -6,6 +6,13 @@ import xml.etree.ElementTree as ET
 import csv
 from datetime import timedelta
 import requests_cache
+import logging
+from datetime import datetime
+
+logging.basicConfig(
+    filename=datetime.now().strftime("logs/journal-convert-%Y_%m_%d_%H%M%S.log"),
+    level=logging.INFO,
+)
 
 # import helpers module - it contains the guess_language function and can be found one level up in the directory structure
 import sys
@@ -70,7 +77,7 @@ session_doaj = requests_cache.CachedSession(
     urls_expire_after=urls_expire_after,
 )
 
-tree = ET.parse("XML_source/journals-241008_101417.xml")
+tree = ET.parse("XML_source/journals-241204_095941.xml")
 root = tree.getroot()
 
 # a graph for the journal data
@@ -258,7 +265,7 @@ class Journal:
         try:
             self.uuid = jtc_uuid_lookup[self.journalcode]
         except KeyError:
-            print(
+            logging.error(
                 f"Journal code {self.journalcode} not found in the lookup dictionary."
             )
 
@@ -307,7 +314,7 @@ class Journal:
 
         except AttributeError:
             self.title = None
-            print(
+            logging.error(
                 "No title found for journal "
                 + str(self.journalcode)
                 + " with UUID "
@@ -457,7 +464,7 @@ class Journal:
                     self.__issnL = replaced_issn
                 else:
                     self.__issnL = None
-                    print(
+                    logging.warning(
                         "ISSN-L "
                         + str(issnL)
                         + " for journal "
@@ -493,19 +500,19 @@ class Journal:
                         issnl = response.json()["issn_l"]
                         self.issnL = issnl
                     except:
-                        print(
+                        logging.warning(
                             "OpenAlex API response did not contain an ISSN-L for any of our ISSNs"
                         )
                 else:
                     # if both print and online ISSNs exist, we can just use the print issn as the issnL - if all else fails!
                     if self.print_issn is not None and self.online_issn is not None:
                         self.issnL = self.print_issn
-                        print(
+                        logging.info(
                             "since both print and online ISSNs exist, using print ISSN as ISSN-L: "
                             + str(self.journalcode)
                         )
                     else:
-                        print(
+                        logging.warning(
                             "OpenAlex API request failed for journal and no ISSNL or equivalent found in record: "
                             + str(self.journalcode)
                         )
@@ -532,7 +539,7 @@ class Journal:
     def print_issn(self, issn):
         # check the format of the print ISSN
         if issn is not None:
-            print("Checking print ISSN format of " + issn)
+            logging.info("Checking print ISSN format of " + issn)
             print_issn_format_correct = helpers.check_issn_format(
                 issn
             )  # will return two values, a boolean and a string (a cleaned up version of the issn).
@@ -547,7 +554,7 @@ class Journal:
                     self.__print_issn = replaced_issn
                 else:
                     self.__print_issn = None
-                    print(
+                    logging.error(
                         "Print ISSN "
                         + str(issn)
                         + " for journal "
@@ -578,7 +585,7 @@ class Journal:
     def online_issn(self, issn):
         # check the format of the online ISSN
         if issn is not None:  # if a value was passed...
-            print("Checking online ISSN format of " + issn)
+            logging.info("Checking online ISSN format of " + issn)
             online_issn_format_correct = helpers.check_issn_format(issn)
             if online_issn_format_correct[0] is True:
                 self.__online_issn = online_issn_format_correct[1]
@@ -589,7 +596,7 @@ class Journal:
                     self.__online_issn = replaced_issn
                 else:
                     self.__online_issn = None
-                    print(
+                    logging.error(
                         "Online ISSN "
                         + str(issn)
                         + " for journal "
@@ -617,7 +624,7 @@ class Journal:
         # what happens: if both are identical, we (usually) have an online journal with no print version! So we should drop the issn completely.
         if self.print_issn is not None and self.online_issn is not None:
             if self.print_issn == self.online_issn:
-                print(
+                logging.info(
                     "Print and online ISSNs are identical for journal "
                     + str(self.journalcode)
                     + ": "
@@ -644,12 +651,12 @@ class Journal:
             if self.print_issn is None or self.print_issn == "":
                 self.lookup_issn = self.online_issn
                 if self.online_issn is None:
-                    print("No ISSNs found in record at all: " + str(self.journalcode))
+                    logging.error("No ISSNs found in record at all: " + str(self.journalcode))
                     return
             else:
                 self.lookup_issn = self.print_issn
         except:
-            print("No ISSNs found in record at all: " + str(self.journalcode))
+            logging.error("No ISSNs found in record at all: " + str(self.journalcode))
 
     @property
     def screening_status(self):
@@ -688,7 +695,7 @@ class Journal:
         except AttributeError:
             self.screening_status = "C"
             # about 45, probably give a status of C
-            print(
+            logging.info(
                 "No screening status found for journal "
                 + str(self.journalcode)
                 + " Title: "
@@ -730,7 +737,7 @@ class Journal:
             except KeyError:
                 # if the JTRVK field does not exist and the journal code is not in the lookup table, set the review policy to "unknown"
                 self.review_policy = "unknown"
-                print("No review policy found for journal " + str(self.journalcode))
+                logging.info("No review policy found for journal " + str(self.journalcode))
 
     def build_review_policy_node(self, record, journalhub, journals_graph):
         # make a new node for the review policy of the journal, its uri should be the journalhub uri + "#reviewpolicy"
@@ -813,7 +820,7 @@ class Journal:
             # print(self.journalcode + " Editors: " + str(self.editor_person_list))
         except AttributeError:
             self.editor_person_list = None
-            print("no editors found")
+            logging.info("no editors found")
 
     # KHS - Herausgebende Körperschaft
     @property
@@ -1192,7 +1199,7 @@ class Journal:
                         version_print,
                         version_online,
                     ]  # add both, but know that there is probably an error in one of the ISSNs!
-                    print(
+                    logging.error(
                         "Identical ISSNs, but two different media types: "
                         + str(self.journalcode)
                     )
@@ -1205,7 +1212,7 @@ class Journal:
             ):  # if the ISSNs are different, add both versions
                 self.versions = [version_print, version_online]
             else:
-                print("Something went wrong with the ISSNs of " + str(self.journalcode))
+                logging.error("Something went wrong with the ISSNs of " + str(self.journalcode))
         # in general, though, we want to add both versions if two different ISSNs exist
         # if only the print ISSN exists, add only the print version, but check if there are still two media types
         elif self.print_issn is not None and self.online_issn is None:
@@ -1224,7 +1231,7 @@ class Journal:
         # another snag: sometimes, we have only one issn, but there are two versions (an MT2 exists!)
         # if neither exists, we have a problem
         else:
-            print("No ISSNs found for journal " + str(self.journalcode))
+            logging.warning("No ISSNs found for journal " + str(self.journalcode))
             # then we do need to look at the media types. If there is one that is "Print", we add that version. If there is one that is "Online", we add that version.
             # if there are two different media types, we add both versions.
             if self.media_type_1 == "Print" and self.media_type_2 == "Online Medium":
@@ -1244,7 +1251,7 @@ class Journal:
             ):
                 self.versions = [version_online]
             else:
-                print(
+                logging.error(
                     "No ISSNs and no media types found for journal "
                     + str(self.journalcode)
                 )
@@ -1338,11 +1345,11 @@ class Journal:
                         if doaj_journalrecord.get("apc", {}).get("has_apc", False)
                         else "diamond"
                     )
-                    print(f"DOAJ says the oa status of {lookup_issn} is: {oa_status}")
+                    logging.info(f"DOAJ says the oa status of {lookup_issn} is: {oa_status}")
                     # set oa status:
                     if self.access_status == "unknown":
                         self.access_status = oa_status
-                        print(
+                        logging.info(
                             f"DOAJ added a new access policy (previously unknown) for {lookup_issn}"
                         )
                     # fetch review policy
@@ -1364,7 +1371,7 @@ class Journal:
                             break
                         elif "anonymous peer review" in review_process:
                             review_policy = "blindpeer"
-                    print(
+                    logging.info(
                         f"Review Policy of {lookup_issn} according to DOAJ: {review_policy}"
                     )
                     # set the policy, if not already set
@@ -1374,7 +1381,7 @@ class Journal:
                         or self.review_policy == "peerreviewed"
                     ):
                         self.review_policy = review_policy
-                        print(
+                        logging.info(
                             f"added a review policy where we had none previously in {lookup_issn}"
                         )
                     # we can also get issuing body and publisher data from DOAJ, but we'll do that later...:
@@ -1395,7 +1402,7 @@ class Journal:
                     # if not self.publisher_name:
                     #     self.publisher_name = doaj_journalrecord.get("publisher", "")
                 except (KeyError, IndexError):
-                    print(f"DOAJ record not found for ISSN {lookup_issn}")
+                    logging.info(f"DOAJ record not found for ISSN {lookup_issn}")
 
         # doaj gives us:
         # - institution/issuing body (fill if self.__isb None)
@@ -1424,7 +1431,7 @@ journal = Journal()
 for record in root.findall("Record"):
     # for record in root.findall("Record")[:100]:
     # leave out record with JTC 4884, because it has no title
-    if record.find("JTC").text == "4884" or record.find("JTC").text == "5033":
+    if record.find("JTC").text == "4884" or record.find("JTC").text == "5033" or record.find("JTC").text == "5092":
         continue
 
     # use journal.build_journalhub to build the journalhub node for the record and add it to the journals_graph
