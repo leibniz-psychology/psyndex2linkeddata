@@ -19,6 +19,7 @@ from rdflib import BNode, Graph, Literal, URIRef
 from rdflib.namespace import OWL, RDF, RDFS, SKOS, XSD, Namespace
 from tqdm.auto import tqdm
 
+import modules.abstract as abstract
 import modules.counters as counters
 import modules.helpers as helpers
 import modules.identifiers as identifiers
@@ -180,19 +181,6 @@ def camel_case(s):
 
     # Join the string, ensuring the first letter is lowercase
     return "".join([s[0].lower(), s[1:]])
-
-
-def get_abstract_release(record):
-    """ "Checks if the record's abstract can be exported or must be suppressed for copyright reasons. Based on Publisher as determined from DOI stem 10.1016 && COPR = PUBL"""
-    if record.find("DOI") is not None and record.find("COPR") is not None:
-        record_doi = record.find("DOI").text
-        record_copyright = record.find("COPR").text
-        if "10.1016" in record_doi and "PUBL" in record_copyright:
-            return False
-        else:
-            return True
-    else:
-        return True
 
 
 def get_ror_org_country(affiliation_ror_id):
@@ -1461,60 +1449,6 @@ def get_bf_identifier_dfk(resource_uri, dfk):
     return identifier
 
 
-# ## Generic Function: Replace languages with their language tag
-#
-# Can be used for different fields that are converted to langstrings or language uris. Use within other functions that work with the languages in different fields.
-#
-# Returns an array with two values: a two-letter langstring tag at [0] and a three-letter uri code for the library of congress language vocab at [1].
-
-
-def get_langtag_from_field(langfield):
-    # when passed a string from any language field in star, returns an array with two items.
-    # Index 0: two-letter langstring tag, e.g. "de"
-    # Index 1: two-letter iso langtag, e.g. "ger"
-    # can be used on these fields (it contains the different spellings found in them):
-    # "LA", "LA2", "TIL", "TIUL", "ABLH", "ABLN", "TIUE |s"
-    match langfield:
-        case (
-            "german" | "de" | "GERM" | "Deutsch" | "GERMAN" | "GERMaN" | "German" | "Fi"
-        ):
-            return ["de", "ger"]
-        case (
-            "en"
-            | "ENGL"
-            | "ENGLISH"
-            | "Englisch"
-            | "English"
-            | "English; English"
-            | "english"
-        ):
-            return ["en", "eng"]
-        case "BULG" | "Bulgarian":
-            return ["bg", "bul"]
-        case "SPAN" | "Spanish":
-            return ["es", "spa"]
-        case "Dutch":
-            return ["nl", "dut"]
-        case "CZEC":
-            return ["cs", "ces"]
-        case "FREN" | "French":
-            return ["fr", "fra"]
-        case "ITAL" | "Italian":
-            return ["it", "ita"]
-        case "PORT" | "Portuguese":
-            return ["pt", "por"]
-        case "JAPN" | "Japanese":
-            return ["jp", "jpn"]
-        case "HUNG":
-            return ["hu", "hun"]
-        case "RUSS" | "Russian":
-            return ["ru", "rus"]
-        case "NONE" | "Silent":
-            return ["zxx", "zxx"]
-        case _:
-            return ["und", "und"]  # for "undetermined!"
-
-
 # ## Function: Get work language from LA
 #
 # Example
@@ -1532,7 +1466,7 @@ def get_langtag_from_field(langfield):
 
 
 def get_work_language(record):
-    work_language = get_langtag_from_field(record.find("LA").text.strip())[1]
+    work_language = helpers.get_langtag_from_field(record.find("LA").text.strip())[1]
     work_lang_uri = LANG[work_language]
     return work_lang_uri
 
@@ -1721,7 +1655,9 @@ def get_bf_title(resource_uri, record):
     subtitle_language = "en"
     # get language of main title - if exists!:
     if record.find("TIL") is not None:
-        maintitle_language = get_langtag_from_field(record.find("TIL").text.strip())[0]
+        maintitle_language = helpers.get_langtag_from_field(
+            record.find("TIL").text.strip()
+        )[0]
         # if maintitle_language that is returned the get_langtag_from_field is "und"
         # (because it was a malformed language name), guess the language from the string itself!
         if maintitle_language == "und":
@@ -1743,7 +1679,7 @@ def get_bf_title(resource_uri, record):
         # get language of subtitle - it is in field TIUL, but sometimes that is missing...:
         #  # get language of subtitle:
         if record.find("TIUL") is not None:
-            subtitle_language = get_langtag_from_field(
+            subtitle_language = helpers.get_langtag_from_field(
                 record.find("TIUL").text.strip()
             )[0]
             if subtitle_language == "und":
@@ -1776,7 +1712,7 @@ def get_bf_translated_title(resource_uri, record):
     match = re.search(r"^(.*)\s\|s\s(.*)", fulltitle)
     if match:
         fulltitle = match.group(1).strip()
-        fulltitle_language = get_langtag_from_field(match.group(2).strip())[0]
+        fulltitle_language = helpers.get_langtag_from_field(match.group(2).strip())[0]
     else:
         # if the language of the translated title (in |s) is missing, guess the language from the string itself!
         fulltitle_language = helpers.guess_language(fulltitle)
@@ -1803,320 +1739,6 @@ def get_bf_translated_title(resource_uri, record):
     records_bf.add((translated_title, BF.adminMetadata, titlesource_node))
 
     return translated_title
-
-
-# %% [markdown]
-# ## Function: Add Abstracts - original abstract (from fields ABH, ABLH, ABSH1, ABSH2) and translated/secondary abstract (from ABN, ABLN, ASN1, ASN2)
-#
-# - Main Abstract:
-#     - abstract text is in field ABH.
-#     - abstract language is in ABLH ("German" or "English") but can be missing in rare cases! In that case, we guess it using the langid module.
-#     - abstract original source is in ASH1 ("Original" or "ZPID")
-#     - agent who edited the original, if that happened, is in ASH2 ()
-# - Secondary Abstract
-#     - abstract text is in field ABN.
-#     - abstract language is in ABLN ("German" or "English")
-#     - abstract original source is in ASN1 ("Original" or "ZPID")
-#     - agent who edited the original, if that happened, is in ASN2 ()
-#
-# Scheme:
-#
-# ```turtle
-# <W> bf:summary
-#     [ a pxc:Abstract , bf:Summary ;
-#         rdfs:label  "Background: Loneliness is ..."@en ;
-#         bf:adminMetadata  [
-#             a bf:AdminMetadata ;
-#             bflc:metadataLicensor  "Original";
-#             bf:descriptionModifier "ZPID"
-#         ]
-# ] .
-# ```
-
-# %%
-from modules.mappings import (
-    abstract_origin_deepl,
-    abstract_origin_fis_bildung,
-    abstract_origin_gesis,
-    abstract_origin_krimz,
-    abstract_origin_original,
-    abstract_origin_zpid,
-)
-
-
-def replace_abstract_origin_string(origin_string):
-    # if the passed string is in "abstract_origin_original", thenreplace it with "Original":
-    if origin_string in abstract_origin_original:
-        return "Original"
-    elif origin_string in abstract_origin_zpid:
-        return "ZPID"
-    # elif origin_string in abstract_origin_iwf:
-    #     return "IWF"
-    elif origin_string in abstract_origin_deepl:
-        return "DeepL"
-    elif origin_string in abstract_origin_gesis:
-        return "GESIS"
-    elif origin_string in abstract_origin_fis_bildung:
-        return "FIS Bildung"
-    elif origin_string in abstract_origin_krimz:
-        return "KrimZ"
-    else:
-        return origin_string
-
-
-def add_abstract_licensing_note(abstract, abstracttext):
-    # use this on the abstract _after_ first removing the ToC!
-    # we will extract any text at the end of an abstract that is not actually part of the abstract, but a licensing note or a note about what software was used to translate it.
-    """Adds a licensing note to the abstract if it contains a copyright string and/or a "translated by DeepL" notice."""
-    abstract_copyright_string = None
-    # 1. first check if there is a "(translated by DeepL)" at the end of the abstract, remove it and add it to the licensing note.
-    # 2 then check for a copyright string at the (new) end of the abstract. Remove it and copy it into the licensinf note -
-    # but only if there isn't already something in there (the translated by deepl note) - because if there is, the translation note takes precedence
-    # and the copyright note will not be retained.
-    deepl_match = re.search(
-        r"^(.*)\s\((translated by DeepL)\)$", abstracttext, re.IGNORECASE
-    )
-    if deepl_match:
-        # replace the abstract with the content before the "(translated by DeepL)":
-        abstracttext = deepl_match.group(1)
-        # add it to the licensing note, but only if empty:
-        abstract_copyright_string = deepl_match.group(2)
-    else:
-        abstract_copyright_string = None
-
-    # also, after that, check the new abstract for a copyright string:
-    license_match = re.search(r"(.*)(\(c\).*)$", abstracttext, re.IGNORECASE)
-    # if that match is not None, check if it is in the last 100 characters of the abstract:
-    if license_match and len(license_match.group(2)) < 100:
-        # if so, check if there is a "(b)" anywhere in the abstract before the match (this is an exclusion criterion,
-        # because if there is a "(b)" before the "(c)", it's just a lettered list item, not the copyright string):
-        if re.search(r"(.*)(\(b\).*)", license_match.group(1), re.IGNORECASE):
-            pass
-            # if there is _no_ "(b)" before the "(c)", we have a copyright string; add it to the licensing note.
-            # unless it already contains something - which will always be the translation note:
-        else:
-            if abstract_copyright_string is None or abstract_copyright_string == "":
-                abstract_copyright_string = license_match.group(2)
-                abstracttext = license_match.group(1)
-            else:
-                # don't write it into the note if there is already something in it, but do remove it from the abstract!
-                abstracttext = license_match.group(1)
-            # otherwise ignore the string, we have no copyright string
-
-    if abstract_copyright_string is not None and abstract_copyright_string != "":
-        # make a node for the abstract licensing note:
-        # give it a fragment uri:
-        abstract_license_node = URIRef(abstract + "_license")
-        # give it a class:
-        records_bf.add((abstract_license_node, RDF.type, BF.UsageAndAccessPolicy))
-        # add the license type to the node with rdf:value and anyURI:
-        if (
-            abstract_blocked
-        ):  # if it's an elsevier abstract with publisher copyright (blocked from release/sharing), use this specific string to indicate we can't release it, otherwise the string we find at the end:
-            records_bf.add(
-                (
-                    abstract_license_node,
-                    RDFS.label,
-                    Literal("Abstract not released by publisher."),
-                )
-            )
-        else:
-            records_bf.add(
-                (abstract_license_node, RDFS.label, Literal(abstract_copyright_string))
-            )
-        # attach it to the abstract node with bf:usageAndAccessPolicy:
-        records_bf.add((abstract, BF.usageAndAccessPolicy, abstract_license_node))
-    # also, return the new abstracttext with any copyright string removed:
-    return abstracttext.strip()
-
-
-# function to get the original abstract:
-def get_bf_abstract(work_uri, record, abstract_blocked):
-    """Extracts the abstract from field ABH and adds a bf:Summary bnode with the abstract and its metadata. Also extracts the Table of Content from the same field."""
-    ## first check if this is even an abstract at all, or just some text saying "no abstract":
-    # if the text is very short (under 50 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
-    if len(record.find("ABH").text) < 500 and re.search(
-        r"(no abstract|kein Abstract)", record.find("ABH").text, re.IGNORECASE
-    ):
-        return None  # don't make a node at all!
-    # if it's not a "no abstract" text, make a node for the abstract:
-
-    abstract = URIRef(work_uri + "#abstract")
-    # abstract = URIRef(work_uri + "/abstract")
-    records_bf.add((abstract, RDF.type, PXC.Abstract))
-    # get abstract text from ABH
-    abstracttext = html.unescape(
-        mappings.replace_encodings(record.find("ABH").text).strip()
-    )
-
-    ## == Extracting the table of contents from the abstract: == ##
-    # check via regex if there is a " - Inhalt: " or " - Contents: " in it.
-    # if so, split out what comes after. Drop the contents/inhalt part itself.
-    match2 = re.search(r"^(.*)[-–]\s*(?:Contents|Inhalt)\s*:\s*(.*)$", abstracttext)
-    if match2:
-        abstracttext = match2.group(1).strip()
-        contents = match2.group(2).strip()
-        # make a node for bf:TableOfContents:
-        toc = URIRef(work_uri + "#toc")
-        records_bf.add((toc, RDF.type, BF.TableOfContents))
-        # add the bnode to the work via bf:tableOfContents:
-        records_bf.add((work_uri, BF.tableOfContents, toc))
-        # add the contents to the abstract node as a bf:tableOfContents:
-        # if the contents start with http, extract as url into rdf:value:
-        if contents.startswith("http"):
-            records_bf.add((toc, RDF.value, Literal(contents, datatype=XSD.anyURI)))
-            # otherwise it's a text toc and needs to go into the label
-        else:
-            # but we need to determine the language of the toc:
-            try:
-                toc_language = helpers.guess_language(contents)
-            except:
-                toc_language = "und"
-            records_bf.add((toc, RDFS.label, Literal(contents, lang=toc_language)))
-
-    # Check for end of abstract that says something about the license "translated by DeepL"
-    # and remove them, but add them to the node as a bf:usageAndAccessPolicy:
-    # note: I won't remove the useless string saying "no abstract" that is in place of the abstract. It's not worth the effort. Somebody else
-    # can do it if they want to - it can be filtered by looking for the "no abstract" concept added to the abstract node.
-    # check the abstract for any copyright strings (and "translated by DeepL") and remove them, but add them to the node as a bf:usageAndAccessPolicy:
-    abstracttext = add_abstract_licensing_note(abstract, abstracttext)
-
-    # get abstract language from ABLH ("German" or "English")
-    abstract_language = "en"  # set default
-    # TODO: that's a bad idea, actually. Better: if field is missing, use a language recog function!
-    if record.find("ABLH") is not None:
-        abstract_language = get_langtag_from_field(record.find("ABLH").text.strip())[0]
-        if abstract_language == "und":
-            # guess language from the text:
-            abstract_language = helpers.guess_language(abstracttext)
-    else:  # if the ABLH field is missing, try to recognize the language of the abstract from its text:
-        abstract_language = helpers.guess_language(abstracttext)
-
-    # add the text to the node:
-    records_bf.add(
-        (abstract, RDFS.label, Literal(abstracttext, lang=abstract_language))
-    )
-
-    # get abstract original source from ASH1 ("Original" or "ZPID")
-    abstract_source = "Original"  # default
-    # create a blank node for admin metadata:
-    abstract_source_node = URIRef(str(abstract) + "_source")
-    records_bf.add((abstract_source_node, RDF.type, BF.AdminMetadata))
-
-    if record.find("ASH1") is not None:
-        # overwrite default ("Original") with what we find in ASH1:
-        # and while we're at it, replace some known strings with their respective values
-        # (e.g. employee tags with "ZPID"):
-        abstract_source = replace_abstract_origin_string(
-            record.find("ASH1").text.strip()
-        )
-
-    # write final source text into source node:
-    records_bf.add(
-        (abstract_source_node, BFLC.metadataLicensor, Literal(abstract_source))
-    )
-
-    # here is a list of known zpid employee tags, we will use them later to replace these with "ZPID" if found in ASH2:
-
-    # and this is a list of things we want to replace with "Original":
-
-    # get optional agent who edited the original abstract from ASH2
-    if record.find("ASH2") is not None:
-        # note what we find in ABSH2:
-        abstract_editor = replace_abstract_origin_string(
-            record.find("ASH2").text.strip()
-        )
-
-        records_bf.add(
-            (abstract_source_node, BF.descriptionModifier, Literal(abstract_editor))
-        )
-
-    # add the source node to the abstract node:
-    records_bf.add((abstract, BF.adminMetadata, abstract_source_node))
-    # and return the completed node:
-    # return (abstract)
-    # or better, attach it right away:
-    records_bf.add((work_uri, BF.summary, abstract))
-    # add a boolean qualifier whether the abstract is "open" - cleared by the publisher to be shared
-    records_bf.add(
-        (
-            abstract_source_node,
-            PXP.blockedAbstract,
-            Literal(abstract_blocked, datatype=XSD.boolean),
-        )
-    )
-
-
-def get_bf_secondary_abstract(work_uri, record, abstract_blocked):
-    ## first check if this is even an abstract at all, or just some text saying "no abstract":
-    # if the text is very short (under 100 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
-    if len(record.find("ABN").text) < 50 and re.search(
-        r"(no abstract|kein Abstract)", record.find("ABH").text, re.IGNORECASE
-    ):
-        return None  # don't make a node at all!
-    abstract = URIRef(work_uri + "#secondaryabstract")
-    # abstract = URIRef(work_uri + "/abstract/secondary")
-    records_bf.add((abstract, RDF.type, PXC.Abstract))
-    records_bf.add((abstract, RDF.type, PXC.SecondaryAbstract))
-    abstracttext = html.unescape(
-        mappings.replace_encodings(record.find("ABN").text).strip()
-    )
-    # check if the abstracttext ends with " (translated by DeepL)" or a licensing note,
-    # and if so, remove those from the abstract and place them into a UsageandAccessPolicy node.
-    abstracttext = add_abstract_licensing_note(abstract, abstracttext)
-
-    abstract_language = "de"  # fallback default
-
-    if record.find("ABLN") is not None and record.find("ABLN").text != "":
-        abstract_language = get_langtag_from_field(record.find("ABLN").text.strip())[0]
-        if abstract_language == "und":
-            # guess language from the text:
-            abstract_language = helpers.guess_language(abstracttext)
-    else:  # if no language field, guess language from the text:
-        abstract_language = helpers.guess_language(abstracttext)
-
-    records_bf.add(
-        (abstract, RDFS.label, Literal(abstracttext, lang=abstract_language))
-    )
-
-    abstract_source_node = URIRef(str(abstract) + "_source")
-    records_bf.add((abstract_source_node, RDF.type, BF.AdminMetadata))
-    abstract_source = "Original"  # fallback default
-    if record.find("ASN1") is not None:
-        # overwrite default ("Original") with what we find in ASH1:
-        abstract_source = replace_abstract_origin_string(
-            record.find("ASN1").text.strip()
-        )
-
-    records_bf.add(
-        (abstract_source_node, BFLC.metadataLicensor, Literal(abstract_source))
-    )
-
-    # get optional agent who edited the original abstract from ASH2
-    if record.find("ASN2") is not None:
-        # note what we find in ABSN2:
-        abstract_editor = replace_abstract_origin_string(
-            record.find("ASN2").text.strip()
-        )
-        # and add it via decription modifier:
-        records_bf.add(
-            (abstract_source_node, BF.descriptionModifier, Literal(abstract_editor))
-        )
-
-    # add the source node to the abstract node:
-    records_bf.add((abstract, BF.adminMetadata, abstract_source_node))
-    # and return the completed node:
-    # return abstract
-    # or better, attach it right away:
-    records_bf.add((work_uri, BF.summary, abstract))
-    # add a boolean qualifier whether the abstract is "open" - cleared by the publisher to be shared
-    records_bf.add(
-        (
-            abstract_source_node,
-            PXP.blockedAbstract,
-            Literal(abstract_blocked, datatype=XSD.boolean),
-        )
-    )
 
 
 # %% [markdown]
@@ -3072,19 +2694,21 @@ for record in tqdm(records):
     # get_bf_toc(work_uri, record) # this is now done inside the abstract functions - along with abstract license recognition
 
     # TODO: calculate a bool true/false value from fields to set whether abstract should be made available or not due to copyright reasons.
-    abstract_blocked = not get_abstract_release(record)
+    abstract_blocked = not abstract.get_abstract_release(record)
 
     # Adding main/original abstract to the work:
     # note: somehow not all records have one!
     if record.find("ABH") is not None:
-        get_bf_abstract(work_uri, record, abstract_blocked)
-        # records_bf.add((work_uri, BF.summary, get_bf_abstract(work_uri, record)))
-    # d.add((work_uri, BF.summary, get_bf_abstract(work_uri, record), graph_1))
+        abstract.get_bf_abstract(work_uri, record, abstract_blocked, records_bf)
+        # records_bf.add((work_uri, ns.BF.summary, get_bf_abstract(work_uri, record)))
+    # d.add((work_uri, ns.BF.summary, get_bf_abstract(work_uri, record), graph_1))
 
     # Adding secondary abstract to the work - (usually a translation, so also has data about the origin of the abstract):
     # note: somehow not all records have one!
     if record.find("ABN") is not None:
-        get_bf_secondary_abstract(work_uri, record, abstract_blocked)
+        abstract.get_bf_secondary_abstract(
+            work_uri, record, abstract_blocked, records_bf
+        )
 
     ### Adding controlled terms and subject classifications to the work: CT, IT, SH, AGE, PLOC
     # Adding CTs to the work, including skosmos lookup for the concept uris:

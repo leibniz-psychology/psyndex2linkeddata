@@ -170,3 +170,55 @@ def check_issn_format(issn):
     else:
         # we might fix some more obvious errors here, like missing hyphen (we can add it):
         return False, issn
+
+
+# ## Generic Function: Replace languages with their language tag
+#
+# Can be used for different fields that are converted to langstrings or language uris. Use within other functions that work with the languages in different fields.
+#
+# Returns an array with two values: a two-letter langstring tag at [0] and a three-letter uri code for the library of congress language vocab at [1].
+def get_langtag_from_field(langfield):
+    # when passed a string from any language field in star, returns an array with two items.
+    # Index 0: two-letter langstring tag, e.g. "de"
+    # Index 1: two-letter iso langtag, e.g. "ger"
+    # can be used on these fields (it contains the different spellings found in them):
+    # "LA", "LA2", "TIL", "TIUL", "ABLH", "ABLN", "TIUE |s"
+    match langfield:
+        case (
+            "german" | "de" | "GERM" | "Deutsch" | "GERMAN" | "GERMaN" | "German" | "Fi"
+        ):
+            return ["de", "ger"]
+        case (
+            "en"
+            | "ENGL"
+            | "ENGLISH"
+            | "Englisch"
+            | "English"
+            | "English; English"
+            | "english"
+        ):
+            return ["en", "eng"]
+        case "BULG" | "Bulgarian":
+            return ["bg", "bul"]
+        case "SPAN" | "Spanish":
+            return ["es", "spa"]
+        case "Dutch":
+            return ["nl", "dut"]
+        case "CZEC":
+            return ["cs", "ces"]
+        case "FREN" | "French":
+            return ["fr", "fra"]
+        case "ITAL" | "Italian":
+            return ["it", "ita"]
+        case "PORT" | "Portuguese":
+            return ["pt", "por"]
+        case "JAPN" | "Japanese":
+            return ["jp", "jpn"]
+        case "HUNG":
+            return ["hu", "hun"]
+        case "RUSS" | "Russian":
+            return ["ru", "rus"]
+        case "NONE" | "Silent":
+            return ["zxx", "zxx"]
+        case _:
+            return ["und", "und"]  # for "undetermined!"
