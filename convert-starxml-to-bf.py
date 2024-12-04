@@ -19,6 +19,7 @@ from rdflib import BNode, Graph, Literal, URIRef
 from rdflib.namespace import OWL, RDF, RDFS, SKOS, XSD, Namespace
 from tqdm.auto import tqdm
 
+import modules.counters as counters
 import modules.helpers as helpers
 import modules.identifiers as identifiers
 import modules.instance_source_ids as instance_source_ids
@@ -760,19 +761,25 @@ def generate_bf_contribution_node(work_uri):
     # adds a bf:Contribution node, adds the position from a counter, and returns the node.
     contribution_qualifier = None
     # make the node and add class:
-    contribution_node = URIRef(work_uri + "#contribution" + str(contribution_counter))
+    contribution_node = URIRef(
+        work_uri + "#contribution" + str(counters.contribution_counter)
+    )
     records_bf.add((contribution_node, RDF.type, BF.Contribution))
 
     # add author positions:
     records_bf.add(
-        (contribution_node, PXP.contributionPosition, Literal(contribution_counter))
+        (
+            contribution_node,
+            PXP.contributionPosition,
+            Literal(counters.contribution_counter),
+        )
     )
     # if we are in the first loop, set contribution's bf:qualifier" to "first":
-    if contribution_counter == 1:
+    if counters.contribution_counter == 1:
         contribution_qualifier = "first"
         records_bf.add((contribution_node, RDF.type, BFLC.PrimaryContribution))
     # if we are in the last loop, set "contribution_qualifier" to "last":
-    elif contribution_counter == len(record.findall("AUP")) + len(
+    elif counters.contribution_counter == len(record.findall("AUP")) + len(
         record.findall("AUK")
     ):
         contribution_qualifier = "last"
@@ -789,8 +796,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
     # adds all corporate body contributors from any of the record's AUK fields as contributions.
     for org in record.findall("AUK"):
         # count up the global contribution_counter:
-        global contribution_counter
-        contribution_counter += 1
+        counters.contribution_counter += 1
         # generate a contribution node, including positions, and return it:
         contribution_node = generate_bf_contribution_node(work_uri)
         # do something:
@@ -1190,8 +1196,7 @@ def add_bf_contributor_person(work_uri, record):
         # count how often we've gone through the loop to see the author position:
 
         # count up the global contribution_counter:
-        global contribution_counter
-        contribution_counter += 1
+        counters.contribution_counter += 1
         # do all the things a contribution needs in another function (counting and adding positions, generating fragment uri)
         contribution_node = generate_bf_contribution_node(work_uri)
 
@@ -2252,13 +2257,14 @@ def get_bf_preregistrations(work_uri, record):
     preregistration_note = None
     unknown_field_content = None
     for prreg in record.findall("PRREG"):
-        global preregistrationlink_counter
-        preregistrationlink_counter += 1
+        counters.preregistrationlink_counter += 1
         # get the full content of the field, sanitize it:
         prregfield = html.unescape(mappings.replace_encodings(prreg.text.strip()))
         # use our node-building function to build the node:
         relationship_node, instance = build_work_relationship_node(
-            work_uri, relation_type="preregistration", count=preregistrationlink_counter
+            work_uri,
+            relation_type="preregistration",
+            count=counters.preregistrationlink_counter,
         )
         doi_set = set()
         url_set = set()
@@ -2480,13 +2486,12 @@ def add_trials_as_preregs(work_uri, prereg_string):
 
                 if trialnumber[2] is not True:
                     # first, count up the counter:
-                    global preregistrationlink_counter
-                    preregistrationlink_counter += 1
+                    counters.preregistrationlink_counter += 1
                     # make a new Preregistration node:
                     relationship_node, instance = build_work_relationship_node(
                         work_uri,
                         relation_type="preregistration",
-                        count=preregistrationlink_counter,
+                        count=counters.preregistrationlink_counter,
                     )
                     logging.info(
                         "adding new Preregistration node for trial number: "
@@ -2613,11 +2618,10 @@ def get_bf_grants(work_uri, record):
         # point one: pipe all text in the field through the DD-Code replacer function:
         grantfield = mappings.replace_encodings(grantfield)
         # count up the global funding counter for this record:
-        global fundingreference_counter
-        fundingreference_counter += 1
+        counters.fundingreference_counter += 1
         # add a node for a new Contribution:
         funding_contribution_node = URIRef(
-            str(work_uri) + "#fundingreference" + str(fundingreference_counter)
+            str(work_uri) + "#fundingreference" + str(counters.fundingreference_counter)
         )
         # records_bf.add((funding_contribution_node, RDF.type, BF.Contribution))
         records_bf.add((funding_contribution_node, RDF.type, PXC.FundingReference))
@@ -2783,13 +2787,12 @@ def get_bf_conferences(work_uri, record):
 
             # construct the node for the conference:
             # count up the global conference counter for this record:
-            global conferencereference_counter
-            conferencereference_counter += 1
+            counters.conferencereference_counter += 1
             # a bnode for the contribution/conferencereference:
             conference_reference_node = URIRef(
                 str(work_uri)
                 + "#conferencereference"
-                + str(conferencereference_counter)
+                + str(counters.conferencereference_counter)
             )
             records_bf.add(
                 (conference_reference_node, RDF.type, PXC.ConferenceReference)
@@ -2871,14 +2874,13 @@ def get_urlai(work_uri, record):
     for data in record.findall("URLAI"):
         urlai_field = mappings.replace_encodings(data.text.strip())
         unknown_field_content = None
-        global researchdatalink_counter
-        researchdatalink_counter += 1
+        counters.researchdatalink_counter += 1
         # build the relationship node:
         # add ~~secondary~~ only class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
             work_uri,
             relation_type="rd_restricted_access",
-            count=researchdatalink_counter,
+            count=counters.researchdatalink_counter,
         )
         # there are no subfields in urlai, so let's just grab the whole thing and pass it on to the url or doi checker:
         # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
@@ -2944,10 +2946,11 @@ def get_datac(work_uri, record):
     for data in record.findall("DATAC"):
         datac_field = mappings.replace_encodings(data.text.strip())
         # build the relationship node:
-        global researchdatalink_counter
-        researchdatalink_counter += 1
+        counters.researchdatalink_counter += 1
         relationship_node, instance = build_work_relationship_node(
-            work_uri, count=researchdatalink_counter, relation_type="rd_open_access"
+            work_uri,
+            count=counters.researchdatalink_counter,
+            relation_type="rd_open_access",
         )
         # we want to drop any duplicate dois that can occur if datac has a doi and doi url (same doi, but protocol etc prefixed)
         # for the same data that,
@@ -3051,11 +3054,11 @@ for record in tqdm(records):
     ## Adding Contributions by Persons and Corporate Bodies to the work (only real creators, like editors, authors, translators,
     # not funders or conferences, which are handled below)
     # set up/reset a global counter for contributions to a work (it will count up in the functions that add Person contributions from AUP fields and Org contributions from AUK fields) - we need it to add the contribution position
-    contribution_counter = 0
-    fundingreference_counter = 0
-    conferencereference_counter = 0
-    researchdatalink_counter = 0
-    preregistrationlink_counter = 0
+    counters.contribution_counter = 0
+    counters.fundingreference_counter = 0
+    counters.conferencereference_counter = 0
+    counters.researchdatalink_counter = 0
+    counters.preregistrationlink_counter = 0
 
     add_bf_contributor_person(work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
