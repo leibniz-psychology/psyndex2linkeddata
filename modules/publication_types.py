@@ -6,39 +6,24 @@
 """
 
 import logging
-import xml.etree.ElementTree as ET
 
-from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, URIRef
 
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings
-
-BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
-WORKS = Namespace("https://w3id.org/zpid/resources/works/")
-CONTENTTYPES = Namespace("https://w3id.org/zpid/vocabs/contenttypes/")
-GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
-CM = Namespace("https://w3id.org/zpid/vocabs/carriermedia/")
-PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
-ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
-METHODS = Namespace("https://w3id.org/zpid/vocabs/methods/")
-PXC = Namespace("https://w3id.org/zpid/ontology/classes/")
-PXP = Namespace("https://w3id.org/zpid/ontology/properties/")
-CONTENT = Namespace("http://id.loc.gov/vocabulary/contentTypes/")
-MEDIA = Namespace("http://id.loc.gov/vocabulary/mediaTypes/")
-CARRIER = Namespace("http://id.loc.gov/vocabulary/carriers/")
-
+import modules.namespace as ns
 
 graph = Graph()
 
-graph.bind("bf", BF)
-graph.bind("pxc", PXC)
-graph.bind("pxp", PXP)
-graph.bind("works", WORKS)
-graph.bind("contenttypes", CONTENTTYPES)
-graph.bind("genres", GENRES)
-graph.bind("pmt", PMT)
-graph.bind("methods", METHODS)
+graph.bind("bf", ns.BF)
+graph.bind("pxc", ns.PXC)
+graph.bind("pxp", ns.PXP)
+graph.bind("works", ns.WORKS)
+graph.bind("contenttypes", ns.CONTENTTYPES)
+graph.bind("genres", ns.GENRES)
+graph.bind("pmt", ns.PMT)
+graph.bind("methods", ns.METHODS)
 
 
 def generate_content_type(record, dfk, work_node, graph):
@@ -95,25 +80,25 @@ def generate_content_type(record, dfk, work_node, graph):
         content_type_string = bf_work_subclass = "Text"
     # print(content_type_string, bf_work_subclass)
     # create a node for the content type:
-    content_type_node = URIRef(CONTENTTYPES[content_type_string.lower()])
+    content_type_node = URIRef(ns.CONTENTTYPES[content_type_string.lower()])
     # make it a bf:Content class
     graph.add(
         (
             content_type_node,
             RDF.type,
-            BF.Content,
+            ns.BF.Content,
         )
     )
     graph.add(
         (
             work_node,
-            BF.content,
+            ns.BF.content,
             content_type_node,
         )
     )
     # add a secondary class to work, if applicable:
     if bf_work_subclass != "":
-        work_subclass_node = URIRef(BF[bf_work_subclass])
+        work_subclass_node = URIRef(ns.BF[bf_work_subclass])
         graph.add(
             (
                 work_node,
@@ -150,11 +135,11 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         # get a method suggestion from the Annif API:
         # get the title from instance bundle's bf:title > rdfs:label
         # get all titles, then use the one with class bf:Title, not the one with pxc:Translated Title:
-        title_node = graph.value(instance_bundle_node, BF.title, None)
+        title_node = graph.value(instance_bundle_node, ns.BF.title, None)
         #  make sure it is not RDF.type pxc:TranslatedTitle:
         if (
             title_node is not None
-            and graph.value(title_node, RDF.type, None) != PXC.Title
+            and graph.value(title_node, RDF.type, None) != ns.PXC.Title
         ):
             try:
                 title = graph.value(title_node, RDFS.label, None)
@@ -165,10 +150,10 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
         else:
             title = ""
         # get the abstract from the work:
-        abstract_node = graph.value(work_node, BF.summary, None)
+        abstract_node = graph.value(work_node, ns.BF.summary, None)
         if (
             abstract_node is not None
-            and graph.value(abstract_node, RDF.type, None) != PXC.SecondaryAbstract
+            and graph.value(abstract_node, RDF.type, None) != ns.PXC.SecondaryAbstract
         ):
             abstract = graph.value(abstract_node, RDFS.label, None)
             logging.info(f"Abstract found!")
@@ -264,7 +249,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 (
                     method_node,
                     RDF.type,
-                    PXC.ControlledMethod,
+                    ns.PXC.ControlledMethod,
                 )
             )
             # add the method_code as an owl:sameAs to the node:
@@ -272,7 +257,7 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 (
                     method_node,
                     OWL.sameAs,
-                    URIRef(METHODS[method["code"]]),
+                    URIRef(ns.METHODS[method["code"]]),
                 )
             )
             # if there is a label, add that:
@@ -291,14 +276,14 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                     (
                         method_node,
                         RDF.type,
-                        PXC.ControlledMethodWeighted,
+                        ns.PXC.ControlledMethodWeighted,
                     )
                 )
 
             graph.add(
                 (
                     work_node,
-                    BF.classification,
+                    ns.BF.classification,
                     method_node,
                 )
             )
@@ -312,18 +297,18 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
             )
             new_genres.remove("ScholarlyWork")
         for genre in new_genres:
-            genre_node = URIRef(GENRES[genre])
+            genre_node = URIRef(ns.GENRES[genre])
             graph.add(
                 (
                     genre_node,
                     RDF.type,
-                    BF.GenreForm,
+                    ns.BF.GenreForm,
                 )
             )
             graph.add(
                 (
                     work_node,
-                    BF.genreForm,
+                    ns.BF.genreForm,
                     genre_node,
                 )
             )
@@ -471,9 +456,9 @@ def add_work_genres(work_uri, record, dfk, records_bf):
 
     # # create node for each genre:
     for genre in genres:
-        genre_node = URIRef(GENRES[genre])
+        genre_node = URIRef(ns.GENRES[genre])
         # class bf:GenreForm
-        records_bf.set((genre_node, RDF.type, BF.GenreForm))
+        records_bf.set((genre_node, RDF.type, ns.BF.GenreForm))
         # get the label from skosmos:
         try:
             german_label = localapi.get_preflabel_from_skosmos(
@@ -491,7 +476,7 @@ def add_work_genres(work_uri, record, dfk, records_bf):
             # keeping the genre without label for now
         finally:
             # add it to the work:
-            records_bf.add((work_uri, BF.genreForm, genre_node))
+            records_bf.add((work_uri, ns.BF.genreForm, genre_node))
             # add a label: no need for first migration! Get from skosmos api later.
             # records_bf.set((genre_node, RDFS.label, Literal(genre)))
 
@@ -501,46 +486,46 @@ def clean_up_genres(work_uri, graph):
     if (
         (
             work_uri,
-            BF.genreForm,
-            URIRef(GENRES["ThesisDoctoral"]),
+            ns.BF.genreForm,
+            URIRef(ns.GENRES["ThesisDoctoral"]),
         )
         in graph
         or (
             work_uri,
-            BF.genreForm,
-            URIRef(GENRES["CompilationThesisDoctoral"]),
+            ns.BF.genreForm,
+            URIRef(ns.GENRES["CompilationThesisDoctoral"]),
         )
         in graph
         or (
             work_uri,
-            BF.genreForm,
-            URIRef(GENRES["ThesisHabilitation"]),
+            ns.BF.genreForm,
+            URIRef(ns.GENRES["ThesisHabilitation"]),
         )
         in graph
         or (
             work_uri,
-            BF.genreForm,
-            URIRef(GENRES["CompilationThesisHabilitation"]),
+            ns.BF.genreForm,
+            URIRef(ns.GENRES["CompilationThesisHabilitation"]),
         )
         in graph
     ):
         logging.info("we have a thesis!")
-        if ((work_uri, BF.genreForm, URIRef(GENRES["ResearchPaper"]))) in graph:
+        if ((work_uri, ns.BF.genreForm, URIRef(ns.GENRES["ResearchPaper"]))) in graph:
             # print("removed ResearchPaper genre from Thesis work " + work_uri)
             graph.remove(
                 (
                     work_uri,
-                    BF.genreForm,
-                    URIRef(GENRES["ResearchPaper"]),
+                    ns.BF.genreForm,
+                    URIRef(ns.GENRES["ResearchPaper"]),
                 )
             )
-        if ((work_uri, BF.genreForm, URIRef(GENRES["ScholarlyWork"]))) in graph:
+        if ((work_uri, ns.BF.genreForm, URIRef(ns.GENRES["ScholarlyWork"]))) in graph:
             # print("removed ScholarlyWork genre from Thesis work " + work_uri)
             graph.remove(
                 (
                     work_uri,
-                    BF.genreForm,
-                    URIRef(GENRES["ScholarlyWork"]),
+                    ns.BF.genreForm,
+                    URIRef(ns.GENRES["ScholarlyWork"]),
                 )
             )
     # also, if both ScholarlyWork AND ResearchPaper exist, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
@@ -563,7 +548,7 @@ def clean_up_genres(work_uri, graph):
     # generally: if there is already a genre that is a subconcept of another genre, remove the more general one.
     # check this using the skosmos api
     # first, get all genres of the work:
-    genres = graph.objects(work_uri, BF.genreForm)
+    genres = graph.objects(work_uri, ns.BF.genreForm)
     genre_count = len(list(genres))
 
     if genre_count > 1:
@@ -575,7 +560,7 @@ def clean_up_genres(work_uri, graph):
         # print the genres, iterating through the generator again:
         # print(type(genres))
         # iterate the generator genres:
-        genres = graph.objects(work_uri, BF.genreForm)
+        genres = graph.objects(work_uri, ns.BF.genreForm)
         # then, for each genre, check if it is a subconcept of another genre:
         for genre in list(genres):
             logging.info(str(genre))
@@ -604,12 +589,12 @@ def clean_up_genres(work_uri, graph):
                     pass
                 # also remove any top-level concepts from the list (https://w3id.org/zpid/vocabs/genres/InformationalWork, https://w3id.org/zpid/vocabs/genres/InstructionalOrEducationalWork, https://w3id.org/zpid/vocabs/genres/DiscursiveWork, https://w3id.org/zpid/vocabs/genres/WorkCollection, https://w3id.org/zpid/vocabs/genres/WorkCollectionStatic, https://w3id.org/zpid/vocabs/genres/PaperCollection), if they exist:
                 top_level_genres = [
-                    str(URIRef(GENRES["InformationalWork"])),
-                    str(URIRef(GENRES["InstructionalOrEducationalWork"])),
-                    str(URIRef(GENRES["DiscursiveWork"])),
-                    str(URIRef(GENRES["WorkCollection"])),
-                    str(URIRef(GENRES["WorkCollectionStatic"])),
-                    str(URIRef(GENRES["PaperCollection"])),
+                    str(URIRef(ns.GENRES["InformationalWork"])),
+                    str(URIRef(ns.GENRES["InstructionalOrEducationalWork"])),
+                    str(URIRef(ns.GENRES["DiscursiveWork"])),
+                    str(URIRef(ns.GENRES["WorkCollection"])),
+                    str(URIRef(ns.GENRES["WorkCollectionStatic"])),
+                    str(URIRef(ns.GENRES["PaperCollection"])),
                 ]
                 try:
                     for top_level_genre in top_level_genres:
@@ -626,7 +611,7 @@ def clean_up_genres(work_uri, graph):
                 for broader_genre in broader_list:
                     # remember that "genres" is a list of uris and broader_genre is just a string, so we need to recast it:
                     broader_genre = URIRef(broader_genre)
-                    if broader_genre in graph.objects(work_uri, BF.genreForm):
+                    if broader_genre in graph.objects(work_uri, ns.BF.genreForm):
                         logging.info(
                             str(work_uri)
                             + " has a broader ("
@@ -638,7 +623,7 @@ def clean_up_genres(work_uri, graph):
                             graph.remove(
                                 (
                                     work_uri,
-                                    BF.genreForm,
+                                    ns.BF.genreForm,
                                     broader_genre,
                                 )
                             )
@@ -678,11 +663,11 @@ def get_issuance_type(instance_bundle_uri, record, graph):
     issuance_uri_fragment = issuance_type.replace(" ", "")
     try:
         # generate a node for the Issuance:
-        issuance_node = URIRef(ISSUANCES + issuance_uri_fragment)
+        issuance_node = URIRef(ns.ISSUANCES + issuance_uri_fragment)
         # class bf:Issuance
-        graph.set((issuance_node, RDF.type, PXC.IssuanceType))
+        graph.set((issuance_node, RDF.type, ns.PXC.IssuanceType))
         # add it to the instance
-        graph.add((instance_bundle_uri, PXP.issuanceType, issuance_node))
+        graph.add((instance_bundle_uri, ns.PXP.issuanceType, issuance_node))
         # add a label:
         graph.set((issuance_node, RDFS.label, Literal(issuance_type)))
     except:
@@ -738,8 +723,8 @@ def add_mediacarrier_to_instance(instance_node, graph, mediatype_field_object=No
             graph.add(
                 (
                     instance_node,
-                    PXP.mediaCarrier,
-                    URIRef(PMT[media_carrier_type]),
+                    ns.PXP.mediaCarrier,
+                    URIRef(ns.PMT[media_carrier_type]),
                 )
             )
             add_media_and_carrier_rda(instance_node, graph, media_carrier_type)
@@ -748,7 +733,7 @@ def add_mediacarrier_to_instance(instance_node, graph, mediatype_field_object=No
                 (
                     instance_node,
                     RDF.type,
-                    URIRef(BF[instance_subclass]),
+                    URIRef(ns.BF[instance_subclass]),
                 )
             )
 
@@ -770,21 +755,21 @@ def add_media_and_carrier_rda(instance_node, graph, media_carrier_type):
             carrier_type = "cr"  # online resource
         case "ElectronicDisc":
             # get the work of the instance:
-            work_node = graph.value(instance_node, BF.instanceOf, None)
+            work_node = graph.value(instance_node, ns.BF.instanceOf, None)
             # get the content type of the work:
-            content_type_node = graph.value(work_node, BF.content, None)
+            content_type_node = graph.value(work_node, ns.BF.content, None)
             if content_type_node is not None:
-                if content_type_node == URIRef(PMT["MovingImage"]):
+                if content_type_node == URIRef(ns.PMT["MovingImage"]):
                     media_type = "v"  # video
                     carrier_type = "vd"  # videodisc
-                elif content_type_node == URIRef(PMT["Text"]):
+                elif content_type_node == URIRef(ns.PMT["Text"]):
                     media_type = "c"  # computer
                     carrier_type = "cd"  # computer disc
         case "TapeCassette":
-            if content_type_node == URIRef(PMT["SpokenWord"]):
+            if content_type_node == URIRef(ns.PMT["SpokenWord"]):
                 media_type = "s"  # audio
                 carrier_type = "ss"  # audiocassette
-            elif content_type_node == URIRef(PMT["MovingImage"]):
+            elif content_type_node == URIRef(ns.PMT["MovingImage"]):
                 media_type = "v"  # video
                 carrier_type = "vf"  # videocassette
         case "FilmReelRoll":
@@ -803,8 +788,8 @@ def add_media_and_carrier_rda(instance_node, graph, media_carrier_type):
         graph.add(
             (
                 instance_node,
-                BF.media,
-                URIRef(MEDIA[media_type]),
+                ns.BF.media,
+                URIRef(ns.MEDIA[media_type]),
             )
         )
 
@@ -812,7 +797,7 @@ def add_media_and_carrier_rda(instance_node, graph, media_carrier_type):
         graph.add(
             (
                 instance_node,
-                BF.carrier,
-                URIRef(CARRIER[carrier_type]),
+                ns.BF.carrier,
+                URIRef(ns.CARRIER[carrier_type]),
             )
         )

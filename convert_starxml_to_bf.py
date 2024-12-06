@@ -16,21 +16,20 @@ import requests_cache
 # old fuzzy compare for reconciliations: using fuzzywuzzy
 from fuzzywuzzy import fuzz, process
 from rdflib import BNode, Graph, Literal, URIRef
-from rdflib.namespace import OWL, RDF, RDFS, SKOS, XSD, Namespace
+from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from tqdm.auto import tqdm
 
 import modules.abstract as abstract
 import modules.counters as counters
 import modules.helpers as helpers
-import modules.identifiers as identifiers
 import modules.instance_source_ids as instance_source_ids
 import modules.instance_sources as instance_sources
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings
 import modules.namespace as ns
 import modules.publication_types as publication_types
+import modules.research_info as research_info
 import modules.terms as terms
-from modules.mappings import funder_names_replacelist
 
 # import modules.contributions as contributions
 # import modules.open_science as open_science

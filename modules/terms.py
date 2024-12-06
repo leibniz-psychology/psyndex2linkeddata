@@ -31,40 +31,24 @@
 
 import logging
 import re
-import xml.etree.ElementTree as ET
 
-from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, URIRef
 
 import modules.helpers as helpers
 import modules.local_api_lookups as localapi
 import modules.mappings as mappings
-
-BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
-BFLC = Namespace("http://id.loc.gov/ontologies/bflc/")
-WORKS = Namespace("https://w3id.org/zpid/resources/works/")
-CONTENTTYPES = Namespace("https://w3id.org/zpid/vocabs/contenttypes/")
-GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
-CM = Namespace("https://w3id.org/zpid/vocabs/carriermedia/")
-PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
-ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
-METHODS = Namespace("https://w3id.org/zpid/vocabs/methods/")
-PXC = Namespace("https://w3id.org/zpid/ontology/classes/")
-PXP = Namespace("https://w3id.org/zpid/ontology/properties/")
-CONTENT = Namespace("http://id.loc.gov/vocabulary/contentTypes/")
-MEDIA = Namespace("http://id.loc.gov/vocabulary/mediaTypes/")
-CARRIER = Namespace("http://id.loc.gov/vocabulary/carriers/")
-
+import modules.namespace as ns
 
 graph = Graph()
 
-graph.bind("bf", BF)
-graph.bind("pxc", PXC)
-graph.bind("pxp", PXP)
-graph.bind("works", WORKS)
-graph.bind("contenttypes", CONTENTTYPES)
-graph.bind("genres", GENRES)
-graph.bind("pmt", PMT)
-graph.bind("methods", METHODS)
+graph.bind("bf", ns.BF)
+graph.bind("pxc", ns.PXC)
+graph.bind("pxp", ns.PXP)
+graph.bind("works", ns.WORKS)
+graph.bind("contenttypes", ns.CONTENTTYPES)
+graph.bind("genres", ns.GENRES)
+graph.bind("pmt", ns.PMT)
+graph.bind("methods", ns.METHODS)
 
 
 def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter):
@@ -94,7 +78,7 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
         # create a blank node for the controlled term and make it a class bf:Topic:
         controlled_term_node = URIRef(str(work_uri) + "#topic" + str(counter))
         # a ct node is a bf:Topic (and a skos:Concept - albeit without a uri identifier, because the CT "code" is not exported, only the labels); sometimes it is also a pxc:WeightedTopic:
-        records_bf.add((controlled_term_node, RDF.type, BF.Topic))
+        records_bf.add((controlled_term_node, RDF.type, ns.BF.Topic))
         # records_bf.add((controlled_term_node, RDF.type, SKOS.Concept))
         # uncomment for export to real graph (not needed for migration to pxr):
         # add source to the controlled term node (bf:source <https://w3id.org/zpid/vocabs/terms>):
@@ -117,7 +101,7 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
                 + controlled_term_string_english
             )
         if controlled_term_weighted:
-            records_bf.add((controlled_term_node, RDF.type, PXC.WeightedTopic))
+            records_bf.add((controlled_term_node, RDF.type, ns.PXC.WeightedTopic))
         # add the controlled term string to the controlled term node:
         records_bf.add(
             (
@@ -146,7 +130,7 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
             )
 
         # attach the controlled term node to the work node:
-        records_bf.add((work_uri, BF.subject, controlled_term_node))
+        records_bf.add((work_uri, ns.BF.subject, controlled_term_node))
     return counter
 
 
@@ -159,10 +143,12 @@ def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
         classification_node = URIRef(
             str(work_uri) + "#subjectheading" + str(heading_counter)
         )
-        records_bf.add((classification_node, RDF.type, PXC.SubjectHeading))
+        records_bf.add((classification_node, RDF.type, ns.PXC.SubjectHeading))
         # if it is the first heading, also add the class pxc:SubjectHeadingWeighted:
         if heading_counter == 1:
-            records_bf.add((classification_node, RDF.type, PXC.SubjectHeadingWeighted))
+            records_bf.add(
+                (classification_node, RDF.type, ns.PXC.SubjectHeadingWeighted)
+            )
         # records_bf.add((classification_node, RDF.type, SKOS.Concept))
         # first, get the code and label from the field:
         # |c 3290 |e Physical &amp; Somatic Disorders |g Körperliche und somatoforme Störungen
@@ -214,7 +200,7 @@ def add_subject_classification(work_uri, record, records_bf, termtype, vocid):
         #         Literal(heading_string_german, lang="de"),
         #     )
         # )
-        records_bf.add((work_uri, BF.classification, classification_node))
+        records_bf.add((work_uri, ns.BF.classification, classification_node))
 
 
 def add_age_groups(work_uri, record, records_bf, termtype, vocid):
@@ -240,9 +226,9 @@ def add_age_groups(work_uri, record, records_bf, termtype, vocid):
         age_group_node = URIRef(
             "https://w3id.org/zpid/vocabs/age/" + str(age_camelcased)
         )
-        records_bf.add((age_group_node, RDF.type, PXC.AgeGroup))
+        records_bf.add((age_group_node, RDF.type, ns.PXC.AgeGroup))
         # add it to the work node:
-        records_bf.add((work_uri, BFLC.demographicGroup, URIRef(age_group_node)))
+        records_bf.add((work_uri, ns.BFLC.demographicGroup, URIRef(age_group_node)))
         # records_bf.add((age_group_node, RDF.type, SKOS.Concept))
         # get the content of the AGE field:
         # the field only ever contains the english label of a controlled term, e.g. "Preschool Age"

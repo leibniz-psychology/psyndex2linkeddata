@@ -1,6 +1,5 @@
 import logging
 from datetime import timedelta
-from urllib.parse import urlencode
 
 import requests_cache
 from decouple import config

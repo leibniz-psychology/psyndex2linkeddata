@@ -1,38 +1,21 @@
 import logging
-import xml.etree.ElementTree as ET
 
-from rdflib import OWL, RDF, RDFS, SKOS, Graph, Literal, Namespace, URIRef
+from rdflib import Graph
 
 import modules.helpers as helpers
 import modules.identifiers as identifiers
-import modules.local_api_lookups as localapi
-import modules.mappings as mappings
-
-BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
-WORKS = Namespace("https://w3id.org/zpid/resources/works/")
-CONTENTTYPES = Namespace("https://w3id.org/zpid/vocabs/contenttypes/")
-GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
-CM = Namespace("https://w3id.org/zpid/vocabs/carriermedia/")
-PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
-ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
-METHODS = Namespace("https://w3id.org/zpid/vocabs/methods/")
-PXC = Namespace("https://w3id.org/zpid/ontology/classes/")
-PXP = Namespace("https://w3id.org/zpid/ontology/properties/")
-CONTENT = Namespace("http://id.loc.gov/vocabulary/contentTypes/")
-MEDIA = Namespace("http://id.loc.gov/vocabulary/mediaTypes/")
-CARRIER = Namespace("http://id.loc.gov/vocabulary/carriers/")
-
+import modules.namespace as ns
 
 graph = Graph()
 
-graph.bind("bf", BF)
-graph.bind("pxc", PXC)
-graph.bind("pxp", PXP)
-graph.bind("works", WORKS)
-graph.bind("contenttypes", CONTENTTYPES)
-graph.bind("genres", GENRES)
-graph.bind("pmt", PMT)
-graph.bind("methods", METHODS)
+graph.bind("bf", ns.BF)
+graph.bind("pxc", ns.PXC)
+graph.bind("pxp", ns.PXP)
+graph.bind("works", ns.WORKS)
+graph.bind("contenttypes", ns.CONTENTTYPES)
+graph.bind("genres", ns.GENRES)
+graph.bind("pmt", ns.PMT)
+graph.bind("methods", ns.METHODS)
 
 
 def get_instance_doi(instance, record, graph):
