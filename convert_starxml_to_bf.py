@@ -20,7 +20,6 @@ from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from tqdm.auto import tqdm
 
 import modules.abstract as abstract
-import modules.counters as counters
 import modules.helpers as helpers
 import modules.instance_source_ids as instance_source_ids
 import modules.instance_sources as instance_sources
@@ -726,14 +725,12 @@ def extract_contribution_role(contributiontext):
         return "AU"
 
 
-def generate_bf_contribution_node(work_uri):
+def generate_bf_contribution_node(work_uri, record, contribution_counter):
     # will be called by functions that add AUPs and AUKS
     # adds a bf:Contribution node, adds the position from a counter, and returns the node.
     contribution_qualifier = None
     # make the node and add class:
-    contribution_node = URIRef(
-        work_uri + "#contribution" + str(counters.contribution_counter)
-    )
+    contribution_node = URIRef(work_uri + "#contribution" + str(contribution_counter))
     records_bf.add((contribution_node, RDF.type, ns.BF.Contribution))
 
     # add author positions:
@@ -741,15 +738,15 @@ def generate_bf_contribution_node(work_uri):
         (
             contribution_node,
             ns.PXP.contributionPosition,
-            Literal(counters.contribution_counter),
+            Literal(contribution_counter),
         )
     )
     # if we are in the first loop, set contribution's bf:qualifier" to "first":
-    if counters.contribution_counter == 1:
+    if contribution_counter == 1:
         contribution_qualifier = "first"
         records_bf.add((contribution_node, RDF.type, ns.BFLC.PrimaryContribution))
     # if we are in the last loop, set "contribution_qualifier" to "last":
-    elif counters.contribution_counter == len(record.findall("AUP")) + len(
+    elif contribution_counter == len(record.findall("AUP")) + len(
         record.findall("AUK")
     ):
         contribution_qualifier = "last"
@@ -766,11 +763,15 @@ def generate_bf_contribution_node(work_uri):
 
 def add_bf_contributor_corporate_body(work_uri, record):
     # adds all corporate body contributors from any of the record's AUK fields as contributions.
+    contribution_counter = len(record.findall("AUP"))
+
     for org in record.findall("AUK"):
-        # count up the global contribution_counter:
-        counters.contribution_counter += 1
+        # count up the contribution_counter:
+        contribution_counter += 1
         # generate a contribution node, including positions, and return it:
-        contribution_node = generate_bf_contribution_node(work_uri)
+        contribution_node = generate_bf_contribution_node(
+            work_uri, record, contribution_counter
+        )
         # do something:
         # read the text in AUK and add it as a label:
         # create a fragment uri node for the agent:
@@ -1170,13 +1171,11 @@ def add_bf_contributor_person(work_uri, record):
     # contribution_counter = 0
     # contribution_qualifier = None
 
-    for person in record.findall("AUP"):
+    for index, person in enumerate(record.findall("AUP")):
         # count how often we've gone through the loop to see the author position:
 
-        # count up the global contribution_counter:
-        counters.contribution_counter += 1
         # do all the things a contribution needs in another function (counting and adding positions, generating fragment uri)
-        contribution_node = generate_bf_contribution_node(work_uri)
+        contribution_node = generate_bf_contribution_node(work_uri, record, index + 1)
 
         # make a fragment uri node for the person:
         person_node = URIRef(str(contribution_node) + "_personagent")
@@ -1762,7 +1761,7 @@ def get_crossref_funder_id(funder_name):
 def get_bf_grants(work_uri, record):
     """this function takes a string and returns a funder (name and fundref doi),
     a list of grant numbers, a note with grant holder and info"""
-    for grant in record.findall("GRANT"):
+    for index, grant in enumerate(record.findall("GRANT")):
         # point zero: remove html entities from the field:
         grantfield = html.unescape(grant.text)
         # if the field contains these, skip it - don't even create a fundinfregerence node:
@@ -1770,11 +1769,9 @@ def get_bf_grants(work_uri, record):
             continue
         # point one: pipe all text in the field through the DD-Code replacer function:
         grantfield = mappings.replace_encodings(grantfield)
-        # count up the global funding counter for this record:
-        counters.fundingreference_counter += 1
         # add a node for a new Contribution:
         funding_contribution_node = URIRef(
-            str(work_uri) + "#fundingreference" + str(counters.fundingreference_counter)
+            str(work_uri) + "#fundingreference" + str(index + 1)
         )
         # records_bf.add((funding_contribution_node, RDF.type, ns.BF.Contribution))
         records_bf.add((funding_contribution_node, RDF.type, ns.PXC.FundingReference))
@@ -1890,7 +1887,7 @@ def get_bf_conferences(work_uri, record):
     # ignore those in other publication types like journal article
     # get the conference info from the field CF:
     if record.find("BE").text == "SS" or record.find("BE").text == "SM":
-        for conference in record.findall("CF"):
+        for index, conference in enumerate(record.findall("CF")):
             # get the text content of the CF field,
             # sanitize it by unescaping html entities and
             # replacing STAR's ^DD encodings:
@@ -1939,13 +1936,9 @@ def get_bf_conferences(work_uri, record):
                 conference_place = None
 
             # construct the node for the conference:
-            # count up the global conference counter for this record:
-            counters.conferencereference_counter += 1
             # a bnode for the contribution/conferencereference:
             conference_reference_node = URIRef(
-                str(work_uri)
-                + "#conferencereference"
-                + str(counters.conferencereference_counter)
+                str(work_uri) + "#conferencereference" + str(index + 1)
             )
             records_bf.add(
                 (conference_reference_node, RDF.type, ns.PXC.ConferenceReference)
@@ -2017,13 +2010,6 @@ for record in tqdm(records):
 
     ## Adding Contributions by Persons and Corporate Bodies to the work (only real creators, like editors, authors, translators,
     # not funders or conferences, which are handled below)
-    # set up/reset a global counter for contributions to a work (it will count up in the functions that add Person contributions from AUP fields and Org contributions from AUK fields) - we need it to add the contribution position
-    counters.contribution_counter = 0
-    counters.fundingreference_counter = 0
-    counters.conferencereference_counter = 0
-    counters.researchdatalink_counter = 0
-    counters.preregistrationlink_counter = 0
-
     add_bf_contributor_person(work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
     match_CS_COU_affiliations_to_first_contribution(work_uri, record)

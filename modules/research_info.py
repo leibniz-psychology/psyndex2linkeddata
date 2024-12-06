@@ -5,7 +5,6 @@ import re
 from rdflib import Literal, URIRef
 from rdflib.namespace import RDF, RDFS, SKOS
 
-import modules.counters as counters
 import modules.helpers as helpers
 import modules.identifiers as identifiers
 import modules.mappings as mappings
@@ -44,12 +43,11 @@ relation_types = {
     },
 }
 
+
 # %% [markdown]
 # ### Building generic bf:Note nodes
 #
 # Will probably also need this later for other kinds of notes, such as the ones in field BN.
-
-
 # %%
 def build_note_node(resource_uri, note, graph):
     if note is not None and note != "":
@@ -197,17 +195,19 @@ def get_urlai(work_uri, record, graph):
     """Gets research data from field URLAI. This is always in PsychData, so it will be restricted access by default.
     We will also assume it to always be just research data, not code.
     """
+    researchdatalink_counter = len(record.findall("DATAC"))
+
     for data in record.findall("URLAI"):
         urlai_field = mappings.replace_encodings(data.text.strip())
         unknown_field_content = None
-        counters.researchdatalink_counter += 1
+        researchdatalink_counter += 1
         # build the relationship node:
         # add ~~secondary~~ only class pxc:ResearchDataRelationship to the relationship node for research data
         relationship_node, instance = build_work_relationship_node(
             work_uri,
             graph,
             relation_type="rd_restricted_access",
-            count=counters.researchdatalink_counter,
+            count=researchdatalink_counter,
         )
         # there are no subfields in urlai, so let's just grab the whole thing and pass it on to the url or doi checker:
         # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
@@ -272,15 +272,14 @@ def get_datac(work_uri, record, graph):
     Newer data from PSYNDEXER may be something else, but for first migration, we assume all data is research data only.
     """
     # go through the list of datac fields and get the doi, if there is one:
-    for data in record.findall("DATAC"):
+    for index, data in enumerate(record.findall("DATAC")):
         datac_field = mappings.replace_encodings(data.text.strip())
         # build the relationship node:
-        counters.researchdatalink_counter += 1
         relationship_node, instance = build_work_relationship_node(
             work_uri,
             graph,
             relation_type="rd_open_access",
-            count=counters.researchdatalink_counter,
+            count=index + 1,
         )
         # we want to drop any duplicate dois that can occur if datac has a doi and doi url (same doi, but protocol etc prefixed)
         # for the same data that,
@@ -403,17 +402,15 @@ def get_datac(work_uri, record, graph):
 #     ]
 # .
 # ```
-
 # %%
+
+
 # function to build the nodes for preregistration links
-
-
 def get_bf_preregistrations(work_uri, record, graph):
     # get the preregistration link from the field PREREG:
     preregistration_note = None
     unknown_field_content = None
-    for prreg in record.findall("PRREG"):
-        counters.preregistrationlink_counter += 1
+    for index, prreg in enumerate(record.findall("PRREG")):
         # get the full content of the field, sanitize it:
         prregfield = html.unescape(mappings.replace_encodings(prreg.text.strip()))
         # use our node-building function to build the node:
@@ -421,7 +418,7 @@ def get_bf_preregistrations(work_uri, record, graph):
             work_uri,
             graph,
             relation_type="preregistration",
-            count=counters.preregistrationlink_counter,
+            count=index + 1,
         )
         doi_set = set()
         url_set = set()
@@ -534,6 +531,8 @@ def add_trials_as_preregs(work_uri, record, graph):
         (r"umin\d+", "umin-japan"),
         # r("u[\d-]+", "utn"),
     ]
+
+    preregistrationlink_counter = len(record.findall("PRREG"))
     # for each PRREG field:
     for prreg in record.findall("PRREG"):
         # a string may contain several trial numbers from different registries.
@@ -639,13 +638,13 @@ def add_trials_as_preregs(work_uri, record, graph):
 
                 if trialnumber[2] is not True:
                     # first, count up the counter:
-                    counters.preregistrationlink_counter += 1
+                    preregistrationlink_counter += 1
                     # make a new Preregistration node:
                     relationship_node, instance = build_work_relationship_node(
                         work_uri,
                         graph,
                         relation_type="preregistration",
-                        count=counters.preregistrationlink_counter,
+                        count=preregistrationlink_counter,
                     )
                     logging.info(
                         "adding new Preregistration node for trial number: "
