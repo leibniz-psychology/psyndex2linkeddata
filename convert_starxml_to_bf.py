@@ -62,14 +62,16 @@ urls_expire_after = {
 
 # a cache for ror requests
 session_ror = requests_cache.CachedSession(
-    ".cache/requests_ror",
+    cache_name="requests_ror",
+    backend="redis",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
 )
 # and a cache for the crossref api:
 session_fundref = requests_cache.CachedSession(
-    ".cache/requests_fundref",
+    cache_name="requests_fundref",
+    backend="redis",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,

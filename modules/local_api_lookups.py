@@ -23,20 +23,20 @@ urls_expire_after = {
     # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/': 0,
 }
 session_annif = requests_cache.CachedSession(
-    ".cache/requests_annif",
+    cache_name="requests_annif",
+    backend="redis",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
-    backend="redis",
 )
 
 # cache for skosmos requests:
 session_skosmos = requests_cache.CachedSession(
-    ".cache/requests_skosmos",
+    cache_name="requests_skosmos",
+    backend="redis",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
     urls_expire_after=urls_expire_after,
-    backend="redis",
 )
 
 session_skosmos.auth = (SKOSMOS_USER, SKOSMOS_PASSWORD)
