@@ -7,6 +7,7 @@ import html
 import logging
 import re
 import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 
 import dateparser
@@ -1987,9 +1988,8 @@ def get_bf_conferences(work_uri, record):
 # ## Creating the Work and Instance uris and adding other triples via functions
 # ## This is the main loop that goes through all the records and creates the triples for the works and instances
 
-records = root.findall("Record")[0:200]
-# for record in tqdm(root.findall("Record")):
-for record in tqdm(records):
+
+def process_record(record):
     """comment this out to run the only 200 records instead of all 700:"""
     # count up the processed records for logging purposes:
 
@@ -2285,6 +2285,18 @@ for record in tqdm(records):
                     # add the urn of the record to the instance:
                     instance_source_ids.get_instance_urn(instance, record, records_bf)
             #     # if there are two or more, but we can't find any electronic instance among them? That would be an error, but what can be done to still catch it?
+
+
+records = root.findall("Record")[0:200]
+with ThreadPoolExecutor(
+    max_workers=10
+) as executor:  # Adjust max_workers to limit the number of parallel threads
+    futures = [
+        executor.submit(process_record, record) for index, record in enumerate(records)
+    ]
+
+    for future in tqdm(as_completed(futures), total=len(futures)):
+        future.result()  # Wait for each future to complete
 
 
 # add a Literal for the count of records:
