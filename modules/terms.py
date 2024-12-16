@@ -68,6 +68,18 @@ def add_controlled_terms(work_uri, record, records_bf, termtype, vocid, counter)
         controlled_term_string_german = helpers.get_subfield(
             controlled_term_string, "d"
         )
+        if controlled_term_string_english is None:
+            if controlled_term_string_german is None:
+                logging.warning(
+                    "Term string is empty: "
+                    + topic.text
+                    + " in "
+                    + record.find("DFK").text
+                )
+                continue
+            else:
+                controlled_term_string_english = controlled_term_string_german
+
         term_weighting = helpers.get_subfield(controlled_term_string, "g")
         if term_weighting is not None and term_weighting == "x":
             controlled_term_weighted = True
