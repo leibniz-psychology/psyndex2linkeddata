@@ -327,7 +327,7 @@ def get_datac(work_uri, record, graph):
                         logging.info(
                             f"unknown type: {unknown_field_content}. Adding as a note."
                         )
-                        helpers.build_note_node(
+                        build_note_node(
                             instance, helpers.check_for_url_or_doi(subfield)[0], graph
                         )
         # first, compare all the dois in the doi_set to each item in the url set. If the url contains the doi, remove it from the url set:
