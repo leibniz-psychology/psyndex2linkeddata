@@ -416,13 +416,10 @@ def add_work_genres(work_uri, record, dfk, records_bf):
         if "0369284" in dfk:
             genres.append("ConferenceProceedings")
         # DFKs 0262075, 0266517, 0266519, 0273412, 0291044 -> "Talk"
-        elif any(dfk in ["0262075", "0266517", "0266519", "0273412", "0291044"]):
+        elif dfk in ["0262075", "0266517", "0266519", "0273412", "0291044"]:
             genres.append("Talk")
-        elif any(
-            # 0307206 "Textbesprechung" - einfach eine Sammlung von Aufsätzen dieser verstorbenen Person -> "PaperCollection"
-            "0307206"
-            in record.find("DFK").text
-        ):
+        # 0307206 "Textbesprechung" - einfach eine Sammlung von Aufsätzen dieser verstorbenen Person -> "PaperCollection"
+        elif "0307206" in record.find("DFK").text:
             genres.append("PaperCollection")
         # for any that are 18650 (workshop) and also BE=UZ, UR, US, add "MeetingReport"
         # elif bibliographic_level in [
