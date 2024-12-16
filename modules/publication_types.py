@@ -30,7 +30,7 @@ def generate_content_type(record, dfk, work_node, graph):
     """
     Generate a bf:content type based on the record's different fields.
     """
-    content_type_string = work_subclass = ""
+    content_type_string = bf_work_subclass = ""
     try:
         DT = record.find("DT").text
     except AttributeError:
