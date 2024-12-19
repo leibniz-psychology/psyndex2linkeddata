@@ -4,7 +4,7 @@ from datetime import timedelta
 import requests_cache
 from decouple import config
 
-ANNIF_API_URL = "https://annif.dev.zpid.org/v1/projects/"
+ANNIF_API_URL = f"{config('ANNIF_API_URL')}/v1/projects/"
 
 # project names for different languages:
 # psyndex-methods-en + /suggest

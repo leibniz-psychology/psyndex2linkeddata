@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import dateparser
 import requests
 import requests_cache
+from decouple import config
 
 # old fuzzy compare for reconciliations: using fuzzywuzzy
 from fuzzywuzzy import fuzz, process
@@ -45,14 +46,14 @@ logging.basicConfig(
 
 
 # ror lookup api url for looking up organization contributors and the affiliations of persons:
-ROR_API_URL = "https://api.ror.org/organizations?affiliation="
+ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
 
 
 ## crossref api stuff for looking up funders:
 # set up friendly session by adding mail in request:
-CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
+CROSSREF_FRIENDLY_MAIL = f"&mailto={config('CROSSREF_FRIENDLY_MAIL')}"
 # for getting a list of funders from api ():
-CROSSREF_API_URL = "https://api.crossref.org/funders?query="
+CROSSREF_API_URL = f"{config('CROSSREF_API_URL')}/funders?query="
 
 ## Caching requests:
 urls_expire_after = {
@@ -170,8 +171,10 @@ def get_ror_org_country(affiliation_ror_id):
     # first, use only the last part of the ror id, which is the id itself:
     affiliation_ror_id = affiliation_ror_id.split("/")[-1]
     # the country name is in country.name in the json response
+
     ror_request = session_ror.get(
-        "https://api.ror.org/organizations/" + affiliation_ror_id, timeout=20
+        f"{config('ROR_API_URL')}/organizations/" + affiliation_ror_id,
+        timeout=20,
     )
     if ror_request.status_code == 200:
         ror_response = ror_request.json()
