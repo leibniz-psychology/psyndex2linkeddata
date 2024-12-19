@@ -246,8 +246,12 @@ def get_bf_abstract(work_uri, record, abstract_blocked, graph):
 def get_bf_secondary_abstract(work_uri, record, abstract_blocked, graph):
     ## first check if this is even an abstract at all, or just some text saying "no abstract":
     # if the text is very short (under 100 characters) and contains "no abstract" or "kein Abstract", it's not an abstract:
-    if len(record.find("ABN").text) < 50 and re.search(
-        r"(no abstract|kein Abstract)", record.find("ABH").text, re.IGNORECASE
+    if (
+        record.find("ABN") is not None
+        and len(record.find("ABN").text) < 50
+        and re.search(
+            r"(no abstract|kein Abstract)", record.find("ABN").text, re.IGNORECASE
+        )
     ):
         return None  # don't make a node at all!
     abstract = URIRef(work_uri + "#secondaryabstract")
