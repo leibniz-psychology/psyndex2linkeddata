@@ -1,3 +1,5 @@
+import urllib.parse
+
 from rdflib import RDF, Graph, Literal, URIRef
 
 import modules.namespace as ns
@@ -23,7 +25,7 @@ def build_doi_identifier_node(instance, doi, graph):
     # we use the doi itself as part of the doi node uri to make it a unique node,
     # otherwise all doi values will be added to the same node.
     # make node for the identifier:
-    identifier_node = URIRef("https://doi.org/" + doi)
+    identifier_node = URIRef("https://doi.org/" + urllib.parse.quote(doi))
     # give it class bf:Doi:
     graph.add((identifier_node, RDF.type, ns.BF.Doi))
     # give it the doi as a literal value:
