@@ -48,7 +48,7 @@ def get_instance_urn(instance, record, graph):
         urn_field = None
     if urn_field is not None:
         # add it as a n identifier of class bf:Urn!
-        identifiers.build_urn_identifier_node(instance, urn_field, graph)
+        identifiers.build_urn_identifier_node(instance, urn_field.strip(), graph)
 
 
 def get_instance_url(instance, record, graph):
