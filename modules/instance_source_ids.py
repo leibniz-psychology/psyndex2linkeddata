@@ -65,7 +65,7 @@ def get_instance_url(instance, record, graph):
         if helpers.check_for_url_or_doi(url_field)[1] == "url":
             url = helpers.check_for_url_or_doi(url_field)[0]
         else:
-            print(f"Warning: URL {url_field} is not a valid URL.")
+            logging.warning(f"URL {str(url_field)} is not a valid URL.")
             # should probably check if it is a valid doi and then use it as a doi?
         if url is not None:
             identifiers.build_electronic_locator_node(instance, url, graph)
