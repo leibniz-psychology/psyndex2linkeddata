@@ -129,41 +129,53 @@ def split_series_title_volume(series_statement):
 # a function to fetch JT, JBD, JFT, PAGE, ISSN, EISSN
 def fetch_journal_info(record):
     # get JT as journal_title
+    journal_title = None
     try:
         journal_title = record.find("JT").text
     except:
-        journal_title = None
+        logging.warning("no JT field found in DFK " + record.find("DFK").text)
     # get JBD as journal_volume
+    journal_volume = None
     try:
         journal_volume = record.find("JBD").text
     except:
-        journal_volume = None
+        logging.warning("no JBD field found in DFK " + record.find("DFK").text)
     # JHFT as journal_issue
+    journal_issue = None
     try:
         journal_issue = record.find("JHFT").text
     except:
-        journal_issue = None
+        logging.warning("no JHFT field found in DFK " + record.find("DFK").text)
     # split PAGE into (page_start and page_end) or article_no
+    page_string = None
+    page_start = None
+    page_end = None
+    extent = None
+    article_number = None
     try:
         page_string = record.find("PAGE").text
         try:
             page_start, page_end, extent, article_number = split_pages(page_string)
         except:
-            page_start = None
-            page_end = None
-            extent = None
-            article_number = None
+            logging.warning(
+                "couldn't properly parse PAGE field: "
+                + page_string
+                + " in DFK "
+                + record.find("DFK").text
+            )
     except:
-        page_string = None
+        logging.warning("no PAGE field found in DFK " + record.find("DFK").text)
     # get ISSN and EISSN (and fetch the issnL for them via an API?)
+    print_issn = None
     try:
         print_issn = record.find("ISSN").text
     except:
-        print_issn = None
+        logging.warning("no ISSN field found in DFK " + record.find("DFK").text)
+    online_issn = None
     try:
         online_issn = record.find("EISSN").text
     except:
-        online_issn = None
+        logging.warning("no EISSN field found in DFK " + record.find("DFK").text)
     # return them all:
     return (
         journal_title,
@@ -309,17 +321,25 @@ def build_series_relationship(resource_node, graph, series_title, series_volume)
 def fetch_surrounding_book_info(record):
     # PAGE, split into page_start, page_end using split_pages() function
 
+    page_string = None
+    page_start = None
+    page_end = None
+    extent = None
+    article_number = None
     try:
         page_string = record.find("PAGE").text
         try:
             page_start, page_end, extent, article_number = split_pages(page_string)
         except:
-            page_start = None
-            page_end = None
-            extent = None
-            article_number = None
+            logging.warning(
+                "couldn't properly parse PAGE field: "
+                + page_string
+                + " in DFK "
+                + record.find("DFK").text
+            )
+
     except:
-        page_string = None
+        logging.warning("no PAGE field found in DFK " + record.find("DFK").text)
     # SSDFK, if it exists (then link to book without writing all the editors etc in here)
     try:
         book_dfk = record.find("SSDFK").text
