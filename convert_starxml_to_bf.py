@@ -1822,7 +1822,12 @@ def get_bf_grants(work_uri, record):
             funder_name = helpers.get_mainfield(
                 grantfield
             )  # we already checked wheter the field is empty, so we can use get_mainfield here
+            if funder_name == None:
+                raise ValueError
         except:
+            logging.warning(
+                "Could not extract funder name from GRANT field {grantfield} in record {record.find('DFK').text}"
+            )
             funder_name = "unknown funder"  # just in case the GRANT field has no content beside the subfields
         # add the funder name to the funder node:
         records_bf.add((funder_node, RDFS.label, Literal(funder_name)))
