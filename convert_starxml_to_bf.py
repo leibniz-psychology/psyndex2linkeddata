@@ -2024,6 +2024,16 @@ def process_record(record):
     # note: actually adding it as an identifier is done below, to the instancebundle.
     dfk = record.find("DFK").text
 
+    # open tsv file, check if dfk is in first row, if not, skip the record:
+    with open("xml-data/bad_dfks.tsv", "r") as dfk_list:
+        reader = csv.reader(dfk_list, delimiter="\t")
+        for row in reader:
+            if row[0] == dfk:
+                print(f"Skipping record {dfk}: {row[1]}")
+                return
+
+    # print("Processing record " + dfk)
+
     # Create a URI node for the work and  give it the correct bibframe classes:
     # make sure a work_uri will look like this: works:dfk_work, eg works:123456_work
     work_uri = URIRef(ns.WORKS + dfk + "_work")
