@@ -193,131 +193,144 @@ def add_instance_license(resource_uri, record):
     """
     if record.find("COPR") is not None:
         # get the last subfield of COPR:
-        license_code = helpers.get_subfield(record.find("COPR").text, "c")
-        # get the german_label from |d:
-        license_german_label = helpers.get_subfield(record.find("COPR").text, "d")
-        # create a skosmos uri for the license:
-        SKOSMOS_LICENSES_PREFIX = "https://w3id.org/zpid/vocabs/licenses/"
-        # license_uri = URIRef(LICENSES + license_code)
-        # several cases and the different uris for the licenses:
-        if license_code == "CC":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1.0")
-        elif license_code == "PDM":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1.0")
-        # CC BY 4.0
-        elif license_code == "CC BY 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4.0")
-        # CC BY-SA 4.0
-        elif license_code == "CC BY-SA 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4.0")
-        # CC BY-NC-ND 3.0
-        elif license_code == "CC BY-NC-ND 3.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3.0")
-        # CC BY-NC-ND 4.0
-        elif license_code == "CC BY-NC-ND 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4.0")
-        elif license_code == "CC BY-NC 1.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1.0")
-        elif license_code == "CC BY-NC 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4.0")
-            # CC BY-NC-ND 2.5
-        elif license_code == "CC BY-NC-ND 2.5":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2.5")
-            # CC BY-NC-SA 4.0
-        elif license_code == "CC BY-NC-SA 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4.0")
-            # CC BY-ND 4.0
-        elif license_code == "CC BY-ND 4.0":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4.0")
-            # CC BY-ND 2.5
-        elif license_code == "CC BY-ND 2.5":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2.5")
-            # CC BY (unknown version)
-        elif license_code == "CC BY":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY")
-            # CC BY-NC (unknown version)
-        elif license_code == "CC BY-NC":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC")
-            # CC BY-NC-SA (unknown version)
-        elif license_code == "CC BY-NC-SA":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA")
-            # CC BY-SA (unknown version)
-        elif license_code == "CC BY-SA":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA")
-            # CC BY-NC-ND (unknown version)
-        elif license_code == "CC BY-NC-ND":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND")
-            # CC BY-ND (unknown version)
-        elif license_code == "CC BY-ND":
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND")
-            # starts with "AUTH":
-        elif license_code.startswith("AUTH"):
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "AUTH")
-            # starts with "PUBL" or license_german_label starts with "Volles Urheberrecht des Verlags" > PUBL:
-        elif license_code.startswith("PUBL") or license_german_label.startswith(
-            "Volles Urheberrecht des Verlags"
-        ):
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PUBL")
-            # starts with starts with "Hogrefe OpenMind" -> HogrefeOpenMind
-        elif license_code.startswith("Hogrefe OpenMind"):
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "HogrefeOpenMind")
-            # contains contains "Springer"-> ExclusiveSpringer:
-        elif "Springer" in license_code:
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "ExclusiveSpringer")
-        # starts with "OTHER" -> UnspecifiedOpenLicense
-        elif license_code.startswith("OTHER"):
-            license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "UnspecifiedOpenLicense")
-        else:
-            logging.info(
-                f"no license uri found for {license_code} in record {record.find('DFK').text}"
-            )
-            license_uri = None
-        if license_uri is not None:
-            # add the license uri from skosmos directly:
-            license_node = license_uri
-            records_bf.set((license_node, RDF.type, ns.BF.UsePolicy))
-            records_bf.add((resource_uri, ns.BF.usageAndAccessPolicy, license_node))
-
-            # Get the label from skosmos:
-            try:
-                german_preflabel = localapi.get_preflabel_from_skosmos(
-                    license_uri, "licenses", "de"
-                )
-            except:
-                logging.warning(f"failed getting prefLabels for license {license_uri}")
-                german_preflabel = None
-            try:
-                english_preflabel = localapi.get_preflabel_from_skosmos(
-                    license_uri, "licenses", "en"
-                )
-            except:
-                logging.warning(f"failed getting prefLabels for license {license_uri}")
-                english_preflabel = None
-            # add the prefLabels to the license node:
-            if german_preflabel is not None:
-                records_bf.add(
-                    (license_node, SKOS.prefLabel, Literal(german_preflabel, lang="de"))
-                )
+        try:
+            license_code = helpers.get_subfield(record.find("COPR").text, "c")
+            # get the german_label from |d:
+            license_german_label = helpers.get_subfield(record.find("COPR").text, "d")
+            # create a skosmos uri for the license:
+            SKOSMOS_LICENSES_PREFIX = "https://w3id.org/zpid/vocabs/licenses/"
+            # license_uri = URIRef(LICENSES + license_code)
+            # several cases and the different uris for the licenses:
+            if license_code == "CC":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1.0")
+            elif license_code == "PDM":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1.0")
+            # CC BY 4.0
+            elif license_code == "CC BY 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4.0")
+            # CC BY-SA 4.0
+            elif license_code == "CC BY-SA 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4.0")
+            # CC BY-NC-ND 3.0
+            elif license_code == "CC BY-NC-ND 3.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3.0")
+            # CC BY-NC-ND 4.0
+            elif license_code == "CC BY-NC-ND 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4.0")
+            elif license_code == "CC BY-NC 1.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1.0")
+            elif license_code == "CC BY-NC 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4.0")
+                # CC BY-NC-ND 2.5
+            elif license_code == "CC BY-NC-ND 2.5":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2.5")
+                # CC BY-NC-SA 4.0
+            elif license_code == "CC BY-NC-SA 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4.0")
+                # CC BY-ND 4.0
+            elif license_code == "CC BY-ND 4.0":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4.0")
+                # CC BY-ND 2.5
+            elif license_code == "CC BY-ND 2.5":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2.5")
+                # CC BY (unknown version)
+            elif license_code == "CC BY":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY")
+                # CC BY-NC (unknown version)
+            elif license_code == "CC BY-NC":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC")
+                # CC BY-NC-SA (unknown version)
+            elif license_code == "CC BY-NC-SA":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA")
+                # CC BY-SA (unknown version)
+            elif license_code == "CC BY-SA":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA")
+                # CC BY-NC-ND (unknown version)
+            elif license_code == "CC BY-NC-ND":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND")
+                # CC BY-ND (unknown version)
+            elif license_code == "CC BY-ND":
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND")
+                # starts with "AUTH":
+            elif license_code.startswith("AUTH"):
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "AUTH")
+                # starts with "PUBL" or license_german_label starts with "Volles Urheberrecht des Verlags" > PUBL:
+            elif license_code.startswith("PUBL") or license_german_label.startswith(
+                "Volles Urheberrecht des Verlags"
+            ):
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PUBL")
+                # starts with starts with "Hogrefe OpenMind" -> HogrefeOpenMind
+            elif license_code.startswith("Hogrefe OpenMind"):
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "HogrefeOpenMind")
+                # contains contains "Springer"-> ExclusiveSpringer:
+            elif "Springer" in license_code:
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "ExclusiveSpringer")
+            # starts with "OTHER" -> UnspecifiedOpenLicense
+            elif license_code.startswith("OTHER"):
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "UnspecifiedOpenLicense")
             else:
-                logging.warning(f"no german prefLabel found for {license_uri}")
-            if english_preflabel is not None:
-                records_bf.add(
-                    (
-                        license_node,
-                        SKOS.prefLabel,
-                        Literal(english_preflabel, lang="en"),
+                logging.info(
+                    f"no license uri found for {license_code} in record {record.find('DFK').text}"
+                )
+                license_uri = None
+            if license_uri is not None:
+                # add the license uri from skosmos directly:
+                license_node = license_uri
+                records_bf.set((license_node, RDF.type, ns.BF.UsePolicy))
+                records_bf.add((resource_uri, ns.BF.usageAndAccessPolicy, license_node))
+
+                # Get the label from skosmos:
+                try:
+                    german_preflabel = localapi.get_preflabel_from_skosmos(
+                        license_uri, "licenses", "de"
                     )
-                )
-                records_bf.set((license_node, RDFS.label, Literal(english_preflabel)))
-            else:
-                logging.warning(f"no english prefLabel found for {license_uri}")
+                except:
+                    logging.warning(
+                        f"failed getting prefLabels for license {license_uri}"
+                    )
+                    german_preflabel = None
+                try:
+                    english_preflabel = localapi.get_preflabel_from_skosmos(
+                        license_uri, "licenses", "en"
+                    )
+                except:
+                    logging.warning(
+                        f"failed getting prefLabels for license {license_uri}"
+                    )
+                    english_preflabel = None
+                # add the prefLabels to the license node:
+                if german_preflabel is not None:
+                    records_bf.add(
+                        (
+                            license_node,
+                            SKOS.prefLabel,
+                            Literal(german_preflabel, lang="de"),
+                        )
+                    )
+                else:
+                    logging.warning(f"no german prefLabel found for {license_uri}")
+                if english_preflabel is not None:
+                    records_bf.add(
+                        (
+                            license_node,
+                            SKOS.prefLabel,
+                            Literal(english_preflabel, lang="en"),
+                        )
+                    )
+                    records_bf.set(
+                        (license_node, RDFS.label, Literal(english_preflabel))
+                    )
+                else:
+                    logging.warning(f"no english prefLabel found for {license_uri}")
 
-            # english_preflabel = localapi.get_preflabel_from_skosmos(license_uri, "licenses", "en")
-            # TODO: get url for license itself from skosmos (e.g. creative commons deed url)
+                # english_preflabel = localapi.get_preflabel_from_skosmos(license_uri, "licenses", "en")
+                # TODO: get url for license itself from skosmos (e.g. creative commons deed url)
+        except:
+            logging.warning(
+                f"no valid license found for record {record.find('DFK').text}: {record.find('COPR').text}"
+            )
     else:
-        logging.warning(
-            f"warning: record {record.find('DFK').text} has no valid license!"
-        )
+        logging.warning(f"record {record.find('DFK').text} has no license!")
 
 
 def add_work_classification(work_uri, record):
