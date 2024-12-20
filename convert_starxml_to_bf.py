@@ -801,9 +801,15 @@ def add_bf_contributor_corporate_body(work_uri, record):
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
         records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
 
-        # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
-        org_name = mappings.replace_encodings(helpers.get_mainfield(org.text))
-        # org_name = mappings.replace_encodings(org.text).strip()
+        try:
+            # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
+            org_name = mappings.replace_encodings(helpers.get_mainfield(org.text))
+            # org_name = mappings.replace_encodings(org.text).strip()
+        except:
+            logging.warning(
+                f"{record.find('DFK').text}: skipping malformed AUK: {org.text}"
+            )
+            continue
         # get ror id of org from api:
         org_ror_id = get_ror_id_from_api(org_name)
         # if there is a ror id, add the ror id as an identifier:
