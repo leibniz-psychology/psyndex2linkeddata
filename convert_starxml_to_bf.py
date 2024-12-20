@@ -988,6 +988,7 @@ def normalize_names(familyname, givenname):
     )
     # generate an abbreviated version of givenname (only the first letter),
     # (drop any middle names or initials, but keep the first name):
+    fullname_normalized = familyname_normalized
     if givenname:
         givenname_abbreviated = givenname[0] + "."
         # generate a normalized version of the name by concatenating the two with a comma as the separator:
