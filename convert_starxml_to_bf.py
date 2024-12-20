@@ -359,11 +359,11 @@ def get_publication_date(record):
     # from field PHIST or PY, get pub date and return this as a Literal
     # get date from PHIST field, it exists, otherwise from P> field:
     if record.find("PHIST") is not None and record.find("PHIST").text != "":
-        date = helpers.get_subfield(record.find("PHIST").text, "o")
-        # clean up anything that's not a digit at the  start, such as ":" - make sure with a regex that date starts with a digit:
-        date.strip()
-        # parse the date: it can be either "8 June 2021" or "08.06.2021"
         try:
+            date = helpers.get_subfield(record.find("PHIST").text, "o")
+            # clean up anything that's not a digit at the  start, such as ":" - make sure with a regex that date starts with a digit:
+            date.strip()
+            # parse the date: it can be either "8 June 2021" or "08.06.2021"
             # parse and convert this to the yyyy-mm-dd format:
             date = dateparser.parse(date).strftime("%Y-%m-%d")
         except:
