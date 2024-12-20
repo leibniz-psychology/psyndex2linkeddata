@@ -40,14 +40,17 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
+RECORDS_FILE = config("RECORDS_FILE")
+RECORDS_START = int(config("RECORDS_START"))
+RECORDS_END = int(config("RECORDS_END"))
+MAX_WORKERS = int(config("MAX_WORKERS"))
+
 # TODO: new fuzzy compare: using the faster rapidfuzz as a drop-in replacement for fuzzywuzzy:
 # from rapidfuzz import fuzz
 # from rapidfuzz import process
 
-
 # ror lookup api url for looking up organization contributors and the affiliations of persons:
 ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
-
 
 ## crossref api stuff for looking up funders:
 # set up friendly session by adding mail in request:
@@ -93,11 +96,7 @@ with open("institute_lux.csv", newline="") as csvfile:
 
 
 # Create an "element tree" from the records in my selected xml file so we can loop through them and do things with them:
-# root = ET.parse("xml-data/records-440.xml")
-# root = ET.parse("xml-data/records-322.xml")
-# root = ET.parse("xml-data/records-395.xml")
-# root = ET.parse("xml-data/records-214.xml")
-root = ET.parse("xml-data/records-556.xml")
+root = ET.parse(RECORDS_FILE)
 
 # To see the source xml's structure, uncomment this function:
 # def print_element(element, depth=0):
@@ -2290,9 +2289,9 @@ def process_record(record):
             #     # if there are two or more, but we can't find any electronic instance among them? That would be an error, but what can be done to still catch it?
 
 
-records = root.findall("Record")[0:200]
+records = root.findall("Record")[RECORDS_START:RECORDS_END]
 with ThreadPoolExecutor(
-    max_workers=10
+    max_workers=MAX_WORKERS
 ) as executor:  # Adjust max_workers to limit the number of parallel threads
     futures = [
         executor.submit(process_record, record) for index, record in enumerate(records)
