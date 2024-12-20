@@ -20,6 +20,7 @@ openai = "*"
 dateparser = "*"
 tqdm = "*"
 python-decouple = "*"
+redis = "*"
 
 [dev-packages]
 
