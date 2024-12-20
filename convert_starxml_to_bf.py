@@ -2112,6 +2112,10 @@ def process_record(record):
     )  # adds the generated bflc:Relationship node to the work
     # switched off for performance reasons
 
+    research_info.get_urlai(
+        work_uri, record, records_bf
+    )  # adds the generated bflc:Relationship node to the work
+
     ### Adding Preregistration links to the work (from field <PREREG>):
     # deactivated due to performance issues and
     # needing a rewrite (replace bnodes with hash-uris),
