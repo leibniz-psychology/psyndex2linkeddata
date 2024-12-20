@@ -8,3 +8,4 @@ normkoerperschaften/.cache/requests.sqlite
 .cache/requests_ror.sqlite
 .cache/requests_skosmos.sqlite
 .cache_backup/requests.sqlite
+logs/

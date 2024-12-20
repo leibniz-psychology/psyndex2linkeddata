@@ -151,6 +151,7 @@ dd_codes = (
     ("^DIF", "∞"),  # infinity
     ("^DDS", "–"),  # n-dash/Halbgeviertstrich;
     ("^DDL", "—"),  # em-dash
+    ("^DCR", "°"),  # degree
     # remove html tags:
     # ("&lt;b&gt;", ""),  # bold start
     # ("&lt;/b&gt;", ""),  # bold end

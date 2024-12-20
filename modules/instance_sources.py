@@ -32,44 +32,26 @@
 # ```
 #
 
-from ast import expr
+import logging
 import re
-import xml.etree.ElementTree as ET
-from rdflib import OWL, SKOS, Literal, URIRef, Namespace, Graph, RDF, RDFS
-import modules.mappings as mappings
-import modules.helpers as helpers
+
+from rdflib import OWL, RDF, Graph, Literal, URIRef
+
 import modules.identifiers as identifiers
-import modules.local_api_lookups as localapi
-
-BF = Namespace("http://id.loc.gov/ontologies/bibframe/")
-BFLC = Namespace("http://id.loc.gov/ontologies/bflc/")
-WORKS = Namespace("https://w3id.org/zpid/resources/works/")
-INSTANCEBUNDLES = Namespace("https://w3id.org/zpid/resources/instancebundles/")
-CONTENTTYPES = Namespace("https://w3id.org/zpid/vocabs/contenttypes/")
-GENRES = Namespace("https://w3id.org/zpid/vocabs/genres/")
-CM = Namespace("https://w3id.org/zpid/vocabs/carriermedia/")
-PMT = Namespace("https://w3id.org/zpid/vocabs/mediacarriers/")
-ISSUANCES = Namespace("https://w3id.org/zpid/vocabs/issuances/")
-METHODS = Namespace("https://w3id.org/zpid/vocabs/methods/")
-PXC = Namespace("https://w3id.org/zpid/ontology/classes/")
-PXP = Namespace("https://w3id.org/zpid/ontology/properties/")
-CONTENT = Namespace("http://id.loc.gov/vocabulary/contentTypes/")
-MEDIA = Namespace("http://id.loc.gov/vocabulary/mediaTypes/")
-CARRIER = Namespace("http://id.loc.gov/vocabulary/carriers/")
-
+import modules.namespace as ns
 
 graph = Graph()
 
-graph.bind("bf", BF)
-graph.bind("bflc", BFLC)
-graph.bind("pxc", PXC)
-graph.bind("pxp", PXP)
-graph.bind("works", WORKS)
-graph.bind("instancebundles", INSTANCEBUNDLES)
-graph.bind("contenttypes", CONTENTTYPES)
-graph.bind("genres", GENRES)
-graph.bind("pmt", PMT)
-graph.bind("methods", METHODS)
+graph.bind("bf", ns.BF)
+graph.bind("bflc", ns.BFLC)
+graph.bind("pxc", ns.PXC)
+graph.bind("pxp", ns.PXP)
+graph.bind("works", ns.WORKS)
+graph.bind("instancebundles", ns.INSTANCEBUNDLES)
+graph.bind("contenttypes", ns.CONTENTTYPES)
+graph.bind("genres", ns.GENRES)
+graph.bind("pmt", ns.PMT)
+graph.bind("methods", ns.METHODS)
 
 
 def split_pages(page_string):
@@ -119,7 +101,7 @@ def split_pages(page_string):
             except:
                 article_number = None
     else:
-        print("couldn't properly parse PAGE field: " + page_string)
+        logging.warning("couldn't properly parse PAGE field: " + page_string)
     return page_start, page_end, extent, article_number
 
 
@@ -147,41 +129,53 @@ def split_series_title_volume(series_statement):
 # a function to fetch JT, JBD, JFT, PAGE, ISSN, EISSN
 def fetch_journal_info(record):
     # get JT as journal_title
+    journal_title = None
     try:
         journal_title = record.find("JT").text
     except:
-        journal_title = None
+        logging.warning("no JT field found in DFK " + record.find("DFK").text)
     # get JBD as journal_volume
+    journal_volume = None
     try:
         journal_volume = record.find("JBD").text
     except:
-        journal_volume = None
+        logging.warning("no JBD field found in DFK " + record.find("DFK").text)
     # JHFT as journal_issue
+    journal_issue = None
     try:
         journal_issue = record.find("JHFT").text
     except:
-        journal_issue = None
+        logging.warning("no JHFT field found in DFK " + record.find("DFK").text)
     # split PAGE into (page_start and page_end) or article_no
+    page_string = None
+    page_start = None
+    page_end = None
+    extent = None
+    article_number = None
     try:
         page_string = record.find("PAGE").text
         try:
             page_start, page_end, extent, article_number = split_pages(page_string)
         except:
-            page_start = None
-            page_end = None
-            extent = None
-            article_number = None
+            logging.warning(
+                "couldn't properly parse PAGE field: "
+                + page_string
+                + " in DFK "
+                + record.find("DFK").text
+            )
     except:
-        page_string = None
+        logging.warning("no PAGE field found in DFK " + record.find("DFK").text)
     # get ISSN and EISSN (and fetch the issnL for them via an API?)
+    print_issn = None
     try:
         print_issn = record.find("ISSN").text
     except:
-        print_issn = None
+        logging.warning("no ISSN field found in DFK " + record.find("DFK").text)
+    online_issn = None
     try:
         online_issn = record.find("EISSN").text
     except:
-        online_issn = None
+        logging.warning("no EISSN field found in DFK " + record.find("DFK").text)
     # return them all:
     return (
         journal_title,
@@ -214,18 +208,18 @@ def build_journal_relationship(
         series_enumeration = ""
         series_statement = journal_title
         relationship_node = URIRef(resource_node + "#journalrel")
-        graph.add((resource_node, BFLC.relationship, relationship_node))
-        graph.set((relationship_node, RDF.type, BFLC.Relationship))
+        graph.add((resource_node, ns.BFLC.relationship, relationship_node))
+        graph.set((relationship_node, RDF.type, ns.BFLC.Relationship))
         # the journal itself, including title and issns:
         journal_node = URIRef(relationship_node + "_journal")
-        graph.add((relationship_node, BF.relatedTo, journal_node))
-        graph.add((journal_node, RDF.type, BF.Serial))
-        graph.add((journal_node, RDF.type, BF.Hub))
+        graph.add((relationship_node, ns.BF.relatedTo, journal_node))
+        graph.add((journal_node, RDF.type, ns.BF.Serial))
+        graph.add((journal_node, RDF.type, ns.BF.Hub))
         # graph.set((journal_node, RDF.type, BF.Uncontrolled))
         title_node = URIRef(journal_node + "_title")
-        graph.add((journal_node, BF.title, title_node))
-        graph.set((title_node, RDF.type, BF.Title))
-        graph.set((title_node, BF.mainTitle, Literal(journal_title)))
+        graph.add((journal_node, ns.BF.title, title_node))
+        graph.set((title_node, RDF.type, ns.BF.Title))
+        graph.set((title_node, ns.BF.mainTitle, Literal(journal_title)))
         # issn: if there are two, and one is eissn, we can be pretty sure that the other (ISSN) is the issnL!
         # if there is only one, it is always "ISSN", and we can't even be sure it is the print issn
         # solution: just take what they give us:
@@ -253,28 +247,28 @@ def build_journal_relationship(
             identifiers.build_issn_identifier_node(journal_node, eissn, "online", graph)
             # add a seriesstatement that collates all the stuff in one convenient string?
         if journal_volume is not None:
-            graph.add((relationship_node, PXP.inVolume, Literal(journal_volume)))
+            graph.add((relationship_node, ns.PXP.inVolume, Literal(journal_volume)))
             series_enumeration = series_enumeration + " " + journal_volume
         if journal_issue is not None:
             series_enumeration = series_enumeration + "(" + journal_issue + ")"
-            graph.add((relationship_node, PXP.inIssue, Literal(journal_issue)))
+            graph.add((relationship_node, ns.PXP.inIssue, Literal(journal_issue)))
         if page_start is not None:
             series_enumeration = series_enumeration + ", p. " + page_start
-            graph.add((relationship_node, PXP.pageStart, Literal(page_start)))
+            graph.add((relationship_node, ns.PXP.pageStart, Literal(page_start)))
         if page_end is not None:
-            graph.add((relationship_node, PXP.pageEnd, Literal(page_end)))
+            graph.add((relationship_node, ns.PXP.pageEnd, Literal(page_end)))
             series_enumeration = series_enumeration + "-" + page_end
         if article_no is not None:
             series_enumeration = series_enumeration + ", Article number: " + article_no
             identifiers.build_articleno_identifier_node(
                 relationship_node, article_no, graph
             )
-        graph.add((resource_node, BF.seriesStatement, Literal(series_statement)))
+        graph.add((resource_node, ns.BF.seriesStatement, Literal(series_statement)))
         if series_enumeration != "":
             graph.add(
                 (
                     relationship_node,
-                    BF.seriesEnumeration,
+                    ns.BF.seriesEnumeration,
                     Literal((series_enumeration).strip()),
                 )
             )
@@ -304,38 +298,48 @@ def fetch_book_series_info(record):
 def build_series_relationship(resource_node, graph, series_title, series_volume):
     if series_title is not None:
         series_statement = series_title
-        graph.add((resource_node, BF.seriesStatement, Literal(series_statement)))
+        graph.add((resource_node, ns.BF.seriesStatement, Literal(series_statement)))
         relationship_node = URIRef(resource_node + "#seriesrel")
-        graph.add((resource_node, BFLC.relationship, relationship_node))
-        graph.set((relationship_node, RDF.type, BFLC.Relationship))
+        graph.add((resource_node, ns.BFLC.relationship, relationship_node))
+        graph.set((relationship_node, RDF.type, ns.BFLC.Relationship))
         # the series itself:
         series_node = URIRef(relationship_node + "_series")
-        graph.add((relationship_node, BF.relatedTo, series_node))
-        graph.add((series_node, RDF.type, BF.Series))
-        graph.add((series_node, RDF.type, BF.Hub))
+        graph.add((relationship_node, ns.BF.relatedTo, series_node))
+        graph.add((series_node, RDF.type, ns.BF.Series))
+        graph.add((series_node, RDF.type, ns.BF.Hub))
         # graph.add((series_node, RDF.type, BF.Uncontrolled))
         title_node = URIRef(series_node + "_title")
-        graph.add((series_node, BF.title, title_node))
-        graph.set((title_node, RDF.type, BF.Title))
-        graph.set((title_node, BF.mainTitle, Literal(series_title)))
+        graph.add((series_node, ns.BF.title, title_node))
+        graph.set((title_node, RDF.type, ns.BF.Title))
+        graph.set((title_node, ns.BF.mainTitle, Literal(series_title)))
         if series_volume is not None:
-            graph.add((relationship_node, BF.seriesEnumeration, Literal(series_volume)))
+            graph.add(
+                (relationship_node, ns.BF.seriesEnumeration, Literal(series_volume))
+            )
 
 
 def fetch_surrounding_book_info(record):
     # PAGE, split into page_start, page_end using split_pages() function
 
+    page_string = None
+    page_start = None
+    page_end = None
+    extent = None
+    article_number = None
     try:
         page_string = record.find("PAGE").text
         try:
             page_start, page_end, extent, article_number = split_pages(page_string)
         except:
-            page_start = None
-            page_end = None
-            extent = None
-            article_number = None
+            logging.warning(
+                "couldn't properly parse PAGE field: "
+                + page_string
+                + " in DFK "
+                + record.find("DFK").text
+            )
+
     except:
-        page_string = None
+        logging.warning("no PAGE field found in DFK " + record.find("DFK").text)
     # SSDFK, if it exists (then link to book without writing all the editors etc in here)
     try:
         book_dfk = record.find("SSDFK").text
@@ -375,35 +379,35 @@ def build_book_relationship(
 ):
 
     relationship_node = URIRef(resource_node + "#bookrel")
-    graph.add((resource_node, BFLC.relationship, relationship_node))
-    graph.set((relationship_node, RDF.type, BFLC.Relationship))
+    graph.add((resource_node, ns.BFLC.relationship, relationship_node))
+    graph.set((relationship_node, RDF.type, ns.BFLC.Relationship))
     # the book itself:
     book_node = URIRef(relationship_node + "_book")
-    graph.add((relationship_node, BF.relatedTo, book_node))
-    graph.add((book_node, RDF.type, PXC.InstanceBundle))
+    graph.add((relationship_node, ns.BF.relatedTo, book_node))
+    graph.add((book_node, RDF.type, ns.PXC.InstanceBundle))
     if book_dfk is not None:
         # add the book_dfk_node as an owl:sameAs to the book_node
-        book_dfk_node = URIRef(INSTANCEBUNDLES[book_dfk])
+        book_dfk_node = URIRef(ns.INSTANCEBUNDLES[book_dfk])
         graph.add((book_node, OWL.sameAs, book_dfk_node))
         # add class pxc:InstanceBundle to the book_dfk_node
-        graph.add((book_dfk_node, RDF.type, PXC.InstanceBundle))
+        graph.add((book_dfk_node, RDF.type, ns.PXC.InstanceBundle))
     else:
-        graph.add((book_node, RDF.type, BFLC.Uncontrolled))
+        graph.add((book_node, RDF.type, ns.BFLC.Uncontrolled))
 
     # if no book_dfk, add the book title to the instancebundle
     if book_title is not None:
         title_node = URIRef(book_node + "_title")
         # give bf:Title class to the title node
-        graph.add((title_node, RDF.type, BF.Title))
-        graph.add((title_node, BF.mainTitle, Literal(book_title)))
-        graph.add((book_node, BF.title, title_node))
+        graph.add((title_node, RDF.type, ns.BF.Title))
+        graph.add((title_node, ns.BF.mainTitle, Literal(book_title)))
+        graph.add((book_node, ns.BF.title, title_node))
     # add page_start, page_end, extent, article_number
     if page_start is not None:
-        graph.add((relationship_node, PXP.pageStart, Literal(page_start)))
+        graph.add((relationship_node, ns.PXP.pageStart, Literal(page_start)))
     if page_end is not None:
-        graph.add((relationship_node, PXP.pageEnd, Literal(page_end)))
+        graph.add((relationship_node, ns.PXP.pageEnd, Literal(page_end)))
     if extent is not None:
-        graph.add((resource_node, PXP.extent, Literal(extent)))
+        graph.add((resource_node, ns.PXP.extent, Literal(extent)))
     if article_number is not None:
         identifiers.build_articleno_identifier_node(
             relationship_node, article_number, graph
