@@ -50,7 +50,8 @@ MAX_WORKERS = int(config("MAX_WORKERS"))
 # from rapidfuzz import process
 
 # ror lookup api url for looking up organization contributors and the affiliations of persons:
-ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
+# ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
+ROR_API_URL = config("ROR_API_URL")
 
 ## crossref api stuff for looking up funders:
 # set up friendly session by adding mail in request:
@@ -172,7 +173,7 @@ def get_ror_org_country(affiliation_ror_id):
     # the country name is in country.name in the json response
 
     ror_request = session_ror.get(
-        f"{config('ROR_API_URL')}/organizations/" + affiliation_ror_id,
+        f"{config('ROR_API_URL')}/v1/organizations/" + affiliation_ror_id,
         timeout=20,
     )
     if ror_request.status_code == 200:
@@ -1009,7 +1010,7 @@ def get_local_authority_institute(affiliation_string, country):
 
 def get_ror_id_from_api(orgname_string):
     # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
-    ror_api_url = ROR_API_URL + orgname_string
+    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
     # make a request to the ror api:
     # ror_api_request = requests.get(ror_api_url)
     # make request to api with caching:
