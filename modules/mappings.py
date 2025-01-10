@@ -325,7 +325,8 @@ abstract_origin_gesis = (
 # and what if "DeepL"???
 # or "FIS Bildung", "GESIS Fachinformation für die Sozialwissenschaften, Bonn", "Kriminologische Zentralstelle",
 
-funder_names_replacelist = (
+# A list of funder names that ror won't find with findable replacements
+funder_names_full_replacelist = (
     ("DFG", "Deutsche Forschungsgemeinschaft (DFG)"),
     ("German Research Council", "Deutsche Forschungsgemeinschaft (DFG)"),
     ("German Research Society (DFG)", "Deutsche Forschungsgemeinschaft (DFG)"),
@@ -344,10 +345,6 @@ funder_names_replacelist = (
         "DFG Research Training Group Computational Cognition",
         "Deutsche Forschungsgemeinschaft (DFG)",
     ),
-    ("Villigst e.V.", "Villigst"),
-    ("Bial Foundation in Porto, Portugal", "Bial Foundation"),
-    ("European Union's Horizon 2020 research and innovation programme", "Horizon 2020"),
-    ("European Union's Horizon 2020 research and innovation program", "Horizon 2020"),
     ("H.W. & J. Hector Stiftung", "Hector Stiftung"),
     (
         "German Federal Ministry of Education and Research (BMBF)",
@@ -380,10 +377,33 @@ funder_names_replacelist = (
         "Christian Doppler Forschungsgesellschaft in Österreich",
         "Christian Doppler Forschungsgesellschaft",
     ),
-    # actually, anytime the name contains "Emmy Noether, copy the whole name into the note, then replace with DFG"
-    # also, anytime it ends in "grant", or "programme" or "program", remove that part- it may match better!
+    ("Tirol Science Fund (TWF)", "Tiroler Wissenschaftsfonds"),
+    ("Tiroler Wissenschaftsförderung", "Tiroler Wissenschaftsfonds"),
+    ("Tiroler Wissenschaftsförderung (TWF)", "Tiroler Wissenschaftsfonds"),
+    ("Tirol Science Fund (TWF)", "Tiroler Wissenschaftsfonds"),
+    ("Tirolean Government", "Tiroler Wissenschaftsfonds"),
+    ("Tiroler Wissenschaftsförderung - TWF", "Tiroler Wissenschaftsfonds"),
+    ("Land Tirol", "Tiroler Wissenschaftsfonds"),
+    ("Federal state of Tyrol", "Tiroler Wissenschaftsfonds"),
+    ("Federal State Tyrol", "Tiroler Wissenschaftsfonds"),
+    ("Office of the Tyrolean Government", "Tiroler Wissenschaftsfonds"),
+    ("Tyrolean Science Fund (TWF)", "Tiroler Wissenschaftsfonds"),
+    ("Government of the Province of Tyrol", "Tiroler Wissenschaftsfonds"),
+    ("Tyrolean Science Fund", "Tiroler Wissenschaftsfonds"),
+    ("The Tyrolean research funding", "Tiroler Wissenschaftsfonds"),
+    ("tyrolean science fond (TWF)", "Tiroler Wissenschaftsfonds"),
 )
 
+# A list of parts of funder names that signify that the whole funder name must
+# be replaced with something ror can find, unlike above list
+funder_names_substr_replacelist = (
+    ("Villigst", "Evangelisches Studienwerk Villigst"),
+    ("Bial", "Bial (Portugal)"),
+    ("Horizon 2020", "European Commission"),
+    ("Horizon Europe", "European Commission"),
+    ("Emmy Noether", "Deutsche Forschungsgemeinschaft (DFG)"),
+    ("Emmy-Noether", "Deutsche Forschungsgemeinschaft (DFG)"),
+)
 
 # list of country names, geonames ids, and 2-digit ISO-3166 alpha2 country codes
 # First few countries ordered first by DACHLUX, then by amount of publications from that country in openalex
@@ -593,7 +613,7 @@ copr_cc0 = ()
 
 
 ## issuance types:
-issuancetypes: (
+issuancetypes = (
     ("SS", "Edited Book", "Buch: Sammelwerk"),
     ("SM", "Authored Book", "Buch: Monografie"),
     ("US", "Chapter", "Kapitel"),

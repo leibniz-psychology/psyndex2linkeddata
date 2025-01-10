@@ -1725,13 +1725,28 @@ def extract_grant_numbers(subfield_n_string):
 
 
 def replace_common_fundernames(funder_name):
-    """This will accept a funder name that the crossref api may not recognize, at least not as the first hit,
+    """This will accept a funder name that the fundref or ror api may not recognize, at least not as the first hit,
     and replace it with a string that will supply the right funder as the first hit"""
-    # if the funder_name is in the list of funder names to replace (in index 0), then replace it with what is in index 1:
-    for funder in mappings.funder_names_replacelist:
-        if funder_name == funder[0]:
+
+    # Remove "program", "programme", or "grant" if they appear at the end of the string
+    # funder_name = re.sub(
+    #     r"\b(program|programme|grant)\b$", "", funder_name, flags=re.IGNORECASE
+    # ).strip()
+
+    # find common substrings (e.g. Horizon 2020) and replace the whole name with
+    # a more common name (e.g. European Commission):
+    for funder in mappings.funder_names_substr_replacelist:
+        if re.search(r"\b" + re.escape(funder[0]) + r"\b", funder_name, re.IGNORECASE):
             funder_name = funder[1]
             # print("replacing " + funder[0] + " with " + funder[1])
+            return funder_name
+
+    # find full names and replace the whole name with a more common name:
+    for funder in mappings.funder_names_full_replacelist:
+        if funder[0].lower() == funder_name.lower():
+            funder_name = funder[1]
+            # print("replacing " + funder[0] + " with " + funder[1])
+            return funder_name
     return funder_name
 
 
