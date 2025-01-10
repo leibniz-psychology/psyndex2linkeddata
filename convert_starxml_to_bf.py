@@ -1798,7 +1798,64 @@ def get_crossref_funder_id(funder_name):
         logging.error(f"Error: {e}")
 
 
-# function to build the nodes for preregistration links
+def get_ror_funder_id(funder_name):
+    # gets crossref funder id for a funder name from ROR
+    funder_name = replace_common_fundernames(funder_name)
+    # funder_name = quote(funder_name)
+
+    # construct the api url:
+    # https://api.ror.org/v1/organizations?filter=types:Funder?&affiliation=Deutsche%20Forschungsgemeinschaft%20(DFG)
+    ror_api_url = ROR_API_URL + "/v1/organizations?affiliation=" + funder_name
+
+    try:
+        ror_api_request = session_ror.get(ror_api_url, timeout=20)
+    except:
+        logging.warning("ror request failed at " + ror_api_url)
+    try:
+        ror_api_response = ror_api_request.json()
+    except:
+        logging.warning("ror response not received for " + ror_api_url)
+
+    funder_id = None
+
+    try:
+        if (
+            ror_api_request.status_code == 200
+            and ror_api_response["number_of_results"] > 0
+            and ror_api_response["items"][0]["chosen"] == True
+            and ror_api_response["items"][0]["organization"]["external_ids"]["FundRef"]
+        ):
+            try:
+                funder_id = (
+                    "10.13039/"
+                    + ror_api_response["items"][0]["organization"]["external_ids"][
+                        "FundRef"
+                    ]["preferred"]
+                )
+
+            except:
+                logging.warning(f"No preferred FundRef id found for '{funder_name}'")
+                try:
+                    funder_id = (
+                        "10.13039/"
+                        + ror_api_response["items"][0]["organization"]["external_ids"][
+                            "FundRef"
+                        ]["all"][0]
+                    )
+                except:
+                    logging.warning(f"No FundRef id found for '{funder_name}'")
+        else:
+            logging.warning(f"No funder found for '{funder_name}'")
+
+    except KeyError:
+        logging.warning(f"Funder without FundRef info found for '{funder_name}'")
+    except Exception as e:
+        logging.error(f"Error: {e}")
+
+    return funder_id
+
+
+# TODO move to research_info
 def get_bf_grants(work_uri, record):
     """this function takes a string and returns a funder (name and fundref doi),
     a list of grant numbers, a note with grant holder and info"""
@@ -1850,7 +1907,7 @@ def get_bf_grants(work_uri, record):
         # try to look up this funder name in the crossref funder registry:
         # if there is a match, add the crossref funder id as an identifier:
         crossref_funder_id = None
-        crossref_funder_id = get_crossref_funder_id(funder_name)
+        crossref_funder_id = get_ror_funder_id(funder_name)
         if crossref_funder_id is not None:
             # add a node for the identifier:
             crossref_funder_id_node = URIRef(str(funder_node) + "_funderid")
