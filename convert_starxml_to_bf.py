@@ -50,7 +50,8 @@ MAX_WORKERS = int(config("MAX_WORKERS"))
 # from rapidfuzz import process
 
 # ror lookup api url for looking up organization contributors and the affiliations of persons:
-ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
+# ROR_API_URL = f"{config('ROR_API_URL')}/organizations?affiliation="
+ROR_API_URL = config("ROR_API_URL")
 
 ## crossref api stuff for looking up funders:
 # set up friendly session by adding mail in request:
@@ -172,7 +173,7 @@ def get_ror_org_country(affiliation_ror_id):
     # the country name is in country.name in the json response
 
     ror_request = session_ror.get(
-        f"{config('ROR_API_URL')}/organizations/" + affiliation_ror_id,
+        f"{config('ROR_API_URL')}/v1/organizations/" + affiliation_ror_id,
         timeout=20,
     )
     if ror_request.status_code == 200:
@@ -1009,7 +1010,7 @@ def get_local_authority_institute(affiliation_string, country):
 
 def get_ror_id_from_api(orgname_string):
     # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
-    ror_api_url = ROR_API_URL + orgname_string
+    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
     # make a request to the ror api:
     # ror_api_request = requests.get(ror_api_url)
     # make request to api with caching:
@@ -1725,13 +1726,28 @@ def extract_grant_numbers(subfield_n_string):
 
 
 def replace_common_fundernames(funder_name):
-    """This will accept a funder name that the crossref api may not recognize, at least not as the first hit,
+    """This will accept a funder name that the fundref or ror api may not recognize, at least not as the first hit,
     and replace it with a string that will supply the right funder as the first hit"""
-    # if the funder_name is in the list of funder names to replace (in index 0), then replace it with what is in index 1:
-    for funder in mappings.funder_names_replacelist:
-        if funder_name == funder[0]:
+
+    # Remove "program", "programme", or "grant" if they appear at the end of the string
+    # funder_name = re.sub(
+    #     r"\b(program|programme|grant)\b$", "", funder_name, flags=re.IGNORECASE
+    # ).strip()
+
+    # find common substrings (e.g. Horizon 2020) and replace the whole name with
+    # a more common name (e.g. European Commission):
+    for funder in mappings.funder_names_substr_replacelist:
+        if re.search(r"\b" + re.escape(funder[0]) + r"\b", funder_name, re.IGNORECASE):
             funder_name = funder[1]
             # print("replacing " + funder[0] + " with " + funder[1])
+            return funder_name
+
+    # find full names and replace the whole name with a more common name:
+    for funder in mappings.funder_names_full_replacelist:
+        if funder[0].lower() == funder_name.lower():
+            funder_name = funder[1]
+            # print("replacing " + funder[0] + " with " + funder[1])
+            return funder_name
     return funder_name
 
 
@@ -1782,7 +1798,64 @@ def get_crossref_funder_id(funder_name):
         logging.error(f"Error: {e}")
 
 
-# function to build the nodes for preregistration links
+def get_ror_funder_id(funder_name):
+    # gets crossref funder id for a funder name from ROR
+    funder_name = replace_common_fundernames(funder_name)
+    # funder_name = quote(funder_name)
+
+    # construct the api url:
+    # https://api.ror.org/v1/organizations?filter=types:Funder?&affiliation=Deutsche%20Forschungsgemeinschaft%20(DFG)
+    ror_api_url = ROR_API_URL + "/v1/organizations?affiliation=" + funder_name
+
+    try:
+        ror_api_request = session_ror.get(ror_api_url, timeout=20)
+    except:
+        logging.warning("ror request failed at " + ror_api_url)
+    try:
+        ror_api_response = ror_api_request.json()
+    except:
+        logging.warning("ror response not received for " + ror_api_url)
+
+    funder_id = None
+
+    try:
+        if (
+            ror_api_request.status_code == 200
+            and ror_api_response["number_of_results"] > 0
+            and ror_api_response["items"][0]["chosen"] == True
+            and ror_api_response["items"][0]["organization"]["external_ids"]["FundRef"]
+        ):
+            try:
+                funder_id = (
+                    "10.13039/"
+                    + ror_api_response["items"][0]["organization"]["external_ids"][
+                        "FundRef"
+                    ]["preferred"]
+                )
+
+            except:
+                logging.warning(f"No preferred FundRef id found for '{funder_name}'")
+                try:
+                    funder_id = (
+                        "10.13039/"
+                        + ror_api_response["items"][0]["organization"]["external_ids"][
+                            "FundRef"
+                        ]["all"][0]
+                    )
+                except:
+                    logging.warning(f"No FundRef id found for '{funder_name}'")
+        else:
+            logging.warning(f"No funder found for '{funder_name}'")
+
+    except KeyError:
+        logging.warning(f"Funder without FundRef info found for '{funder_name}'")
+    except Exception as e:
+        logging.error(f"Error: {e}")
+
+    return funder_id
+
+
+# TODO move to research_info
 def get_bf_grants(work_uri, record):
     """this function takes a string and returns a funder (name and fundref doi),
     a list of grant numbers, a note with grant holder and info"""
@@ -1834,7 +1907,7 @@ def get_bf_grants(work_uri, record):
         # try to look up this funder name in the crossref funder registry:
         # if there is a match, add the crossref funder id as an identifier:
         crossref_funder_id = None
-        crossref_funder_id = get_crossref_funder_id(funder_name)
+        crossref_funder_id = get_ror_funder_id(funder_name)
         if crossref_funder_id is not None:
             # add a node for the identifier:
             crossref_funder_id_node = URIRef(str(funder_node) + "_funderid")
