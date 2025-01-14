@@ -1,0 +1,40 @@
+# returns any corporate bodies as contributurs, at first only thos with a ror id:
+PREFIX works: <https://w3id.org/zpid/resources/works/>
+PREFIX issuances: <https://w3id.org/zpid/vocabs/issuances/>
+PREFIX roles: <https://w3id.org/zpid/vocabs/roles/>
+PREFIX pxc: <https://w3id.org/zpid/ontology/classes/>
+PREFIX pxp: <https://w3id.org/zpid/ontology/properties/>
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX bflc: <http://id.loc.gov/ontologies/bflc/>
+PREFIX locid: <http://id.loc.gov/vocabulary/identifiers/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX mads: <http://www.loc.gov/mads/rdf/v1#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?work ?agent ?country ?rorid WHERE {
+    ?work a pxc:MainWork;
+        bf:contribution ?contribution .
+        ?contribution bf:agent ?agent .
+    ?agent a bf:Organization . 
+OPTIONAL {
+    ?agent bf:identifiedBy ?identifier .
+    ?identifier a locid:ror .
+    ?identifier rdf:value ?rorid
+}
+OPTIONAL {
+    # has an affiliation address:
+    ?contribution mads:hasAffiliation/mads:hasAffiliationAddress/mads:country/rdfs:label ?country
+}
+        
+    
+}
+
+# call with:
+# arq --data ttl-data/bibframe_records.ttl --query testing/with_corporate_contributor.rq  --results=TSV > testing/testing/with_corporate_contributor.tsv
