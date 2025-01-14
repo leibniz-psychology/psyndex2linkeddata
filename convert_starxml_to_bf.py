@@ -677,7 +677,9 @@ def match_email_to_contribution_nodes(work_uri, record):
     # (unlike for PAUP and ORCID, :eyeroll:) so matching the names is pretty easy.
     # First get the email:
     if record.find("EMAIL") is not None:
-        # cleaning up the horrible mess that star makes of any urls and email addresses (it replaces _ with space, but there is no way to differentiate between an underscore-based space and a real one...):
+        # cleaning up the horrible mess that star makes of any urls and email
+        # addresses (it replaces _ with space, but there is no way to
+        # differentiate between an underscore-based space and a real one...):
         email = html.unescape(
             mappings.replace_encodings(record.find("EMAIL").text.strip())
         )
@@ -691,46 +693,49 @@ def match_email_to_contribution_nodes(work_uri, record):
             r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
         )
         # check if email matches the regex in email_pattern:
-        if not email_pattern.match(email):
-            logging.warning(
-                f"warning: invalid email: {email} in record {record.find('DFK').text}"
-            )
-        email = "mailto:" + email
-        # if there is an emid, the email will be added to the person with a name matching the name in emid.
+        if email_pattern.match(email):
+            email = "mailto:" + email
+            # if there is an emid, the email will be added to the person with a name matching the name in emid.
 
-        # get the emid:
-        try:
-            emid_name = record.find("EMID").text
-        except:
-            emid_name = None
-        if emid_name is not None:
-            # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
-            for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-                # get the agent of the contribution:
-                agent = records_bf.value(contribution, ns.BF.agent)
-                # if the agent is a person, get the given and family names:
-                if records_bf.value(agent, RDF.type) == ns.BF.Person:
-                    # get the given and family names of the agent:
-                    name = records_bf.value(agent, RDFS.label)
-                    emid_name = mappings.replace_encodings(emid_name).strip()
-                    # if the emid_name matches the agent's name, add the email as a mads:email to the agent:
-                    if fuzz.partial_ratio(emid_name, name) > 80:
+            # get the emid:
+            try:
+                emid_name = record.find("EMID").text
+            except:
+                emid_name = None
+            if emid_name is not None:
+                # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
+                for contribution in records_bf.objects(work_uri, ns.BF.contribution):
+                    # get the agent of the contribution:
+                    agent = records_bf.value(contribution, ns.BF.agent)
+                    # if the agent is a person, get the given and family names:
+                    if records_bf.value(agent, RDF.type) == ns.BF.Person:
+                        # get the given and family names of the agent:
+                        name = records_bf.value(agent, RDFS.label)
+                        emid_name = mappings.replace_encodings(emid_name).strip()
+                        # if the emid_name matches the agent's name, add the email as a mads:email to the agent:
+                        if fuzz.partial_ratio(emid_name, name) > 80:
+                            # add to contribution node:
+                            records_bf.add((contribution, ns.MADS.email, URIRef(email)))
+                            # and break the loop, since we only need to add the email to one person:
+                            break
+            # if after all loops, no match was found for EMID in the AUP-based name,
+            # add the email to the first contribution node:
+            else:
+                # finding the contribution node from those the work_uri has that has pxp:contributionPosition 1:
+                for contribution in records_bf.objects(work_uri, ns.BF.contribution):
+                    # dont get the agent at all, but just the position of the contribution:
+                    position = records_bf.value(
+                        contribution, ns.PXP.contributionPosition
+                    )
+                    if int(position) == 1:
                         # add to contribution node:
                         records_bf.add((contribution, ns.MADS.email, URIRef(email)))
-                        # and break the loop, since we only need to add the email to one person:
+                        # break after position 1 - since we only need the first contribution node:
                         break
-        # if after all loops, no match was found for EMID in the AUP-based name,
-        # add the email to the first contribution node:
         else:
-            # finding the contribution node from those the work_uri has that has pxp:contributionPosition 1:
-            for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-                # dont get the agent at all, but just the position of the contribution:
-                position = records_bf.value(contribution, ns.PXP.contributionPosition)
-                if int(position) == 1:
-                    # add to contribution node:
-                    records_bf.add((contribution, ns.MADS.email, URIRef(email)))
-                    # break after position 1 - since we only need the first contribution node:
-                    break
+            logging.warning(
+                f"invalid email found in record {record.find('DFK').text}: {email}, discarding email"
+            )
 
 
 def extract_contribution_role(contributiontext):
