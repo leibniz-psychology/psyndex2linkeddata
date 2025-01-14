@@ -1,0 +1,188 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
+@prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix licenses: <https://w3id.org/zpid/vocabs/licenses/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pmt: <https://w3id.org/zpid/vocabs/mediacarriers/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix roles: <https://w3id.org/zpid/vocabs/roles/> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+works:0390332_work a bf:Text,
+        bf:Work,
+        pxc:MainWork ;
+    bf:classification <https://w3id.org/zpid/resources/works/0390332_work#controlledmethod1>,
+        <https://w3id.org/zpid/resources/works/0390332_work#controlledmethod2> ;
+    bf:content <https://w3id.org/zpid/vocabs/contenttypes/text> ;
+    bf:contribution <https://w3id.org/zpid/resources/works/0390332_work#contribution1> ;
+    bf:genreForm genres:ThesisDoctoral ;
+    bf:hasInstance <https://w3id.org/zpid/resources/instances/0390332#1> ;
+    bf:language lang:eng ;
+    bf:subject <https://w3id.org/zpid/resources/works/0390332_work#topic1>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic2>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic3>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic4>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic5>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic6>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic7>,
+        <https://w3id.org/zpid/resources/works/0390332_work#topic8> ;
+    bf:summary <https://w3id.org/zpid/resources/works/0390332_work#abstract>,
+        <https://w3id.org/zpid/resources/works/0390332_work#secondaryabstract> ;
+    pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0390332> .
+
+
+<https://w3id.org/zpid/resources/works/0390332_work#abstract> a pxc:Abstract ;
+    rdfs:label "The confirmation bias is the tendency to try to confirm rather than disprove previous beliefs and attitudes and has been held accountable for failures in intelligence analysis in the past. In this thesis, a high-level model of activities in the intelligence cycle (HLMAIC) including the most intelligence-relevant but error-prone activities, was developed. It consists of the \"Active Search for Information\" (e.g., using a search engine), \"Information Search\" (e.g., collecting sources of information) and \"Information Evaluation\" (e.g., the quality assessment of information). Based on the HLMAIC, an attempt was made to mitigate the confirmation bias in the relevant activities and to understand how the occurrence of a confirmation bias in one phase of the HLMAIC can determine its reoccurrence at a later point. Main-study 1 (n = 46) demonstrates that the priming of analytical thinking (\"System 2\") reduces \"Confirmatory Information Evaluation\" (CIE) but does not reduce \"Confirmatory Active Search for Information\" (CASI) or \"Confirmatory Information Search\" (CIS). Main-study 2 (n = 105) demonstrates that creating awareness of the confirmation bias reduces CIE in the group of intelligence professionals. This effect could only be observed if awareness was created immediately before the \"Information Evaluation\" and \"Information Search\" tasks. In main-study 2, the confirmation bias could not be reduced in any other phase of the HLMAIC, neither by creating awareness nor by triggering analytical thinking. Data from both studies were analysed in main-study 3 to predict the confirmation bias in the HLMAIC and identify its consequences in real-life situations (e.g., initial exposure to decision-consistent information following CASI). It showed that the CASI and \"Order of Information Exposure\" predict CIE, which by itself predicts the likelihood of a \"Decision Change\". Practical implications to improve intelligence analysis and recommendations for future research are discussed."@en ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390332_work#abstract_source> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#abstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent> ;
+    bf:qualifier "first" ;
+    bf:role roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1> ;
+    pxp:contributionPosition 1 .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent> a bf:Person ;
+    rdfs:label "Winter, Lisa Christina" ;
+    schema:familyName "Winter" ;
+    schema:givenName "Lisa Christina" .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Austria" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2782113" .
+
+<https://w3id.org/zpid/resources/works/0390332_work#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Universität Graz, Naturwissenschaftliche Fakultät" .
+
+<https://w3id.org/zpid/resources/works/0390332_work#controlledmethod1> a pxc:ControlledMethod,
+        pxc:ControlledMethodWeighted ;
+    rdfs:label "randomized controlled trial" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/methods/10111> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#controlledmethod2> a pxc:ControlledMethod ;
+    rdfs:label "nonempirical work" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/methods/20000> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#secondaryabstract> a pxc:Abstract,
+        pxc:SecondaryAbstract ;
+    rdfs:label "Der \"Confirmation Bias\" beschreibt die Tendenz, bestehende Überzeugungen zu bestätigen anstatt diese zu widerlegen und wurde als eine der Ursachen für vergangene Fehlentscheidungen in der geheimdienstlichen Arbeit identifiziert. In dieser Dissertation wurde ein \"High-Level Modell der Aktivitäten im Geheimdienstbereich\" (HLMAIC) entwickelt, welches geheimdienst-relevante, fehleranfällige Aktivitäten abbildet. Es besteht aus der aktiven Suche nach Information (z.B. Suchmaschinenbenutzung), Informationssuche (z.B. Sammeln von Quellen) und Informationsevaluation (Beurteilung der Informationsqualität). Es wurde, auf Basis des HLMAIC, versucht, den Confirmation Bias zu reduzieren und sein Wiederauftreten in späteren Phasen des HLMAIC besser zu verstehen. Hauptstudie 1 (n = 46) zeigt, dass das Priming des analytischen Denkens zwar den Confirmation Bias in Informationsevaluation (CIE), jedoch nicht in der aktiven Suche nach Information (CASI) oder Informationssuche (CIS) reduziert. Machen sich Geheimdienst-MitarbeiterInnen den Confirmation Bias unmittelbar vor den Informationsevaluierungs und -suchaufgaben bewusst, reduziert sich CIE, wie Hauptstudie 2 (n = 105) zeigt. Diese Reduktion gab es in keiner anderen Phase des HLMAIC (d.h., aktive Suche nach Information oder Informationssuche), weder durch die Schaffung von Bewusstsein noch das Anregen analytischen Denkens. Die Daten beider Studien wurden gemeinsam in Hauptstudie 3 analysiert um den Confirmation Bias im HLMAIC vorherzusagen und Auswirkungen in realen Situationen zu ermitteln (z.B. CASI gefolgt von der Präsentation bestätigender Information). Es zeigte sich, dass CASI und die Informationsreihenfolge den CIE vorhersagen, während durch das Ausmaß des CIE die Wahrscheinlichkeit einer Entscheidungsänderung vorausgesagt werden kann. Praktische Implikationen zur Verbesserung von Geheimdienstarbeit und Empfehlungen für zukünftige Forschung werden diskutiert."@de ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390332_work#secondaryabstract_source> .
+
+<https://w3id.org/zpid/resources/works/0390332_work#secondaryabstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic1> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Cognitive Bias" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/10057> ;
+    skos:prefLabel "Kognitiver Bias"@de,
+        "Cognitive Bias"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic2> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Information Seeking" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/25330> ;
+    skos:prefLabel "Informationssuche"@de,
+        "Information Seeking"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic3> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Decision Making" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/13190> ;
+    skos:prefLabel "Entscheidungsfindung"@de,
+        "Decision Making"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic4> a bf:Topic ;
+    rdfs:label "Selective Attention" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/46175> ;
+    skos:prefLabel "Selektive Aufmerksamkeit"@de,
+        "Selective Attention"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic5> a bf:Topic ;
+    rdfs:label "Judgment" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/27140> ;
+    skos:prefLabel "Beurteilung"@de,
+        "Judgment"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic6> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Government Agencies" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/21400> ;
+    skos:prefLabel "Regierungsbehörden"@de,
+        "Government Agencies"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic7> a bf:Topic ;
+    rdfs:label "Government Personnel" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/21420> ;
+    skos:prefLabel "Beschäftigte im Öffentlichen Dienst"@de,
+        "Government Personnel"@en .
+
+<https://w3id.org/zpid/resources/works/0390332_work#topic8> a bf:Topic ;
+    rdfs:label "Models" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/31805> ;
+    skos:prefLabel "Modelle"@de,
+        "Models"@en .
+
+    
+<https://w3id.org/zpid/resources/instancebundles/0390332> a pxc:InstanceBundle ;
+    bf:hasPart <https://w3id.org/zpid/resources/instances/0390332#1> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0390332#dfk> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/instancebundles/0390332_publication> ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0390332#title>,
+        <https://w3id.org/zpid/resources/instancebundles/0390332#translatedtitle> ;
+    bf:usageAndAccessPolicy licenses:AUTH ;
+    pxp:issuanceType issuances:GrayLiterature .
+
+<https://w3id.org/zpid/resources/instancebundles/0390332#dfk> a pxc:DFK ;
+    rdf:value "0390332" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390332#title> a bf:Title ;
+    rdfs:label "Mitigation and prediction of the confirmation bias in intelligence analysis" ;
+    bf:mainTitle "Mitigation and prediction of the confirmation bias in intelligence analysis"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0390332#translatedtitle> a pxc:TranslatedTitle ;
+    rdfs:label "Abschwächung und Vorhersage des Confirmation Bias in der nachrichtendienstlichen Analyse" ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/instancebundles/0390332#translatedtitle_source> ;
+    bf:mainTitle "Abschwächung und Vorhersage des Confirmation Bias in der nachrichtendienstlichen Analyse"@de .
+
+<https://w3id.org/zpid/resources/instancebundles/0390332#translatedtitle_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "DeepL" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390332_publication> a bf:Publication ;
+    bflc:simpleDate "2017" ;
+    bf:date "2017"^^xsd:gYear .
+
+<https://w3id.org/zpid/resources/instances/0390332#1> a bf:Electronic,
+        bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/cr> ;
+    bf:identifiedBy <urn:nbn:at:at-ubg:1-120765> ;
+    bf:instanceOf works:0390332_work ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/c> ;
+    pxp:mediaCarrier pmt:Online .

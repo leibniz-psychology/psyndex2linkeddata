@@ -1,0 +1,54 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
+@prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix licenses: <https://w3id.org/zpid/vocabs/licenses/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pmt: <https://w3id.org/zpid/vocabs/mediacarriers/> .
+@prefix sam: <https://w3id.org/zpid/vocabs/sam/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix roles: <https://w3id.org/zpid/vocabs/roles/> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+# diss mit Link zu den Einzelartikeln?
+# Artikel mit REPLIC 
+
+works:xyz_work a bf:Work, pxc:MainWork ;
+    #...
+    bflc:relationship works:xyz_work#workrel1 ;
+.
+
+works:xyz_work#workrel1 a bflc:Relationship ;
+    bflc:relation relations:hasArticlePartOfCompilationThesis ;
+    bf:relatedTo works:xyz_work#workrel1_work ; # the article's work
+.
+
+works:xyz_work#workrel1_work a bf:Work ;
+    pxp:hasInstanceBundle works:xyz_work#workrel1_instancebundle ; # the article's instancebundle
+.
+
+works:xyz_work#workrel1_instancebundle a pxc:InstanceBundle ;
+    bf:identifiedBy works:xyz_work#workrel1_instancebundle_id ;
+.
+
+bf:identifiedBy works:xyz_work#workrel1_instancebundle_id a pxc:DFK ;
+    rdf:value "0331107" ;
+.
+
+# Priorität: wenn DFK vorhanden, diese migrieren, 
+    # wenn nicht, dann DOI aus REL |q -> "doi:...", 
+        # wenn nicht, dann Citation aus |a (Auotorenliste) + |t (Titel) + |j (Jahr), + |q 
+        # oder vorher mal Crossref fragen nach einer DOI
+
+
