@@ -299,17 +299,17 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 ### Beziehungen zu anderen Werken
 - [ ] REL -> Werk > bflc:relationship > bflc:Relationship > bf:relatedTo > bf:Work
-- [ ] TESN, TESTC (nur jeweils Subfeld |n und |c von TESTO und TESTG) -> Werk > bflc:relationship >> bflc:Relationship > bf:relatedTo > bf:Work
+- [ ] TESTO (nur jeweils Subfeld |n und |c von TESTO und TESTG) -> Werk > bflc:relationship >> bflc:Relationship > bf:relatedTo > bf:Work
 
 ### Keywords/Classifications
 
 - [x] CT with weighting
   - [x] skosmos lookup for uri
-- [ ] IT
-- [ ] SH mit weighting
+- [x] IT
+- [x] SH mit weighting
 - [ ] UTE/UTG?
 - [ ] KP (Keyphrase)
-- [ ] CM
+- [x] CM
 
 ### Population:
 - [ ] AGE (Achtung, hier passiert künstiches Upposting - wenn zb Preschool Age, dann immer auch Childood. Das verwässert die Suche. Eventuell muss ich da das Vokabular/Skosmos zur Migration nutzen: nur Leaf Nodes, also nur die niedrigsten Unterbegriffe mit exportieren - Skosmos-API: hat keinen Unterbegriff?) - und wie migrieren? Mit verschachtelter SKOS-Hierarchie direkt im Werk? als Work > concept > broader > concept!?
@@ -324,9 +324,10 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
 - [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
   - [x] move from bnode to fragment uri, make sure not to collapse 2 or more into one by counting up or something.
+- [ ] RPLIC
 
 ### Dissertationen
-- [ ] GRAD
+- [ ] GRAD 
 - [ ] PROMY
 - [ ] INST
 - [ ] ORT
@@ -354,11 +355,11 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] BE
 - [ ] DT -> Genre?
 - [x] MT, MT2 an den einzelnen Instanzen
-- [ ] DOI
-- [ ] URN
-- [ ] URLAI
+- [X] DOI
+- [X] URN
+- [X] URLAI
 
-- [ ] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled 
+- [ ] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled ; bf:seriesStatement
   > bf:title > bf:Title > bf:mainTitle "Buchreihehntitel" ;
 > bf:seriesEnumeration "Band 1" 
 - [ ] NE - Edition -> Instanz > bf:editionStatement "2., überarb. Aufl." 
@@ -491,6 +492,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [ ] instance.subSeriesTitle
 - [ ] instance.seriesVolume
 - [ ] instance.bookEdition
+
 ## Kapitel und Journal Articles: Verweis auf umgebendes Buch oder Journal
 
 - [ ] instance.journalTitle
