@@ -1,7 +1,7 @@
 # a place for helper functions that extract stuff from subfields etc.
 
 """extract here:
-- def check_for_url_or_doi(string)
+- [x] def check_for_url_or_doi(string)
 - build_doi_identifier_node(instance, doi) - uses a doi returned from check_for_url_or_doi, eg., to build a node
 - def build_electronic_locator_node(instance, url) - uses a url returned from check_for_url_or_doi, eg., to build a node 
  that is attached to a resource via bf:electronicLocator
@@ -35,6 +35,39 @@ def get_subfield(subfield_full_string, subfield_name):
             return html.unescape(mappings.replace_encodings(subfield))
         else:
             return None
+     
+
+# Chatty suggested the following version of the above, which it says is more robust
+# against inconsistent spacing (since it uses some regexes) and is also a bit 
+# shorter and thus easier to understand. (But it has no comments, so i added some).
+# Haven't tested it yet!
+
+# def get_subfield(text, code):
+#     # Fast subfield extractor using string split.
+#     ## If passed string is empty or does not contain the given subfield code, 
+#     ## return None.
+#     ## Otherwise, clean up the string and split it into parts:
+#     if not text or f"|{code}" not in text:
+#         return None
+#     ## string cleaning - remove leading/trailing spaces and 
+#     ## replace multiple spaces with a single space:
+#     text = re.sub(r'\s{2,}', ' ', text.strip())
+#     ## Only now, split the string into parts using the 
+#     # subfield code as a delimiter:
+#     parts = text.split(f"|{code}", 1)
+#     ## If the split does not yield at least two parts, return None,
+#     # because the subfield was either empty or not found:
+#     if len(parts) < 2:
+#         return None
+#     ## Otherwise, take the second part, split it again 
+#     # at the first pipe character, and strip any leading/trailing spaces:
+#     value = parts[1].split("|", 1)[0].strip()
+#     ## Finally, return the cleaned-up value, using html.unescape
+#     ## and mappings.replace_encodings to decode any HTML entities.
+#     ## If the value is empty, return None:
+#     ## Otherwise, return the cleaned-up value:
+#     return html.unescape(mappings.replace_encodings(value)) if value else None
+
 
 
 def get_mainfield(field_fullstring):
@@ -74,17 +107,38 @@ def guess_language(string_in_language):
 
 # ### Getting URLs and DOIs from a field
 # Converting http-DOIs to pure ones, checking if what looks like url really is one.
-def check_for_url_or_doi(string):
+def check_for_url_or_doi(original_string):
     """checks if the content of the string is a doi or url or something else.
     Returns the a string and a string_type (doi, url, unknown). The given string
     is sanitized, eg. missing http protocol is added for urls; dois are stripped
     of web protocols and domain/subdomains like dx, doi.org).
-    Pass any string where you suspect it might be a url or doi,
+    Pass any string where you suspect it might contain a url or doi,
     returns the cleaned up string (for urls and dois; because STAR messes then up and indexers make mistakes and are inconsistent) and a string type (doi, url, or unknown).
     """
-    # use a regex: if string starts with "DOI " or "DOI:" or "DOI: " (case insensitive), remove that and strip again:
-    doi_error_pattern = re.compile(r"^(DOI:|DOI |DOI: )", re.IGNORECASE)
-    string = doi_error_pattern.sub("", string).strip()
+    
+    string = original_string.strip()  # first, strip any spaces from the string
+    
+
+    # use a regex: if string contains "DOI " or "DOI:" or "DOI: " (also case insensitive, so ".doi: " as well), remove that and anything before that and strip again:
+    # examples:
+    # 'Rütsche, B., Hauser, T. U., Jäncke, L., and Grabner, R. H. (2015). Whenproblem size matters: differential effects of brain stimulation on arithmeticproblem  solving  and  neural  oscillations. PLoS ONE10:e0120665.doi: 10.1371/journal.pone.0120665'
+    # note, to do that, we must catch anything that comes before that pattern in a capture group, so we can remove it:
+    # doi_error_pattern = re.compile(
+    #     r"^(.*)(DOI: |DOI |DOI:)(.*)$", re.IGNORECASE
+    # ) 
+    # # now drop the first group and the second group, and only keeps the third, the actual doi
+    # string = doi_error_pattern.sub(r"\3", string).strip()
+    # # string = doi_error_pattern.sub("", string).strip()  # this will remove the doi error pattern, but also anything that came before it
+
+    # examples I want caught, with their results:
+    # - 'Rütsche, B., Hauser, T. U., Jäncke, L., and Grabner, R. H. (2015). Whenproblem size matters: differential effects of brain stimulation on arithmeticproblem  solving  and  neural  oscillations. PLoS ONE10:e0120665.doi: 10.1371/journal.pone.0120665' -> 10.1371/journal.pone.0120665
+    # - "Daw ND, O^D&gt;'Doherty JP, Dayan P, Seymour B, Dolan RJ. 2006. Cortical substrates for exploratory decisions inhumans.Nature441:876^DDS879.DOI: https://doi.org/10.1038/nature04766,PMID: 16778890" -> 10.1038/nature04766
+    doi_error_pattern = re.compile(
+        r"^(.*)(DOI: |DOI |DOI:|doi:|doi |doi:)(.*)$", re.IGNORECASE
+    )
+    # now drop the first group and the second group, and only keeps the third, the actual doi
+    string = doi_error_pattern.sub(r"\3", string).strip()
+    
 
     # find any stray characters at the start of the field with spaces around them and remove them:
     # "^ . " - this will catch :, but also |u fields marked with "x" for empty:
@@ -101,38 +155,57 @@ def check_for_url_or_doi(string):
     # and replace with: group1, group2:
     url_error_pattern = re.compile(r"(.*\.) ((io)|(org)|(com)|(net)|(de))\b")
     string = url_error_pattern.sub(r"\1\2", string)
+    # so this will fix urls like "osf. io" to "osf.io", "domain. org" to "domain.org", etc.
 
     # replace spaces after slashes (when followed by a letter or a digit a question mark, eg "osf.io/ abc"):
     # use this regex: (.*/) ([a-z]) and replace with group1, group2:
     # example: "osf.io/ abc" -> "osf.io/abc", "https:// osf.io/ abc" -> "https://osf.io/abc"
     url_error_pattern3 = re.compile(r"(.*/) ([a-z]|[0-9]|\?)")
     string = url_error_pattern3.sub(r"\1\2", string)
+    # this will fix urls like "osf.io/ abc" to "osf.io/abc", "https:// osf.io/ abc" to "https://osf.io/abc", etc.
+
 
     # and now spaces before slashes:
     # use this regex: (.*) (/) and replace with group1, group2:
     # example: "https: //", "http://domain.org/blabla /"
     url_error_pattern4 = re.compile(r"(.*) (/)")
     string = url_error_pattern4.sub(r"\1\2", string)
+    # this will fix urls like "https: //", "http://domain.org/blabla /" to "https://", "http://domain.org/blabla/"
 
     # replace single space with underscore,
     # fixing a known STAR bug that replaces underscores with spaces,
     # which is especially bad for urls.  (In other text,
     # we can't really fix it, since usually a space was intended):
     string = re.sub(" ", "_", string)
+    # this will fix urls like "osf.io/ab c" to "osf.io/ab_c", right?
 
     # now check for doi or url:
-    doi_pattern = re.compile(r"^(https?:)?(\/\/)?(dx\.)?doi\.org\/?(.*)$")
-    if doi_pattern.search(string):
-        # remove the matching part:
-        string = doi_pattern.search(string).group(4)
+    # this will catch the following doi types:
+    # - "10.1371/journal.pone.0120665"
+    # - "https://doi.org/10.1371/journal.pone.0120665"
+    # - "https://dx.doi.org/10.1371/journal.pone.0120665"
+    # - "https://doi.org/10.3758/BF03193932"
+    # - "https://link.springer.com/article/10.3758/BF03193932"
+    # - "https://onlinelibrary.wiley.com/doi/10.1111/j.1469-8986.2010.01081.x" - modify such that it will also catch the final two:
+    doi_pattern = re.compile(r"10\.\d{4,9}/[-._;()/:A-Z0-9]+", re.IGNORECASE)
+    match = doi_pattern.search(string)
+
+    if match: # that is, this looks like a doi
+        # keep the matching part (only the canonical doi, not the whole url):
+        # example: "https://doi.org/10.1371/journal.pone.0120665" -> "10.1371/journal.pone.0120665"
+        # which is the 4th capture group in the regex:
+        # string = doi_pattern.search(string).group(4)
+        string = match.group()
+        # remove any trailing characters, such as a "." or a space:
+        # example: "10.1371/journal.pone.0120665." -> "10.1371/journal.pone.0120665"
+        string = re.sub(r"[. ]*$", "", string)
         string_type = "doi"
         # print("DOI: " + doi)
-    elif string.startswith("10."):
-        # if the string starts with "10." the whole thing is a DOI:
-        string_type = "doi"
+    # elif string.startswith("10."):
+    #     # if the string starts with "10." the whole thing is a DOI:
+    #     string_type = "doi"
         # print("DOI: " + doi)
-        # proceed to generate an identifier node for the doi:
-    else:
+    else: # if it doesn't match the doi pattern, check for a url:
         # doi = None
         # check for validity of url using a regex:
         url_pattern = re.compile(
@@ -151,8 +224,13 @@ def check_for_url_or_doi(string):
         else:
             # url = None
             string_type = "unknown"
+            string = original_string.strip()
+            # as the value, return the original string:
+
             # print("Das ist weder eine DOI noch eine URL: " + string)
     return string, string_type
+## result: a tuple with the cleaned-up string and the type (doi, url, or unknown), e.g.
+# ("10.1234/5678", "doi") or ("http://example.com", "url") or ("some random text", "unknown")
 
 
 def check_issn_format(issn):
