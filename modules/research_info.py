@@ -2,6 +2,17 @@ import html
 import logging
 import re
 
+import requests
+import requests_cache
+from datetime import timedelta
+from rapidfuzz import fuzz
+
+CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
+# for getting a list of funders from api ():
+CROSSREF_API_URL = "https://api.crossref.org/works?query="
+
+
+
 from rdflib import Literal, URIRef
 from rdflib.namespace import RDF, RDFS, SKOS
 
@@ -37,6 +48,26 @@ relation_types = {
         "work_subclass": "Text",
         "content_type": "txt",
         "genre": "Preregistration",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+    "replication": {
+        "relation": "isReplicationOf",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "genre": "ScholarlyPaper",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "reanalysis": {
+        "relation": "isReanalysisOf",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "genre": "ScholarlyPaper",
         "access_policy_label": None,
         "access_policy_value": None,
         "access_policy_concept": None,
@@ -666,3 +697,240 @@ def add_trials_as_preregs(work_uri, record, graph):
                     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
                     # add preregistration_node to work:
                     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+## Function to go through the subfields of a RPLIC field and generate a Replication. The actual node is
+# created from that data elsewhere, but we need to extract the data from the subfields.
+# input: a RPLIC string, which is a field from the PSYNDEXER record with subfields |u (URL), |d (DOI), |f (DFK)
+# output: DFK, or DOI, or URL, or a citation string.
+def generate_replication_from_rplic(rplic_string):
+    """Generates a replication from a RPLIC string, which is a field from the PSYNDEXER record with subfields |u (URL), |d (DOI), |f (DFK).
+    Returns a dictionary with the keys 'doi', 'url', 'dfk', and 'citation'.
+    """
+    skip_list = [
+    "Testeintrag, wieder loeschen",
+    "dittrich, K.",
+    "no URL", "no URL |f  |u  |d "
+    ]
+    replication = {
+        "doi": None,
+        "url": None,
+        "dfk": None,
+        "citation": None,
+    }
+    # first, clean the whole string up from DD codes and html entities:
+    rplic_string = mappings.replace_encodings(html.unescape(rplic_string.strip()))
+
+    # then filter out anything from the skip_list, so we don't process those:
+    if rplic_string in skip_list:
+        print(f"Skipping RPLIC field: {rplic_string}")
+        return replication  # return early if we skip this field
+    # get the subfield and main fields and fill them into variables: 
+    # subfield_url, subfield_doi, subfield_dfk, mainfield_citation
+    subfield_dfk = helpers.get_subfield(rplic_string, "f") if "f" in rplic_string else None
+    subfield_doi = helpers.get_subfield(rplic_string, "d") if "d" in rplic_string else None
+    subfield_url = helpers.get_subfield(rplic_string, "u") if "u" in rplic_string else None
+    mainfield_citation = helpers.get_mainfield(rplic_string) if rplic_string != "" else None
+    # if we have a valid DFK in the subfield_dfk, add it to the replication dict and stop (valid: 7 digits):
+    if subfield_dfk is not None and re.match(r"^\d{7}$", subfield_dfk):
+        replication["dfk"] = subfield_dfk
+        print(f"✅ Found DFK: {subfield_dfk} in RPLIC field. Stopping search.")
+        return replication
+    # else, if no DFK, we continue to check for a DOI or URL:
+    else:
+        print("No DFK, checking for others:\n'" + str(rplic_string) + "'")
+        try:
+            # generate a List of tuples using the check_for_url_or_doi() function for each of the three fields, but only if they are not None - otherwise do not add them to the list:
+            url_doi_list = []
+            if subfield_doi is not None:
+                url_doi_list.append(
+                    helpers.check_for_url_or_doi(subfield_doi)
+                ) 
+            if subfield_url is not None:
+                url_doi_list.append(
+                    helpers.check_for_url_or_doi(subfield_url)
+                )
+            if mainfield_citation is not None:
+                url_doi_list.append(
+                    helpers.check_for_url_or_doi(mainfield_citation)
+                )
+
+            # remove duplicates by converting the list to a set:
+            url_doi_set = set(url_doi_list)
+            print(
+                f"Found {len([x for x in url_doi_set if x[1] in ['doi', 'url']])} valid url/doi tuples in RPLIC field: {url_doi_set}"
+            )
+            # First, try to find a valid DOI
+            for url_doi_tuple in url_doi_set:
+                if url_doi_tuple[1] == "doi":
+                    if validate_doi_against_crossref(url_doi_tuple[0], mainfield_citation):
+                        replication["doi"] = url_doi_tuple[0]
+                        return replication  # return early if we found a valid doi
+
+            # If no valid DOI, try to find a URL
+            for url_doi_tuple in url_doi_set:
+                if url_doi_tuple[1] == "url":
+                    replication["url"] = url_doi_tuple[0]
+                    print(f"✅ Found URL: {url_doi_tuple[0]} in RPLIC field, stopping.")
+                    return replication
+
+            # If neither, check for unknown/citation
+            for url_doi_tuple in url_doi_set:
+                if url_doi_tuple[1] == "unknown":
+                    # if check_crossref_for_citation_doi(url_doi_tuple[0]) returns a doi (is not None or ""), we can use that as a doi:
+                    try:
+                        crossref_doi = check_crossref_for_citation_doi(url_doi_tuple[0])
+                        if crossref_doi is not None and crossref_doi != "":
+                            replication["doi"] = crossref_doi
+                            logging.info(f"Found DOI from Crossref: {crossref_doi}"
+                            )
+                        else: # it returns None, so we use the url_doi_tuple[0] as a citation:
+                            replication["citation"] = url_doi_tuple[0]
+                    except Exception as e:
+                        logging.error(f"Error checking Crossref for citation: {e}")
+                        replication["citation"] = url_doi_tuple[0]
+            # if we reach this point, we have no doi or url, but maybe a citation:
+            if mainfield_citation is not None and mainfield_citation not in skip_list:
+                replication["citation"] = mainfield_citation
+        except Exception as e:
+            logging.error(f"Error processing RPLIC field: {e}")
+            replication["citation"] = rplic_string
+    return replication  # return the replication dict with the found values
+        
+    
+
+def validate_doi_against_crossref(our_doi, mainfield_citation):
+    """Validates a citation against Crossref using the DOI.
+    Returns True if the citation matches, False otherwise.
+    imput: a doi and the citation that came with it.
+    output: True if the doi can be found on crossref AND
+    if the title crossref has for the doi matches our citation (using fuzzywuzzy/rapidfuzz).
+    """
+    similarity_threshold = 30  # set a threshold for fuzzy matching
+    # Collects Crossref rejections for review
+    crossref_rejections = []
+    #crossref_api_url = CROSSREF_API_URL + mainfield_citation + CROSSREF_FRIENDLY_MAIL
+    urls_expire_after = {
+    # Custom cache duration per url, 0 means "don't cache"
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/09183&lang=de': 0,
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/': 0,
+    }
+
+    session_crossref_doi_checker = requests_cache.CachedSession(
+        ".cache/requests",
+        allowable_codes=[200, 404],
+        expire_after=timedelta(days=30),
+        urls_expire_after=urls_expire_after,
+    )
+    
+    print(f"- Validating DOI: {our_doi} against citation: '{mainfield_citation}'")
+    if our_doi is None or our_doi == "":
+        logging.warning("No DOI provided for validation.")
+        return False
+    elif mainfield_citation is None or mainfield_citation == "" or mainfield_citation.startswith("http") or mainfield_citation.startswith("10."):
+        # if the citation is empty or just a url or doi, we cannot validate it against crossref, so we return True, we assume it is valid, because that is all we have
+        logging.warning("No valid citation provided for validation.")
+        print(f"✅ Crossref can't compare empty titles, so we assume the DOI {our_doi} is valid.")
+        return True
+    try: #send doi we have on file to crossref and check if it matches the citation
+        response = session_crossref_doi_checker.get(
+            "https://api.crossref.org/works/" + our_doi,
+            timeout=20
+        )
+        # print the api url we are creating:
+        # print(f"Crossref API URL: {response.url}")
+        if response.ok:
+            item = response.json().get('message')
+            if item is not None:
+                title = item.get('title', [''])[0]
+                authors = ', '.join([a.get('family', '') for a in item.get('author', []) if 'family' in a])
+
+                crossref_str = f"{title} {authors}".lower()
+                citation_str = mainfield_citation.lower()
+
+                similarity = fuzz.token_sort_ratio(crossref_str, citation_str)
+
+                if similarity >= similarity_threshold:  # threshold for fuzzy matching
+                    print(f"✅ Crossref says this DOI has the same title (similarity={similarity}): {title}")
+                    return True  # Accept match
+                else:
+                    crossref_rejections.append({
+                        'doi': our_doi,
+                        'crossref_title': title,
+                        'crossref_authors': authors,
+                        'similarity': similarity
+                    })
+                    print(f"⚠️ Crossref says this DOI {our_doi} has a different title (similarity={similarity}): {title}")
+                    return False  # Reject match
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error validating DOI against Crossref for {our_doi}: {e}")
+        return False
+    
+
+    
+
+def check_crossref_for_citation_doi(citation_string):
+    """Checks Crossref for a DOI for a given citation string.
+    Also checks if the title of the citation matches the title of the work as archived in Crossref (using fuzzywuzzy/rapidfuzz). If they are too different (>30%), we return None.
+    Returns the DOI if found, None otherwise.
+    Note: only check against the citation_string if it is not None or empty aside from a url or doi,
+    which is the case for these examples:
+    - 'https://doi.org/10.1016/j.tate.2021.103346'
+    - '10.1037/pspp0000263'
+    - ''
+
+    """
+    # this is a placeholder function, we need to implement the actual logic.
+    # we can probably use the one in pythontests! But need to edit it to use 
+    # friendly email credentials and caching.
+    # for now, we just return a dummy DOI if the citation_string is not None, otherwise None.
+        # Collects Crossref rejections for review
+    crossref_rejections = []
+    #crossref_api_url = CROSSREF_API_URL + mainfield_citation + CROSSREF_FRIENDLY_MAIL
+    urls_expire_after = {
+    # Custom cache duration per url, 0 means "don't cache"
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/09183&lang=de': 0,
+    # f'{SKOSMOS_URL}/rest/v1/label?uri=https%3A//w3id.org/zpid/vocabs/terms/': 0,
+    }
+
+    session_crossref_doi_finder = requests_cache.CachedSession(
+        ".cache/requests",
+        allowable_codes=[200, 404],
+        expire_after=timedelta(days=30),
+        urls_expire_after=urls_expire_after,
+    )
+    similarity_threshold = 30  # set a threshold for fuzzy matching
+    try:
+        response = session_crossref_doi_finder.get(
+            CROSSREF_API_URL,
+            params={'query.bibliographic': citation_string, 'rows': 1, 'mailto': CROSSREF_FRIENDLY_MAIL},
+            timeout=20
+        )
+        if response.ok:
+            items = response.json().get('message', {}).get('items', [])
+            if items:
+                item = items[0]
+                doi = item.get('DOI')
+                title = item.get('title', [''])[0]
+                authors = ', '.join([a.get('family', '') for a in item.get('author', []) if 'family' in a])
+
+                crossref_str = f"{title} {authors}".lower()
+                citation_str = citation_string.lower()
+
+                similarity = fuzz.token_sort_ratio(crossref_str, citation_str)
+
+                if similarity >= similarity_threshold:
+                    print(f"✅ Crossref match accepted (similarity={similarity}): {title}")
+                    return doi  # Accept match
+                else:
+                    crossref_rejections.append({
+                        'original': citation_string,
+                        'doi': doi,
+                        'crossref_title': title,
+                        'crossref_authors': authors,
+                        'similarity': similarity
+                    })
+                    print(f"⚠️ Crossref match rejected (similarity={similarity}): {title}, saving as plain citation.")
+                    return None  # Reject match
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error checking Crossref for DOI for {citation_string}: {e}")
+        return None  # Return None if there was an error
