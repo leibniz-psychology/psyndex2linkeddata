@@ -735,7 +735,7 @@ def generate_replication_from_rplic(rplic_string):
 
     # then filter out anything from the skip_list, so we don't process those:
     if rplic_string in skip_list:
-        print(f"Skipping RPLIC field: {rplic_string}")
+        #print(f"Skipping RPLIC field: {rplic_string}")
         return replication  # return early if we skip this field
     # get the subfield and main fields and fill them into variables: 
     # subfield_url, subfield_doi, subfield_dfk, mainfield_citation
@@ -746,11 +746,11 @@ def generate_replication_from_rplic(rplic_string):
     # if we have a valid DFK in the subfield_dfk, add it to the replication dict and stop (valid: 7 digits):
     if subfield_dfk is not None and re.match(r"^\d{7}$", subfield_dfk):
         replication["dfk"] = subfield_dfk
-        print(f"✅ Found DFK: {subfield_dfk} in RPLIC field. Stopping search.")
+        #print(f"✅ Found DFK: {subfield_dfk} in RPLIC field. Stopping search.")
         return replication
     # else, if no DFK, we continue to check for a DOI or URL:
     else:
-        print("No DFK, checking for others:\n'" + str(rplic_string) + "'")
+        #print("No DFK, checking for others:\n'" + str(rplic_string) + "'")
         try:
             # generate a List of tuples using the check_for_url_or_doi() function for each of the three fields, but only if they are not None - otherwise do not add them to the list:
             url_doi_list = []
@@ -769,9 +769,9 @@ def generate_replication_from_rplic(rplic_string):
 
             # remove duplicates by converting the list to a set:
             url_doi_set = set(url_doi_list)
-            print(
-                f"Found {len([x for x in url_doi_set if x[1] in ['doi', 'url']])} valid url/doi tuples in RPLIC field: {url_doi_set}"
-            )
+            # print(
+            #     f"Found {len([x for x in url_doi_set if x[1] in ['doi', 'url']])} valid url/doi tuples in RPLIC field: {url_doi_set}"
+            # )
             # First, try to find a valid DOI
             for url_doi_tuple in url_doi_set:
                 if url_doi_tuple[1] == "doi":
@@ -783,7 +783,7 @@ def generate_replication_from_rplic(rplic_string):
             for url_doi_tuple in url_doi_set:
                 if url_doi_tuple[1] == "url":
                     replication["url"] = url_doi_tuple[0]
-                    print(f"✅ Found URL: {url_doi_tuple[0]} in RPLIC field, stopping.")
+                    #print(f"✅ Found URL: {url_doi_tuple[0]} in RPLIC field, stopping.")
                     return replication
 
             # If neither, check for unknown/citation
@@ -835,14 +835,14 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
         urls_expire_after=urls_expire_after,
     )
     
-    print(f"- Validating DOI: {our_doi} against citation: '{mainfield_citation}'")
+    #print(f"- Validating DOI: {our_doi} against citation: '{mainfield_citation}'")
     if our_doi is None or our_doi == "":
         logging.warning("No DOI provided for validation.")
         return False
     elif mainfield_citation is None or mainfield_citation == "" or mainfield_citation.startswith("http") or mainfield_citation.startswith("10."):
         # if the citation is empty or just a url or doi, we cannot validate it against crossref, so we return True, we assume it is valid, because that is all we have
         logging.warning("No valid citation provided for validation.")
-        print(f"✅ Crossref can't compare empty titles, so we assume the DOI {our_doi} is valid.")
+        #print(f"✅ Crossref can't compare empty titles, so we assume the DOI {our_doi} is valid.")
         return True
     try: #send doi we have on file to crossref and check if it matches the citation
         response = session_crossref_doi_checker.get(
@@ -863,7 +863,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
                 similarity = fuzz.token_sort_ratio(crossref_str, citation_str)
 
                 if similarity >= similarity_threshold:  # threshold for fuzzy matching
-                    print(f"✅ Crossref says this DOI has the same title (similarity={similarity}): {title}")
+                    #print(f"✅ Crossref says this DOI has the same title (similarity={similarity}): {title}")
                     return True  # Accept match
                 else:
                     crossref_rejections.append({
@@ -872,7 +872,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
                         'crossref_authors': authors,
                         'similarity': similarity
                     })
-                    print(f"⚠️ Crossref says this DOI {our_doi} has a different title (similarity={similarity}): {title}")
+                    #print(f"⚠️ Crossref says this DOI {our_doi} has a different title (similarity={similarity}): {title}")
                     return False  # Reject match
     except requests.exceptions.RequestException as e:
         logging.error(f"Error validating DOI against Crossref for {our_doi}: {e}")
