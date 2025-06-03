@@ -80,6 +80,14 @@ relation_types = {
 }
 
 ## urls for unknown preregistrations, replicated works, reanalyzed works
+# that we find from CMs (but where no applicable PRREG or RPLIC field exists):
+UNKNOWN_PREREG_URL = "https://w3id.org/zpid/dummyworks/unknown_preregistration" # or "https://unknown-preregistration.example.org"
+UNKNOWN_REPLICATION_URL = "https://w3id.org/zpid/dummyworks/unknown_replicated_study" # or 
+# "https://unknown-replicated-study.example.org"
+UNKNOWN_REANALYSIS_URL = "https://w3id.org/zpid/dummyworks/unknown_reanalyzed_study" # or
+# "https://unknown-reanalyzed-study.example.org"
+
+
 # ### Building generic bf:Note nodes
 #
 # Will probably also need this later for other kinds of notes, such as the ones in field BN.
@@ -1020,3 +1028,22 @@ def build_empty_replication_reanalyis_node(work_uri, graph, relation_type):
     # add the relationship node to the work:
     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
+
+def build_empty_preregistration_node(work_uri, graph):
+    """Builds an empty preregistration node for a work.
+    This is used to indicate that the work is a preregistration, but no specific preregistration data is available.
+    For cases where the cm says something has a preregistration, but no specific preregistration data is available (because no PRREG field was found).
+    """
+    # create a new node for the preregistration:
+    relationship_node, instance = build_work_relationship_node(
+        work_uri,
+        graph,
+        relation_type="preregistration",
+    )
+    # add a generic url to the instance, so it can be found in the graph:
+    identifiers.build_electronic_locator_node(
+        instance, UNKNOWN_PREREG_URL, graph
+    )
+    
+    # add the relationship node to the work:
+    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
