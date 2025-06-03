@@ -27,6 +27,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
+        "relationship_type": "ResearchData",
         "genre": "ResearchData",
         "access_policy_label": "open access",
         "access_policy_value": "http://purl.org/coar/access_right/c_abf2",
@@ -37,6 +38,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
+        "relationship_type": "ResearchData",
         "genre": "ResearchData",
         "access_policy_label": "restricted access",
         "access_policy_value": "http://purl.org/coar/access_right/c_16ec",
@@ -47,6 +49,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Preregistration",
         "genre": "Preregistration",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -57,6 +60,7 @@ relation_types = {
         "relatedTo_subprop": "relatedTo",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Replication",
         "genre": "ScholarlyPaper",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -67,6 +71,7 @@ relation_types = {
         "relatedTo_subprop": "relatedTo",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Reanalysis",
         "genre": "ScholarlyPaper",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -103,18 +108,21 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
         relation = relation_types[relation_type]["relation"]
         relatedTo_subprop = relation_types[relation_type]["relatedTo_subprop"]
         work_subclass = relation_types[relation_type]["work_subclass"]
+        # TODO: add content type and genre to the relationship node later, when we actually export the data for psychporta:
         content_type = relation_types[relation_type]["content_type"]
         genre = relation_types[relation_type]["genre"]
+        relationship_type = relation_types[relation_type]["relationship_type"]
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
         access_policy_concept = relation_types[relation_type]["access_policy_concept"]
     # make a node for this relationship:
-    # use a random number to make node unique:
-    # TODO: use count to attach a numbering to the node so two different Relationships have unique names and aren't collapsed anymore!
+    
     # make it class bflc:Relationship:
-    relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
+    # relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
+    relationship_subclass = relationship_type[0].upper() + relationship_type[1:] + "Relationship"
     # or "PreregistrationRelationship"
     relationship_bnode = URIRef(
+    # use count to attach a numbering to the node so two different Relationships have unique names:
         work_uri + "#" + str(relationship_subclass) + str(count)
     )
     # or other. We can use the content of "genre" in Camelcase for this:
@@ -168,7 +176,7 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
         graph.add(
             (access_policy_node, SKOS.prefLabel, Literal("freier Zugang", lang="de"))
         )
-        # not addind the url to coar for now, we don't need it for migration:
+        # not adding the url to coar for now, we don't need it for migration:
         # records_bf.set(
         #     (
         #         access_policy_node,
