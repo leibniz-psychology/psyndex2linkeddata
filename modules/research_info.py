@@ -935,3 +935,88 @@ def check_crossref_for_citation_doi(citation_string):
     except requests.exceptions.RequestException as e:
         logging.error(f"Error checking Crossref for DOI for {citation_string}: {e}")
         return None  # Return None if there was an error
+    
+## function to go through all RPLIC fields in a record and build nodes for each replication.
+def get_rplic_replications(work_uri, graph, rplic_field):
+    """Gets replication objects from the RPLIC fields in a record.
+    Each Replication object is a dictionary with the keys 'doi', 'url', 'dfk', and 'citation'.
+    It expects a list of RPLIC fields, at least one. To get these out of a record, 
+    use the record.findall("RPLIC") method and then we need the text content, so .text.
+    It will then build a node for each replication object, and attach it to the work_uri.
+    There will only ever be one rplic field per record, right?
+    """
+
+    rplic_string = html.unescape(mappings.replace_encodings(rplic_field.strip()))
+    # get object from the rplic_string:
+    replication = generate_replication_from_rplic(rplic_string)
+    # already build a node for the replicated work, to which we can then attach identifiers/other properties for dfk, doi, url, or citation: (but only if the replication object has at least one of those properties set)
+    if replication["doi"] is None and replication["url"] is None and replication["dfk"] is None and replication["citation"] is None:
+        logging.warning(f"No valid identifier found in RPLIC field: {rplic_string}")
+    else: # we have at least one valid identifier, so we can build a node for the replication:
+        relationship_node, instance = build_work_relationship_node(
+            work_uri,
+            graph,
+            relation_type="replication",
+            count=1,  # we can use a count of 1 here, since we only expect one replication per work.
+        ) # the function returns a relationship node and an instance node for the replication. But we may need an instancebundle, too, so we can attach the dfk (studyId) to it. Maybe it is ok to use the work to attach the dfk to it?
+
+        # if the replication object has a DFK, we can build an identifier node for the instancebundle with the DFK:
+        if replication["dfk"] is not None:
+            # build a DFK identifier node for the instance:
+            # NOTE: for now, we will attach the DFK to the instance, even though it really belongs to the instancebundle.
+            # It is not time efficient to rewrite the node creation function to handle instancebundles, so we will just attach it to the instance for now - since it is only
+            # for initial data migration. In the future, links to existing works will be handled differently (by linking
+            # the work uri directly to the replicating work, not by attaching the DFK to the instancebundle).
+            identifiers.build_dfk_identifier_node(instance, replication["dfk"], graph)
+        # if the replication object has a DOI, we can build a DOI identifier node for the instance:
+        elif replication["doi"] is not None:
+            identifiers.build_doi_identifier_node(instance, replication["doi"], graph)
+        # if the replication object has a URL, we can build an electronic locator node for the instance:
+        elif replication["url"] is not None:
+            identifiers.build_electronic_locator_node(instance, replication["url"], graph)
+        # if the replication object has a citation, we can build a preferredCitation node for the instance:
+        elif replication["citation"] is not None:
+            # build a preferredCitation node for the instance:
+            # identifiers.build_preferred_citation_node(work_uri, replication["citation"], graph)
+            # let's do it right here, since it is dead simple and just a literal property:
+            graph.add(
+                (instance, ns.BF.preferredCitation, Literal(replication["citation"]))
+            )
+        else:
+            logging.warning(f"No valid identifier found in RPLIC field: {rplic_string}")
+
+        # now attach the finished relationship node, including instance and identifiers to the work:
+        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+
+def build_empty_replication_reanalyis_node(work_uri, graph, relation_type):
+    """Builds an empty replication reanalysis node for a work.
+    This is used to indicate that the work is a replication or reanalysis, but no specific replication data is available.
+    For cases where the cm says something is a replication or a reanalysis, but no specific replication data is available (because no RPLIC field was found).
+    """
+    # create a new node for the replication reanalysis:
+    relationship_node, instance = build_work_relationship_node(
+        work_uri,
+        graph,
+        relation_type, # expects either "reanalysis" or "replication"
+    )
+    # add a generic url to the instance, so it can be found in the graph:
+    if relation_type == "replication":
+        # add a generic url to the instance, so it can be found in the graph:
+        identifiers.build_electronic_locator_node(
+            instance, UNKNOWN_REPLICATION_URL, graph
+        )
+    elif relation_type == "reanalysis":
+        # add a generic url to the instance, so it can be found in the graph:
+        identifiers.build_electronic_locator_node(
+            instance, UNKNOWN_REANALYSIS_URL, graph
+        )       
+    else:
+        logging.error(
+            f"Unknown relation type for replication reanalysis node: {relation_type}. Expected 'replication' or 'reanalysis'."
+        )
+        # dont add any electroniclocator
+    
+    # add the relationship node to the work:
+    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
