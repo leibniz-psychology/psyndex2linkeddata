@@ -2228,6 +2228,19 @@ def process_record(record):
     # make another round through all the PRREG fields of the record, identifying any trial numbers and adding each as separate pxc:PreregistrationRelationship to the work, including the number as an identifier of the instance, and the ifentified registry as the assigner of the identifier:
     research_info.add_trials_as_preregs(work_uri, record, records_bf)
 
+    ### Add replication relationship nodes from RPLIC field - there is only ever one per work.
+    # get the content of the RPLIC field, if it exists:
+    replication_info = record.find("RPLIC")
+    if replication_info is not None and replication_info.text is not None:
+        # get the text content:
+        replication_info = replication_info.text.strip()
+        # call our function that pulls out dfk, doi (double checking existing
+        # ones via crossref, getting missing ones from crossref and double check
+        # them), url or citation from
+        # subfiels and the main field and which also calls itself the 
+        # node generation function
+        research_info.get_rplic_replications(work_uri=work_uri, graph=records_bf, rplic_field=replication_info)
+
     ## ==== InstanceBundle ==== ##
 
     # For each work, create one pxc:InstanceBundle node with an uri
