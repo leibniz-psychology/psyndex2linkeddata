@@ -1015,8 +1015,16 @@ def get_local_authority_institute(affiliation_string, country):
 
 def get_ror_id_from_api(orgname_string):
     # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
-    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
+
+    # but first, find some common substrings from names that ror can't find with those it will find:
+    for affiliation in mappings.affilation_org_substr_replacelist:
+        if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
+            orgname_string = affiliation[1]
+            # print("replacing " + funder[0] + " with " + funder[1])
+            return orgname_string
+
     # make a request to the ror api:
+    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
     # ror_api_request = requests.get(ror_api_url)
     # make request to api with caching:
     ror_api_request = session_ror.get(ror_api_url, timeout=20)
@@ -1029,6 +1037,8 @@ def get_ror_id_from_api(orgname_string):
             for item in ror_api_response["items"]:
                 if item["chosen"] == True:
                     return item["organization"]["id"]
+                else:
+                    logging.info("No ror id found for affiliation " + orgname_string)
         else:
             return None
     else:
