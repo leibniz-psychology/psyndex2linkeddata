@@ -79,12 +79,11 @@ relation_types = {
     },
 }
 
-
-# %% [markdown]
+## urls for unknown preregistrations, replicated works, reanalyzed works
 # ### Building generic bf:Note nodes
 #
 # Will probably also need this later for other kinds of notes, such as the ones in field BN.
-# %%
+
 def build_note_node(resource_uri, note, graph):
     if note is not None and note != "":
         # make a fragment uri node for the note:
@@ -392,7 +391,7 @@ def get_datac(work_uri, record, graph):
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 
-# %% [markdown]
+
 # ## Function: Create nodes for PRREG (linked Preregistration Works)
 #
 # Field PRREG can occur multiple times per record (0..n).
@@ -441,8 +440,6 @@ def get_datac(work_uri, record, graph):
 #     ]
 # .
 # ```
-# %%
-
 
 # function to build the nodes for preregistration links
 def get_bf_preregistrations(work_uri, record, graph):
@@ -887,11 +884,7 @@ def check_crossref_for_citation_doi(citation_string):
     - ''
 
     """
-    # this is a placeholder function, we need to implement the actual logic.
-    # we can probably use the one in pythontests! But need to edit it to use 
-    # friendly email credentials and caching.
-    # for now, we just return a dummy DOI if the citation_string is not None, otherwise None.
-        # Collects Crossref rejections for review
+   
     crossref_rejections = []
     #crossref_api_url = CROSSREF_API_URL + mainfield_citation + CROSSREF_FRIENDLY_MAIL
     urls_expire_after = {
