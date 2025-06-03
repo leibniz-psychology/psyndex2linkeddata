@@ -739,10 +739,23 @@ def match_email_to_contribution_nodes(work_uri, record):
             )
 
 
-def extract_contribution_role(contributiontext):
+def extract_contribution_role(contributiontext, record):
     role = helpers.get_subfield(contributiontext, "f")
     if role is not None:
         # if we find a role, return it:
+        if role is "VE":
+        # if the role is VE (Verfasser), we will replace it with AU (they were used interchangeably
+        # in the past, but we only kept AU):
+            role = "AU"
+        # Also: RE was used for Interviewers, but only in Interviews, 
+        # otherwise they meant "Redaktion", so replace with ED
+        elif role == "RE":
+            # check if any CM of the record contains "interview", then replace
+            # role with "IVR" (interviewer), otherwise with "ED" (editor):
+            if "interview" in record.find("CM").text:
+                role = "IVR"
+            else:
+                role = "ED"
         return role
     else:
         # if none is found, add the default role AU:
@@ -803,7 +816,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
         records_bf.add((org_node, RDF.type, ns.BF.Organization))
 
         ## extracting the role:
-        role = extract_contribution_role(org.text)
+        role = extract_contribution_role(org.text, record)
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
         records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
 
@@ -1334,8 +1347,9 @@ def add_bf_contributor_person(work_uri, record):
         # add the role from AUP subfield |f to the contribution node:
         # extracting the role:
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
-        role = extract_contribution_role(person.text)
+        role = extract_contribution_role(person.text, record)
         records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
+        
 
         ## --- Add the contribution node to the work node:
         records_bf.add((work_uri, ns.BF.contribution, contribution_node))
