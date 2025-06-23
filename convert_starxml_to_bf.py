@@ -743,7 +743,7 @@ def extract_contribution_role(contributiontext, record):
     role = helpers.get_subfield(contributiontext, "f")
     if role is not None:
         # if we find a role, return it:
-        if role is "VE":
+        if role == "VE":
         # if the role is VE (Verfasser), we will replace it with AU (they were used interchangeably
         # in the past, but we only kept AU):
             role = "AU"
@@ -2240,6 +2240,13 @@ def process_record(record):
         # subfiels and the main field and which also calls itself the 
         # node generation function
         research_info.get_rplic_replications(work_uri=work_uri, graph=records_bf, rplic_field=replication_info)
+
+    ## ==== RELs and TESTs ==== ##
+    # Add the RELs and TESTs from the record to the work:
+    research_info.build_rels(record=record, work_uri=work_uri, graph=records_bf)
+
+    ## TODO
+    # research_info.build_tests(record=record, work_uri=work_uri, graph=records_bf)
 
     ## ==== InstanceBundle ==== ##
 
