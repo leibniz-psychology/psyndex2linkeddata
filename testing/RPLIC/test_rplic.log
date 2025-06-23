@@ -1,0 +1,249 @@
+Skipping RPLIC field: Testeintrag, wieder loeschen
+RPLIC 0: None
+No DFK, checking for others:
+'https://osf.io/kv65n/'
+Found 1 valid url/doi tuples in RPLIC field: {('https://osf.io/kv65n/', 'url')}
+✅ Found URL: https://osf.io/kv65n/ in RPLIC field, stopping.
+RPLIC 1: None
+No DFK, checking for others:
+'Timmer, K., Calabria, M., Branzi, F. M., Baus, C., & Costa, A. (2018). On the reliability of switching costs  across time and domains. Frontiers in Psychology, 9, 1032.'
+Found 0 valid url/doi tuples in RPLIC field: {('Timmer, K., Calabria, M., Branzi, F. M., Baus, C., & Costa, A. (2018). On the reliability of switching costs across time and domains. Frontiers in Psychology, 9, 1032.', 'unknown')}
+✅ Crossref match accepted (similarity=74.43609022556392): On the Reliability of Switching Costs Across Time and Domains
+RPLIC 2: None
+No DFK, checking for others:
+'Stumbrys, T., & Erlacher, D. (2014). The science of lucid dream induction. In R. Hurd, & K. Bulkeley (Eds.). Lucid dreaming: New perspectives on consciousness in sleep (pp. 77–96). Westport: Praeger.'
+Found 0 valid url/doi tuples in RPLIC field: {('Stumbrys, T., & Erlacher, D. (2014). The science of lucid dream induction. In R. Hurd, & K. Bulkeley (Eds.). Lucid dreaming: New perspectives on consciousness in sleep (pp. 77–96). Westport: Praeger.', 'unknown')}
+⚠️ Crossref match rejected (similarity=13.145539906103288): Lucid Dreaming, saving as plain citation.
+RPLIC 3: None
+No DFK, checking for others:
+'Mattler, U., & Fendrich, R. (2010). Consciousness mediated by neural transition states: How invisiblyrapid motions can become visible.Consciousness and Cognition,19, 172–185. https://doi.org/10.1016/j.concog.2009.12.015'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1016/j.concog.2009.12.015', 'doi')}
+- Validating DOI: 10.1016/j.concog.2009.12.015 against citation: 'Mattler, U., & Fendrich, R. (2010). Consciousness mediated by neural transition states: How invisiblyrapid motions can become visible.Consciousness and Cognition,19, 172–185. https://doi.org/10.1016/j.concog.2009.12.015'
+✅ Crossref says this DOI has the same title (similarity=66.86567164179105): Consciousness mediated by neural transition states: How invisibly rapid motions can become visible
+RPLIC 4: None
+No DFK, checking for others:
+'Dreßing H, Kuehner C, Gass P: Lifetime prevalence and impact of stalking in a European population: epidemiological data from a middlesized German city. Br J Psychiat 2005; 187: 168–72'
+Found 0 valid url/doi tuples in RPLIC field: {('Dreßing H, Kuehner C, Gass P: Lifetime prevalence and impact of stalking in a European population: epidemiological data from a middlesized German city. Br J Psychiat 2005; 187: 168–72', 'unknown')}
+✅ Crossref match accepted (similarity=63.503649635036496): Lifetime prevalence and impact of stalking in a European population
+RPLIC 5: None
+No DFK, checking for others:
+'Daw ND, Oğt;'Doherty JP, Dayan P, Seymour B, Dolan RJ. 2006. Cortical substrates for exploratory decisions inhumans.Nature441:876–879.DOI: https://doi.org/10.1038/nature04766,PMID: 16778890'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1038/nature04766', 'doi')}
+- Validating DOI: 10.1038/nature04766 against citation: 'Daw ND, Oğt;'Doherty JP, Dayan P, Seymour B, Dolan RJ. 2006. Cortical substrates for exploratory decisions inhumans.Nature441:876–879.DOI: https://doi.org/10.1038/nature04766,PMID: 16778890'
+✅ Crossref says this DOI has the same title (similarity=63.12056737588653): Cortical substrates for exploratory decisions in humans
+RPLIC 6: None
+No DFK, checking for others:
+'Kahneman, D., & Tversky. A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-292.'
+Found 0 valid url/doi tuples in RPLIC field: {('Kahneman, D., & Tversky. A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-292.', 'unknown')}
+✅ Crossref match accepted (similarity=73.79679144385027): Prospect Theory: An Analysis of Decision under Risk
+RPLIC 7: None
+No DFK, checking for others:
+'Saalbach, H., Eckstein, D., Andri, N., Hobi, R., & Grabner, R. H. (2013). When language of instruction and language of application differ: Cognitive costs of bilingual mathematics learning. Learning and Instruction, 26, 36-44.'
+Found 0 valid url/doi tuples in RPLIC field: {('Saalbach, H., Eckstein, D., Andri, N., Hobi, R., & Grabner, R. H. (2013). When language of instruction and language of application differ: Cognitive costs of bilingual mathematics learning. Learning and Instruction, 26, 36-44.', 'unknown')}
+✅ Crossref match accepted (similarity=81.36482939632546): When language of instruction and language of application differ: Cognitive costs of bilingual mathematics learning
+RPLIC 8: None
+No DFK, checking for others:
+'Grabner, R. H., Saalbach, H., & Eckstein, D. (2012). Language‐Switching Costs in Bilingual Mathematics Learning. Mind, Brain, and Education, 6(3), 147-155.'
+Found 0 valid url/doi tuples in RPLIC field: {('Grabner, R. H., Saalbach, H., & Eckstein, D. (2012). Language‐Switching Costs in Bilingual Mathematics Learning. Mind, Brain, and Education, 6(3), 147-155.', 'unknown')}
+✅ Crossref match accepted (similarity=71.36929460580913): Language‐Switching Costs in Bilingual Mathematics Learning
+RPLIC 9: None
+No DFK, checking for others:
+'Eskine, K. J., Kacinik, N. A., & Prinz, J. J. (2011). A bad taste in the mouth: Gustatory disgustinfluences moral judgment.Psychological Science,22(3), 295–299.'
+Found 0 valid url/doi tuples in RPLIC field: {('Eskine, K. J., Kacinik, N. A., & Prinz, J. J. (2011). A bad taste in the mouth: Gustatory disgustinfluences moral judgment.Psychological Science,22(3), 295–299.', 'unknown')}
+✅ Crossref match accepted (similarity=45.410628019323674): A Bad Taste in the Mouth
+RPLIC 10: None
+No DFK, checking for others:
+'Head, D., & Isom, M. (2010). Age effects on wayfinding and route learn-ing skills.Behavioural Brain Research,209,49–58.'
+Found 0 valid url/doi tuples in RPLIC field: {('Head, D., & Isom, M. (2010). Age effects on wayfinding and route learn-ing skills.Behavioural Brain Research,209,49–58.', 'unknown')}
+✅ Crossref match accepted (similarity=68.50828729281768): Age effects on wayfinding and route learning skills
+RPLIC 11: None
+No DFK, checking for others:
+'Rütsche, B., Hauser, T. U., Jäncke, L., and Grabner, R. H. (2015). Whenproblem size matters: differential effects of brain stimulation on arithmeticproblem  solving  and  neural  oscillations. PLoS ONE10:e0120665.doi: 10.1371/journal.pone.0120665'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1371/journal.pone.0120665', 'doi')}
+- Validating DOI: 10.1371/journal.pone.0120665 against citation: 'Rütsche, B., Hauser, T. U., Jäncke, L., and Grabner, R. H. (2015). Whenproblem size matters: differential effects of brain stimulation on arithmeticproblem solving and neural oscillations. PLoS ONE10:e0120665.doi: 10.1371/journal.pone.0120665'
+✅ Crossref says this DOI has the same title (similarity=72.54408060453402): When Problem Size Matters: Differential Effects of Brain Stimulation on Arithmetic Problem Solving and Neural Oscillations
+RPLIC 12: None
+No DFK, checking for others:
+'https://doi.org/10.1101/470435'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1101/470435', 'doi')}
+- Validating DOI: 10.1101/470435 against citation: 'https://doi.org/10.1101/470435'
+✅ Crossref can't compare empty titles, so we assume the DOI 10.1101/470435 is valid.
+RPLIC 13: None
+No DFK, checking for others:
+'Armstrong, T., Bilsky, S. A., Zhao, M., & Olatunji, B. O. (2013). Dwellingon potential threat cues: An eye movement marker for combat-relatedPTSD.Depression and Anxiety, 30,497–502.'
+Found 0 valid url/doi tuples in RPLIC field: {('Armstrong, T., Bilsky, S. A., Zhao, M., & Olatunji, B. O. (2013). Dwellingon potential threat cues: An eye movement marker for combat-relatedPTSD.Depression and Anxiety, 30,497–502.', 'unknown')}
+✅ Crossref match accepted (similarity=73.64864864864865): DWELLING ON POTENTIAL THREAT CUES: AN EYE MOVEMENT MARKER FOR COMBAT-RELATED PTSD
+RPLIC 14: None
+No DFK, checking for others:
+'Kugler, K. G., Reif, J. A. M., Kaschner, T., & Brodbeck, F. C. (2018). Gender differences in the initiation of negoti-ations: A meta-analysis.Psychological Bulletin,144, 198–222.'
+Found 0 valid url/doi tuples in RPLIC field: {('Kugler, K. G., Reif, J. A. M., Kaschner, T., & Brodbeck, F. C. (2018). Gender differences in the initiation of negoti-ations: A meta-analysis.Psychological Bulletin,144, 198–222.', 'unknown')}
+✅ Crossref match accepted (similarity=73.30960854092527): Gender differences in the initiation of negotiations: A meta-analysis.
+RPLIC 15: None
+No DFK, checking for others:
+'Tietze, W., Becker-Stoll, F., Bensel, J., Eckhardt, A. G., Haug-Schnabel, G., Kalicki, B.,. . . & Leyendecker, B. (2013). Nationale Untersuchung zur Bildung, Betreuung undErziehung in der frühen Kindheit (NUBBEK). Weimar: verlag das netz.'
+Found 0 valid url/doi tuples in RPLIC field: {('Tietze, W., Becker-Stoll, F., Bensel, J., Eckhardt, A. G., Haug-Schnabel, G., Kalicki, B.,. . . & Leyendecker, B. (2013). Nationale Untersuchung zur Bildung, Betreuung undErziehung in der frühen Kindheit (NUBBEK). Weimar: verlag das netz.', 'unknown')}
+✅ Crossref match accepted (similarity=53.42465753424658): Nationale Untersuchung zur Bildung, Betreuung und Erziehung in der frühen Kindheit (NUBBEK) – Design, Methodenüberblick, Datenzugang und das Potenzial zu Mehrebenenanalysen
+RPLIC 16: None
+No DFK, checking for others:
+'Korb, F. M., Jiang, J., King, J. A., & Egner, T. (2017). Hierarchicallyorganized medial frontal cortex-basal ganglia loops selectively controltask- and response-selection.Journal of Neuroscience: The Official Journal of the Society for Neuroscience, 37,7893–7905.http://dx.doi.org/10.1523/JNEUROSCI.3289-16.2017'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1523/JNEUROSCI.3289-16.2017', 'doi')}
+- Validating DOI: 10.1523/JNEUROSCI.3289-16.2017 against citation: 'Korb, F. M., Jiang, J., King, J. A., & Egner, T. (2017). Hierarchicallyorganized medial frontal cortex-basal ganglia loops selectively controltask- and response-selection.Journal of Neuroscience: The Official Journal of the Society for Neuroscience, 37,7893–7905.http://dx.doi.org/10.1523/JNEUROSCI.3289-16.2017'
+✅ Crossref says this DOI has the same title (similarity=58.09312638580931): Hierarchically Organized Medial Frontal Cortex-Basal Ganglia Loops Selectively Control Task- and Response-Selection
+RPLIC 17: None
+No DFK, checking for others:
+'Langguth,  B. et al. Tinnitus severity, depression, and the big five personality traits. In Langguth, B., Hajak, G., Kleinjung, T., Cacace, A. & Møller, A. R. (eds.) Progress in Brain Research, vol. 166 of Tinnitus: Pathophysiology and Treatment, 221–225.'
+Found 0 valid url/doi tuples in RPLIC field: {('Langguth, B. et al. Tinnitus severity, depression, and the big five personality traits. In Langguth, B., Hajak, G., Kleinjung, T., Cacace, A. & Møller, A. R. (eds.) Progress in Brain Research, vol. 166 of Tinnitus: Pathophysiology and Treatment, 221–225.', 'unknown')}
+✅ Crossref match accepted (similarity=52.94117647058824): Tinnitus severity, depression, and the big five personality traits
+RPLIC 18: None
+No DFK, checking for others:
+'Schmitz, J., Krämer, M., Blechert, J., & Tuschen-Caffier, B. (2010). Post-event processing in children with social phobia.Journal ofAbnormal Child Psychology, 38(7), 911–919.'
+Found 0 valid url/doi tuples in RPLIC field: {('Schmitz, J., Krämer, M., Blechert, J., & Tuschen-Caffier, B. (2010). Post-event processing in children with social phobia.Journal ofAbnormal Child Psychology, 38(7), 911–919.', 'unknown')}
+✅ Crossref match accepted (similarity=70.63197026022306): Post-event Processing in Children with Social Phobia
+RPLIC 19: None
+No DFK, checking for others:
+'Gamble, T., & Walker, I. (2016). Wearing a bicycle helmet can increase risk taking and sensation seeking in adults. Psychological Science, 27(2),  289–294.  https ://doi.org/10.1177/09567 97615 620784'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1177/09567_97615_620784', 'doi')}
+- Validating DOI: 10.1177/09567_97615_620784 against citation: 'Gamble, T., & Walker, I. (2016). Wearing a bicycle helmet can increase risk taking and sensation seeking in adults. Psychological Science, 27(2), 289–294. https ://doi.org/10.1177/09567 97615 620784'
+RPLIC 20: None
+No DFK, checking for others:
+'Sprenger,  L.,  Becker,  K.,  Heinzel-Gutenbrunner,  M.,  Mingebach,  T.,  Otterbach,  S.,  Peters,  M.,  &  Kamp-Becker,  I.  (2015).  Is  the  "Stepping  Stones/Triple  Pğt;"-parenting  program  a  reason-able, additional intervention in the treatment of children with an autism spectrum disorder? Kindheit und Entwicklung, 24, 28–36'
+Found 0 valid url/doi tuples in RPLIC field: {('Sprenger, L., Becker, K., Heinzel-Gutenbrunner, M., Mingebach, T., Otterbach, S., Peters, M., & Kamp-Becker, I. (2015). Is the "Stepping Stones/Triple Pğt;"-parenting program a reason-able, additional intervention in the treatment of children with an autism spectrum disorder? Kindheit und Entwicklung, 24, 28–36', 'unknown')}
+✅ Crossref match accepted (similarity=57.87545787545787): Ist das „Stepping-Stones/Triple P”-Elterntraining eine sinnvolle, ergänzende Intervention in der Behandlung von Kindern mit Autismus-Spektrum-Störungen?
+RPLIC 21: None
+No DFK, checking for others:
+'Hagan  CC,  Graham  JM,  Tait  R,  et  al.  Adolescents  with  current  major  depressive  disorder  show  dissimilar  patterns  of  age-related  differences in ACC and thalamus. Neuroimage Clin 2015;7:391-9.'
+Found 0 valid url/doi tuples in RPLIC field: {('Hagan CC, Graham JM, Tait R, et al. Adolescents with current major depressive disorder show dissimilar patterns of age-related differences in ACC and thalamus. Neuroimage Clin 2015;7:391-9.', 'unknown')}
+✅ Crossref match accepted (similarity=72.1311475409836): Adolescents with current major depressive disorder show dissimilar patterns of age-related differences in ACC and thalamus
+RPLIC 22: None
+No DFK, checking for others:
+'Jaworska  N,  Yucel  K,  Courtright  A,  et  al.  Subgenual  anterior  cin-gulate  cortex  and  hippocampal  volumes  in  depressed  youth:  the  role of comorbidity and age. J Affect Disord 2016;190:726-32.'
+Found 0 valid url/doi tuples in RPLIC field: {('Jaworska N, Yucel K, Courtright A, et al. Subgenual anterior cin-gulate cortex and hippocampal volumes in depressed youth: the role of comorbidity and age. J Affect Disord 2016;190:726-32.', 'unknown')}
+RPLIC 23: None
+No DFK, checking for others:
+'Tran, U. S., Glück, T. M., & Nader, I. W. (2013). Investigating the FiveFacet Mindfulness Questionnaire (FFMQ): construction of a shortform and evidence of a two-factor higher order structure of mind-fulness.Journal of Clinical Psychology, 69,951–965.https://doi.org/10.1002/jclp.21996.'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1002/jclp.21996', 'doi')}
+- Validating DOI: 10.1002/jclp.21996 against citation: 'Tran, U. S., Glück, T. M., & Nader, I. W. (2013). Investigating the FiveFacet Mindfulness Questionnaire (FFMQ): construction of a shortform and evidence of a two-factor higher order structure of mind-fulness.Journal of Clinical Psychology, 69,951–965.https://doi.org/10.1002/jclp.21996.'
+✅ Crossref says this DOI has the same title (similarity=71.70626349892008): Investigating the Five Facet Mindfulness Questionnaire (FFMQ): Construction of a Short Form and Evidence of a Two‐Factor Higher Order Structure of Mindfulness
+RPLIC 24: None
+No DFK, checking for others:
+'Rand, D. G., Greene, J. D., & Nowak, M. A. (2012). Spontaneous giving and calculated greed. Nature, 489, 427–430'
+Found 0 valid url/doi tuples in RPLIC field: {('Rand, D. G., Greene, J. D., & Nowak, M. A. (2012). Spontaneous giving and calculated greed. Nature, 489, 427–430', 'unknown')}
+✅ Crossref match accepted (similarity=69.00584795321637): Spontaneous giving and calculated greed
+RPLIC 25: None
+No DFK, checking for others:
+'Borota, D., Murray, E., Keceli, G., Chang, A., Watabe, J. M., Ly, M., . . . Yassa, M. A. 535 (2014). Post-study caffeine administration enhances memory consolidation in humans. 536 Nature Neuroscience, 17 (2), 201–203 |d 10.1038/nn.3623'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1038/nn.3623', 'doi'), ('Borota, D., Murray, E., Keceli, G., Chang, A., Watabe, J. M., Ly, M., . . . Yassa, M. A. 535 (2014). Post-study caffeine administration enhances memory consolidation in humans. 536 Nature Neuroscience, 17 (2), 201–203', 'unknown')}
+- Validating DOI: 10.1038/nn.3623 against citation: 'Borota, D., Murray, E., Keceli, G., Chang, A., Watabe, J. M., Ly, M., . . . Yassa, M. A. 535 (2014). Post-study caffeine administration enhances memory consolidation in humans. 536 Nature Neuroscience, 17 (2), 201–203'
+✅ Crossref says this DOI has the same title (similarity=70.48710601719196): Post-study caffeine administration enhances memory consolidation in humans
+RPLIC 26: None
+No DFK, checking for others:
+'Schneider, D., Bayliss, A. P., Becker, S. I., & Dux, P. E. (2012). Eye movements reveal sustained implicit processing of others' mental states. Journal of Experimental Psychology: General, 141, 433-438. |d DOI: 10.1037/a0025458'
+Found 1 valid url/doi tuples in RPLIC field: {("Schneider, D., Bayliss, A. P., Becker, S. I., & Dux, P. E. (2012). Eye movements reveal sustained implicit processing of others' mental states. Journal of Experimental Psychology: General, 141, 433-438.", 'unknown'), ('10.1037/a0025458', 'doi')}
+- Validating DOI: 10.1037/a0025458 against citation: 'Schneider, D., Bayliss, A. P., Becker, S. I., & Dux, P. E. (2012). Eye movements reveal sustained implicit processing of others' mental states. Journal of Experimental Psychology: General, 141, 433-438.'
+✅ Crossref says this DOI has the same title (similarity=69.6774193548387): Eye movements reveal sustained implicit processing of others' mental states.
+RPLIC 27: None
+No DFK, checking for others:
+'validating the pro-environmental behavior task |u https://osf.io/x2qh3/'
+Found 1 valid url/doi tuples in RPLIC field: {('validating the pro-environmental behavior task', 'unknown'), ('https://osf.io/x2qh3/', 'url')}
+✅ Found URL: https://osf.io/x2qh3/ in RPLIC field, stopping.
+RPLIC 28: None
+No DFK, checking for others:
+'|u https://osf.io/x2qh3/'
+Found 1 valid url/doi tuples in RPLIC field: {('https://osf.io/x2qh3/', 'url')}
+✅ Found URL: https://osf.io/x2qh3/ in RPLIC field, stopping.
+RPLIC 29: None
+✅ Found DFK: 0311238 in RPLIC field. Stopping search.
+RPLIC 30: None
+No DFK, checking for others:
+'Dale, R., Kehoe, C., & Spivey, M. J. (2007). Graded motor responses inthe time course of categorizing atypical exemplars.Memory &Cognition,35(1), 15–28 |f |u |d'
+Found 0 valid url/doi tuples in RPLIC field: {('Dale, R., Kehoe, C., & Spivey, M. J. (2007). Graded motor responses inthe time course of categorizing atypical exemplars.Memory &Cognition,35(1), 15–28', 'unknown')}
+✅ Crossref match accepted (similarity=74.49392712550606): Graded motor responses in the time course of categorizing atypical exemplars
+RPLIC 31: None
+No DFK, checking for others:
+'Höffler, T. N., Prechtl, H., & Nerdel, C. (2010). The influence of visual cog- nitive style when learning from instructional animations and static  pictures. Learning and IndividualDifferences, 20, 479–483. |u https://doi. org/10.1016/j.lindif.2010.03.001'
+Found 1 valid url/doi tuples in RPLIC field: {('Höffler, T. N., Prechtl, H., & Nerdel, C. (2010). The influence of visual cog- nitive style when learning from instructional animations and static pictures. Learning and IndividualDifferences, 20, 479–483.', 'unknown'), ('10.1016/j.lindif.2010.03.001', 'doi')}
+- Validating DOI: 10.1016/j.lindif.2010.03.001 against citation: 'Höffler, T. N., Prechtl, H., & Nerdel, C. (2010). The influence of visual cog- nitive style when learning from instructional animations and static pictures. Learning and IndividualDifferences, 20, 479–483.'
+✅ Crossref says this DOI has the same title (similarity=73.27327327327326): The influence of visual cognitive style when learning from instructional animations and static pictures
+RPLIC 32: None
+No DFK, checking for others:
+'The universal and automatic association between brightness and positivity. Acta Psychologica, 186, 47–53. |d 10.1016/j.actpsy.2018.04.007'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1016/j.actpsy.2018.04.007', 'doi'), ('The universal and automatic association between brightness and positivity. Acta Psychologica, 186, 47–53.', 'unknown')}
+- Validating DOI: 10.1016/j.actpsy.2018.04.007 against citation: 'The universal and automatic association between brightness and positivity. Acta Psychologica, 186, 47–53.'
+✅ Crossref says this DOI has the same title (similarity=63.6734693877551): The universal and automatic association between brightness and positivity
+RPLIC 33: None
+No DFK, checking for others:
+'Attention, Perception & Psychophysics, 69(6), 952957 |f  |u https://link.springer.com/article/10.3758/BF03193932 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.3758/BF03193932', 'doi'), ('Attention, Perception & Psychophysics, 69(6), 952957', 'unknown')}
+- Validating DOI: 10.3758/BF03193932 against citation: 'Attention, Perception & Psychophysics, 69(6), 952957'
+✅ Crossref says this DOI has the same title (similarity=32.05128205128205): The subjective size of visual stimuli affects the perceived duration of their presentation
+RPLIC 34: None
+No DFK, checking for others:
+'Marks, L. E. (1987). On cross-modal similarity: Auditoryvisual interactions in speeded discrimination. Journal of Experimental Psychology: Human Perception and Performance, 13(3), 384394. https://doi.org/10.1037// 0096-1523.13.3.384 |f  |u https://doi.org/10.1037//0096-1523.13.3.384 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1037//0096-1523.13.3.384', 'doi')}
+- Validating DOI: 10.1037//0096-1523.13.3.384 against citation: 'Marks, L. E. (1987). On cross-modal similarity: Auditoryvisual interactions in speeded discrimination. Journal of Experimental Psychology: Human Perception and Performance, 13(3), 384394. https://doi.org/10.1037// 0096-1523.13.3.384'
+✅ Crossref says this DOI has the same title (similarity=54.37499999999999): On cross-modal similarity: Auditory-visual interactions in speeded discrimination.
+RPLIC 35: None
+No DFK, checking for others:
+'Henne, P., Perez, K., & McCracken, C. (2023). No evidence that reversibility affects causal judgments in late-preemption cases. Preprint. https:// doi.org/10.31219/osf.io/ky9xn |f  |u https://osf.io/preprints/osf/ky9xn |d'
+Found 2 valid url/doi tuples in RPLIC field: {('10.31219/osf.io/ky9xn', 'doi'), ('https://osf.io/preprints/osf/ky9xn', 'url')}
+- Validating DOI: 10.31219/osf.io/ky9xn against citation: 'Henne, P., Perez, K., & McCracken, C. (2023). No evidence that reversibility affects causal judgments in late-preemption cases. Preprint. https:// doi.org/10.31219/osf.io/ky9xn'
+✅ Crossref says this DOI has the same title (similarity=74.28571428571429): No Evidence that Reversibility Affects Causal judgments in Late-preemption Cases
+RPLIC 36: None
+No DFK, checking for others:
+'Scheer, D., Egener, L., Laubenstein, D. & Melzer, C. (2023). Development and psychometric evalua- tion of an instrument measuring subjective defini- tions of inclusion (FEDI). International Journal of Inclusive Education, 27(4), 472–492. |f  |u https://doi.org/10.1080/13603116.2020.1853256 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1080/13603116.2020.1853256', 'doi'), ('Scheer, D., Egener, L., Laubenstein, D. & Melzer, C. (2023). Development and psychometric evalua- tion of an instrument measuring subjective defini- tions of inclusion (FEDI). International Journal of Inclusive Education, 27(4), 472–492.', 'unknown')}
+- Validating DOI: 10.1080/13603116.2020.1853256 against citation: 'Scheer, D., Egener, L., Laubenstein, D. & Melzer, C. (2023). Development and psychometric evalua- tion of an instrument measuring subjective defini- tions of inclusion (FEDI). International Journal of Inclusive Education, 27(4), 472–492.'
+✅ Crossref says this DOI has the same title (similarity=71.72774869109948): Development and psychometric evaluation of an instrument measuring subjective definitions of inclusion (FEDI)
+RPLIC 37: None
+No DFK, checking for others:
+'Lüke, T. & Grosche, M. (2018). Konstruktion und Validierung der Professionsunabhängigen Einstel- lungsskala zum Inklusiven Schulsystem (PREIS). Empirische Sonderpädagogik, 10(1), 3–20. |f  |u https://doi.org/10.25656/01:15958 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.25656/01:15958', 'doi'), ('Lüke, T. & Grosche, M. (2018). Konstruktion und Validierung der Professionsunabhängigen Einstel- lungsskala zum Inklusiven Schulsystem (PREIS). Empirische Sonderpädagogik, 10(1), 3–20.', 'unknown')}
+- Validating DOI: 10.25656/01:15958 against citation: 'Lüke, T. & Grosche, M. (2018). Konstruktion und Validierung der Professionsunabhängigen Einstel- lungsskala zum Inklusiven Schulsystem (PREIS). Empirische Sonderpädagogik, 10(1), 3–20.'
+✅ Crossref match accepted (similarity=55.61797752808989): Replikationsstudie zur Testgüte der Professionsunabhängigen Einstellungsskala zum Inklusiven Schulsystem – ein Beitrag zur Validierung
+RPLIC 38: None
+✅ Found DFK: 9007420 in RPLIC field. Stopping search.
+RPLIC 39: None
+No DFK, checking for others:
+'https://doi.org/10.1016/j.tate.2021.103346 |f  |u  |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1016/j.tate.2021.103346', 'doi')}
+- Validating DOI: 10.1016/j.tate.2021.103346 against citation: 'https://doi.org/10.1016/j.tate.2021.103346'
+✅ Crossref can't compare empty titles, so we assume the DOI 10.1016/j.tate.2021.103346 is valid.
+RPLIC 40: None
+No DFK, checking for others:
+'Paul, A. A., Lee, K., & Ashton, M. C. (2022). Who tells prosocial lies? A HEXACO model investigation. Journal of Research in Personality, 98, Article 104232. |f  |u https://doi.org/ 10.1016/j.jrp.2022.104232 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('Paul, A. A., Lee, K., & Ashton, M. C. (2022). Who tells prosocial lies? A HEXACO model investigation. Journal of Research in Personality, 98, Article 104232.', 'unknown'), ('10.1016/j.jrp.2022.104232', 'doi')}
+- Validating DOI: 10.1016/j.jrp.2022.104232 against citation: 'Paul, A. A., Lee, K., & Ashton, M. C. (2022). Who tells prosocial lies? A HEXACO model investigation. Journal of Research in Personality, 98, Article 104232.'
+✅ Crossref says this DOI has the same title (similarity=62.882096069869): Who tells prosocial lies? A HEXACO model investigation
+RPLIC 41: None
+No DFK, checking for others:
+'https://doi.org/10.1086/598971 |f  |u https://academic.oup.com/jcr/article/36/3/406/1846977 |d'
+Found 2 valid url/doi tuples in RPLIC field: {('10.1086/598971', 'doi'), ('https://academic.oup.com/jcr/article/36/3/406/1846977', 'url')}
+- Validating DOI: 10.1086/598971 against citation: 'https://doi.org/10.1086/598971'
+✅ Crossref can't compare empty titles, so we assume the DOI 10.1086/598971 is valid.
+RPLIC 42: None
+No DFK, checking for others:
+'https://doi.org/10.1111/j.1469-8986.2010.01081.x |f  |u https://onlinelibrary.wiley.com/doi/10.1111/j.1469-8986.2010.01081.x |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1111/j.1469-8986.2010.01081.x', 'doi')}
+- Validating DOI: 10.1111/j.1469-8986.2010.01081.x against citation: 'https://doi.org/10.1111/j.1469-8986.2010.01081.x'
+✅ Crossref can't compare empty titles, so we assume the DOI 10.1111/j.1469-8986.2010.01081.x is valid.
+RPLIC 43: None
+No DFK, checking for others:
+'Chowdhury, S. M., Jeon, J. Y., & Saha, B. (2017). Gender differences in the giving and taking variants of the dictator game. Southern Economic Journal, 84(2), 474–483 |f  |u https://doi.org/10.1002/soej.12223 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1002/soej.12223', 'doi'), ('Chowdhury, S. M., Jeon, J. Y., & Saha, B. (2017). Gender differences in the giving and taking variants of the dictator game. Southern Economic Journal, 84(2), 474–483', 'unknown')}
+- Validating DOI: 10.1002/soej.12223 against citation: 'Chowdhury, S. M., Jeon, J. Y., & Saha, B. (2017). Gender differences in the giving and taking variants of the dictator game. Southern Economic Journal, 84(2), 474–483'
+✅ Crossref says this DOI has the same title (similarity=72.79693486590037): Gender Differences in the Giving and Taking Variants of the Dictator Game
+RPLIC 44: None
+✅ Found DFK: 0137014 in RPLIC field. Stopping search.
+RPLIC 45: None
+No DFK, checking for others:
+'Bonefeld, M., & Karst, K. (2020). Döner vs. Schweinebraten – Stereotype von (angehenden) Lehrkräften über Personen deutscher und türkischer Herkunft im Vergleich [Döner vs. pig roast - stereotypes of teachers (in training) about people of German and Turkish origin in comparison]. In S. Glock & H. Kleen (Eds.), Stereotype in der Schule (pp. 159–190). Springer Fachmedien Wiesbaden. |f  |u https://doi.org/10.1007/978-3-658-27275-3 6 |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1007/978-3-658-27275-3_6', 'doi'), ('Bonefeld, M., & Karst, K. (2020). Döner vs. Schweinebraten – Stereotype von (angehenden) Lehrkräften über Personen deutscher und türkischer Herkunft im Vergleich [Döner vs. pig roast - stereotypes of teachers (in training) about people of German and Turkish origin in comparison]. In S. Glock & H. Kleen (Eds.), Stereotype in der Schule (pp. 159–190). Springer Fachmedien Wiesbaden.', 'unknown')}
+- Validating DOI: 10.1007/978-3-658-27275-3_6 against citation: 'Bonefeld, M., & Karst, K. (2020). Döner vs. Schweinebraten – Stereotype von (angehenden) Lehrkräften über Personen deutscher und türkischer Herkunft im Vergleich [Döner vs. pig roast - stereotypes of teachers (in training) about people of German and Turkish origin in comparison]. In S. Glock & H. Kleen (Eds.), Stereotype in der Schule (pp. 159–190). Springer Fachmedien Wiesbaden.'
+✅ Crossref says this DOI has the same title (similarity=54.47619047619048): Döner vs. Schweinebraten – Stereotype von (angehenden) Lehrkräften über Personen deutscher und türkischer Herkunft im Vergleich
+RPLIC 46: None
+No DFK, checking for others:
+'https://doi.org/10.1037/pspp0000263 |f  |u  |d'
+Found 1 valid url/doi tuples in RPLIC field: {('10.1037/pspp0000263', 'doi')}
+- Validating DOI: 10.1037/pspp0000263 against citation: 'https://doi.org/10.1037/pspp0000263'
+✅ Crossref can't compare empty titles, so we assume the DOI 10.1037/pspp0000263 is valid.
+RPLIC 47: None
