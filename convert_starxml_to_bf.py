@@ -739,10 +739,23 @@ def match_email_to_contribution_nodes(work_uri, record):
             )
 
 
-def extract_contribution_role(contributiontext):
+def extract_contribution_role(contributiontext, record):
     role = helpers.get_subfield(contributiontext, "f")
     if role is not None:
         # if we find a role, return it:
+        if role == "VE":
+        # if the role is VE (Verfasser), we will replace it with AU (they were used interchangeably
+        # in the past, but we only kept AU):
+            role = "AU"
+        # Also: RE was used for Interviewers, but only in Interviews, 
+        # otherwise they meant "Redaktion", so replace with ED
+        elif role == "RE":
+            # check if any CM of the record contains "interview", then replace
+            # role with "IVR" (interviewer), otherwise with "ED" (editor):
+            if "interview" in record.find("CM").text:
+                role = "IVR"
+            else:
+                role = "ED"
         return role
     else:
         # if none is found, add the default role AU:
@@ -803,7 +816,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
         records_bf.add((org_node, RDF.type, ns.BF.Organization))
 
         ## extracting the role:
-        role = extract_contribution_role(org.text)
+        role = extract_contribution_role(org.text, record)
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
         records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
 
@@ -1015,8 +1028,16 @@ def get_local_authority_institute(affiliation_string, country):
 
 def get_ror_id_from_api(orgname_string):
     # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
-    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
+
+    # but first, find some common substrings from names that ror can't find with those it will find:
+    for affiliation in mappings.affilation_org_substr_replacelist:
+        if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
+            orgname_string = affiliation[1]
+            # print("replacing " + funder[0] + " with " + funder[1])
+            return orgname_string
+
     # make a request to the ror api:
+    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
     # ror_api_request = requests.get(ror_api_url)
     # make request to api with caching:
     ror_api_request = session_ror.get(ror_api_url, timeout=20)
@@ -1029,6 +1050,8 @@ def get_ror_id_from_api(orgname_string):
             for item in ror_api_response["items"]:
                 if item["chosen"] == True:
                     return item["organization"]["id"]
+                else:
+                    logging.info("No ror id found for affiliation " + orgname_string)
         else:
             return None
     else:
@@ -1324,8 +1347,9 @@ def add_bf_contributor_person(work_uri, record):
         # add the role from AUP subfield |f to the contribution node:
         # extracting the role:
         # check if there is a role in |f subfield and add as a role, otherwise set role to AU
-        role = extract_contribution_role(person.text)
+        role = extract_contribution_role(person.text, record)
         records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
+        
 
         ## --- Add the contribution node to the work node:
         records_bf.add((work_uri, ns.BF.contribution, contribution_node))
@@ -2203,6 +2227,26 @@ def process_record(record):
 
     # make another round through all the PRREG fields of the record, identifying any trial numbers and adding each as separate pxc:PreregistrationRelationship to the work, including the number as an identifier of the instance, and the ifentified registry as the assigner of the identifier:
     research_info.add_trials_as_preregs(work_uri, record, records_bf)
+
+    ### Add replication relationship nodes from RPLIC field - there is only ever one per work.
+    # get the content of the RPLIC field, if it exists:
+    replication_info = record.find("RPLIC")
+    if replication_info is not None and replication_info.text is not None:
+        # get the text content:
+        replication_info = replication_info.text.strip()
+        # call our function that pulls out dfk, doi (double checking existing
+        # ones via crossref, getting missing ones from crossref and double check
+        # them), url or citation from
+        # subfiels and the main field and which also calls itself the 
+        # node generation function
+        research_info.get_rplic_replications(work_uri=work_uri, graph=records_bf, rplic_field=replication_info)
+
+    ## ==== RELs and TESTs ==== ##
+    # Add the RELs and TESTs from the record to the work:
+    research_info.build_rels(record=record, work_uri=work_uri, graph=records_bf)
+
+    ## TODO
+    # research_info.build_tests(record=record, work_uri=work_uri, graph=records_bf)
 
     ## ==== InstanceBundle ==== ##
 

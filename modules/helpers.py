@@ -176,8 +176,10 @@ def check_for_url_or_doi(original_string):
     # fixing a known STAR bug that replaces underscores with spaces,
     # which is especially bad for urls.  (In other text,
     # we can't really fix it, since usually a space was intended):
+
     string = re.sub(" ", "_", string)
     # this will fix urls like "osf.io/ab c" to "osf.io/ab_c", right?
+    
 
     # now check for doi or url:
     # this will catch the following doi types:
@@ -196,9 +198,9 @@ def check_for_url_or_doi(original_string):
         # which is the 4th capture group in the regex:
         # string = doi_pattern.search(string).group(4)
         string = match.group()
-        # remove any trailing characters, such as a "." or a space:
+        # remove any trailing characters, such as a "." or a space or an underscore:
         # example: "10.1371/journal.pone.0120665." -> "10.1371/journal.pone.0120665"
-        string = re.sub(r"[. ]*$", "", string)
+        string = re.sub(r"[. _]*$", "", string)
         string_type = "doi"
         # print("DOI: " + doi)
     # elif string.startswith("10."):

@@ -27,6 +27,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
+        "relationship_type": "ResearchData",
         "genre": "ResearchData",
         "access_policy_label": "open access",
         "access_policy_value": "http://purl.org/coar/access_right/c_abf2",
@@ -37,6 +38,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Dataset",
         "content_type": "cod",
+        "relationship_type": "ResearchData",
         "genre": "ResearchData",
         "access_policy_label": "restricted access",
         "access_policy_value": "http://purl.org/coar/access_right/c_16ec",
@@ -47,6 +49,7 @@ relation_types = {
         "relatedTo_subprop": "supplement",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Preregistration",
         "genre": "Preregistration",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -57,6 +60,7 @@ relation_types = {
         "relatedTo_subprop": "relatedTo",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Replication",
         "genre": "ScholarlyPaper",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -67,6 +71,95 @@ relation_types = {
         "relatedTo_subprop": "relatedTo",
         "work_subclass": "Text",
         "content_type": "txt",
+        "relationship_type": "Reanalysis",
+        "genre": "ScholarlyPaper",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "isRelatedTo": {
+        "relation": "isRelatedTo",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasComment": {
+        "relation": "hasComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "isCommentOn": {
+        "relation": "isCommentOn",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "ScholarlyPaper",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "isReplyToComment": {
+        "relation": "isReplyToComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasReplyToComment": {
+        "relation": "hasReplyToComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "CommentReply",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasReplyToCommentsOnItself": {
+        "relation": "hasReplyToCommentsOnItself",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "CommentReply",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+    "hasOlderEdition": {
+        "relation": "hasOlderEdition",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": None,
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasArticlePartOfCompilationThesis": {
+        "relation": "hasArticlePartOfCompilationThesis",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
         "genre": "ScholarlyPaper",
         "access_policy_label": None,
         "access_policy_value": None,
@@ -74,12 +167,19 @@ relation_types = {
     },
 }
 
+## urls for unknown preregistrations, replicated works, reanalyzed works
+# that we find from CMs (but where no applicable PRREG or RPLIC field exists):
+UNKNOWN_PREREG_URL = "https://w3id.org/zpid/dummyworks/unknown_preregistration" # or "https://unknown-preregistration.example.org"
+UNKNOWN_REPLICATION_URL = "https://w3id.org/zpid/dummyworks/unknown_replicated_study" # or 
+# "https://unknown-replicated-study.example.org"
+UNKNOWN_REANALYSIS_URL = "https://w3id.org/zpid/dummyworks/unknown_reanalyzed_study" # or
+# "https://unknown-reanalyzed-study.example.org"
 
-# %% [markdown]
+
 # ### Building generic bf:Note nodes
 #
 # Will probably also need this later for other kinds of notes, such as the ones in field BN.
-# %%
+
 def build_note_node(resource_uri, note, graph):
     if note is not None and note != "":
         # make a fragment uri node for the note:
@@ -103,18 +203,21 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
         relation = relation_types[relation_type]["relation"]
         relatedTo_subprop = relation_types[relation_type]["relatedTo_subprop"]
         work_subclass = relation_types[relation_type]["work_subclass"]
+        # TODO: add content type and genre to the relationship node later, when we actually export the data for psychporta:
         content_type = relation_types[relation_type]["content_type"]
         genre = relation_types[relation_type]["genre"]
+        relationship_type = relation_types[relation_type]["relationship_type"]
         access_policy_label = relation_types[relation_type]["access_policy_label"]
         access_policy_value = relation_types[relation_type]["access_policy_value"]
         access_policy_concept = relation_types[relation_type]["access_policy_concept"]
     # make a node for this relationship:
-    # use a random number to make node unique:
-    # TODO: use count to attach a numbering to the node so two different Relationships have unique names and aren't collapsed anymore!
+    
     # make it class bflc:Relationship:
-    relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
+    # relationship_subclass = genre[0].upper() + genre[1:] + "Relationship"
+    relationship_subclass = relationship_type[0].upper() + relationship_type[1:] + "Relationship"
     # or "PreregistrationRelationship"
     relationship_bnode = URIRef(
+    # use count to attach a numbering to the node so two different Relationships have unique names:
         work_uri + "#" + str(relationship_subclass) + str(count)
     )
     # or other. We can use the content of "genre" in Camelcase for this:
@@ -168,7 +271,7 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
         graph.add(
             (access_policy_node, SKOS.prefLabel, Literal("freier Zugang", lang="de"))
         )
-        # not addind the url to coar for now, we don't need it for migration:
+        # not adding the url to coar for now, we don't need it for migration:
         # records_bf.set(
         #     (
         #         access_policy_node,
@@ -384,7 +487,7 @@ def get_datac(work_uri, record, graph):
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 
-# %% [markdown]
+
 # ## Function: Create nodes for PRREG (linked Preregistration Works)
 #
 # Field PRREG can occur multiple times per record (0..n).
@@ -433,8 +536,6 @@ def get_datac(work_uri, record, graph):
 #     ]
 # .
 # ```
-# %%
-
 
 # function to build the nodes for preregistration links
 def get_bf_preregistrations(work_uri, record, graph):
@@ -533,7 +634,7 @@ def get_bf_preregistrations(work_uri, record, graph):
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
         # add preregistration_node to work:
-        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+        # graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 
 def add_trials_as_preregs(work_uri, record, graph):
@@ -696,7 +797,7 @@ def add_trials_as_preregs(work_uri, record, graph):
                     # add the finished node for the relationship to the work:
                     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
                     # add preregistration_node to work:
-                    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+                    # graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 ## Function to go through the subfields of a RPLIC field and generate a Replication. The actual node is
 # created from that data elsewhere, but we need to extract the data from the subfields.
@@ -722,7 +823,7 @@ def generate_replication_from_rplic(rplic_string):
 
     # then filter out anything from the skip_list, so we don't process those:
     if rplic_string in skip_list:
-        print(f"Skipping RPLIC field: {rplic_string}")
+        #print(f"Skipping RPLIC field: {rplic_string}")
         return replication  # return early if we skip this field
     # get the subfield and main fields and fill them into variables: 
     # subfield_url, subfield_doi, subfield_dfk, mainfield_citation
@@ -733,11 +834,11 @@ def generate_replication_from_rplic(rplic_string):
     # if we have a valid DFK in the subfield_dfk, add it to the replication dict and stop (valid: 7 digits):
     if subfield_dfk is not None and re.match(r"^\d{7}$", subfield_dfk):
         replication["dfk"] = subfield_dfk
-        print(f"✅ Found DFK: {subfield_dfk} in RPLIC field. Stopping search.")
+        #print(f"✅ Found DFK: {subfield_dfk} in RPLIC field. Stopping search.")
         return replication
     # else, if no DFK, we continue to check for a DOI or URL:
     else:
-        print("No DFK, checking for others:\n'" + str(rplic_string) + "'")
+        #print("No DFK, checking for others:\n'" + str(rplic_string) + "'")
         try:
             # generate a List of tuples using the check_for_url_or_doi() function for each of the three fields, but only if they are not None - otherwise do not add them to the list:
             url_doi_list = []
@@ -756,9 +857,9 @@ def generate_replication_from_rplic(rplic_string):
 
             # remove duplicates by converting the list to a set:
             url_doi_set = set(url_doi_list)
-            print(
-                f"Found {len([x for x in url_doi_set if x[1] in ['doi', 'url']])} valid url/doi tuples in RPLIC field: {url_doi_set}"
-            )
+            # print(
+            #     f"Found {len([x for x in url_doi_set if x[1] in ['doi', 'url']])} valid url/doi tuples in RPLIC field: {url_doi_set}"
+            # )
             # First, try to find a valid DOI
             for url_doi_tuple in url_doi_set:
                 if url_doi_tuple[1] == "doi":
@@ -770,7 +871,7 @@ def generate_replication_from_rplic(rplic_string):
             for url_doi_tuple in url_doi_set:
                 if url_doi_tuple[1] == "url":
                     replication["url"] = url_doi_tuple[0]
-                    print(f"✅ Found URL: {url_doi_tuple[0]} in RPLIC field, stopping.")
+                    #print(f"✅ Found URL: {url_doi_tuple[0]} in RPLIC field, stopping.")
                     return replication
 
             # If neither, check for unknown/citation
@@ -822,14 +923,14 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
         urls_expire_after=urls_expire_after,
     )
     
-    print(f"- Validating DOI: {our_doi} against citation: '{mainfield_citation}'")
+    #print(f"- Validating DOI: {our_doi} against citation: '{mainfield_citation}'")
     if our_doi is None or our_doi == "":
         logging.warning("No DOI provided for validation.")
         return False
     elif mainfield_citation is None or mainfield_citation == "" or mainfield_citation.startswith("http") or mainfield_citation.startswith("10."):
         # if the citation is empty or just a url or doi, we cannot validate it against crossref, so we return True, we assume it is valid, because that is all we have
         logging.warning("No valid citation provided for validation.")
-        print(f"✅ Crossref can't compare empty titles, so we assume the DOI {our_doi} is valid.")
+        #print(f"✅ Crossref can't compare empty titles, so we assume the DOI {our_doi} is valid.")
         return True
     try: #send doi we have on file to crossref and check if it matches the citation
         response = session_crossref_doi_checker.get(
@@ -850,7 +951,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
                 similarity = fuzz.token_sort_ratio(crossref_str, citation_str)
 
                 if similarity >= similarity_threshold:  # threshold for fuzzy matching
-                    print(f"✅ Crossref says this DOI has the same title (similarity={similarity}): {title}")
+                    #print(f"✅ Crossref says this DOI has the same title (similarity={similarity}): {title}")
                     return True  # Accept match
                 else:
                     crossref_rejections.append({
@@ -859,7 +960,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
                         'crossref_authors': authors,
                         'similarity': similarity
                     })
-                    print(f"⚠️ Crossref says this DOI {our_doi} has a different title (similarity={similarity}): {title}")
+                    #print(f"⚠️ Crossref says this DOI {our_doi} has a different title (similarity={similarity}): {title}")
                     return False  # Reject match
     except requests.exceptions.RequestException as e:
         logging.error(f"Error validating DOI against Crossref for {our_doi}: {e}")
@@ -868,7 +969,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
 
     
 
-def check_crossref_for_citation_doi(citation_string):
+def check_crossref_for_citation_doi(citation_string, similarity_threshold=30):
     """Checks Crossref for a DOI for a given citation string.
     Also checks if the title of the citation matches the title of the work as archived in Crossref (using fuzzywuzzy/rapidfuzz). If they are too different (>30%), we return None.
     Returns the DOI if found, None otherwise.
@@ -879,11 +980,7 @@ def check_crossref_for_citation_doi(citation_string):
     - ''
 
     """
-    # this is a placeholder function, we need to implement the actual logic.
-    # we can probably use the one in pythontests! But need to edit it to use 
-    # friendly email credentials and caching.
-    # for now, we just return a dummy DOI if the citation_string is not None, otherwise None.
-        # Collects Crossref rejections for review
+   
     crossref_rejections = []
     #crossref_api_url = CROSSREF_API_URL + mainfield_citation + CROSSREF_FRIENDLY_MAIL
     urls_expire_after = {
@@ -898,7 +995,7 @@ def check_crossref_for_citation_doi(citation_string):
         expire_after=timedelta(days=30),
         urls_expire_after=urls_expire_after,
     )
-    similarity_threshold = 30  # set a threshold for fuzzy matching
+    #similarity_threshold = 30  # set a threshold for fuzzy matching
     try:
         response = session_crossref_doi_finder.get(
             CROSSREF_API_URL,
@@ -934,3 +1031,315 @@ def check_crossref_for_citation_doi(citation_string):
     except requests.exceptions.RequestException as e:
         logging.error(f"Error checking Crossref for DOI for {citation_string}: {e}")
         return None  # Return None if there was an error
+    
+## function to go through all RPLIC fields in a record and build nodes for each replication.
+def get_rplic_replications(work_uri, graph, rplic_field):
+    """Gets replication objects from the RPLIC fields in a record.
+    Each Replication object is a dictionary with the keys 'doi', 'url', 'dfk', and 'citation'.
+    It expects a list of RPLIC fields, at least one. To get these out of a record, 
+    use the record.findall("RPLIC") method and then we need the text content, so .text.
+    It will then build a node for each replication object, and attach it to the work_uri.
+    There will only ever be one rplic field per record, right?
+    """
+
+    rplic_string = html.unescape(mappings.replace_encodings(rplic_field.strip()))
+    # get object from the rplic_string:
+    replication = generate_replication_from_rplic(rplic_string)
+    # already build a node for the replicated work, to which we can then attach identifiers/other properties for dfk, doi, url, or citation: (but only if the replication object has at least one of those properties set)
+    if replication["doi"] is None and replication["url"] is None and replication["dfk"] is None and replication["citation"] is None:
+        logging.warning(f"No valid identifier found in RPLIC field: {rplic_string}")
+    else: # we have at least one valid identifier, so we can build a node for the replication:
+        relationship_node, instance = build_work_relationship_node(
+            work_uri,
+            graph,
+            relation_type="replication",
+            count=1,  # we can use a count of 1 here, since we only expect one replication per work.
+        ) # the function returns a relationship node and an instance node for the replication. But we may need an instancebundle, too, so we can attach the dfk (studyId) to it. Maybe it is ok to use the work to attach the dfk to it?
+
+        # if the replication object has a DFK, we can build an identifier node for the instancebundle with the DFK:
+        if replication["dfk"] is not None:
+            # build a DFK identifier node for the instance:
+            # NOTE: for now, we will attach the DFK to the instance, even though it really belongs to the instancebundle.
+            # It is not time efficient to rewrite the node creation function to handle instancebundles, so we will just attach it to the instance for now - since it is only
+            # for initial data migration. In the future, links to existing works will be handled differently (by linking
+            # the work uri directly to the replicating work, not by attaching the DFK to the instancebundle).
+            identifiers.build_dfk_identifier_node(instance, replication["dfk"], graph)
+        # if the replication object has a DOI, we can build a DOI identifier node for the instance:
+        elif replication["doi"] is not None:
+            identifiers.build_doi_identifier_node(instance, replication["doi"], graph)
+        # if the replication object has a URL, we can build an electronic locator node for the instance:
+        elif replication["url"] is not None:
+            identifiers.build_electronic_locator_node(instance, replication["url"], graph)
+        # if the replication object has a citation, we can build a preferredCitation node for the instance:
+        elif replication["citation"] is not None:
+            # build a preferredCitation node for the instance:
+            # identifiers.build_preferred_citation_node(work_uri, replication["citation"], graph)
+            # let's do it right here, since it is dead simple and just a literal property:
+            graph.add(
+                (instance, ns.BF.preferredCitation, Literal(replication["citation"]))
+            )
+        else:
+            logging.warning(f"No valid identifier found in RPLIC field: {rplic_string}")
+
+        # now attach the finished relationship node, including instance and identifiers to the work:
+        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+
+def build_empty_replication_reanalyis_node(work_uri, graph, relation_type):
+    """Builds an empty replication reanalysis node for a work.
+    This is used to indicate that the work is a replication or reanalysis, but no specific replication data is available.
+    For cases where the cm says something is a replication or a reanalysis, but no specific replication data is available (because no RPLIC field was found).
+    """
+    # create a new node for the replication reanalysis:
+    relationship_node, instance = build_work_relationship_node(
+        work_uri,
+        graph,
+        relation_type, # expects either "reanalysis" or "replication"
+    )
+    # add a generic url to the instance, so it can be found in the graph:
+    if relation_type == "replication":
+        # add a generic url to the instance, so it can be found in the graph:
+        identifiers.build_electronic_locator_node(
+            instance, UNKNOWN_REPLICATION_URL, graph
+        )
+    elif relation_type == "reanalysis":
+        # add a generic url to the instance, so it can be found in the graph:
+        identifiers.build_electronic_locator_node(
+            instance, UNKNOWN_REANALYSIS_URL, graph
+        )       
+    else:
+        logging.error(
+            f"Unknown relation type for replication reanalysis node: {relation_type}. Expected 'replication' or 'reanalysis'."
+        )
+        # dont add any electroniclocator
+    
+    # add the relationship node to the work:
+    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+
+def build_empty_preregistration_node(work_uri, graph):
+    """Builds an empty preregistration node for a work.
+    This is used to indicate that the work is a preregistration, but no specific preregistration data is available.
+    For cases where the cm says something has a preregistration, but no specific preregistration data is available (because no PRREG field was found).
+    """
+    # create a new node for the preregistration:
+    relationship_node, instance = build_work_relationship_node(
+        work_uri,
+        graph,
+        relation_type="preregistration",
+    )
+    # add a generic url to the instance, so it can be found in the graph:
+    identifiers.build_electronic_locator_node(
+        instance, UNKNOWN_PREREG_URL, graph
+    )
+    
+    # add the relationship node to the work:
+    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+def handle_other_relations(relationship_type):
+    # in case of books, compilation theses and "else" (any other cms), we
+    # want to handle all of them the same way, but i don't want to repeat 
+    # the same else condition 3 times, so we can just make a function
+    # takes: the relationship type, returns: the desired new relationship type
+    # if the reltype is "Comment", we replace it with "hasComment":
+    if relationship_type == "Comment":
+        relationship_type = "hasComment"
+        # and if it is "Reply", we replace it with "hasReplyToCommentsOnItself:
+    elif relationship_type == "Reply":
+        relationship_type = "hasReplyToCommentsOnItself"
+    # if it is Original or empty, we replace it with "isRelatedTo":
+    elif relationship_type == "Original" or relationship_type == None:
+        relationship_type = "isRelatedTo"
+    # for any other case, we set the type to "isRelatedTo", which is the default:
+    else:
+        relationship_type = "isRelatedTo"
+    return relationship_type
+
+def build_rels(record, work_uri, graph):
+    ## access BE, BN and CM fields to inform or override the relation type found in REL |b
+    # do we want to make a function that makes all rels for this work? Yes!
+    # so we go through all relas in the record.
+    # get the BE, BN and the three relevant CM fields from the record:
+    # set book to true if we find BE with text SM or SS:
+    book = False
+    compilation_thesis = False
+    has_cm_comment = False
+    has_cm_comment_reply = False
+    has_cm_comment_appended = False
+    if record.find("BE") is not None and record.find("BE").text == "SS" or record.find("BE").text == "SM":
+        book = True
+    if record.find("BN") is not None:
+        if record.find("BN").text is not None and record.find("BN").text.startswith("Kumu"):
+            compilation_thesis = True
+            print("Found BN field with Kumu, setting compilation_thesis to True.")
+    # go through all the CM fields and set the flags accordingly:
+    for cm_field in record.findall("CM"):
+        if cm_field.text is not None:
+            if cm_field.text.startswith("|c 14100"): # comment
+                has_cm_comment = True
+            elif cm_field.text.startswith("|c 14110"): # comment reply
+                has_cm_comment_reply = True
+            elif cm_field.text.startswith("|c 14120"):  # comment appended
+                has_cm_comment_appended = True
+    # now we have all the info, go through the REL field and build the relations:
+    for index,rel_field in enumerate(record.findall("REL")):
+         
+        # if the REL field is empty, we can skip it:
+        if rel_field is None or rel_field.text is None:
+            print("Skipping REL field because it is empty.")
+            continue
+        # if the REL field is not empty, we can process it:
+        rel_string = rel_field.text.strip()
+        ## first, make empty REL object:
+        related_work = {
+            "dfk": None,  # DFK of the related work
+            "doi": None,  # DOI of the related work, if available
+            "url": None,  # URL of the related work, if available
+            "citation": None,  # citation of the related work, if available
+            "relationship_type": None,  # type of relationship, e.g. "Original", "Reply", "Comment" etc.
+        }
+        # strip and clean it up first:
+        rel_string = html.unescape(mappings.replace_encodings(rel_string.strip()))
+        # if it starts with |b and there is no other subfield (# count of "|"" symbols is just 1), we can ignore it.
+        if rel_string.startswith("|b") and rel_string.count("|") == 1 or rel_string == "":
+            print(f"Skipping REL because empty: {rel_string}")
+            return None # stop and return early, since there is nothing to extract here.
+        # if it instead starts with a DFK (7-digit number), we can just return that and the relationship type.:
+        elif rel_string[:7].isdigit():
+            related_work["dfk"] = rel_string[:7]
+            print(f"Found DFK: {related_work['dfk']}")
+        else:
+            # these are the special cases where there is no DFK, but we still want to extract the relationship type and other information.
+            # first, check for a hidden doi anywhere in the string.
+            # we have a neat function for that: check_for_url_or_doi(string)
+            # we can expect just one doi or url in the whole string, so we can just use the first one.
+            doi_or_url = helpers.check_for_url_or_doi(rel_string)
+            if doi_or_url:
+                # if the type is doi, we can just set it as the doi for our object:
+                if doi_or_url[1] == "doi":
+                    related_work["doi"] = doi_or_url[0]
+                    print(f"Found DOI: {related_work['doi']}")
+                # if the type is url, we can just set it as the url for our object:
+                elif doi_or_url[1] == "url":
+                    related_work["url"] = doi_or_url[0]
+                    print(f"Found URL: {related_work['url']}")
+                else: # if no doi or url, we need to send the title in |t to crossref to get the doi. Use the research_info.validate_doi_against_crossref function.
+                    try:
+                        title = helpers.get_subfield(rel_string, "t") 
+                    except ValueError:
+                        title = None
+                    try:
+                        author = helpers.get_subfield(rel_string, "a")
+                    except ValueError:
+                        author = None
+                    try:
+                        year = helpers.get_subfield(rel_string, "j")
+                    except ValueError:
+                        year = None
+                    try:
+                        source = helpers.get_subfield(rel_string, "q")
+                    except ValueError:
+                        source = None
+                    # concatenate into the semblance of a citation:
+                    if title and author and year and source:
+                        citation = f"{author}: {title}; {year}; {source}"
+                    elif title and author and year:
+                        citation = f"{author}: {title}; {year}"
+                    elif title and author:
+                        citation = f"{author}: {title}"
+                    elif title and year and source:
+                        citation = f"{title}; {year}; {source}"
+                    elif title and year:
+                        citation = f"{title}; {year}"
+                    elif title:
+                        citation = title
+                    else:
+                        citation = None
+                    try:
+                        related_work["doi"] = check_crossref_for_citation_doi(
+                            citation, similarity_threshold=60  # low similarity threshold to get most of the RELs
+                        )
+                        if related_work["doi"] is not None:
+                            print(f"Found DOI via Crossref: {related_work['doi']}")
+                        else:
+                            print(f"No DOI found via Crossref for citation: {citation}")
+                            related_work["citation"] = citation
+                            print(f"Using citation as fallback: {related_work['citation']}")
+                    # if there is an error, we can just use the citation as fallback:
+                    except:
+                        print(f"Error checking Crossref for DOI: {citation}")
+                        related_work["citation"] = citation
+                        print(f"Using citation as fallback: {related_work['citation']}")
+        # Now we need to extract the relation type from subfield |b. If there is no |b, we assume "Original", probably?
+        # get subfield |b, if it exists:
+        try:
+            related_work["relationship_type"] = helpers.get_subfield(rel_string, "b")
+        # if there is no |b, we assume "Original" (or just empty, if we don't know):
+        except ValueError:
+            # if there is no |b, we assume "Original"
+            related_work["relationship_type"] = "Original" 
+
+        ## This is where some more magic needs to happen based on our flags from the beginning of the function:
+        if book: ## any books (BE=SM or SS) can have reltypes "Original", which should by replaced by our new relationship "hasOlderEdition"
+            if related_work["relationship_type"] == "Original":
+                # if the work is a book, we can replace the relationship type with "hasOlderEdition"
+                related_work["relationship_type"] = "hasOlderEdition"
+            # TODO: what about other relationship types, e.g. when the book is a comment or a reply? Currently, we don't even check for that.
+            else:
+                related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        elif compilation_thesis:
+            if related_work["relationship_type"] == "Original":
+            # if the work is a compilation thesis, we can replace the relationship type with "hasArticlePartOfCompilationThesis"
+                related_work["relationship_type"] = "hasArticlePartOfCompilationThesis"
+            else:
+                related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        elif has_cm_comment:  # if the work is a comment, and the relationship type is "Comment" or "Original" we replace it with "isCommentOn":
+            if related_work["relationship_type"] == "Comment" or related_work["relationship_type"] == "Original":
+                related_work["relationship_type"] = "isCommentOn"
+            # if it is empy or "Reply", we replace it with "hasReplyToComment":
+            elif related_work["relationship_type"] == None or related_work["relationship_type"] == "Reply":
+                related_work["relationship_type"] = "hasReplyToComment"
+        elif has_cm_comment_reply:  # if the work is a comment reply, and the reltype is "Comment" OR "Reply" or empty-> `isReplyToComment`
+            if related_work["relationship_type"] == "Comment" or related_work["relationship_type"] == "Reply" or related_work["relationship_type"] == None:
+                related_work["relationship_type"] = "isReplyToComment"
+            # and if it is "Original" we replace it with the new, weird relationship type "hasReplyToCommentsOnItself":
+            elif related_work["relationship_type"] == "Original":
+                related_work["relationship_type"] = "hasReplyToCommentsOnItself"
+        elif has_cm_comment_appended:  # if the work is a comment appended, with any reltype, we replace it with "isCommentOn":
+            related_work["relationship_type"] = "isCommentOn"
+        # for any other cm, we have some cases, depending on reltype, as well:
+        else:
+            related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        print(f"Found relationship type: {related_work['relationship_type']} in REL field: {rel_string}")
+        # we now have a related_work dictionary with the extracted information, which we can use to generate a relationship node set. 
+        
+        # let's build the relationship node for the related work:
+        relationship_node, instance = build_work_relationship_node(
+            work_uri,
+            graph,
+            relation_type=related_work["relationship_type"],
+            count = index+1 # we'll use the index of the loop to count the relationships
+        )
+        # now we can add the identifiers to the instance node:
+        if related_work["dfk"] is not None:
+            # if we have a DFK, we can build a DFK identifier node for the instance:
+            identifiers.build_dfk_identifier_node(instance, related_work["dfk"], graph)
+        elif related_work["doi"] is not None:
+            # if we have a DOI, we can build a DOI identifier node for the instance:
+            identifiers.build_doi_identifier_node(instance, related_work["doi"], graph)
+        elif related_work["url"] is not None:
+            # if we have a URL, we can build an electronic locator node for the instance:
+            identifiers.build_electronic_locator_node(instance, related_work["url"], graph)
+        elif related_work["citation"] is not None:
+            # if we have a citation, we can build a preferredCitation node for the instance:
+            graph.add(
+                (instance, ns.BF.preferredCitation, Literal(related_work["citation"]))
+            )
+        else:
+            logging.warning(
+                f"No valid identifier found in REL field: {rel_string}"
+            )
+        # now we can add the relationship node to the work:
+        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+            

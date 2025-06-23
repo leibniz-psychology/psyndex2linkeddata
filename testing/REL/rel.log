@@ -1,0 +1,111 @@
+Processing REL 1/26: |b Original
+Skipping REL because empty: |b Original
+No relationship extracted.
+----------------------------------------
+Processing REL 2/26: |b Reply
+Skipping REL because empty: |b Reply
+No relationship extracted.
+----------------------------------------
+Processing REL 3/26: |a Zhang, Da-Wei &amp; Sauce, Bruno |t Efficiency and capacity mechanisms can coexist in cognitive training |j 2023 |q Nature Reviews Psychology, 2, 127 |b Reply
+✅ Crossref match accepted (similarity=73.63636363636363): Efficiency and capacity mechanisms can coexist in cognitive training
+Found DOI via Crossref: 10.1038/s44159-022-00146-9
+Extracted relationship: {'dfk': None, 'doi': '10.1038/s44159-022-00146-9', 'url': None, 'citation': None, 'relationship_type': 'Reply'}
+----------------------------------------
+Processing REL 4/26: |a Lakens, D. |t Invited commentary: Comparing the independent segments procedure with group sequential designs |j 2021 |q Psychological Methods, 26 (4), 498^DDS500. doi: 10.1037/met0000400 |b Reply
+Found DOI: 10.1037/met0000400
+Extracted relationship: {'dfk': None, 'doi': '10.1037/met0000400', 'url': None, 'citation': None, 'relationship_type': 'Reply'}
+----------------------------------------
+Processing REL 5/26: |a De Tommaso, M. &amp; Prpic, V. |t Slow and fast beat sequences are represented differently through space |j 2020 |q Attention, Perception, &amp; Psychophysics 82, 2765^DDS2773 |b Comment
+✅ Crossref match accepted (similarity=71.54471544715447): Slow and fast beat sequences are represented differently through space
+Found DOI via Crossref: 10.3758/s13414-019-01945-8
+Extracted relationship: {'dfk': None, 'doi': '10.3758/s13414-019-01945-8', 'url': None, 'citation': None, 'relationship_type': 'Comment'}
+----------------------------------------
+Processing REL 6/26: 
+Skipping REL because empty: 
+No relationship extracted.
+----------------------------------------
+Processing REL 7/26: 0389778 |a Hansmann, Ralf; Scholz, Roland W. |t Arguments of usefulness and acceptance of video surveillance: An experimental study |j 2002 |q Schweizerische Zeitschrift für Soziologie, 28 (3), 425-434 |b Original
+Found DFK: 0389778
+Extracted relationship: {'dfk': '0389778', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 8/26: 0309957 |a Hansmann, Ralf |t Linking the components of a university program to the qualification profile of graduates: The case of a sustainability-oriented Environmental Science curriculum |j 2009 |q Journal of Research in Science Teaching, 46 (5), 537-569. doi:10.1002/tea.20286 |b Original
+Found DFK: 0309957
+Extracted relationship: {'dfk': '0309957', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 9/26: 0281114 |a Crott, H. W.; Hansmann, R. |t Informative intervention to improve normative functioning and output of groups |j 2003 |q Swiss Journal of Psychology, 62 (3), 177-193. doi:10.1024//1421-0185.62.3.177 |b Original
+Found DFK: 0281114
+Extracted relationship: {'dfk': '0281114', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 10/26: 0309953 |a Scholz, Roland W.; Steiner, Regula; Hansmann, Ralf |t Role of internship in higher education in environmental sciences |j 2004 |q Journal of Research in Science Teaching, 41 (1), 24-46. doi:10.1002/tea.10123 |b Original
+Found DFK: 0309953
+Extracted relationship: {'dfk': '0309953', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 11/26: 0319581 |a Hansmann, Ralf; Mieg, Harald A.; Crott, Helmut W.; Scholz, Roland W. |t Shifting students' to experts' complex systems knowledge: Effects of bootstrapping, group discussion, and case study participation |j 2003 |q International Journal of Sustainability in Higher Education, 4 (2), 151-168 |b Original
+Found DFK: 0319581
+Extracted relationship: {'dfk': '0319581', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 12/26: 0315701 |a Hansmann, Ralf; Scholz, Roland W.; Crott, Helmut W.; Mieg, Harald A. |t Higher education in environmental sciences: The effects of incorporating expert information in group discussions of a transdisciplinary case study |j 2003 |q Electronic Journal of Science Education, 7 (3), 31 pages |b Original
+Found DFK: 0315701
+Extracted relationship: {'dfk': '0315701', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 13/26: 0196546 |a Hansmann, Ralf; Crott, Helmut W.; Scholz, Roland W. |t Momentum effects in discussions on intellective tasks: Comparing informed and non-informed groups |j 2007 |q Swiss Journal of Psychology, 66 (1), 17-31. doi:10.1024/1421-0185.66.1.17 |b Original
+Found DFK: 0196546
+Extracted relationship: {'dfk': '0196546', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 14/26: 0318757 |a Hansmann, Ralf; Crott, Helmut W.; Mieg, Harald A.; Scholz, Roland W. |t Improving group processes in transdisciplinary case studies for sustainability learning |j 2009 |q International Journal of Sustainability in Higher Education, 10 (1), 33-42 |b Original
+Found DFK: 0318757
+Extracted relationship: {'dfk': '0318757', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 15/26: 0281666 |a Scholz, Roland W.; Hansmann, Ralf |t Combining experts' risk judgments on technology performance of phytoremediation: Self-confidence ratings, averaging procedures, and formative consensus building |j 2007 |q Risk Analysis, 27 (1), 225-240. doi:10.1111/j.1539-6924.2006.00871.x |b Original
+Found DFK: 0281666
+Extracted relationship: {'dfk': '0281666', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 16/26: |a Hansmann, Ralf; Scholz, Roland W.; Francke Carl-Johan A. C.; Weymann, Martin |t Enhancing environmental awareness: Ecological and economic effects of food consumption |j 2005 |q Simulation &amp; Gaming, 36 (3), 364 - 382. doi:10.1177/1046878105279116 |b Original
+Found DOI: 10.1177/1046878105279116
+Extracted relationship: {'dfk': None, 'doi': '10.1177/1046878105279116', 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 17/26: 0279949 |a Hansmann, Ralf; Bernasconi, Petra; Smieszek, Timo; Loukopoulos, Peter; Scholz, Roland W. |t Justifications and self-organization as determinants of recycling behavior: The case of used batteries |j 2006 |q Resources, Conservation and Recycling, 47 (2), 133-159. doi:10.1016/j.resconrec.2005.10.006 |b Original
+Found DFK: 0279949
+Extracted relationship: {'dfk': '0279949', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 18/26: 0281632 |a Hansmann, Ralf; Loukopoulos, Peter; Scholz, Roland W. |t Characteristics of effective battery recycling slogans: A Swiss field study |j 2009 |q Resources, Conservation and Recycling, 53 (4), 218-230. doi:10.1016/j.resconrec.2008.12.003 |b Original
+Found DFK: 0281632
+Extracted relationship: {'dfk': '0281632', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 19/26: 0166812 |a Hansmann, Ralf; Scholz, Roland W. |t A two-step informational strategy for reducing littering behavior in a cinema |j 2003 |q Environment and Behavior, 35 (6), 752-762. doi:10.1177/0013916503254755 |b Original
+Found DFK: 0166812
+Extracted relationship: {'dfk': '0166812', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 20/26: 0280040 |a Hansmann, Ralf; Köllner, Thomas; Scholz, Roland W. |t Influence of consumers' socio-ecological and economic orientations on preferences for wood products with sustainability labels |j 2006 |q Forest Policy and Economics, 8 (3), 239-250. doi:10.1016/j.forpol.2004.06.005 |b Original
+Found DFK: 0280040
+Extracted relationship: {'dfk': '0280040', 'doi': None, 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 21/26: 0264510 |a Hoyer, Jürgen; Plag, Jens |t Generalisierte Angststörung |j 2013 |q PSYCH up2date, 7 (2), 89-104
+Found DFK: 0264510
+Extracted relationship: {'dfk': '0264510', 'doi': None, 'url': None, 'citation': None, 'relationship_type': None}
+----------------------------------------
+Processing REL 22/26: |a Scheuble, V., Mildenberger, M. &amp; Beauducel, A. |t The P300 and MFN as indicators of concealed knowledge in situations with negative and positive moral valence |j 2021 |q Biological Psychology, 162, No. 108093, doi: 10.1016/j.biopsycho.2021.108093 |b Original
+Found DOI: 10.1016/j.biopsycho.2021.108093
+Extracted relationship: {'dfk': None, 'doi': '10.1016/j.biopsycho.2021.108093', 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 23/26: |a Walsh, B; Hagan, K.; Lockwood, C.  |t A systematic review comparing atypical anorexia nervosa and anorexia nervosa |j 2022 |q International Journal of Eating Disorders, 56 (4), DOI: 10.1002/eat.23856 |b Original
+Found DOI: 10.1002/eat.23856
+Extracted relationship: {'dfk': None, 'doi': '10.1002/eat.23856', 'url': None, 'citation': None, 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 24/26: |t DEBATE: Behavioral addictions in the ICD-11 |j 2022 |q Journal of Behavioral Addictions, 11 (2) |b Original
+⚠️ Crossref match rejected (similarity=41.93548387096774): Nosology of behavioral addictions: Intersections with philosophy of psychiatry •, saving as plain citation.
+No DOI found via Crossref for citation: DEBATE: Behavioral addictions in the ICD-11; 2022; Journal of Behavioral Addictions, 11 (2)
+Using citation as fallback: DEBATE: Behavioral addictions in the ICD-11; 2022; Journal of Behavioral Addictions, 11 (2)
+Extracted relationship: {'dfk': None, 'doi': None, 'url': None, 'citation': 'DEBATE: Behavioral addictions in the ICD-11; 2022; Journal of Behavioral Addictions, 11 (2)', 'relationship_type': 'Original'}
+----------------------------------------
+Processing REL 25/26: |a Palm, Esther; Seubert, C.; Glaser, Jürgen |t Understanding employee motivation for work-to-nonwork integration behavior: A reasoned action approach |j 2019 |q ournal of Busi-ness and Psy-chology (online first, 16.08.2019)
+✅ Crossref match accepted (similarity=73.15634218289085): Understanding Employee Motivation for Work-to-Nonwork Integration Behavior: a Reasoned Action Approach
+Found DOI via Crossref: 10.1007/s10869-019-09648-5
+Extracted relationship: {'dfk': None, 'doi': '10.1007/s10869-019-09648-5', 'url': None, 'citation': None, 'relationship_type': None}
+----------------------------------------
+Processing REL 26/26: |a Palm, Esther; Seubert, C.; Glaser, Jürgen |t Bablub, füblü mübel förgel (börbel)
+⚠️ Crossref match rejected (similarity=39.603960396039604): Understanding Employee Motivation for Work-to-Nonwork Integration Behavior: a Reasoned Action Approach, saving as plain citation.
+No DOI found via Crossref for citation: Palm, Esther; Seubert, C.; Glaser, Jürgen: Bablub, füblü mübel förgel (börbel)
+Using citation as fallback: Palm, Esther; Seubert, C.; Glaser, Jürgen: Bablub, füblü mübel förgel (börbel)
+Extracted relationship: {'dfk': None, 'doi': None, 'url': None, 'citation': 'Palm, Esther; Seubert, C.; Glaser, Jürgen: Bablub, füblü mübel förgel (börbel)', 'relationship_type': None}
+----------------------------------------

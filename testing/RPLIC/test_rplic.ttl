@@ -1,0 +1,790 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+
+<https://w3id.org/zpid/testgraph/works/0> a works:Work .
+
+<https://w3id.org/zpid/testgraph/works/1> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/10> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/11> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/12> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/13> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/14> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/15> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/16> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/17> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/18> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/19> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/2> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/20> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/21> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/22> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/23> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/24> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/25> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/26> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/27> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/28> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/29> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/3> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/30> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/31> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/32> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/33> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/34> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/35> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/36> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/37> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/38> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/39> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/4> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/40> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/41> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/42> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/43> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/44> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/45> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/46> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/47> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/5> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/6> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/7> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/8> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1> .
+
+<https://w3id.org/zpid/testgraph/works/9> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1> .
+
+<https://doi.org/10.1002/da.22115> a bf:Doi ;
+    rdf:value "10.1002/da.22115" .
+
+<https://doi.org/10.1002/jclp.21996> a bf:Doi ;
+    rdf:value "10.1002/jclp.21996" .
+
+<https://doi.org/10.1002/soej.12223> a bf:Doi ;
+    rdf:value "10.1002/soej.12223" .
+
+<https://doi.org/10.1007/978-3-658-27275-3_6> a bf:Doi ;
+    rdf:value "10.1007/978-3-658-27275-3_6" .
+
+<https://doi.org/10.1007/s10802-010-9421-2> a bf:Doi ;
+    rdf:value "10.1007/s10802-010-9421-2" .
+
+<https://doi.org/10.1007/s42010-018-00034-3> a bf:Doi ;
+    rdf:value "10.1007/s42010-018-00034-3" .
+
+<https://doi.org/10.1016/j.actpsy.2018.04.007> a bf:Doi ;
+    rdf:value "10.1016/j.actpsy.2018.04.007" .
+
+<https://doi.org/10.1016/j.bbr.2010.01.012> a bf:Doi ;
+    rdf:value "10.1016/j.bbr.2010.01.012" .
+
+<https://doi.org/10.1016/j.concog.2009.12.015> a bf:Doi ;
+    rdf:value "10.1016/j.concog.2009.12.015" .
+
+<https://doi.org/10.1016/j.jrp.2022.104232> a bf:Doi ;
+    rdf:value "10.1016/j.jrp.2022.104232" .
+
+<https://doi.org/10.1016/j.learninstruc.2013.01.002> a bf:Doi ;
+    rdf:value "10.1016/j.learninstruc.2013.01.002" .
+
+<https://doi.org/10.1016/j.lindif.2010.03.001> a bf:Doi ;
+    rdf:value "10.1016/j.lindif.2010.03.001" .
+
+<https://doi.org/10.1016/j.nicl.2014.12.019> a bf:Doi ;
+    rdf:value "10.1016/j.nicl.2014.12.019" .
+
+<https://doi.org/10.1016/j.tate.2021.103346> a bf:Doi ;
+    rdf:value "10.1016/j.tate.2021.103346" .
+
+<https://doi.org/10.1016/s0079-6123%2807%2966020-8> a bf:Doi ;
+    rdf:value "10.1016/s0079-6123(07)66020-8" .
+
+<https://doi.org/10.1026/0942-5403/a000156> a bf:Doi ;
+    rdf:value "10.1026/0942-5403/a000156" .
+
+<https://doi.org/10.1037//0096-1523.13.3.384> a bf:Doi ;
+    rdf:value "10.1037//0096-1523.13.3.384" .
+
+<https://doi.org/10.1037/a0025458> a bf:Doi ;
+    rdf:value "10.1037/a0025458" .
+
+<https://doi.org/10.1037/bul0000135> a bf:Doi ;
+    rdf:value "10.1037/bul0000135" .
+
+<https://doi.org/10.1037/pspp0000263> a bf:Doi ;
+    rdf:value "10.1037/pspp0000263" .
+
+<https://doi.org/10.1038/nature04766> a bf:Doi ;
+    rdf:value "10.1038/nature04766" .
+
+<https://doi.org/10.1038/nature11467> a bf:Doi ;
+    rdf:value "10.1038/nature11467" .
+
+<https://doi.org/10.1038/nn.3623> a bf:Doi ;
+    rdf:value "10.1038/nn.3623" .
+
+<https://doi.org/10.1080/13603116.2020.1853256> a bf:Doi ;
+    rdf:value "10.1080/13603116.2020.1853256" .
+
+<https://doi.org/10.1086/598971> a bf:Doi ;
+    rdf:value "10.1086/598971" .
+
+<https://doi.org/10.1101/470435> a bf:Doi ;
+    rdf:value "10.1101/470435" .
+
+<https://doi.org/10.1111/j.1469-8986.2010.01081.x> a bf:Doi ;
+    rdf:value "10.1111/j.1469-8986.2010.01081.x" .
+
+<https://doi.org/10.1111/j.1751-228x.2012.01150.x> a bf:Doi ;
+    rdf:value "10.1111/j.1751-228x.2012.01150.x" .
+
+<https://doi.org/10.1177/0956797611398497> a bf:Doi ;
+    rdf:value "10.1177/0956797611398497" .
+
+<https://doi.org/10.1192/bjp.187.2.168> a bf:Doi ;
+    rdf:value "10.1192/bjp.187.2.168" .
+
+<https://doi.org/10.1371/journal.pone.0120665> a bf:Doi ;
+    rdf:value "10.1371/journal.pone.0120665" .
+
+<https://doi.org/10.1523/JNEUROSCI.3289-16.2017> a bf:Doi ;
+    rdf:value "10.1523/JNEUROSCI.3289-16.2017" .
+
+<https://doi.org/10.2307/1914185> a bf:Doi ;
+    rdf:value "10.2307/1914185" .
+
+<https://doi.org/10.31219/osf.io/ky9xn> a bf:Doi ;
+    rdf:value "10.31219/osf.io/ky9xn" .
+
+<https://doi.org/10.3224/zff.v26i2.16528> a bf:Doi ;
+    rdf:value "10.3224/zff.v26i2.16528" .
+
+<https://doi.org/10.3389/fpsyg.2018.01032> a bf:Doi ;
+    rdf:value "10.3389/fpsyg.2018.01032" .
+
+<https://doi.org/10.3758/BF03193932> a bf:Doi ;
+    rdf:value "10.3758/BF03193932" .
+
+<https://doi.org/10.3758/bf03195938> a bf:Doi ;
+    rdf:value "10.3758/bf03195938" .
+
+<https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/1#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:electronicLocator <https://osf.io/kv65n/> .
+
+<https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/10#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1177/0956797611398497> .
+
+<https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/11#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.bbr.2010.01.012> .
+
+<https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/12#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1371/journal.pone.0120665> .
+
+<https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/13#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1101/470435> .
+
+<https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/14#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1002/da.22115> .
+
+<https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/15#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1037/bul0000135> .
+
+<https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/16#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.3224/zff.v26i2.16528> .
+
+<https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/17#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1523/JNEUROSCI.3289-16.2017> .
+
+<https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/18#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/s0079-6123%2807%2966020-8> .
+
+<https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/19#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1007/s10802-010-9421-2> .
+
+<https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/2#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.3389/fpsyg.2018.01032> .
+
+<https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/20#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:preferredCitation "Gamble, T., & Walker, I. (2016). Wearing a bicycle helmet can increase risk taking and sensation seeking in adults. Psychological Science, 27(2), 289–294. https ://doi.org/10.1177/09567 97615 620784" .
+
+<https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/21#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1026/0942-5403/a000156> .
+
+<https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/22#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.nicl.2014.12.019> .
+
+<https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/23#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:preferredCitation "Jaworska N, Yucel K, Courtright A, et al. Subgenual anterior cin-gulate cortex and hippocampal volumes in depressed youth: the role of comorbidity and age. J Affect Disord 2016;190:726-32." .
+
+<https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/24#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1002/jclp.21996> .
+
+<https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/25#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1038/nature11467> .
+
+<https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/26#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1038/nn.3623> .
+
+<https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/27#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1037/a0025458> .
+
+<https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/28#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:electronicLocator <https://osf.io/x2qh3/> .
+
+<https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/29#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:electronicLocator <https://osf.io/x2qh3/> .
+
+<https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/3#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:preferredCitation "Stumbrys, T., & Erlacher, D. (2014). The science of lucid dream induction. In R. Hurd, & K. Bulkeley (Eds.). Lucid dreaming: New perspectives on consciousness in sleep (pp. 77–96). Westport: Praeger." .
+
+<https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work_instance_dfk> .
+
+<https://w3id.org/zpid/testgraph/works/30#ReplicationRelationship1_work_instance_dfk> a pxc:DFK ;
+    rdf:value "0311238" .
+
+<https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/31#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.3758/bf03195938> .
+
+<https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/32#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.lindif.2010.03.001> .
+
+<https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/33#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.actpsy.2018.04.007> .
+
+<https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/34#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.3758/BF03193932> .
+
+<https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/35#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1037//0096-1523.13.3.384> .
+
+<https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/36#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.31219/osf.io/ky9xn> .
+
+<https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/37#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1080/13603116.2020.1853256> .
+
+<https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/38#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1007/s42010-018-00034-3> .
+
+<https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work_instance_dfk> .
+
+<https://w3id.org/zpid/testgraph/works/39#ReplicationRelationship1_work_instance_dfk> a pxc:DFK ;
+    rdf:value "9007420" .
+
+<https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/4#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.concog.2009.12.015> .
+
+<https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/40#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.tate.2021.103346> .
+
+<https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/41#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.jrp.2022.104232> .
+
+<https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/42#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1086/598971> .
+
+<https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/43#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1111/j.1469-8986.2010.01081.x> .
+
+<https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/44#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1002/soej.12223> .
+
+<https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work_instance_dfk> .
+
+<https://w3id.org/zpid/testgraph/works/45#ReplicationRelationship1_work_instance_dfk> a pxc:DFK ;
+    rdf:value "0137014" .
+
+<https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/46#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1007/978-3-658-27275-3_6> .
+
+<https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/47#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1037/pspp0000263> .
+
+<https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/5#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1192/bjp.187.2.168> .
+
+<https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/6#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1038/nature04766> .
+
+<https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/7#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.2307/1914185> .
+
+<https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/8#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1016/j.learninstruc.2013.01.002> .
+
+<https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1> a pxc:ReplicationRelationship ;
+    bflc:relation relations:isReplicationOf ;
+    bf:relatedTo <https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1_work> .
+
+<https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1_work_instance> .
+
+<https://w3id.org/zpid/testgraph/works/9#ReplicationRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://doi.org/10.1111/j.1751-228x.2012.01150.x> .
+

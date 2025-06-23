@@ -377,13 +377,14 @@ def build_book_relationship(
     extent,
     article_number,
 ):
+    # relate a chapter to a book
 
     relationship_node = URIRef(resource_node + "#bookrel")
     graph.add((resource_node, ns.BFLC.relationship, relationship_node))
     graph.set((relationship_node, RDF.type, ns.BFLC.Relationship))
     # the book itself:
     book_node = URIRef(relationship_node + "_book")
-    graph.add((relationship_node, ns.BF.relatedTo, book_node))
+    graph.add((relationship_node, ns.BF.partOf, book_node))
     graph.add((book_node, RDF.type, ns.PXC.InstanceBundle))
     if book_dfk is not None:
         # add the book_dfk_node as an owl:sameAs to the book_node
@@ -391,6 +392,13 @@ def build_book_relationship(
         graph.add((book_node, OWL.sameAs, book_dfk_node))
         # add class pxc:InstanceBundle to the book_dfk_node
         graph.add((book_dfk_node, RDF.type, ns.PXC.InstanceBundle))
+        # TODO:
+        # add the DFK as a local identifier to the book_node InstanceBundle like this:
+        # (bf:Work, pxc:MainWork >> pxp:hasInstanceBundle > pxc:InstanceBundle 
+        # >> bflc:relationship > bflc:Relationship > bf:partOf > pxc:InstanceBundle) 
+        # **>> bf:identifiedBy > pxc:DFK >> rdf:value "0388327"**
+        # so there's not only the owl:sameAs with the canonincal book uri, 
+        # but also a local identifier that is a pxc:DFK
     else:
         graph.add((book_node, RDF.type, ns.BFLC.Uncontrolled))
 
@@ -412,6 +420,12 @@ def build_book_relationship(
         identifiers.build_articleno_identifier_node(
             relationship_node, article_number, graph
         )
+
+    # TODO: add other elements of the book, if it is not in the DB and cannot be just linked to via DFK:
+    # - SSSE (series title and volume)
+    # - SSNE (edition)
+    # - EDRPs (no affil in this field), EDRKs -> contributors with role editor, either Person or Org
+    # - SSPU (wie PU)
 
 
 # print(split_pages("i-iii"))
