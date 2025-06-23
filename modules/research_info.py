@@ -77,6 +77,94 @@ relation_types = {
         "access_policy_value": None,
         "access_policy_concept": None,
     },
+        "isRelatedTo": {
+        "relation": "isRelatedTo",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasComment": {
+        "relation": "hasComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "isCommentOn": {
+        "relation": "isCommentOn",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "ScholarlyPaper",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "isReplyToComment": {
+        "relation": "isReplyToComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "Comment",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasReplyToComment": {
+        "relation": "hasReplyToComment",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "CommentReply",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasReplyToCommentsOnItself": {
+        "relation": "hasReplyToCommentsOnItself",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "CommentReply",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+    "hasOlderEdition": {
+        "relation": "hasOlderEdition",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": None,
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
+        "hasArticlePartOfCompilationThesis": {
+        "relation": "hasArticlePartOfCompilationThesis",
+        "relatedTo_subprop": "relatedTo",
+        "work_subclass": "Text",
+        "content_type": "txt",
+        "relationship_type": "RelatedWork",
+        "genre": "ScholarlyPaper",
+        "access_policy_label": None,
+        "access_policy_value": None,
+        "access_policy_concept": None,
+    },
 }
 
 ## urls for unknown preregistrations, replicated works, reanalyzed works
@@ -546,7 +634,7 @@ def get_bf_preregistrations(work_uri, record, graph):
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
         # add preregistration_node to work:
-        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+        # graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 
 def add_trials_as_preregs(work_uri, record, graph):
@@ -709,7 +797,7 @@ def add_trials_as_preregs(work_uri, record, graph):
                     # add the finished node for the relationship to the work:
                     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
                     # add preregistration_node to work:
-                    graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+                    # graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
 ## Function to go through the subfields of a RPLIC field and generate a Replication. The actual node is
 # created from that data elsewhere, but we need to extract the data from the subfields.
@@ -881,7 +969,7 @@ def validate_doi_against_crossref(our_doi, mainfield_citation):
 
     
 
-def check_crossref_for_citation_doi(citation_string):
+def check_crossref_for_citation_doi(citation_string, similarity_threshold=30):
     """Checks Crossref for a DOI for a given citation string.
     Also checks if the title of the citation matches the title of the work as archived in Crossref (using fuzzywuzzy/rapidfuzz). If they are too different (>30%), we return None.
     Returns the DOI if found, None otherwise.
@@ -907,7 +995,7 @@ def check_crossref_for_citation_doi(citation_string):
         expire_after=timedelta(days=30),
         urls_expire_after=urls_expire_after,
     )
-    similarity_threshold = 30  # set a threshold for fuzzy matching
+    #similarity_threshold = 30  # set a threshold for fuzzy matching
     try:
         response = session_crossref_doi_finder.get(
             CROSSREF_API_URL,
@@ -1047,3 +1135,211 @@ def build_empty_preregistration_node(work_uri, graph):
     
     # add the relationship node to the work:
     graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+def handle_other_relations(relationship_type):
+    # in case of books, compilation theses and "else" (any other cms), we
+    # want to handle all of them the same way, but i don't want to repeat 
+    # the same else condition 3 times, so we can just make a function
+    # takes: the relationship type, returns: the desired new relationship type
+    # if the reltype is "Comment", we replace it with "hasComment":
+    if relationship_type == "Comment":
+        relationship_type = "hasComment"
+        # and if it is "Reply", we replace it with "hasReplyToCommentsOnItself:
+    elif relationship_type == "Reply":
+        relationship_type = "hasReplyToCommentsOnItself"
+    # if it is Original or empty, we replace it with "isRelatedTo":
+    elif relationship_type == "Original" or relationship_type == None:
+        relationship_type = "isRelatedTo"
+    # for any other case, we set the type to "isRelatedTo", which is the default:
+    else:
+        relationship_type = "isRelatedTo"
+    return relationship_type
+
+def build_rels(record, work_uri, graph):
+    ## access BE, BN and CM fields to inform or override the relation type found in REL |b
+    # do we want to make a function that makes all rels for this work? Yes!
+    # so we go through all relas in the record.
+    # get the BE, BN and the three relevant CM fields from the record:
+    # set book to true if we find BE with text SM or SS:
+    book = False
+    compilation_thesis = False
+    has_cm_comment = False
+    has_cm_comment_reply = False
+    has_cm_comment_appended = False
+    if record.find("BE") is not None and record.find("BE").text == "SS" or record.find("BE").text == "SM":
+        book = True
+    if record.find("BN") is not None:
+        if record.find("BN").text is not None and record.find("BN").text.startswith("Kumu"):
+            compilation_thesis = True
+            print("Found BN field with Kumu, setting compilation_thesis to True.")
+    # go through all the CM fields and set the flags accordingly:
+    for cm_field in record.findall("CM"):
+        if cm_field.text is not None:
+            if cm_field.text.startswith("|c 14100"): # comment
+                has_cm_comment = True
+            elif cm_field.text.startswith("|c 14110"): # comment reply
+                has_cm_comment_reply = True
+            elif cm_field.text.startswith("|c 14120"):  # comment appended
+                has_cm_comment_appended = True
+    # now we have all the info, go through the REL field and build the relations:
+    for index,rel_field in enumerate(record.findall("REL")):
+         
+        # if the REL field is empty, we can skip it:
+        if rel_field is None or rel_field.text is None:
+            print("Skipping REL field because it is empty.")
+            continue
+        # if the REL field is not empty, we can process it:
+        rel_string = rel_field.text.strip()
+        ## first, make empty REL object:
+        related_work = {
+            "dfk": None,  # DFK of the related work
+            "doi": None,  # DOI of the related work, if available
+            "url": None,  # URL of the related work, if available
+            "citation": None,  # citation of the related work, if available
+            "relationship_type": None,  # type of relationship, e.g. "Original", "Reply", "Comment" etc.
+        }
+        # strip and clean it up first:
+        rel_string = html.unescape(mappings.replace_encodings(rel_string.strip()))
+        # if it starts with |b and there is no other subfield (# count of "|"" symbols is just 1), we can ignore it.
+        if rel_string.startswith("|b") and rel_string.count("|") == 1 or rel_string == "":
+            print(f"Skipping REL because empty: {rel_string}")
+            return None # stop and return early, since there is nothing to extract here.
+        # if it instead starts with a DFK (7-digit number), we can just return that and the relationship type.:
+        elif rel_string[:7].isdigit():
+            related_work["dfk"] = rel_string[:7]
+            print(f"Found DFK: {related_work['dfk']}")
+        else:
+            # these are the special cases where there is no DFK, but we still want to extract the relationship type and other information.
+            # first, check for a hidden doi anywhere in the string.
+            # we have a neat function for that: check_for_url_or_doi(string)
+            # we can expect just one doi or url in the whole string, so we can just use the first one.
+            doi_or_url = helpers.check_for_url_or_doi(rel_string)
+            if doi_or_url:
+                # if the type is doi, we can just set it as the doi for our object:
+                if doi_or_url[1] == "doi":
+                    related_work["doi"] = doi_or_url[0]
+                    print(f"Found DOI: {related_work['doi']}")
+                # if the type is url, we can just set it as the url for our object:
+                elif doi_or_url[1] == "url":
+                    related_work["url"] = doi_or_url[0]
+                    print(f"Found URL: {related_work['url']}")
+                else: # if no doi or url, we need to send the title in |t to crossref to get the doi. Use the research_info.validate_doi_against_crossref function.
+                    try:
+                        title = helpers.get_subfield(rel_string, "t") 
+                    except ValueError:
+                        title = None
+                    try:
+                        author = helpers.get_subfield(rel_string, "a")
+                    except ValueError:
+                        author = None
+                    try:
+                        year = helpers.get_subfield(rel_string, "j")
+                    except ValueError:
+                        year = None
+                    try:
+                        source = helpers.get_subfield(rel_string, "q")
+                    except ValueError:
+                        source = None
+                    # concatenate into the semblance of a citation:
+                    if title and author and year and source:
+                        citation = f"{author}: {title}; {year}; {source}"
+                    elif title and author and year:
+                        citation = f"{author}: {title}; {year}"
+                    elif title and author:
+                        citation = f"{author}: {title}"
+                    elif title and year and source:
+                        citation = f"{title}; {year}; {source}"
+                    elif title and year:
+                        citation = f"{title}; {year}"
+                    elif title:
+                        citation = title
+                    else:
+                        citation = None
+                    try:
+                        related_work["doi"] = check_crossref_for_citation_doi(
+                            citation, similarity_threshold=60  # low similarity threshold to get most of the RELs
+                        )
+                        if related_work["doi"] is not None:
+                            print(f"Found DOI via Crossref: {related_work['doi']}")
+                        else:
+                            print(f"No DOI found via Crossref for citation: {citation}")
+                            related_work["citation"] = citation
+                            print(f"Using citation as fallback: {related_work['citation']}")
+                    # if there is an error, we can just use the citation as fallback:
+                    except:
+                        print(f"Error checking Crossref for DOI: {citation}")
+                        related_work["citation"] = citation
+                        print(f"Using citation as fallback: {related_work['citation']}")
+        # Now we need to extract the relation type from subfield |b. If there is no |b, we assume "Original", probably?
+        # get subfield |b, if it exists:
+        try:
+            related_work["relationship_type"] = helpers.get_subfield(rel_string, "b")
+        # if there is no |b, we assume "Original" (or just empty, if we don't know):
+        except ValueError:
+            # if there is no |b, we assume "Original"
+            related_work["relationship_type"] = "Original" 
+
+        ## This is where some more magic needs to happen based on our flags from the beginning of the function:
+        if book: ## any books (BE=SM or SS) can have reltypes "Original", which should by replaced by our new relationship "hasOlderEdition"
+            if related_work["relationship_type"] == "Original":
+                # if the work is a book, we can replace the relationship type with "hasOlderEdition"
+                related_work["relationship_type"] = "hasOlderEdition"
+            # TODO: what about other relationship types, e.g. when the book is a comment or a reply? Currently, we don't even check for that.
+            else:
+                related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        elif compilation_thesis:
+            if related_work["relationship_type"] == "Original":
+            # if the work is a compilation thesis, we can replace the relationship type with "hasArticlePartOfCompilationThesis"
+                related_work["relationship_type"] = "hasArticlePartOfCompilationThesis"
+            else:
+                related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        elif has_cm_comment:  # if the work is a comment, and the relationship type is "Comment" or "Original" we replace it with "isCommentOn":
+            if related_work["relationship_type"] == "Comment" or related_work["relationship_type"] == "Original":
+                related_work["relationship_type"] = "isCommentOn"
+            # if it is empy or "Reply", we replace it with "hasReplyToComment":
+            elif related_work["relationship_type"] == None or related_work["relationship_type"] == "Reply":
+                related_work["relationship_type"] = "hasReplyToComment"
+        elif has_cm_comment_reply:  # if the work is a comment reply, and the reltype is "Comment" OR "Reply" or empty-> `isReplyToComment`
+            if related_work["relationship_type"] == "Comment" or related_work["relationship_type"] == "Reply" or related_work["relationship_type"] == None:
+                related_work["relationship_type"] = "isReplyToComment"
+            # and if it is "Original" we replace it with the new, weird relationship type "hasReplyToCommentsOnItself":
+            elif related_work["relationship_type"] == "Original":
+                related_work["relationship_type"] = "hasReplyToCommentsOnItself"
+        elif has_cm_comment_appended:  # if the work is a comment appended, with any reltype, we replace it with "isCommentOn":
+            related_work["relationship_type"] = "isCommentOn"
+        # for any other cm, we have some cases, depending on reltype, as well:
+        else:
+            related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
+        print(f"Found relationship type: {related_work['relationship_type']} in REL field: {rel_string}")
+        # we now have a related_work dictionary with the extracted information, which we can use to generate a relationship node set. 
+        
+        # let's build the relationship node for the related work:
+        relationship_node, instance = build_work_relationship_node(
+            work_uri,
+            graph,
+            relation_type=related_work["relationship_type"],
+            count = index+1 # we'll use the index of the loop to count the relationships
+        )
+        # now we can add the identifiers to the instance node:
+        if related_work["dfk"] is not None:
+            # if we have a DFK, we can build a DFK identifier node for the instance:
+            identifiers.build_dfk_identifier_node(instance, related_work["dfk"], graph)
+        elif related_work["doi"] is not None:
+            # if we have a DOI, we can build a DOI identifier node for the instance:
+            identifiers.build_doi_identifier_node(instance, related_work["doi"], graph)
+        elif related_work["url"] is not None:
+            # if we have a URL, we can build an electronic locator node for the instance:
+            identifiers.build_electronic_locator_node(instance, related_work["url"], graph)
+        elif related_work["citation"] is not None:
+            # if we have a citation, we can build a preferredCitation node for the instance:
+            graph.add(
+                (instance, ns.BF.preferredCitation, Literal(related_work["citation"]))
+            )
+        else:
+            logging.warning(
+                f"No valid identifier found in REL field: {rel_string}"
+            )
+        # now we can add the relationship node to the work:
+        graph.add((work_uri, ns.BFLC.relationship, relationship_node))
+
+            
