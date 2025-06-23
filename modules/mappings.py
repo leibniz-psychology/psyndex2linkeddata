@@ -142,6 +142,9 @@ dd_codes = (
     ("^DRT", "→"),  # right arrow
     ("^D#=", "≠"),  # not equal to
     ("^DTM", "™"),
+    ("^D$ea", "ä"),  # ä
+    ("^D$eu", "ü"),  # ü
+    ("^D$eö", "ö"),  # ö
     ("^D$e", "€"),  # Euro
     # ("^D#&gt;", "≥"),  # greater than or equal to
     ("^D#>", "≥"),  # greater than or equal to
