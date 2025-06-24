@@ -14,7 +14,6 @@ import dateparser
 import requests
 import requests_cache
 from decouple import config
-import urllib.parse
 
 # old fuzzy compare for reconciliations: using fuzzywuzzy
 from fuzzywuzzy import fuzz, process
