@@ -302,3 +302,19 @@ def get_langtag_from_field(langfield):
             return ["zxx", "zxx"]
         case _:
             return ["und", "und"]  # for "undetermined!"
+
+def split_family_and_given_name(name):
+    """Splits a name into family name and given name.
+    Returns a tuple with the family name and given name.
+    If the name cannot be split, returns the name as family name and None as given name
+    """
+    # first, strip any spaces from the name:
+    name = name.strip()
+    # then, split the name at the first comma:
+    parts = name.split(",")
+    if len(parts) == 2:  # if there are two parts, the first is the family name, the second is the given name
+        family_name = parts[0].strip()
+        given_name = parts[1].strip()
+        return family_name, given_name
+    else:  # if there is no comma or only one part, return the whole name as family name and None as given name
+        return name, None
