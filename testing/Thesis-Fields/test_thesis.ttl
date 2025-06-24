@@ -1,0 +1,163 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+
+<https://w3id.org/zpid/testgraph/works/0> a works:Work ;
+    bf:contribution <https://w3id.org/zpid/testgraph/works/0#contribution1>,
+        <https://w3id.org/zpid/testgraph/works/0#thesis_advisor> ;
+    bf:dissertation <https://w3id.org/zpid/testgraph/works/0#dissertation> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/testgraph/works/1> a works:Work ;
+    bf:contribution <https://w3id.org/zpid/testgraph/works/1#contribution1> ;
+    bf:dissertation <https://w3id.org/zpid/testgraph/works/1#dissertation> .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/testgraph/works/2> a works:Work ;
+    bf:contribution <https://w3id.org/zpid/testgraph/works/2#contribution1>,
+        <https://w3id.org/zpid/testgraph/works/2#thesis_advisor>,
+        <https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_1>,
+        <https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_2> ;
+    bf:dissertation <https://w3id.org/zpid/testgraph/works/2#dissertation> .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/dis> ;
+    mads:hasAffiliation <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent> a bf:Person ;
+    schema:familyName "Naumer" ;
+    schema:givenName "Marcus Johannes |f AU" .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    bf:organization <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "The Netherlands" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2750405" .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "University Maastricht, Faculty of Psychology and Neuroscience" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/testgraph/works/0#contribution1_personagent_affiliation1_organization_rorid> a locid:rorid ;
+    rdf:value "https://ror.org/02jz4aj89" .
+
+<https://w3id.org/zpid/testgraph/works/0#dissertation> a bf:Dissertation ;
+    bf:date "2006-12-19" ;
+    bf:degree "Dr. phil." .
+
+<https://w3id.org/zpid/testgraph/works/0#thesis_advisor> a bf:Contribution,
+        bf:ThesisAdvisory ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/0#thesis_advisor_person> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/ths> .
+
+<https://w3id.org/zpid/testgraph/works/0#thesis_advisor_person> a bf:Person ;
+    schema:familyName "Goebel" ;
+    schema:givenName "R. W." .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/dis> ;
+    mads:hasAffiliation <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1> .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent> a bf:Person ;
+    schema:familyName "Hansmann, Ralf |f AU |c SWITZERLAND |i Natural and Social Science Interface (NSSI), Department of Environmental Sciences, ETH Zurich" ;
+    schema:givenName "None" .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    bf:organization <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Switzerland" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2658434" .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Natural and Social Science Interface (NSSI), Department of Environmental Sciences, ETH Zurich" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/testgraph/works/1#contribution1_personagent_affiliation1_organization_rorid> a locid:rorid ;
+    rdf:value "https://ror.org/05a28rw58" .
+
+<https://w3id.org/zpid/testgraph/works/1#dissertation> a bf:Dissertation ;
+    bf:date "1999-12-14" ;
+    bf:degree "Dr. habil." .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/dis> ;
+    mads:hasAffiliation <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1> .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent> a bf:Person ;
+    schema:familyName "Olteteanu" ;
+    schema:givenName "Ana-Maria" .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    bf:organization <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Germany" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2921044" .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Universität Bremen, Fachbereich Mathematik/Informatik" ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/testgraph/works/2#contribution1_personagent_affiliation1_organization_rorid> a locid:rorid ;
+    rdf:value "https://ror.org/04ers2y35" .
+
+<https://w3id.org/zpid/testgraph/works/2#dissertation> a bf:Dissertation ;
+    bf:date "2016" ;
+    bf:degree "Dr. rer. nat." .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_advisor> a bf:Contribution,
+        bf:ThesisAdvisory ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/2#thesis_advisor_person> ;
+    bf:role <http://id.loc.gov/vocabulary/relators/ths> .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_advisor_person> a bf:Person ;
+    schema:familyName "Freksa" ;
+    schema:givenName "C." .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_1> a bf:Contribution,
+        bf:ThesisReview ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_1_person> ;
+    bf:role <https://id.loc.gov/vocabulary/relators/dgc> .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_1_person> a bf:Person ;
+    schema:familyName "Plaza" ;
+    schema:givenName "Enric" .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_2> a bf:Contribution,
+        bf:ThesisReview ;
+    bf:agent <https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_2_person> ;
+    bf:role <https://id.loc.gov/vocabulary/relators/dgc> .
+
+<https://w3id.org/zpid/testgraph/works/2#thesis_reviewer_2_person> a bf:Person ;
+    schema:familyName "Sloman" ;
+    schema:givenName "Aaron" .
+
