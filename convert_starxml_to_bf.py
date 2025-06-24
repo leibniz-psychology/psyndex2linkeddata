@@ -14,6 +14,7 @@ import dateparser
 import requests
 import requests_cache
 from decouple import config
+import urllib.parse
 
 # old fuzzy compare for reconciliations: using fuzzywuzzy
 from fuzzywuzzy import fuzz, process
@@ -25,7 +26,7 @@ import modules.abstract as abstract
 import modules.helpers as helpers
 import modules.instance_source_ids as instance_source_ids
 import modules.instance_sources as instance_sources
-import modules.local_api_lookups as localapi
+import modules.local_api_lookups as local_api_lookups
 import modules.mappings as mappings
 import modules.namespace as ns
 import modules.publication_types as publication_types
@@ -85,13 +86,13 @@ session_fundref = requests_cache.CachedSession(
 
 
 # import csv of LUX authority institutes:
-with open("institute_lux.csv", newline="") as csvfile:
-    reader = csv.DictReader(csvfile)
-    # save it in a list:
-    lux_institutes = list(reader)
-    # split string "known_names" into a list of strings on "##":
-    for institute in lux_institutes:
-        institute["known_names"] = institute["known_names"].split(" ## ")
+# with open("institute_lux.csv", newline="") as csvfile:
+#     reader = csv.DictReader(csvfile)
+#     # save it in a list:
+#     lux_institutes = list(reader)
+#     # split string "known_names" into a list of strings on "##":
+#     for institute in lux_institutes:
+#         institute["known_names"] = institute["known_names"].split(" ## ")
 # print("Und die ganze Tabelle:")
 # print(dachlux_institutes)
 
@@ -166,23 +167,23 @@ def camel_case(s):
     return "".join([s[0].lower(), s[1:]])
 
 
-def get_ror_org_country(affiliation_ror_id):
-    # given a ror id, get the country of the organization from the ror api:
-    # first, use only the last part of the ror id, which is the id itself:
-    affiliation_ror_id = affiliation_ror_id.split("/")[-1]
-    # the country name is in country.name in the json response
+# def get_ror_org_country(affiliation_ror_id):
+#     # given a ror id, get the country of the organization from the ror api:
+#     # first, use only the last part of the ror id, which is the id itself:
+#     affiliation_ror_id = affiliation_ror_id.split("/")[-1]
+#     # the country name is in country.name in the json response
 
-    ror_request = session_ror.get(
-        f"{config('ROR_API_URL')}/v1/organizations/" + affiliation_ror_id,
-        timeout=20,
-    )
-    if ror_request.status_code == 200:
-        ror_response = ror_request.json()
-        if "country" in ror_response:
-            return ror_response["country"]["name"]
-        else:
-            logging.info("no country found for " + affiliation_ror_id)
-            return None
+#     ror_request = session_ror.get(
+#         f"{config('ROR_API_URL')}/v1/organizations/" + affiliation_ror_id,
+#         timeout=20,
+#     )
+#     if ror_request.status_code == 200:
+#         ror_response = ror_request.json()
+#         if "country" in ror_response:
+#             return ror_response["country"]["name"]
+#         else:
+#             logging.info("no country found for " + affiliation_ror_id)
+#             return None
 
 
 def add_instance_license(resource_uri, record):
@@ -830,7 +831,7 @@ def add_bf_contributor_corporate_body(work_uri, record):
             )
             continue
         # get ror id of org from api:
-        org_ror_id = get_ror_id_from_api(org_name)
+        org_ror_id = local_api_lookups.get_ror_id_from_api(org_name)
         # if there is a ror id, add the ror id as an identifier:
         if org_ror_id is not None and org_ror_id != "null":
             # create a fragment uri node fore the identifier:
@@ -1022,42 +1023,41 @@ def get_local_authority_institute(affiliation_string, country):
             affiliation_string, lux_institutes, scorer=fuzz.token_set_ratio
         )
         return best_match[0].get("uuid")
-    else:
-        return None
 
 
-def get_ror_id_from_api(orgname_string):
-    # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
+# def get_ror_id_from_api(orgname_string):
+#     # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
 
-    # but first, find some common substrings from names that ror can't find with those it will find:
-    for affiliation in mappings.affilation_org_substr_replacelist:
-        if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
-            orgname_string = affiliation[1]
-            # print("replacing " + funder[0] + " with " + funder[1])
-            return orgname_string
-
-    # make a request to the ror api:
-    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
-    # ror_api_request = requests.get(ror_api_url)
-    # make request to api with caching:
-    ror_api_request = session_ror.get(ror_api_url, timeout=20)
-    # if the request was successful, get the json response:
-    if ror_api_request.status_code == 200:
-        ror_api_response = ror_api_request.json()
-        # check if the response has any hits:
-        if len(ror_api_response["items"]) > 0:
-            # if so, get the item with a key value pair of "chosen" and "true" and return its id:
-            for item in ror_api_response["items"]:
-                if item["chosen"] == True:
-                    return item["organization"]["id"]
-                else:
-                    logging.info("No ror id found for affiliation " + orgname_string)
-        else:
-            return None
-    else:
-        return None
-
-
+#     # but first, find some common substrings from names that ror can't find with those it will find:
+#     for affiliation in mappings.affilation_org_substr_replacelist:
+#         if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
+#             orgname_string = affiliation[1]
+#             # print("replacing " + funder[0] + " with " + funder[1])
+#             # do not return here; continue to query the ROR API with the modified orgname_string
+#     # make a request to the ror api:
+#     encoded_orgname = urllib.parse.quote_plus(orgname_string)
+#     ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={encoded_orgname}"
+#     # ror_api_request = requests.get(ror_api_url)
+#     # make request to api with caching:
+#     ror_api_request = session_ror.get(ror_api_url, timeout=20)
+#     # if the request was successful, get the json response:
+#     if ror_api_request.status_code == 200:
+#         ror_api_response = ror_api_request.json()
+#         if "items" in ror_api_response and len(ror_api_response["items"]) > 0:
+#             for item in ror_api_response["items"]:
+#                 # check if the item has a "chosen" key and if it is True, or if not, but score is 1.0:
+#                 if item.get("chosen") == True or (item.get("score") == 1.0):
+#                     found_chosen = True
+#                     try:
+#                         return item["organization"]["id"]
+#                     except KeyError:
+#                         logging.warning(f"Missing 'organization' or 'id' key in ROR API response item: {item}")
+#                         return None
+#             return None
+#         else:
+#             logging.info(f"ROR API returned status code {ror_api_request.status_code} for URL: {ror_api_url}")
+#             return None
+        
 def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_country):
     # person_affiliation = replace_encodings(person_affiliation)
     # is passed two string: the affiliation name and the affiliation country name
@@ -1083,7 +1083,7 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
     # do a ror lookup for the affiliation string
     # and if there is a ror id, add the ror id as an identifier:
     # affiliation_ror_id = None
-    affiliation_ror_id = get_ror_id_from_api(agent_affiliation)
+    affiliation_ror_id = local_api_lookups.get_ror_id_from_api(agent_affiliation)
 
     if affiliation_ror_id is not None and affiliation_ror_id != "null":
         # create a fragment uri node fore the identifier:
@@ -1124,7 +1124,7 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
     if agent_affiliation_country is None or agent_affiliation_country == "":
         # try to check if we have a ror id for the affiliation and get the country from the ror api:
         try:
-            agent_affiliation_country = get_ror_org_country(affiliation_ror_id)
+            agent_affiliation_country = local_api_lookups.get_ror_org_country(affiliation_ror_id)
         except:
             agent_affiliation_country = None
 

@@ -1,6 +1,10 @@
 import logging
 from datetime import timedelta
+import re
 
+import urllib
+
+from modules import mappings
 import requests_cache
 from decouple import config
 
@@ -15,6 +19,9 @@ SKOSMOS_URL = config("SKOSMOS_URL")
 SKOSMOS_API_URL = SKOSMOS_URL + "/rest/v1/"
 SKOSMOS_USER = config("SKOSMOS_USER")
 SKOSMOS_PASSWORD = config("SKOSMOS_PASSWORD")
+
+ROR_API_URL = config("ROR_API_URL")
+
 # annif api caching:
 ## Caching requests:
 urls_expire_after = {
@@ -33,6 +40,15 @@ session_annif = requests_cache.CachedSession(
 # cache for skosmos requests:
 session_skosmos = requests_cache.CachedSession(
     cache_name="requests_skosmos",
+    backend="redis",
+    allowable_codes=[200, 404],
+    expire_after=timedelta(days=30),
+    urls_expire_after=urls_expire_after,
+)
+
+# a cache for ror requests
+session_ror = requests_cache.CachedSession(
+    cache_name="requests_ror",
     backend="redis",
     allowable_codes=[200, 404],
     expire_after=timedelta(days=30),
@@ -173,4 +189,77 @@ def get_broader_transitive(vocid, concept_uri):
         return skosmos_response
     else:
         logging.warning("4. skosmos request failed for broaderTransitive")
+        return None
+
+def get_ror_id_from_api(orgname_string):
+    # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
+
+    # but first, find some common substrings from names that ror can't find with those it will find:
+    for affiliation in mappings.affilation_org_substr_replacelist:
+        if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
+            orgname_string = affiliation[1]
+            # print("replacing " + funder[0] + " with " + funder[1])
+            # do not return here; continue to query the ROR API with the modified orgname_string
+    # make a request to the ror api:
+    encoded_orgname = urllib.parse.quote_plus(orgname_string)
+    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={encoded_orgname}"
+    # ror_api_request = requests.get(ror_api_url)
+    # make request to api with caching:
+    ror_api_request = session_ror.get(ror_api_url, timeout=20)
+    # if the request was successful, get the json response:
+    if ror_api_request.status_code == 200:
+        ror_api_response = ror_api_request.json()
+        if "items" in ror_api_response and len(ror_api_response["items"]) > 0:
+            for item in ror_api_response["items"]:
+                # check if the item has a "chosen" key and if it is True, or if not, but score is 1.0:
+                if item.get("chosen") == True or (item.get("score") == 1.0):
+                    found_chosen = True
+                    try:
+                        return item["organization"]["id"]
+                    except KeyError:
+                        logging.warning(f"Missing 'organization' or 'id' key in ROR API response item: {item}")
+                        return None
+            return None
+        else:
+            logging.info(f"ROR API returned status code {ror_api_request.status_code} for URL: {ror_api_url}")
+            return None
+        
+def get_ror_org_country(affiliation_ror_id):
+    """
+    Given a ROR ID, retrieve the country of the organization from the ROR API.
+
+    Args:
+        affiliation_ror_id (str): The ROR ID of the organization.
+
+    Returns:
+        str or None: The country name of the organization, or None if not found.
+    """
+    # given a ror id, get the country of the organization from the ror api:
+    # first, use only the last part of the ror id, which is the id itself:
+    if not isinstance(affiliation_ror_id, str):
+        raise TypeError("affiliation_ror_id must be a string")
+    if not affiliation_ror_id:
+        logging.warning("Empty affiliation_ror_id provided.")
+        return None
+    try:
+        affiliation_ror_id = affiliation_ror_id.rstrip("/").split("/")[-1]
+    except ValueError as e:
+        logging.warning("affiliation_ror_id does not contain a valid ID segment.")
+        return None
+    # the country name is in country.name in the json response
+
+    ror_request = session_ror.get(
+        f"{ROR_API_URL}/v1/organizations/" + affiliation_ror_id,
+        timeout=20,
+    )
+    if ror_request.status_code == 200:
+        ror_response = ror_request.json()
+        # The country name is typically at ror_response["country"]["country_name"]
+        if "country" in ror_response and "country_name" in ror_response["country"]:
+            return ror_response["country"]["country_name"]
+        else:
+            logging.info("no country or country_name found for " + affiliation_ror_id)
+            return None
+    else:
+        logging.warning(f"ROR API returned status code {ror_request.status_code} for ID: {affiliation_ror_id}")
         return None
