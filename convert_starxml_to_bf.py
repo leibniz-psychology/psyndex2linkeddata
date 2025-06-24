@@ -950,18 +950,6 @@ def add_bf_contributor_corporate_body(work_uri, record):
 # - [x] later: reconcile affiliations to add org id, org ror id (once we actually have institution authority files)
 #
 
-# %%
-from modules.mappings import geonames_countries
-
-
-def country_geonames_lookup(country):
-    for case in geonames_countries:
-        if case[0].casefold() == str(country).casefold():
-            return case[0], case[1]
-    return None
-
-
-# %%
 def sanitize_country_names(country_name):
     if country_name == "COSTA":
         country_name = "Costa Rica"
@@ -975,8 +963,6 @@ def sanitize_country_names(country_name):
         country_name = "People's Republic of China"
     return country_name
 
-
-# %%
 
 
 def add_bf_contribution_role(role):
@@ -1155,8 +1141,8 @@ def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_cou
         )
 
         # if the country is in the geonames lookup table, add the geonames uri as sameAs and the geonames id as an identifier:
-        if country_geonames_lookup(agent_affiliation_country):
-            improved_country_name, geonamesId = country_geonames_lookup(
+        if helpers.country_geonames_lookup(agent_affiliation_country):
+            improved_country_name, geonamesId = helpers.country_geonames_lookup(
                 agent_affiliation_country
             )
             # create a url to click and add it with sameas:

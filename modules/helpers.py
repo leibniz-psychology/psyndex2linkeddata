@@ -303,6 +303,14 @@ def get_langtag_from_field(langfield):
         case _:
             return ["und", "und"]  # for "undetermined!"
 
+from modules.mappings import geonames_countries
+
+def country_geonames_lookup(country):
+    for case in geonames_countries:
+        if case[0].casefold() == str(country).casefold():
+            return case[0], case[1]
+    return None
+
 def split_family_and_given_name(name):
     """Splits a name into family name and given name.
     Returns a tuple with the family name and given name.
