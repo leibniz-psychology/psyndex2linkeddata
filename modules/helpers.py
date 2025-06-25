@@ -105,6 +105,16 @@ def guess_language(string_in_language):
     return langid.classify(string_in_language)[0]
 
 
+# Define a function to convert a string to camel case
+def camel_case(s):
+    # Use regular expression substitution to replace underscores and hyphens with spaces,
+    # then title case the string (capitalize the first letter of each word), and remove spaces
+    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
+
+    # Join the string, ensuring the first letter is lowercase
+    return "".join([s[0].lower(), s[1:]])
+
+
 # ### Getting URLs and DOIs from a field
 # Converting http-DOIs to pure ones, checking if what looks like url really is one.
 def check_for_url_or_doi(original_string):
@@ -310,6 +320,19 @@ def country_geonames_lookup(country):
         if case[0].casefold() == str(country).casefold():
             return case[0], case[1]
     return None
+
+def sanitize_country_names(country_name):
+    if country_name == "COSTA":
+        country_name = "Costa Rica"
+    elif country_name == "CZECH":
+        country_name = "Czech Republic"
+    elif country_name == "NEW":
+        country_name = "New Zealand"
+    elif country_name == "SAUDI":
+        country_name = "Saudi Arabia"
+    elif country_name == "PEOPLES":
+        country_name = "People's Republic of China"
+    return country_name
 
 def split_family_and_given_name(name):
     """Splits a name into family name and given name.
