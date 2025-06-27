@@ -149,11 +149,8 @@ def get_thesis_info(index,thesis):
                         print(f"Error getting institute country: {e}")
                 except Exception as e:
                     print(f"Error getting ROR ID: {e}")
-                
-        
             else:
                 print("No institute found, cannot get ROR ID or country.")
-
 
         # get HRF:
         if "HRF" in thesis:

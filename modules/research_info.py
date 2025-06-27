@@ -1,11 +1,15 @@
 import html
 import logging
 import re
+from tkinter import N
 
 import requests
+from modules import local_api_lookups
+from modules import contributions
 import requests_cache
 from datetime import timedelta
 from rapidfuzz import fuzz
+import dateparser
 
 CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
 # for getting a list of funders from api ():
@@ -1342,4 +1346,357 @@ def build_rels(record, work_uri, graph):
         # now we can add the relationship node to the work:
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
-            
+## Thesis information and node generation:
+
+def get_thesis_info(record):
+    """
+    Extracts thesis information from the given record.
+
+    Args:
+        record: A record with fields relevant for generating thesis information.
+
+    Returns:
+        dict: A dictionary with extracted thesis information. If the record does not represent a thesis, all values in the dictionary will be None.
+    """
+    # TODO: rewrite so this takes not straight fields from a dict, but the fields from the XML, using find for GRAD, HRF, and findall for KRF.
+    thesis_infos = {
+    "degreeGranted": None,
+    "institute": None, # including place, should be written in Affiliation of first author, if not already there
+    # we need to get the ror id and from there, especially if not in Affiliation:
+    "institute_ror_id": None, # ror id of the institute, if available
+    "institute_country": None, # country of the institute, if available
+    "institute_country_geonames": None, # country of the institute, if available, as geonames id
+    "thesisAdvisor": None, # first supervisor, optional, but at most one should be present
+    "thesisReviewers": [], # second supervisor, optional, but can also be several
+    "dateDegreeGranted": None, # date of the PhD thesis, optional?
+    }
+
+    # get BE field from the thesis record:
+    try:
+        be_field = record.find("BE").text.strip()
+    except AttributeError:
+        be_field = None  # if BE field is not present, set to None
+    # get DT and DT2:
+    try:
+        dt_field = record.find("DT").text.strip()
+    except AttributeError:
+        dt_field = None
+    try:
+        dt2_field = record.find("DT2").text.strip()
+    except AttributeError:
+        dt2_field = None
+    # check if this is a thesis, based on BE, DT and DT2:#
+
+    if be_field == "SH" or dt_field == "61" or dt2_field == "61":
+
+        # get dfk for logging purposes:
+        try:
+            dfk = record.find("DFK").text.strip()
+        except AttributeError:
+            dfk = None
+        
+        print(f"\n{dfk} is a thesis; processing it...")
+
+        # get GRAD field:
+        try:
+            grad_field = record.find("GRAD").text.strip()
+        except AttributeError:
+            grad_field = None  # if GRAD field is not present, set to None
+        # get PD field:
+        try:
+            pd_field = record.find("PD").text.strip()
+        except AttributeError:
+            pd_field = None  # if PD field is not present, set to None
+        # get first AUP field:
+        try:
+            aup_field = record.find("AUP").text.strip() # gets the first AUP field, which is the first author.
+        except AttributeError:
+            aup_field = None
+        # get INST field:
+        try:
+            inst_field = record.find("INST").text.strip()
+        except AttributeError:
+            inst_field = None  # if INST field is not present, set to None
+        # get ORT field:
+        try:
+            ort_field = record.find("ORT").text.strip()
+        except AttributeError:
+            ort_field = None
+        # get HRF field:
+        try:
+            hrf_field = record.find("HRF").text.strip()
+        except AttributeError:
+            hrf_field = None
+        # get KRFs as a list:
+        try:
+            krf_fields = [krf.text.strip() for krf in record.findall("KRF")]
+        except AttributeError:
+            krf_fields = []
+
+        # get degree granted:
+        if grad_field is not None:
+            thesis_infos["degreeGranted"] = grad_field
+            print("Degree granted: {}".format(thesis_infos["degreeGranted"]))
+        else:
+            print("No degree found.")
+
+        # check AUP affiliation for institute and place, otherwise concatenate INST and ORT:
+        if aup_field is not None: # we can only add the institute as an affiliation if there is a first author (first AUP), so no need to check for AUPs with no first author.
+        # it contains a pipe |i, which is the subfield for institute:
+            if "|i" in aup_field:
+            # get subfield i:
+                try:
+                    # use helpers.get_subfield(field, i):
+                    thesis_infos["institute"] = helpers.get_subfield(aup_field, "i").strip()
+                    print("Institute from AUP: {}".format(thesis_infos["institute"]))
+                except KeyError:
+                    print("No institute found in AUP.")
+            else:
+                print(f"No institute found in AUP, trying INST + ORT instead: {aup_field}, INST: {inst_field}, ORT: {ort_field}")
+                # if no institute found in AUP, try INST + ORT:
+                if inst_field is not None and ort_field is not None: 
+                    print(f"Found INST and ORT fields, trying to concatenate them: {inst_field} + {ort_field}")
+                    # try to concatenate sensibly: first check INST if it has a comma, than insert ORT before the comma:
+                    if "," in inst_field:
+                        # split INST at the comma, take the first part and add ORT and then the rest of INST:
+                        print("Found comma in INST field, concatenating with ORT.")
+                        # split INST at the comma:
+                        # we assume that the first part is the institute name and the second part is the city:
+                        # e.g. "University of Example, Example City"
+                        # so we take the first part and add ORT to it:
+                        thesis_infos["institute"] = inst_field.split(",")[0].strip() + " " + ort_field.strip() + ", " + inst_field.split(",")[1].strip()
+                    else:
+                        # just concatenate INST and ORT:
+                        thesis_infos["institute"] = inst_field.strip() + " " + ort_field.strip()
+                    print("Institute from INST + ORT: {}".format(thesis_infos["institute"]))
+                elif inst_field is not None and ort_field is None:
+                    # if only INST is present, use that:
+                    thesis_infos["institute"] = inst_field.strip()
+                elif inst_field is None and ort_field is not None:
+                    # if only ORT is present, use that:
+                    thesis_infos["institute"] = ort_field.strip()
+                else:
+                    print("No institute found in AUP, INST or ORT.")
+            # if we have an institute, get the ror-id from the api, as well as the country:
+            if thesis_infos["institute"]:
+                # get the ror-id and country from the api;
+                # use get_ror_id_from_api in main program:
+                try:
+                    ror_id = local_api_lookups.get_ror_id_from_api(thesis_infos["institute"])
+                    thesis_infos["institute_ror_id"] = ror_id
+                    print("ROR ID: {}".format(thesis_infos["institute_ror_id"]))
+                    # if we have a ror id, get the country from the api:
+                    try:
+                        institute_country = local_api_lookups.get_ror_org_country(ror_id)
+                        thesis_infos["institute_country"] = institute_country
+                        print("Institute country: {}".format(thesis_infos["institute_country"]))
+                        # look up geonames id for the country in mappings.geonames_countries -
+                        # format is for each country in that table: ("Germany", "2921044", "DE")
+                        # if thesis_infos["institute_country"]:
+                        #     try:
+                        #         # use funtion helpers.country_geonames_lookup
+                        #         geonames_id = helpers.country_geonames_lookup(thesis_infos["institute_country"])
+                        #         thesis_infos["institute_country_geonames"] = geonames_id[1]
+                        #         print("Institute country geonames id: {}".format(thesis_infos["institute_country_geonames"]))
+                        #     except Exception as e:
+                        #         print(f"Error getting geonames id for country {thesis_infos['institute_country']}: {e}")
+                    except Exception as e:
+                        print(f"Error getting institute country: {e}")
+                except Exception as e:
+                    print(f"Error getting ROR ID: {e}")
+            else:
+                print("No institute found, cannot get ROR ID or country.")
+
+        # get HRF:
+        if hrf_field is not None:
+            # split into given and family name, if possible
+            thesis_infos["thesisAdvisor"] = helpers.split_family_and_given_name(hrf_field)
+            print("Hauptreferent: {}".format(thesis_infos["thesisAdvisor"]))
+        else:
+            print("No HRF found.")
+        
+        # get KRFs:
+        if krf_fields is not None and len(krf_fields) > 0:
+            for count,krf in enumerate(krf_fields):
+                thesis_infos["thesisReviewers"].append(helpers.split_family_and_given_name(krf.strip()))
+                print("Nebenreferent {}: {}".format(count+1,thesis_infos["thesisReviewers"][-1]))
+        else:
+            print("No KRFs found.")
+        # getting a date of the thesis:
+        try:
+            dateDegreeGranted =  pd_field  # PD is the date of the thesis, if it exists
+            # check if this really contains any digits, otherwise, this won't be a date (e.g. "N. N."):
+            if not re.match(r"^\d", dateDegreeGranted):
+                raise ValueError(f"Invalid date format: {dateDegreeGranted}")
+                # and move on to the exception handling below
+                
+            # parse the date: it is usally formatted like "08.06.2021", but sometimes we have just the year "1999" or an abbreviated year "11.12.99"
+            # parse and convert this to the yyyy-mm-dd format:
+            dateDegreeGranted = dateparser.parse(dateDegreeGranted, settings={'PREFER_DATES_FROM': 'past','PREFER_DAY_OF_MONTH': 'first','PREFER_MONTH_OF_YEAR': 'first'}).strftime("%Y-%m-%d")
+            print(f"Parsed date: {dateDegreeGranted}")
+            # write into thesis_infos:
+            thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+        except:
+            print(
+                f"parsedate: couldn't parse {str(dateDegreeGranted)} for {dfk}! Trying to use PROMY instead!"
+            )
+            try:
+                # get PROMY field
+                try:
+                    promy_field = record.find("PROMY").text.strip()
+                except AttributeError:
+                    promy_field = None  # if PROMY field is not present, set to None
+                dateDegreeGranted =  promy_field  # PROMY is the year of the thesis, if it exists
+                print(f"Using PROMY for {dfk}: {dateDegreeGranted}")
+                # write into thesis_infos:
+                thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+            except:
+                print(
+                    f"no PROMY found for {dfk}! Using PY instead!"
+                )
+                try:
+                    # get PY field
+                    py_field = record.find("PY").text.strip()
+                    dateDegreeGranted = py_field  # PY is the year of the thesis, if it exists
+                    print(f"Using PY for {dfk}: {dateDegreeGranted}")
+                    # write into thesis_infos:
+                    thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+                except AttributeError:
+                    print(f"No PY field found for {dfk}, setting dateDegreeGranted to None.")
+                    dateDegreeGranted = None
+    return thesis_infos
+
+def build_thesis_nodes(work_uri,graph,thesis_info):
+    """
+    Builds RDF nodes for the thesis information and adds them to the provided graph in place.
+
+    Args:
+        thesis_info (dict): A dictionary with extracted thesis information.
+
+    Side Effects:
+        Modifies the provided RDF graph in place by adding thesis-related nodes and triples.
+
+    Returns:
+        None
+    """
+    # At least one of 'degreeGranted' or 'dateDegreeGranted' must be present to create thesis nodes;
+    # if both are missing, there is not enough information to generate a thesis node, so return early.
+    if not (thesis_info["degreeGranted"] or thesis_info["dateDegreeGranted"]):
+        return
+
+    # add a dissertation node to the work:
+    # create the node with type bf:Dissertation:
+    # give it a unique URI:
+    dissertation_uri = URIRef(
+        str(work_uri) + "#dissertation")
+    graph.add((dissertation_uri, RDF.type, ns.BF.Dissertation))
+    graph.add((work_uri, ns.BF.dissertation, dissertation_uri))
+    # add degreeGranted to the dissertation node:
+    if thesis_info["degreeGranted"]:
+        graph.add((dissertation_uri, ns.BF.degree, Literal(thesis_info["degreeGranted"])))
+    # add dateDegreeGranted to the dissertation node:
+    if thesis_info["dateDegreeGranted"]:
+        graph.add((dissertation_uri, ns.BF.date, Literal(thesis_info["dateDegreeGranted"])))
+    # add thesis advisor to the work:
+    if thesis_info["thesisAdvisor"] is not None:
+        if (
+            thesis_info["thesisAdvisor"] is None
+            or not isinstance(thesis_info["thesisAdvisor"], (list, tuple))
+            or len(thesis_info["thesisAdvisor"]) != 2
+        ):
+            logging.warning(f"Thesis advisor {thesis_info['thesisAdvisor']} is not a valid name tuple, skipping.")
+        else:
+            # create a URI for the thesis advisor:
+            contribution_uri = URIRef(
+                str(work_uri) + "#thesis_advisor")
+            graph.add((contribution_uri, RDF.type, ns.BF.Contribution))
+            graph.add((contribution_uri, RDF.type, ns.BF.ThesisAdvisory))
+            graph.add((work_uri, ns.BF.contribution, contribution_uri))
+            # add a node for the advisor agent, a Person:
+            advisor_uri = URIRef(str(contribution_uri) + "_person")
+            graph.add((advisor_uri, RDF.type, ns.BF.Person))
+            # add the advisor to the contribution:
+            graph.add((contribution_uri, ns.BF.agent, advisor_uri))
+            # add the family and given name to the advisor:
+            graph.add((advisor_uri, ns.SCHEMA.familyName, Literal(thesis_info["thesisAdvisor"][0])))
+            graph.add((advisor_uri, ns.SCHEMA.givenName, Literal(thesis_info["thesisAdvisor"][1])))
+            # add role to the advisor:
+            graph.add((contribution_uri, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/ths")))  # ths = thesis supervisor
+
+        ## add thesis reviewers:
+        for reviewer_index,reviewer in enumerate(thesis_info["thesisReviewers"]):
+            # create a URI for the thesis reviewer:
+            contribution_uri = URIRef(
+                str(work_uri) + "#thesis_reviewer_" + str(reviewer_index+1))
+            graph.add((contribution_uri, RDF.type, ns.BF.Contribution))
+            graph.add((contribution_uri, RDF.type, ns.BF.ThesisReview))
+            graph.add((work_uri, ns.BF.contribution, contribution_uri))
+            # add a node for the reviewer agent, a Person:
+            reviewer_uri = URIRef(str(contribution_uri) + "_person")
+            graph.add((reviewer_uri, RDF.type, ns.BF.Person))
+            # add the reviewer to the contribution:
+            graph.add((contribution_uri, ns.BF.agent, reviewer_uri))
+            # add the names of the reviewer:
+            # first, make sure the reviewer is a list or tuple with exactly two elements (family and given name):
+            if not isinstance(reviewer, (list, tuple)) or len(reviewer) != 2:
+                logging.warning(f"Reviewer {reviewer} is not a valid name tuple, skipping.")
+                continue
+            graph.add((reviewer_uri, ns.SCHEMA.familyName, Literal(reviewer[0])))
+            graph.add((reviewer_uri, ns.SCHEMA.givenName, Literal(reviewer[1])))
+            # add role to the reviewer:
+            graph.add((contribution_uri, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/dgc")))  # dgc = degree committee member
+
+        # finally, add the institute information to the first contribution node (usually the first author):
+        add_thesis_info_to_first_contributon(work_uri, graph, thesis_info)
+
+
+def add_thesis_info_to_first_contributon(work_uri, graph, thesis_info):
+    # this will add the institute (usually from ORT and INST) as an affiliation to the first author of the work. 
+    # also adds the institute ror id, country and country's geonames id to the affiliation.
+    # For this, it needs to go through the subgraph of the work_uri after adding the author nodes, and find the first author node.
+    # it will then add the affiliation to the first author node, if it doesn't exist already. (MAybe we can reuse existing functions to add all these at once, I think we have an add_affilition function that does this already.)
+    # also adds a second role "dissertant" in addition to AU.
+    # the thesis supervisor and reviewers will be added as further contributions to the work, but not here.
+    
+    # if there is a CS field, add the affiliation to the first contribution node:
+    if thesis_info["institute"] is not None:
+    # and thesis_info["institute_country"] is not None:
+        # get the first contribution node:
+        for contribution in graph.objects(work_uri, ns.BF.contribution):
+            agent_node = graph.value(
+                contribution, ns.BF.agent
+            )  
+            # get the position of the contribution:
+            position = graph.value(contribution, ns.PXP.contributionPosition)
+            if (
+                int(position) == 1
+                and graph.value(agent_node, RDF.type) == ns.BF.Person
+            ):
+                # add the affiliation to the contribution node using the function we already have for it:
+                print(f"Adding dissertant role to first contribution node")
+                # add dissertant role to the contribution node:
+                graph.add(
+                    (contribution, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/dis")))  # dis = dissertant
+                # if there is no affiliation node yet, we can build one:
+                if not graph.value(
+                    contribution, ns.MADS.hasAffiliation
+                ):
+                    print("Adding thesis institute as affiliation to first contribution node")
+                    # build the affiliation node:
+                    affiliation = contributions.build_affiliation_nodes(graph, agent_node, thesis_info["institute"], thesis_info["institute_country"])
+                    # add the affiliation to the contribution node:
+                    graph.add(
+                        (contribution, ns.MADS.hasAffiliation, affiliation)
+                    )
+                else:
+                    print("Affiliation already exists for first contribution node, skipping.")
+
+                # graph.add(
+                #     (
+                #         contribution,
+                #         ns.MADS.hasAffiliation,
+                #         build_affiliation_nodes(agent_node, affiliation, country),
+                #     )
+                # )
+                break
+
