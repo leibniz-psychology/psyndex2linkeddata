@@ -298,8 +298,8 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] ABH: String endet in Lizenzierungsangaben (aber vorher das ToC abziehen!) wie "(C) Thieme"... -> Lizengeber erkennen und als Vokabularbegriff aus abstractnote-Vok exportieren. Format: [a pxc:Abstract ; bf:usageAndAccessPolicy [a bf:UsageAndAccessPolicy [rdfs:label "(C) Thieme"@en, ; rdf:value "vocabs/Thieme"^^^xsd:anyURI]]]. Wenn Abstract in ABH "leer" (also "Kein Abstract vorhanden"/"No abstract available" oder ähnlich, + nur kurzer String unter x Zeichen den Vok-Begriff vocabs/.../NoAbstract...)
 
 ### Beziehungen zu anderen Werken
-- [ ] REL -> Werk > bflc:relationship > bflc:Relationship > bf:relatedTo > bf:Work
-- [ ] TESTO (nur jeweils Subfeld |n und |c von TESTO und TESTG) -> Werk > bflc:relationship >> bflc:Relationship > bf:relatedTo > bf:Work
+- [x] REL -> Werk > bflc:relationship > bflc:Relationship > bf:relatedTo > bf:Work
+- [x] TESTO (nur jeweils Subfeld |n und |c von TESTO und TESTG) -> Werk > bflc:relationship >> bflc:Relationship > bf:relatedTo > bf:Work
 
 ### Keywords/Classifications
 
@@ -324,15 +324,15 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] URLAI, das andere Forschungsdatenfeld nur für PsychData (sollte immer http://dx.doi.org/10.5160/psychdata.stuh96ko20 - 9-stellige alphanumerische ID - sein oder mit http://doi.org/10.5160/psychdata.stuh96ko20 oder https://doi.org oder - selten aber osf-Link drin!)
 - [x] PRREG -> Work > bflc:relationship > bflc:Relationship > bf:supplement > bf:Work
   - [x] move from bnode to fragment uri, make sure not to collapse 2 or more into one by counting up or something.
-- [ ] RPLIC
+- [x] RPLIC
 
 ### Dissertationen
-- [ ] GRAD 
-- [ ] PROMY
-- [ ] INST
-- [ ] ORT
-- [ ] HRF
-- [ ] KRF
+- [x] GRAD 
+- [x] PROMY
+- [x] INST
+- [x] ORT
+- [x] HRF
+- [x] KRF
 
 ## Instanzen/-bündel
 - [x] DFK -> Instance > bf:identifiedBy > bf:Local, pxc:DFK
@@ -359,7 +359,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [X] URN
 - [X] URLAI
 
-- [ ] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled ; bf:seriesStatement
+- [x] SE - Buchreihe -> auftrennen, Instanz > bflc:relationship >> bflc:Relationship > bf:hasSeries >> bf:Series/bf:Instance/bf:Uncontrolled ; bf:seriesStatement
   > bf:title > bf:Title > bf:mainTitle "Buchreihehntitel" ;
 > bf:seriesEnumeration "Band 1" 
 - [ ] NE - Edition -> Instanz > bf:editionStatement "2., überarb. Aufl." 
