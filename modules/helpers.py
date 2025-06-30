@@ -92,6 +92,66 @@ def get_mainfield(field_fullstring):
         else:
             return None
 
+def title_except(
+    text,
+    exceptions=None
+):
+    if exceptions is None:
+        exceptions = ['und','bis', 'zu', 'zum', 'von', 'der', 'die', 'das', 'des', 'dem', 'einer', 'eines', 'einem', 'einen', 'nach', 'für', 'mit', 'in', 'auf', 'an', 'bei', 'über', 'vor', 'vom','unter', 'zwischen',"and", "for"]
+    allcaps_exceptions = ["WHO", "HEXACO","DSM-III-R", "DSM-IV", "ICD-10", "ICD-11", "III", "D"]
+
+    def capitalize_word(word, is_first):
+        # If the word matches an allcaps exception, return as is
+        if word in allcaps_exceptions:
+            return word
+        # Capitalize if first word or not in exceptions
+        if is_first or word.lower() not in exceptions:
+            return word.title()
+        # Otherwise, return lowercase
+        else:
+            return word.lower()
+
+    def process_token(token, is_first):
+        # If the token matches an allcaps exception, return as is
+        if token in allcaps_exceptions:
+            return token
+        # If the token matches any allcaps exception after splitting on hyphens, return as is
+        for exc in allcaps_exceptions:
+            if token == exc:
+                return exc
+        # If the token contains a hyphen and matches an allcaps exception, return as is
+        if token in allcaps_exceptions:
+            return token
+        # Otherwise, split on hyphens, but preserve allcaps exceptions
+        parts = token.split('-')
+        new_parts = []
+        idx_offset = 0
+        while idx_offset < len(parts):
+            # Try to match the longest possible hyphenated exception
+            matched = False
+            for exc in sorted(allcaps_exceptions, key=len, reverse=True):
+                exc_parts = exc.split('-')
+                if parts[idx_offset:idx_offset+len(exc_parts)] == exc_parts:
+                    new_parts.append(exc)
+                    idx_offset += len(exc_parts)
+                    matched = True
+                    break
+            if not matched:
+                part = parts[idx_offset]
+                new_parts.append(capitalize_word(part, is_first or idx_offset > 0))
+                idx_offset += 1
+            is_first = False  # Only first word in text is True
+        return '-'.join(new_parts)
+
+    words = text.split()
+    title_cased = []
+    for i, word in enumerate(words):
+        # If the word matches an allcaps exception, return as is
+        if word in allcaps_exceptions:
+            title_cased.append(word)
+        else:
+            title_cased.append(process_token(word, i == 0))
+    return " ".join(title_cased)
 
 # ## Function: Guess language of a given string
 # Used for missing language fields or if there are discrepancies between the language field and the language of the title etc.
