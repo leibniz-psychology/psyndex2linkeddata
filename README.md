@@ -375,16 +375,16 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 ### Biblio für Unselbständige:
 #### Journal Article
-- [ ] JT
-- [ ] JBD
-- [ ] JHFT
-- [ ] ISSN, EISSN
-- [ ] PAGE -> aufsplitten in Start- und Endseite, Artikelnummer. Jeweils ins passende Feld. Wenn nicht absolute Zahl (Seitensumme), dann in Relationship zum Journal!
+- [x] JT
+- [x] JBD
+- [x] JHFT
+- [x] ISSN, EISSN
+- [x] PAGE -> aufsplitten in Start- und Endseite, Artikelnummer. Jeweils ins passende Feld. Wenn nicht absolute Zahl (Seitensumme), dann in Relationship zum Journal!
 
 #### Chapter
 - [ ] BIP - Titel des Buches
 - [ ] EDRP - Herausgeber des Buches
-- [ ] SSDFK 
+- [x] SSDFK 
 - [ ] SSNE - Edition
 - [ ] SSSE - Buchreihe mit Band
 - [ ] SSPU ? Veröffentlichungsangaben des ganzen Buchs
@@ -403,7 +403,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 - [ ] remarks (Bibliographic note zum Werk?) > `bf:note.rdfs:label`
 - [ ] instance.metadataOrigin ??? nicht sicher, ob in Bestandsdaten, muss ich noch durchkämmen - scheint irgendwi in einem der `MK`-Felder zu stecken
-- [x] instance.license > `bf:hasInstanceBundle.bf:usageAndAccessPolicy.` mit type `bf:UsePolicy` (Ziel ist eine URI aus dem licenses-Vokabular, zB https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4.0)
+- [x] instance.license > `bf:hasInstanceBundle.bf:usageAndAccessPolicy.` mit type `bf:UsePolicy` (Ziel ist eine URI aus dem licenses-Vokabular, zB https://w3id.org/zpid/vocabs/licenses/PUBL oder https://w3id.org/zpid/vocabs/licenses/CC_BY_4_0)
 - [ ] instance.openAccessStatus > `bf:hasInstanceBundle.bf:usageAndAccessPolicy` mit type `bf:AccessPolicy` (Ziel ist uri aus access-Vokabular, zB https://w3id.org/zpid/vocabs/access/open oder https://w3id.org/zpid/vocabs/access/restricted) - berechnen  aus license & API-Abfrage bei OpenAlex?
 - ~~instance.peerReviewStatus~~ - fällt weg, war auch nie in Bestandsdaten
 
@@ -488,57 +488,57 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 ## Reihenangaben für Bücher
 
-- [ ] instance.seriesTitle
-- [ ] instance.subSeriesTitle
-- [ ] instance.seriesVolume
+- [x] instance.seriesTitle
+- [-] instance.subSeriesTitle
+- [x] instance.seriesVolume
 - [ ] instance.bookEdition
 
 ## Kapitel und Journal Articles: Verweis auf umgebendes Buch oder Journal
 
-- [ ] instance.journalTitle
-- [ ] instance.containingJournal
+- [x] instance.journalTitle
+- [x] instance.containingJournal
 - [ ] instance.containingBook	Instance
 
-- [ ] instance.journalVolume
-- [ ] instance.journalIssue
+- [x] instance.journalVolume
+- [x] instance.journalIssue
 
-- [ ] instance.formatInstance.startPage
-- [ ] instance.formatInstance.endPage
+- [x] instance.formatInstance.startPage
+- [x] instance.formatInstance.endPage
 - [ ] instance.formatInstance.pageCount
-- [ ] instance.formatInstance.issn
-- [ ] instance.formatInstance.articleNumber
+- [x] instance.formatInstance.issn
+- [x] instance.formatInstance.articleNumber
 
 ## Links und Identifier der Instanzen selbst 
 
 - [x] instance.dfk > `pxp:hasInstanceBundle.bf:identifiedBy.rdf:value` bei identifier type `pxc:DFK`
 - [x] instance.formatInstance.isbn > `pxp:hasInstanceBundle.bf:identifiedBy.rdf:value` bei identifier type `bf:Isbn` (hash-uri endet bei isbns für Print-OFrmatinstanzen in `#isbn_print` und bei Online-Formatinstanzen in `#isbn_ebook` )
-- [ ] instance.formatInstance.publicationUrls > `pxp:hasInstanceBundle.bf:hasPart.bf:electronicLocator`
-- [ ] instance.formatInstance.publicationUrns `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Urn`
-- [ ] instance.formatInstance.doi > `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Doi`
+- [x] instance.formatInstance.publicationUrls > `pxp:hasInstanceBundle.bf:hasPart.bf:electronicLocator`
+- [x] instance.formatInstance.publicationUrns `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Urn`
+- [x] instance.formatInstance.doi > `pxp:hasInstanceBundle.bf:hasPart.bf:identifiedBy.rdf:value` bei identifier type `bf:Doi`
 
 ## Status
-- publishingStatus - nicht in den Bestandsdaten
-- psyFoMoStatus - nicht in den Bestandsdaten
+- [ ] publishingStatus
+- [ ] psyFoMoStatus
 
 ## ? (Personen/Körperschaften als Thema?)
 - concernedPersonIds  - nicht in den Bestandsdaten
 - concernedCorporateBodyIds - nicht in den Bestandsdaten
 
 ## Verwandte Werke (Werk)
-- [ ] relatedWorks	RelatedWork
-- [ ] relatedWork.relationType
-- [ ] relatedWork.objectWork
-- [ ] relatedWork.doi
-- [ ] relatedWork.citation
-- [ ] relatedWork.url
+- [x] relatedWorks	RelatedWork
+- [x] relatedWork.relationType
+- [x] relatedWork.objectWork
+- [x] relatedWork.doi
+- [x] relatedWork.citation
+- [x] relatedWork.url
 
-- [ ] relatedTestOrMeasures	RelatedTestOrMeasure
-- [ ] relatedTestOrMeasure.relationType
-- [ ] relatedTestOrMeasure.shortName
-- [ ] relatedTestOrMeasure.longName
-- [ ] relatedTestOrMeasure.test
-- [ ] relatedTestOrMeasure.itemsComplete
-- [ ] relatedTestOrMeasure.remark
+- [x] relatedTestOrMeasures	RelatedTestOrMeasure
+- [x] relatedTestOrMeasure.relationType
+- [x] relatedTestOrMeasure.shortName
+- [x] relatedTestOrMeasure.longName
+- [x] relatedTestOrMeasure.test
+- [x] relatedTestOrMeasure.itemsComplete
+- [x] relatedTestOrMeasure.remark
 
 ## Plain Language Summaries (Werk)
 - englishShortPls - nicht in den Bestandsdaten
@@ -549,7 +549,7 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 ## Verschlagwortung (Werk)
 - [x] controlledKeywords > `bf:subject.owl:sameAs` bei subject type `bf:Topic` und zusätzlich `pxc:WeightedTopic` wenn gewichtet. (Wert ist eine Uri aus dem "terms"-Vokabular wie zB https://w3id.org/zpid/vocabs/terms/02370)
-- [ ] subjectClassifications
+- [x] subjectClassifications
 - [ ] methodClassifications	-
 - [ ] ageGroups
 - [ ] simplePopulationLocations
@@ -560,29 +560,30 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 
 
 ## Dissertationsangaben (Werk)
-- [ ] degreeGranted
-- [ ] dateDegreeGranted
-- [ ] thesisAdvisor	Person
-- [ ] thesisAdvisorGivenName
-- [ ] thesisAdvisorFamilyName
-- [ ] thesisReviewerGivenName
-- [ ] thesisReviewerFamilyName
-- [ ] thesisReviewer	Person
+- [x] degreeGranted
+- [x] dateDegreeGranted
+- [x] thesisAdvisor	Person
+- [x] thesisAdvisorGivenName
+- [x] thesisAdvisorFamilyName
+- [x] thesisReviewerGivenName
+- [x] thesisReviewerFamilyName
+- [x] thesisReviewer	Person
 
 ## referenceWorks (Werk) 
-- [ ] referencedWorks	ReferencedWork
-- [ ] referencedWork.authors	string		0..n	-
-- [ ] referencedWork.title	string		1..1	-
-- [ ] referencedWork.publicationYear	integer		0..1	-
-- [ ] referencedWork.doi	string	{Doi}	0..1	-
-- [ ] referencedWork.journalName	string		0..1	-
+- [x] referencedWorks	ReferencedWork
+- [x] referencedWork.authors	string		0..n	-
+- [x] referencedWork.title	string		1..1	-
+- [x] referencedWork.publicationYear	integer		0..1	-
+- [x] referencedWork.doi	string	{Doi}	0..1	-
+- [x] referencedWork.citation?
+<!-- - [ ] referencedWork.journalName	string		0..1	-
 - [ ] referencedWork.journalVolume	string	{*Regex*:/^[0-9]+$/}	0..1	-
 - [ ] referencedWork.journalIssue	string	{*Regex*:/^(?:\d+(?:-\d+)?|Supp|S\d+)$/}	0..1	-
-- [ ] referencedWork.journalSites	string		0..1	-
+- [ ] referencedWork.journalSites	string		0..1	- -->
 
 
 ## Typen von Werk und Instanz
-- [ ] contentType - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:content` (Wert ist Uri aus content-Vokabular, zB https://w3id.org/zpid/vocabs/contenttypes/text)
+- [x] contentType -> `bf:content` (Wert ist Uri aus content-Vokabular, zB https://w3id.org/zpid/vocabs/contenttypes/text)
 - [ ] genre - muss noch abgeleitet werden aus verschiedenen Feldern. > `bf:genreForm` (Wert ist Uri aus genres-Vokabular, zB https://w3id.org/zpid/vocabs/genres/ResearchPaper)
 - [x] instance.publicationType > `pxp:issuanceType`  (Wert ist Uri aus issuances-Vokabular, zB https://w3id.org/zpid/vocabs/issuances/JournalArticle)
 - [x] instance.formatInstance.carrierType `pxp:mediaCarrier` (Wert ist Uri aus mediacarriers-Vokabular, zB https://w3id.org/zpid/vocabs/mediacarriers/Online)
@@ -604,11 +605,11 @@ The preregistration work may also have 0 or one (1) `bf:note > bf:Note > rdfs:la
 - [x] **preregisteredStudy.note**  `bflc:relationship.bf:supplement.bf:Work.bf:hasInstance.bf:note.rdfs:label` (Wert ist String) - aber dafür gibt es gar kein Feld in PSYNDEXER?
 
 ## Links zu replizierten Studien #
-- [ ] replicatedStudies	ReplicatedStudy		0..n	-
-- [ ] replicatedStudy.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXoriginalDataRelations]->id}	1..1	-
-- [ ] replicatedStudy.doi	string	{Doi}	0..1	-
-- [ ] replicatedStudy.url	string	{Url}	0..1	-
-- [ ] replicatedStudy.studyId	string	{Work->id}	0..1	-
-- [ ] replicatedStudy.citation
+- [x] replicatedStudies	ReplicatedStudy		0..n	-
+- [x] replicatedStudy.relationType	string	{ControlledTerm[group=relations, collection=PSYNDEXoriginalDataRelations]->id}	1..1	-
+- [x] replicatedStudy.doi	string	{Doi}	0..1	-
+- [x] replicatedStudy.url	string	{Url}	0..1	-
+- [x] replicatedStudy.studyId	string	{Work->id}	0..1	-
+- [x] replicatedStudy.citation
 
 
