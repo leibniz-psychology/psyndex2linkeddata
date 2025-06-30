@@ -383,7 +383,7 @@ def add_bf_contributor_person(graph,work_uri, record):
                 (contribution_node, ns.MADS.hasAffiliation, affiliation_node)
             )
         else:
-            print("no affiliation string or country found for " + personname + " in record   " + record.find("DFK").text + ". No affiliation node added.")
+            logging.info("no affiliation string or country found for " + personname + " in record   " + record.find("DFK").text + ". No affiliation node added.")
             # but why is it added anyway? is there another affiliation node added later?
         # add the role from AUP subfield |f to the contribution node:
         # extracting the role:
