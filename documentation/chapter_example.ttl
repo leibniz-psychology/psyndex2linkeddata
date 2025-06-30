@@ -39,7 +39,7 @@ works:0390013_work a bf:Text,
         <https://w3id.org/zpid/resources/works/0390013_work#uncontrolledkeyword5> ;
     bf:content <https://w3id.org/zpid/vocabs/contenttypes/text> ;
     bf:contribution <https://w3id.org/zpid/resources/works/0390013_work#contribution1> ;
-    bf:genreForm genres:ResearchPaper ;
+    bf:genreForm genres:ScholarlyPaper ;
     bf:hasInstance <https://w3id.org/zpid/resources/instances/0390013#1>,
         <https://w3id.org/zpid/resources/instances/0390013#2> ;
     bf:language lang:ger ;
@@ -254,10 +254,10 @@ works:0390013_work a bf:Text,
 <https://doi.org/10.1007/978-3-658-27789-5_1> a bf:Doi ;
     rdf:value "10.1007/978-3-658-27789-5_1" .
 
-genres:ResearchPaper a bf:GenreForm ;
-    rdfs:label "Research Paper" ;
+genres:ScholarlyPaper a bf:GenreForm ;
+    rdfs:label "Scholarly Paper" ;
     skos:prefLabel "Forschungsaufsatz"@de,
-        "Research Paper"@en .
+        "Scholarly Paper"@en .
 
 licenses:PUBL a bf:UsePolicy ;
     rdfs:label "PUBL: Full copyright with publisher or association" ;
