@@ -21,18 +21,19 @@ from rdflib import BNode, Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from tqdm.auto import tqdm
 
+import modules.contributions as contributions
 import modules.abstract as abstract
 import modules.helpers as helpers
 import modules.instance_source_ids as instance_source_ids
 import modules.instance_sources as instance_sources
-import modules.local_api_lookups as localapi
+import modules.local_api_lookups as local_api_lookups
 import modules.mappings as mappings
+import modules.identifiers as  identifiers
 import modules.namespace as ns
 import modules.publication_types as publication_types
 import modules.research_info as research_info
 import modules.terms as terms
 
-# import modules.contributions as contributions
 # import modules.open_science as open_science
 
 logging.basicConfig(
@@ -85,13 +86,13 @@ session_fundref = requests_cache.CachedSession(
 
 
 # import csv of LUX authority institutes:
-with open("institute_lux.csv", newline="") as csvfile:
-    reader = csv.DictReader(csvfile)
-    # save it in a list:
-    lux_institutes = list(reader)
-    # split string "known_names" into a list of strings on "##":
-    for institute in lux_institutes:
-        institute["known_names"] = institute["known_names"].split(" ## ")
+# with open("institute_lux.csv", newline="") as csvfile:
+#     reader = csv.DictReader(csvfile)
+#     # save it in a list:
+#     lux_institutes = list(reader)
+#     # split string "known_names" into a list of strings on "##":
+#     for institute in lux_institutes:
+#         institute["known_names"] = institute["known_names"].split(" ## ")
 # print("Und die ganze Tabelle:")
 # print(dachlux_institutes)
 
@@ -120,11 +121,6 @@ records_bf = Graph()
 # make the graph named for the records: just for clarity in the output:
 records_bf = Graph(identifier=URIRef("https://w3id.org/zpid/bibframe/records/"))
 
-# import the graph for kerndaten.ttl from PsychAuthors - we'll need it for
-# matching person names to ids when the names in the records are unmatchable
-# - we'll try to match alternate names from kerndaten:
-kerndaten = Graph()
-kerndaten.parse("ttl-data/kerndaten.ttl", format="turtle")
 
 # Bind the namespaces to the prefixes we want to see in the output:
 records_bf.bind("bf", ns.BF)
@@ -156,35 +152,6 @@ records_bf.bind("licenses", ns.LICENSES)  # licenses
 # These functions will later be called at the bottom of the program, in a loop over all the xml records.
 
 
-# Define a function to convert a string to camel case
-def camel_case(s):
-    # Use regular expression substitution to replace underscores and hyphens with spaces,
-    # then title case the string (capitalize the first letter of each word), and remove spaces
-    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
-
-    # Join the string, ensuring the first letter is lowercase
-    return "".join([s[0].lower(), s[1:]])
-
-
-def get_ror_org_country(affiliation_ror_id):
-    # given a ror id, get the country of the organization from the ror api:
-    # first, use only the last part of the ror id, which is the id itself:
-    affiliation_ror_id = affiliation_ror_id.split("/")[-1]
-    # the country name is in country.name in the json response
-
-    ror_request = session_ror.get(
-        f"{config('ROR_API_URL')}/v1/organizations/" + affiliation_ror_id,
-        timeout=20,
-    )
-    if ror_request.status_code == 200:
-        ror_response = ror_request.json()
-        if "country" in ror_response:
-            return ror_response["country"]["name"]
-        else:
-            logging.info("no country found for " + affiliation_ror_id)
-            return None
-
-
 def add_instance_license(resource_uri, record):
     """Reads field COPR and generates a bf:usageAndAccessPolicy node for the resource_uri based on it. Includes a link to the vocabs/licenses/ vocabulary in our Skosmos. We'll probably only use the last subfield (|c PUBL) and directly build a skosmos-uri from it (and pull the label from there?). There are more specific notes in the migration aection of each license concept in Skosmos. Note: the license always applies to an instance (or an instancebundle), not to a work, since the license is about the publication, not the content of the publication - the work content might be published elsewhere with a different license. Manuel mentioned something like that already about being confused about different licenses for different versions at Crossref.
 
@@ -203,37 +170,37 @@ def add_instance_license(resource_uri, record):
             # license_uri = URIRef(LICENSES + license_code)
             # several cases and the different uris for the licenses:
             if license_code == "CC":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1_0")
             elif license_code == "PDM":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1_0")
             # CC BY 4.0
             elif license_code == "CC BY 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4_0")
             # CC BY-SA 4.0
             elif license_code == "CC BY-SA 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4_0")
             # CC BY-NC-ND 3.0
             elif license_code == "CC BY-NC-ND 3.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3_0")
             # CC BY-NC-ND 4.0
             elif license_code == "CC BY-NC-ND 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4_0")
             elif license_code == "CC BY-NC 1.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1_0")
             elif license_code == "CC BY-NC 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4_0")
                 # CC BY-NC-ND 2.5
             elif license_code == "CC BY-NC-ND 2.5":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2.5")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2_5")
                 # CC BY-NC-SA 4.0
             elif license_code == "CC BY-NC-SA 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4_0")
                 # CC BY-ND 4.0
             elif license_code == "CC BY-ND 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4_0")
                 # CC BY-ND 2.5
             elif license_code == "CC BY-ND 2.5":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2.5")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2_5")
                 # CC BY (unknown version)
             elif license_code == "CC BY":
                 license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY")
@@ -282,7 +249,7 @@ def add_instance_license(resource_uri, record):
 
                 # Get the label from skosmos:
                 try:
-                    german_preflabel = localapi.get_preflabel_from_skosmos(
+                    german_preflabel = local_api_lookups.get_preflabel_from_skosmos(
                         license_uri, "licenses", "de"
                     )
                 except:
@@ -291,7 +258,7 @@ def add_instance_license(resource_uri, record):
                     )
                     german_preflabel = None
                 try:
-                    english_preflabel = localapi.get_preflabel_from_skosmos(
+                    english_preflabel = local_api_lookups.get_preflabel_from_skosmos(
                         license_uri, "licenses", "en"
                     )
                 except:
@@ -462,559 +429,6 @@ def add_isbns(record, instancebundle_uri):
         #             print("found no place for e-issn: " + isbn_ebook)
 
 
-def match_paups_to_contribution_nodes(work_uri, record):
-    # go through all PAUP fields and get the id:
-    for paup in record.findall("PAUP"):
-        paup_id = helpers.get_subfield(paup.text, "n")
-        paup_name = helpers.get_mainfield(paup.text)
-        # get the given and family part of the paup name:
-        paup_split = paup_name.split(",")
-        paup_familyname = paup_split[0].strip()
-        paup_givenname = paup_split[1].strip()
-        paupname_normalized = normalize_names(paup_familyname, paup_givenname)
-        # print("paupname_normalized: " + paupname_normalized)
-        # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
-        for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-            # get the agent of the contribution:
-            agent = records_bf.value(contribution, ns.BF.agent)
-            # if the agent is a person, get the given and family names:
-            if records_bf.value(agent, RDF.type) == ns.BF.Person:
-                # get the given and family names of the agent:
-                givenname = records_bf.value(agent, ns.SCHEMA.givenName)
-                familyname = records_bf.value(agent, ns.SCHEMA.familyName)
-                aupname_normalized = normalize_names(familyname, givenname)
-                # print("aupname_normalized: " + aupname_normalized)
-                # if the paupname_normalized matches the agent's name, add the paup_id as an identifier to the agent:
-                # if paupname_normalized == aupname_normalized:
-                # check using fuzzywuzzy:
-                # use partial_ratio for a more lenient comparison - so we can check if one of the them is a substring of the other - for double names, etc.:
-                if fuzz.partial_ratio(paupname_normalized, aupname_normalized) > 80:
-                    # create a fragment uri node for the identifier:
-                    paup_id_node = URIRef(str(agent) + "_psychauthorsid")
-                    # make it a locid:psychAuthorsID:
-                    records_bf.set((paup_id_node, RDF.type, ns.PXC.PsychAuthorsID))
-                    # add the paup id as a literal to the identifier node:
-                    records_bf.add((paup_id_node, RDF.value, Literal(paup_id)))
-                    # add the identifier node to the agent node:
-                    records_bf.add((agent, ns.BF.identifiedBy, paup_id_node))
-                    # print("paup_id added to agent: " + paup_id)
-                    # and break the loop:
-                    break
-        # after all loops, print a message if no match was found:
-        else:
-            logging.info(
-                "no match found for paup_id "
-                + paup_id
-                + " ("
-                + paup_name
-                + ")"
-                + " in record "
-                + record.find("DFK").text
-                + ". Checking name variants found in kerndaten for this id..."
-            )
-            # loop through the contribtors again, and check if any of the alternate names from psychauthors kerndaten match a person's name from AUP:
-            for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-                # get the agent of the contribution:
-                agent = records_bf.value(contribution, ns.BF.agent)
-                # if the agent is a person, get the given and family names:
-                if records_bf.value(agent, RDF.type) == ns.BF.Person:
-                    # get the given and family names of the agent:
-                    givenname = records_bf.value(agent, ns.SCHEMA.givenName)
-                    familyname = records_bf.value(agent, ns.SCHEMA.familyName)
-                    aupname_normalized = normalize_names(familyname, givenname)
-                    # try to match the paup_id to a uri in kerndaten.ttl and check if any of the alternate names match the agent's name:
-                    person_uri = URIRef("https://w3id.org/zpid/person/" + paup_id)
-                    for alternatename in kerndaten.objects(
-                        person_uri, ns.SCHEMA.alternateName
-                    ):
-                        # split the alternatename into family and given name:
-                        alternatename_split = alternatename.split(",")
-                        alternatename_familyname = alternatename_split[0].strip()
-                        alternatename_givenname = alternatename_split[1].strip()
-                        # normalize the name:
-                        alternatename_normalized = normalize_names(
-                            alternatename_familyname, alternatename_givenname
-                        )
-                        # if the alternatename matches the agent's name, add the paup_id as an identifier to the agent: again using fuzzywuzzy'S partial ratio to also match substrings of the name inside each other:
-                        if (
-                            fuzz.partial_ratio(
-                                alternatename_normalized, aupname_normalized
-                            )
-                            > 80
-                        ):
-                            # create a fragment uri node for the identifier:
-                            paup_id_node = URIRef(str(agent) + "_psychauthorsid")
-                            # make it a locid:psychAuthorsID:
-                            records_bf.set(
-                                (paup_id_node, RDF.type, ns.PXC.PsychAuthorsID)
-                            )
-                            # add the paup id as a literal to the identifier node:
-                            records_bf.add((paup_id_node, RDF.value, Literal(paup_id)))
-                            # add the identifier node to the agent node:
-                            records_bf.add((agent, ns.BF.identifiedBy, paup_id_node))
-                            logging.info("paup_id added to agent: " + paup_id)
-
-
-def match_orcids_to_contribution_nodes(work_uri, record):
-    # go through all ORCID fields and get the id:
-    for orcid in record.findall("ORCID"):
-        # print("orcid: " + orcid.text)
-        orcid_id = helpers.get_subfield(orcid.text, "u")
-        orcid_name = helpers.get_mainfield(orcid.text)
-        # is the orcid well formed?
-        # clean up the orcid_id by removing spaces that sometimes sneak in when entering them in the database:
-        if orcid_id is not None and " " in orcid_id:
-            logging.warning(
-                "warning: orcid_id contains spaces, cleaning it up: " + orcid_id
-            )
-        orcid_id = orcid_id.replace(" ", "")
-        # by the way, here is a regex pattern for valid orcids:
-        orcid_pattern = re.compile(
-            r"^(https?:\/\/(orcid\.)?org\/)?(orcid\.org\/)?(\/)?([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X])$"
-        )
-        if orcid_pattern.match(orcid_id):
-            # remove the prefixes and slashes from the orcid id:
-            orcid_id = orcid_pattern.match(orcid_id).group(5)
-        else:
-            # warn if it doesn't match the pattern for well-formed orcids:
-            logging.warning(f"warning: invalid orcid: {orcid_id}")
-        # get the given and family part of the orcid name:
-        # make sure we give an error message when we can't split:
-        try:
-            orcid_split = orcid_name.split(",")
-            orcid_familyname = orcid_split[0].strip()
-            orcid_givenname = orcid_split[1].strip()
-            orcidname_normalized = normalize_names(orcid_familyname, orcid_givenname)
-        except:
-            logging.info(
-                "couldn't split orcid name into given and family name: "
-                + orcid_name
-                + " in record "
-                + record.find("DFK").text
-                + ". Using the full name as a fallback."
-            )
-            orcidname_normalized = (
-                orcid_name  # if we can't split, just try the full name
-            )
-        # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person - and match names to those in the orcid field:
-        for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-            # get the agent of the contribution:
-            agent = records_bf.value(contribution, ns.BF.agent)
-            # if the agent is a person, get the given and family names:
-            if records_bf.value(agent, RDF.type) == ns.BF.Person:
-                # get the given and family names of the agent:
-                givenname = records_bf.value(agent, ns.SCHEMA.givenName)
-                familyname = records_bf.value(agent, ns.SCHEMA.familyName)
-                aupname_normalized = normalize_names(familyname, givenname)
-
-                # if the orcidname_normalized matches the agent's name, add the orcid_id as an identifier to the agent:
-
-                # check using fuzzywuzzy - use partial_ratio to check if one of the them is a substring of the other:
-                if fuzz.partial_ratio(aupname_normalized, orcidname_normalized) > 80:
-                    # create a fragment uri node for the identifier:
-                    orcid_id_node = URIRef(str(agent) + "_orcid")
-                    # make it a locid:orcid:
-                    records_bf.set((orcid_id_node, RDF.type, ns.LOCID.orcid))
-                    # add the orcid id as a literal to the identifier node:
-                    records_bf.add((orcid_id_node, RDF.value, Literal(orcid_id)))
-                    # add the identifier node to the agent node:
-                    records_bf.add((agent, ns.BF.identifiedBy, orcid_id_node))
-                    # print("orcid_id added to agent: " + orcid_id)
-                    # and break the loop:
-                    break
-        # after all loops, print a message if no match was found:
-        else:
-            logging.info(
-                "no match found for orcid_id "
-                + orcid_id
-                + " ("
-                + orcid_name
-                + ") in record "
-                + record.find("DFK").text
-            )
-
-
-def match_CS_COU_affiliations_to_first_contribution(work_uri, record):
-    # get the content of CS:
-    try:
-        affiliation = record.find("CS").text
-    except:
-        affiliation = ""
-    # get the country from COU:
-    try:
-        country = record.find("COU").text
-    except:
-        country = ""
-    #
-    # if there is a CS field, add the affiliation to the first contribution node:
-    if affiliation is not None and country is not None:
-        # get the first contribution node:
-        for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-            agent_node = records_bf.value(
-                contribution, ns.BF.agent
-            )  # get the agent of the contribution
-            # dont get the agent at all, but just the position of the contribution:
-            position = records_bf.value(contribution, ns.PXP.contributionPosition)
-            if (
-                int(position) == 1
-                and records_bf.value(agent_node, RDF.type) == ns.BF.Person
-            ):
-                # add the affiliation to the contribution node using the function we already have for it:
-                records_bf.add(
-                    (
-                        contribution,
-                        ns.MADS.hasAffiliation,
-                        build_affiliation_nodes(agent_node, affiliation, country),
-                    )
-                )
-                break
-
-
-def match_email_to_contribution_nodes(work_uri, record):
-    # there is only ever one email field in a record, so we can just get it.
-    # unless there is also a field emid, the email will be added to the first contribution node.
-    # if there is an emid, the email will be added to the person with a name matching the name in emid.
-    # fortunately, the name in EMID should always be exactly the same as the one in an AUP field
-    # (unlike for PAUP and ORCID, :eyeroll:) so matching the names is pretty easy.
-    # First get the email:
-    if record.find("EMAIL") is not None:
-        # cleaning up the horrible mess that star makes of any urls and email
-        # addresses (it replaces _ with space, but there is no way to
-        # differentiate between an underscore-based space and a real one...):
-        email = html.unescape(
-            mappings.replace_encodings(record.find("EMAIL").text.strip())
-        )
-        # replace spaces with _, but only if it doesnt come directly before a dot:
-        email = re.sub(r"\s(?=[^\.]*\.)", "_", email)
-        # if a space comes directly before a dot or after a dot, remove it:
-        email = re.sub(r"\s\.", ".", email)
-        email = re.sub(r"\.\s", ".", email)
-        # check if this is a valid email:
-        email_pattern = re.compile(
-            r"^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$"
-        )
-        # check if email matches the regex in email_pattern:
-        if email_pattern.match(email):
-            email = "mailto:" + email
-            # if there is an emid, the email will be added to the person with a name matching the name in emid.
-
-            # get the emid:
-            try:
-                emid_name = record.find("EMID").text
-            except:
-                emid_name = None
-            if emid_name is not None:
-                # go through all bf:Contribution nodes of this work_uri, and get the given and family names of the agent, if it is a person:
-                for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-                    # get the agent of the contribution:
-                    agent = records_bf.value(contribution, ns.BF.agent)
-                    # if the agent is a person, get the given and family names:
-                    if records_bf.value(agent, RDF.type) == ns.BF.Person:
-                        # get the given and family names of the agent:
-                        name = records_bf.value(agent, RDFS.label)
-                        emid_name = mappings.replace_encodings(emid_name).strip()
-                        # if the emid_name matches the agent's name, add the email as a mads:email to the agent:
-                        if fuzz.partial_ratio(emid_name, name) > 80:
-                            # add to contribution node:
-                            records_bf.add((contribution, ns.MADS.email, URIRef(email)))
-                            # and break the loop, since we only need to add the email to one person:
-                            break
-            # if after all loops, no match was found for EMID in the AUP-based name,
-            # add the email to the first contribution node:
-            else:
-                # finding the contribution node from those the work_uri has that has pxp:contributionPosition 1:
-                for contribution in records_bf.objects(work_uri, ns.BF.contribution):
-                    # dont get the agent at all, but just the position of the contribution:
-                    position = records_bf.value(
-                        contribution, ns.PXP.contributionPosition
-                    )
-                    if int(position) == 1:
-                        # add to contribution node:
-                        records_bf.add((contribution, ns.MADS.email, URIRef(email)))
-                        # break after position 1 - since we only need the first contribution node:
-                        break
-        else:
-            logging.warning(
-                f"invalid email found in record {record.find('DFK').text}: {email}, discarding email"
-            )
-
-
-def extract_contribution_role(contributiontext, record):
-    role = helpers.get_subfield(contributiontext, "f")
-    if role is not None:
-        # if we find a role, return it:
-        if role == "VE":
-        # if the role is VE (Verfasser), we will replace it with AU (they were used interchangeably
-        # in the past, but we only kept AU):
-            role = "AU"
-        # Also: RE was used for Interviewers, but only in Interviews, 
-        # otherwise they meant "Redaktion", so replace with ED
-        elif role == "RE":
-            # check if any CM of the record contains "interview", then replace
-            # role with "IVR" (interviewer), otherwise with "ED" (editor):
-            if "interview" in record.find("CM").text:
-                role = "IVR"
-            else:
-                role = "ED"
-        return role
-    else:
-        # if none is found, add the default role AU:
-        return "AU"
-
-
-def generate_bf_contribution_node(work_uri, record, contribution_counter):
-    # will be called by functions that add AUPs and AUKS
-    # adds a bf:Contribution node, adds the position from a counter, and returns the node.
-    contribution_qualifier = None
-    # make the node and add class:
-    contribution_node = URIRef(work_uri + "#contribution" + str(contribution_counter))
-    records_bf.add((contribution_node, RDF.type, ns.BF.Contribution))
-
-    # add author positions:
-    records_bf.add(
-        (
-            contribution_node,
-            ns.PXP.contributionPosition,
-            Literal(contribution_counter),
-        )
-    )
-    # if we are in the first loop, set contribution's bf:qualifier" to "first":
-    if contribution_counter == 1:
-        contribution_qualifier = "first"
-        records_bf.add((contribution_node, RDF.type, ns.BFLC.PrimaryContribution))
-    # if we are in the last loop, set "contribution_qualifier" to "last":
-    elif contribution_counter == len(record.findall("AUP")) + len(
-        record.findall("AUK")
-    ):
-        contribution_qualifier = "last"
-    # if we are in any other loop but the first or last, set "contribution_qualifier" to "middle":
-    else:
-        contribution_qualifier = "middle"
-    # add the contribution qualifier to the contribution node:
-    records_bf.add(
-        (contribution_node, ns.BF.qualifier, Literal(contribution_qualifier))
-    )
-    # finally, return the finished contribution node so we can add our agent and affiliation data to it in their own functions:
-    return contribution_node
-
-
-def add_bf_contributor_corporate_body(work_uri, record):
-    # adds all corporate body contributors from any of the record's AUK fields as contributions.
-    contribution_counter = len(record.findall("AUP"))
-
-    for org in record.findall("AUK"):
-        # count up the contribution_counter:
-        contribution_counter += 1
-        # generate a contribution node, including positions, and return it:
-        contribution_node = generate_bf_contribution_node(
-            work_uri, record, contribution_counter
-        )
-        # do something:
-        # read the text in AUK and add it as a label:
-        # create a fragment uri node for the agent:
-        org_node = URIRef(str(contribution_node) + "_orgagent")
-        records_bf.add((org_node, RDF.type, ns.BF.Organization))
-
-        ## extracting the role:
-        role = extract_contribution_role(org.text, record)
-        # check if there is a role in |f subfield and add as a role, otherwise set role to AU
-        records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
-
-        try:
-            # get the name (but exclude any subfields - like role |f, affiliation |i and country |c )
-            org_name = mappings.replace_encodings(helpers.get_mainfield(org.text))
-            # org_name = mappings.replace_encodings(org.text).strip()
-        except:
-            logging.warning(
-                f"{record.find('DFK').text}: skipping malformed AUK: {org.text}"
-            )
-            continue
-        # get ror id of org from api:
-        org_ror_id = get_ror_id_from_api(org_name)
-        # if there is a ror id, add the ror id as an identifier:
-        if org_ror_id is not None and org_ror_id != "null":
-            # create a fragment uri node fore the identifier:
-            org_ror_id_node = URIRef(str(org_node) + "_rorid")
-            # make it a locid:ror:
-            records_bf.set((org_ror_id_node, RDF.type, ns.LOCID.ror))
-            # add the ror id as a literal to the identifier node:
-            records_bf.add((org_ror_id_node, RDF.value, Literal(org_ror_id)))
-            records_bf.add((org_node, ns.BF.identifiedBy, org_ror_id_node))
-        # else:
-        #     print("ror-api: no ror id found for " + org_name)
-
-        # get any affiliation in |i and add it to the name:
-        try:
-            org_affiliation_name = helpers.get_subfield(org.text, "i")
-            # print("org affiliation:" + org_affiliation_name)
-        except:
-            org_affiliation_name = None
-            # print("AUK subfield i: no affiliation for org " + org_name)
-        if org_affiliation_name is not None:
-            org_name = org_name + "; " + org_affiliation_name
-        # # get country name in |c, if it exists:
-        try:
-            org_country = helpers.get_subfield(org.text, "c")
-            # print("AUK subfield c: org country:" + org_country)
-        except:
-            org_country = None
-            # print("AUK subfield c: no country for org " + org_name)
-        if org_country is not None:
-            # generate a node for the country, clean up the label, look up the geonames id and then add both label and geonamesid node to the org node!
-            affiliation_node = build_affiliation_nodes(org_node, "", org_country)
-            # add the affiliation node to the contribution node:
-            records_bf.add(
-                (contribution_node, ns.MADS.hasAffiliation, affiliation_node)
-            )
-
-        # TODO: we should probably check for affiliations and countries in fields CS and COU for records that have only AUKS or AUK as first contribution? we already did the same for persons.
-
-        # add the name as the org node label:
-        records_bf.add((org_node, RDFS.label, Literal(org_name)))
-
-        ## --- Add the contribution node to the work node:
-        records_bf.add((work_uri, ns.BF.contribution, contribution_node))
-        # add the org node to the contribution node as a contributor:
-        records_bf.add((contribution_node, ns.BF.agent, org_node))
-
-
-# %% [markdown]
-# ## Function: Create Person Contribution nodes from Fields AUP, EMID, EMAIL, AUK, PAUP, CS and COU
-#
-# Use this scheme:
-#
-# ```turtle
-# works:0123456_work a bf:Work;
-#     bf:contribution works:0123456_work#contribution1
-# .
-# works:0123456_work#contribution1 a bf:Contribution, bflc:PrimaryContribution;
-#         # the Bibframe Contribution includes, as usual, an agent and their role,
-#         # but is supplemented with an Affiliation (in the context of that work/while it was written),
-#         # and a position in the author sequence.
-#         bf:agent
-#         [
-#             a bf:Person, schema:Person;
-#             rdfs:label "Trillitzsch, Tina"; # name when creating work
-#             schema:givenName "Tina"; schema:familyName "Trillitzsch";
-#             # owl:sameAs <https://w3id.org/zpid/person/tt_0000001>, <https://orcid.org/0000-0001-7239-4844>; # authority uris of person (local, orcid)
-#             bf:identifiedBy [a pxc:PsychAuthorsID; rdf:value "p01979TTR"; #legacy authority ID
-#             ];
-#             bf:identifiedBy [a locid:orcid; rdf:value "0000-0001-7239-4844"; # ORCID
-#             ];
-#         ]
-#         # we use a model inspired by Option C in Osma Suominen'a suggestion for https://github.com/dcmi/dc-srap/issues/3
-#         # adding the Affiliation into the Contribution, separate from the agent itself, since the affiliation
-#         # is described in the context of this work, not not as a statement about the person's
-#         # current affiliation:
-#         mads:hasAffiliation [
-#             a mads:Affiliation;
-#             # Affiliation blank node has info about the affiliation org (including persistent identifiers),
-#             # the address (country with geonames identifier),
-#             # and the person's email while affiliated there.
-#             mads:organization [
-#                 a bf:Organization;
-#                 rdfs:label "Leibniz Institute of Psychology (ZPID); Digital Research Development Services"; # org name when work was created
-#                 # owl:sameAs <https://w3id.org/zpid/org/zpid_0000001>, <https://ror.org/0165gz615>; # authority uris of org (local, ror)
-#                 # internal id and ror id as literal identifiers:
-#                 bf:identifiedBy [a pxc:ZpidCorporateBodyId; rdf:value "0000001"; ];
-#                 bf:identifiedBy [a locid:ror; rdf:value "0165gz615"; ];
-#             ];
-#             mads:hasAffiliationAddress [a mads:Address;
-#                 mads:country [
-#                     a mads:Country;
-#                     rdfs:label "Germany";
-#                     bf:identifiedBy [a locid:geonames; rdf:value "2921044"; ];
-#                     # owl:sameAs <https://w3id.org/zpid/place/country/ger>;
-#                 ]
-#             ];
-#             mads:email <mailto:ttr@leibniz-psychology.org>; # correspondence author email
-#         ];
-#         bf:role <http://id.loc.gov/vocabulary/relators/aut>;
-#         pxp:contributionPosition 1; bf:qualifier "first"; # first author in sequence: our own subproperty of bf:qualifier & schema:position (also: middle, last)
-#     ].
-# ```
-#
-# Todos:
-# - [x] create blank node for contribution and add agent of type bf:Person
-# - [x] add author position (first, middle, last plus order number) to the contribution
-# - [x] make first author a bflc:PrimaryContribution
-# - [x] match AUP with PAUP to get person names and ids (normalize first)
-# - [x] extend AUP-PAUP match with lookup in kerndaten table/ttl to compare schema:alternatename of person with name in AUP (but first before normalization)
-# - [x] add ORCID to the person's blank node (doesn't add 4 ORCIDs for unknown reason - maybe duplicates?)
-# - [x] add EMAIL to person's blank node (either to person in EMID or to first author)
-# - [x] add affiliation from CS field and COU field to first author
-# - [x] add Affiliation blank node with org name, country to each author that has these subfields in their AUP (|i and |c)
-# - [x] add role from AUP subfield |f
-# - [x] add country geonames id using lookup table
-# - [ ] move mads:email Literal from bf:Contribution to mads:Affiliation
-# - [x] later: reconcile affiliations to add org id, org ror id (once we actually have institution authority files)
-#
-
-# %%
-from modules.mappings import geonames_countries
-
-
-def country_geonames_lookup(country):
-    for case in geonames_countries:
-        if case[0].casefold() == str(country).casefold():
-            return case[0], case[1]
-    return None
-
-
-# %%
-def sanitize_country_names(country_name):
-    if country_name == "COSTA":
-        country_name = "Costa Rica"
-    elif country_name == "CZECH":
-        country_name = "Czech Republic"
-    elif country_name == "NEW":
-        country_name = "New Zealand"
-    elif country_name == "SAUDI":
-        country_name = "Saudi Arabia"
-    elif country_name == "PEOPLES":
-        country_name = "People's Republic of China"
-    return country_name
-
-
-# %%
-
-
-def add_bf_contribution_role(role):
-    # # return role_uri,
-    # # generate a node of type bf:Role:
-    # records_bf.add((role, RDF.type, ns.BF.Role))
-    # # construct the uri for the bf:Role object:
-    # role_uri = URIRef(ROLES + role)
-    # # add the uri to the role node:
-    # records_bf.add((role, RDF.value, role_uri))
-    # # return the new node:
-    # return role
-    return URIRef(ns.ROLES + role)
-
-
-def normalize_names(familyname, givenname):
-    # given a string such as "Forkmann, Thomas"
-    # return a normalized version of the name by
-    # replacing umlauts and ß with their ascii equivalents and making all given names abbreviated:
-    familyname_normalized = (
-        familyname.replace("ä", "ae")
-        .replace("ö", "oe")
-        .replace("ü", "ue")
-        .replace("Ä", "Ae")
-        .replace("Ö", "Oe")
-        .replace("Ü", "Ue")
-        .replace("ß", "ss")
-    )
-    # generate an abbreviated version of givenname (only the first letter),
-    # (drop any middle names or initials, but keep the first name):
-    fullname_normalized = familyname_normalized
-    if givenname:
-        givenname_abbreviated = givenname[0] + "."
-        # generate a normalized version of the name by concatenating the two with a comma as the separator:
-        fullname_normalized = familyname_normalized + ", " + givenname_abbreviated
-    return fullname_normalized
-
-
 def get_local_authority_institute(affiliation_string, country):
     """Uses ~~fuzzywuzzy~~ RapidFuzz to look up the affilaition string in a local authority table loaded from a csv file."""
     if country == "LUXEMBOURG":
@@ -1022,342 +436,10 @@ def get_local_authority_institute(affiliation_string, country):
             affiliation_string, lux_institutes, scorer=fuzz.token_set_ratio
         )
         return best_match[0].get("uuid")
-    else:
-        return None
 
 
-def get_ror_id_from_api(orgname_string):
-    # this function takes a string with an organization name (e.g. from affiliations) and returns the ror id for that org from the ror api
-
-    # but first, find some common substrings from names that ror can't find with those it will find:
-    for affiliation in mappings.affilation_org_substr_replacelist:
-        if re.search(r"\b" + re.escape(affiliation[0]) + r"\b", orgname_string, re.IGNORECASE):
-            orgname_string = affiliation[1]
-            # print("replacing " + funder[0] + " with " + funder[1])
-            return orgname_string
-
-    # make a request to the ror api:
-    ror_api_url = f"{ROR_API_URL}/v1/organizations?affiliation={orgname_string}"
-    # ror_api_request = requests.get(ror_api_url)
-    # make request to api with caching:
-    ror_api_request = session_ror.get(ror_api_url, timeout=20)
-    # if the request was successful, get the json response:
-    if ror_api_request.status_code == 200:
-        ror_api_response = ror_api_request.json()
-        # check if the response has any hits:
-        if len(ror_api_response["items"]) > 0:
-            # if so, get the item with a key value pair of "chosen" and "true" and return its id:
-            for item in ror_api_response["items"]:
-                if item["chosen"] == True:
-                    return item["organization"]["id"]
-                else:
-                    logging.info("No ror id found for affiliation " + orgname_string)
-        else:
-            return None
-    else:
-        return None
 
 
-def build_affiliation_nodes(agent_node, agent_affiliation, agent_affiliation_country):
-    # person_affiliation = replace_encodings(person_affiliation)
-    # is passed two string: the affiliation name and the affiliation country name
-    # make a fragement uri node for the affiliation (use agent node as base) and make it class mads:Affiliation:
-    agent_affiliation_node = URIRef(str(agent_node) + "_affiliation1")
-    records_bf.add((agent_affiliation_node, RDF.type, ns.MADS.Affiliation))
-    # make a fragment uri node for the affiliation organization and make it class bf:Organization:
-    # but only for person agents. Org agents will not get an additial affiliation org node (we will pass an empty string for orgs that need an affiliation node to hold their address).
-    if agent_affiliation is not None and agent_affiliation != "":
-        agent_affiliation_org_node = URIRef(
-            str(agent_affiliation_node) + "_organization"
-        )
-        records_bf.set((agent_affiliation_org_node, RDF.type, ns.BF.Organization))
-        # add the affiliation organization node to the affiliation node:
-        records_bf.add(
-            (agent_affiliation_node, ns.MADS.organization, agent_affiliation_org_node)
-        )
-        # add the affiliation string to the affiliation org node:
-        records_bf.add(
-            (agent_affiliation_org_node, RDFS.label, Literal(agent_affiliation))
-        )
-
-    # do a ror lookup for the affiliation string
-    # and if there is a ror id, add the ror id as an identifier:
-    # affiliation_ror_id = None
-    affiliation_ror_id = get_ror_id_from_api(agent_affiliation)
-
-    if affiliation_ror_id is not None and affiliation_ror_id != "null":
-        # create a fragment uri node fore the identifier:
-        affiliation_ror_id_node = URIRef(str(agent_affiliation_org_node) + "_rorid")
-        # make it a locid:ror:
-        records_bf.set((affiliation_ror_id_node, RDF.type, ns.LOCID.ror))
-        # add the ror id as a literal to the identifier node:
-        records_bf.add(
-            (affiliation_ror_id_node, RDF.value, Literal(affiliation_ror_id))
-        )
-        records_bf.add(
-            (agent_affiliation_org_node, ns.BF.identifiedBy, affiliation_ror_id_node)
-        )
-    # else:
-    # print("no ror id found for " + person_affiliation)
-    #### unused: matching luxembourg Affiliation names to local authority table in our csv:
-    # affiliation_local_id = None
-    # affiliation_local_id = get_local_authority_institute(
-    #     person_affiliation, person_affiliation_country
-    # )
-    # if affiliation_local_id is not None:
-    #     # add a blank node fore the identifier:
-    #     affiliation_local_id_node = BNode()
-    #     # make it a pxc:OrgID:
-    #     records_bf.add((affiliation_local_id_node, RDF.type, PXC.OrgID))
-    #     records_bf.add(
-    #         (person_affiliation_org_node, ns.BF.identifiedBy, affiliation_local_id_node)
-    #     )
-    #     # add the local uuid as a literal to the identifier node:
-    #     records_bf.add(
-    #         (affiliation_local_id_node, RDF.value, Literal(affiliation_local_id))
-    #     )
-
-    # TODO: sometimes people have an affiliation, but no country (no |c subfield).
-    # currently we dont handle that at all and a country label "None" is added
-    # where we should just not add an AffiliationAdress node with a country node at all.
-    # make a fragment uri node for the affiliation address and make it class mads:Address:
-    if agent_affiliation_country is None or agent_affiliation_country == "":
-        # try to check if we have a ror id for the affiliation and get the country from the ror api:
-        try:
-            agent_affiliation_country = get_ror_org_country(affiliation_ror_id)
-        except:
-            agent_affiliation_country = None
-
-    if agent_affiliation_country is not None and agent_affiliation_country != "":
-        person_affiliation_address_node = URIRef(
-            str(agent_affiliation_node) + "_address"
-        )
-        records_bf.add((person_affiliation_address_node, RDF.type, ns.MADS.Address))
-        # add a country node to the affiliation address node:
-        person_affiliation_country_node = URIRef(
-            str(person_affiliation_address_node) + "_country"
-        )
-        records_bf.add((person_affiliation_country_node, RDF.type, ns.MADS.Country))
-        # add the country node to the affiliation address node:
-        records_bf.add(
-            (
-                person_affiliation_address_node,
-                ns.MADS.country,
-                person_affiliation_country_node,
-            )
-        )
-        # add the affiliation address string to the affiliation address node:
-        records_bf.add(
-            (
-                person_affiliation_country_node,
-                RDFS.label,
-                Literal(agent_affiliation_country),
-            )
-        )
-
-        # if the country is in the geonames lookup table, add the geonames uri as sameAs and the geonames id as an identifier:
-        if country_geonames_lookup(agent_affiliation_country):
-            improved_country_name, geonamesId = country_geonames_lookup(
-                agent_affiliation_country
-            )
-            # create a url to click and add it with sameas:
-            # geonames_uri = URIRef("http://geonames.org/" + geonamesId + "/")
-            # records_bf.add((person_affiliation_country_node, SCHEMA.sameAs, geonames_uri))
-            # replace the country name in the affiliation address node with the improved country name:
-            records_bf.add(
-                (
-                    person_affiliation_country_node,
-                    RDFS.label,
-                    Literal(improved_country_name),
-                )
-            )
-            # and remove the old label:
-            records_bf.remove(
-                (
-                    person_affiliation_country_node,
-                    RDFS.label,
-                    Literal(agent_affiliation_country),
-                )
-            )
-            # add the geonames identifier:
-            person_affiliation_country_identifier_node = URIRef(
-                str(person_affiliation_country_node) + "_geonamesid"
-            )
-            # records_bf.add((person_affiliation_country_identifier_node, RDF.type, ns.BF.Identifier))
-            records_bf.add(
-                (
-                    person_affiliation_country_identifier_node,
-                    RDF.type,
-                    ns.LOCID.geonames,
-                )
-            )
-            records_bf.add(
-                (
-                    person_affiliation_country_identifier_node,
-                    RDF.value,
-                    Literal(geonamesId),
-                )
-            )
-            records_bf.add(
-                (
-                    person_affiliation_country_node,
-                    ns.BF.identifiedBy,
-                    person_affiliation_country_identifier_node,
-                )
-            )
-        # add the affiliation address node to the affiliation node:
-        records_bf.add(
-            (
-                agent_affiliation_node,
-                ns.MADS.hasAffiliationAddress,
-                person_affiliation_address_node,
-            )
-        )
-
-    # return the finished affiliation node with all its children and attached strings:
-    return agent_affiliation_node
-
-
-# the full function that creates a contribution node for each person in AUP:
-# first, get all AUPs in a record and create a node for each of them
-def add_bf_contributor_person(work_uri, record):
-    # initialize a counter for the contribution position and a variable for the contribution qualifier:
-    # contribution_counter = 0
-    # contribution_qualifier = None
-
-    for index, person in enumerate(record.findall("AUP")):
-        # count how often we've gone through the loop to see the author position:
-
-        # do all the things a contribution needs in another function (counting and adding positions, generating fragment uri)
-        contribution_node = generate_bf_contribution_node(work_uri, record, index + 1)
-
-        # make a fragment uri node for the person:
-        person_node = URIRef(str(contribution_node) + "_personagent")
-        records_bf.add((person_node, RDF.type, ns.BF.Person))
-
-        # add the name from AUP to the person node, but only use the text before the first |: (and clean up the encoding):
-        personname = mappings.replace_encodings(
-            helpers.get_mainfield(person.text)
-        ).strip()
-
-        records_bf.add((person_node, RDFS.label, Literal(personname)))
-
-        # initialize variables for later use:
-        personname_normalized = None
-        orcidId = None
-
-        # split personname into first and last name:
-        personname_split = personname.split(",")
-        try:
-            familyname = personname_split[0].strip()
-            givenname = personname_split[1].strip()
-        except:
-            familyname = personname
-            givenname = ""
-            logging.info(
-                "no comma in personname: "
-                + personname
-                + " in record "
-                + record.find("DFK").text
-                + " - name content added as familyname + empty string for givenname."
-            )
-
-        records_bf.add((person_node, ns.SCHEMA.familyName, Literal(familyname)))
-        records_bf.add((person_node, ns.SCHEMA.givenName, Literal(givenname)))
-        # generate a normalized version of familyname to compare with PAUP name later:
-        # personname_normalized = normalize_names(familyname, givenname)
-        # for debugging, print the normalized name:
-        # records_bf.add((person_node, PXP.normalizedName, Literal(personname_normalized)))
-
-        # # check if there is a PAUP field in the same record that matches the personname from this AUP:
-        # paId = match_paup(record, person_node, personname_normalized)
-        # if paId is not None:
-        #     # create a fragment uri node for the identifier:
-        #     psychauthors_identifier_node = URIRef(str(person_node) + "_psychauthorsid")
-        #     records_bf.add((psychauthors_identifier_node, RDF.type, PXC.PsychAuthorsID))
-        #     records_bf.add((psychauthors_identifier_node, RDF.value, Literal(paId)))
-        #     # add the identifier node to the person node:
-        #     records_bf.add((person_node, ns.BF.identifiedBy, psychauthors_identifier_node))
-
-        # call the function get_orcid to match the personname with the ORCIDs in the record - so for every person in an AUP, we check all the ORCID fields in the record for a name match:
-        # orcidId = match_orcid(record, person_node, personname_normalized)
-        # if orcidId is not None:
-        #     # create a fragment node for the identifier:
-        #     orcid_identifier_node = URIRef(str(person_node) + "_orcid")
-        #     # records_bf.add((orcid_identifier_node, RDF.type, ns.BF.Identifier))
-        #     records_bf.add((orcid_identifier_node, RDF.type, LOCID.orcid))
-        #     records_bf.add((orcid_identifier_node, RDF.value, Literal(orcidId)))
-        #     # add the identifier node to the person node:
-        #     records_bf.add((person_node, ns.BF.identifiedBy, orcid_identifier_node))
-        #     # add the orcid id as a sameAs link to the person node:
-        #     # orcid_uri = "https://orcid.org/" + orcidId
-        #     # records_bf.add((person_node, SCHEMA.sameAs, URIRef(orcid_uri)))
-        # else:
-        #     print(
-        #         "no orcid found for "
-        #         + personname
-        #         + " in DFK "
-        #         + record.find("DFK").text
-        #     )
-
-        ## -----
-        # Getting Affiliations and their countries from first, CS and COU (only for first author), and then from subfields |i and |c in AUP (for newer records)
-        ## -----
-
-        # initialize variables we'll need for adding affiliations and country names from AUP |i and CS/COU/ADR:
-        affiliation_string = None
-        affiliation_country = None
-
-        # match affiliations in CS and COU to first contribution/author:
-        # dont add ADR here yet (even if this is the place for it - we may drop that info anyway.
-        # look for the field CS:
-        # if the contribution_counter is 1 (i.e. if this is the first loop/first author), add the affiliation to the person node:
-        # if contribution_counter == 1:
-        #     if record.find("CS") is not None:
-        #         print("CS field found in record " + record.find("DFK").text)
-        #         # get the content of the CS field:
-        #         affiliation_string = html.unescape(
-        #             mappings.replace_encodings(record.find("CS").text.strip())
-        #         )
-
-        #     if record.find("COU") is not None:
-        #         # get the country from the COU field:
-        #         affiliation_country = mappings.replace_encodings(
-        #             sanitize_country_names(record.find("COU").text.strip())
-        #         )
-
-        ## Get affiliation from AUP |i, country from |c:
-        # no looping necessary here, just check if a string |i exists in AUP and if so, add it to the person node as the affiliation string:
-        affiliation_string = helpers.get_subfield(person.text, "i")
-
-        affiliation_country = sanitize_country_names(
-            helpers.get_subfield(person.text, "c")
-        )
-
-        # pass this to function build_affiliation_nodes to get a finished affiliation node:
-        if affiliation_string != "" and affiliation_string is not None:
-            affiliation_node = build_affiliation_nodes(
-                person_node, affiliation_string, affiliation_country
-            )
-            # add the affiliation node to the contribution node:
-            records_bf.add(
-                (contribution_node, ns.MADS.hasAffiliation, affiliation_node)
-            )
-
-        # add the role from AUP subfield |f to the contribution node:
-        # extracting the role:
-        # check if there is a role in |f subfield and add as a role, otherwise set role to AU
-        role = extract_contribution_role(person.text, record)
-        records_bf.set((contribution_node, ns.BF.role, add_bf_contribution_role(role)))
-        
-
-        ## --- Add the contribution node to the work node:
-        records_bf.add((work_uri, ns.BF.contribution, contribution_node))
-        # add the person node to the contribution node as a contributor:
-        records_bf.add((contribution_node, ns.BF.agent, person_node))
-
-
-# %% [markdown]
 # ## TODO: Splitting Instances from single records with MT and MT2
 #
 # A record that has two media types (both a MT and a MT2 field) actually contains two instances.
@@ -1368,9 +450,6 @@ def add_bf_contributor_person(work_uri, record):
 #
 # We will also add a property to the instance that links it to its other format, via bf:otherPsysicalFormat.
 #
-
-
-# %%
 
 
 ###
@@ -1457,24 +536,6 @@ def add_publication_info(instance_uri, record):
 #
 # So, we need a node for the Identifier. This is a function that will return such an identifier bnode to add to the work_uri. We are calling it way down below in the loop:
 
-
-#  a function to be called in a for-loop while going through all records of the source xml,
-# which returns a new triple to add to the graph that has a hashed uri node for the dfk identifier.
-# The predicate is "bf:identifiedBy" and the object is a node of rdf:Type "pxc:DFK":
-# The actual identifier is a literal with the text from the "DFK" element of the record.
-def get_bf_identifier_dfk(resource_uri, dfk):
-    # make a node of the Identifier class from the BF namespace:
-    identifier = URIRef(resource_uri + "#dfk")
-    # records_bf.add ((identifier, RDF.type, ns.BF.Identifier))
-    # records_bf.add ((identifier, RDF.type, ns.BF.Local))
-    records_bf.add((identifier, RDF.type, ns.PXC.DFK))
-    # build the source node:
-    # records_bf.add((identifier_source, RDF.type, ns.BF.Source))
-    # records_bf.add((identifier_source, ns.BF.code, Literal("ZPID.PSYNDEX.DFK")))
-    # hang the id source node into the id node:
-    # records_bf.add((identifier, ns.BF.source, identifier_source))
-    records_bf.add((identifier, RDF.value, Literal(dfk)))
-    return identifier
 
 
 # ## Function: Get work language from LA
@@ -1644,7 +705,6 @@ def get_bf_translated_title(resource_uri, record):
     return translated_title
 
 
-# %% [markdown]
 # ## Function to split Table of Content from the Abstract field (ABH)
 #
 # This usually starts with " - Inhalt: " (for German Abstracts) or " - Contents: " (in English abstracts) and ends at the end of the field.
@@ -1672,8 +732,6 @@ def get_bf_translated_title(resource_uri, record):
 # ] .
 # ```
 
-
-# %%
 # def get_bf_toc(work_uri, record):
 #     # read the abstract in ABH
 #     contents = ""
@@ -1703,7 +761,6 @@ def get_bf_translated_title(resource_uri, record):
 #     # return records_bf.add((work_uri, ns.BF.tableOfContents, Literal("test")))
 
 
-# %% [markdown]
 # ## TODO: Function: Create nodes for Population Age Group (AGE) and Population Location (PLOC)
 #
 # Use this scheme:
@@ -1731,7 +788,7 @@ def get_bf_translated_title(resource_uri, record):
 # - replace funder names that fundref usually doesn't match correctly or at all
 # - look up funder names in crossref's fundref api to get their fundref id (a doi)
 
-
+# TODO: refactor the following 5 funding-related functions to a separate module: research_info.py
 def extract_grant_numbers(subfield_n_string):
     # this function takes a string that possibly contains an unstructured set of several award numbers connected with "and" etc. and returns a real array (List) of award numbers
     # first, split the string on "," or ";" or "and": (first replacing all semicolons and "ands" with commas)")
@@ -1883,8 +940,6 @@ def get_ror_funder_id(funder_name):
 
     return funder_id
 
-
-# TODO move to research_info
 def get_bf_grants(work_uri, record):
     """this function takes a string and returns a funder (name and fundref doi),
     a list of grant numbers, a note with grant holder and info"""
@@ -2011,7 +1066,7 @@ def get_bf_grants(work_uri, record):
         # return funding_contribution_node
 
 
-# # Function: Add Conference info from field CF
+# # Function: Add Conference info from field CF. TODO: refactor this to module research_info.py
 
 
 def get_bf_conferences(work_uri, record):
@@ -2151,16 +1206,21 @@ def process_record(record):
 
     ## Adding Contributions by Persons and Corporate Bodies to the work (only real creators, like editors, authors, translators,
     # not funders or conferences, which are handled below)
-    add_bf_contributor_person(work_uri, record)
+    contributions.add_bf_contributor_person(records_bf,work_uri, record)
     # are there any PAUPs left that haven't been successfull matched and added to contributors?
-    match_CS_COU_affiliations_to_first_contribution(work_uri, record)
-    match_paups_to_contribution_nodes(work_uri, record)
-    match_orcids_to_contribution_nodes(work_uri, record)
-    add_bf_contributor_corporate_body(work_uri, record)
-    match_email_to_contribution_nodes(work_uri, record)
+    contributions.match_CS_COU_affiliations_to_first_contribution(records_bf,work_uri, record)
+    contributions.match_paups_to_contribution_nodes(records_bf,work_uri, record)
+    contributions.match_orcids_to_contribution_nodes(records_bf,work_uri, record)
+    contributions.add_bf_contributor_corporate_body(records_bf,work_uri, record)
+    contributions.match_email_to_contribution_nodes(records_bf,work_uri, record)
 
-    # Add the table of contents to the work, if we can extract it from the abstract field (ABH):
-    # get_bf_toc(work_uri, record) # this is now done inside the abstract functions - along with abstract license recognition
+    ## Add dissertation info to the work, if it exists:
+    # run research_info.get_thesis_info(work_uri, record, records_bf) and feed the resulting dict into research_info.build_thesis_nodes(work_uri, records_bf, thesis_info)
+    thesis_info = research_info.get_thesis_info(record)
+    if thesis_info:
+        research_info.build_thesis_nodes(work_uri, records_bf, thesis_info)
+
+    # Add the table of contents to the work, if we can extract it from the abstract field (ABH) -   # get_bf_toc(work_uri, record) # this is now done inside the abstract functions - along with abstract license recognition
 
     # TODO: calculate a bool true/false value from fields to set whether abstract should be made available or not due to copyright reasons.
     abstract_blocked = not abstract.get_abstract_release(record)
@@ -2245,8 +1305,7 @@ def process_record(record):
     # Add the RELs and TESTs from the record to the work:
     research_info.build_rels(record=record, work_uri=work_uri, graph=records_bf)
 
-    ## TODO
-    # research_info.build_tests(record=record, work_uri=work_uri, graph=records_bf)
+    research_info.build_related_tests(record=record, work_uri=work_uri, graph=records_bf)
 
     ## ==== InstanceBundle ==== ##
 
@@ -2361,13 +1420,7 @@ def process_record(record):
         )
 
     # Add the DFK as an identifier node to the instancebundle:
-    records_bf.add(
-        (
-            instance_bundle_uri,
-            ns.BF.identifiedBy,
-            get_bf_identifier_dfk(instance_bundle_uri, dfk),
-        )
-    )
+    identifiers.build_dfk_identifier_node(instance_bundle_uri, dfk, records_bf)
 
     # Add the issuance type (from BE) to the instancebundle (e.g. "Journal Article" or "Edited Book"):
     publication_types.get_issuance_type(instance_bundle_uri, record, records_bf)

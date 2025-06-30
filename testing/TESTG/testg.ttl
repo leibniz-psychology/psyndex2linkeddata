@@ -1,0 +1,606 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/zpid/testgraph/works/0> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/0#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/1> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/1#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/10> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/10#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/11> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/11#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/12> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/12#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/13> a works:Work .
+
+<https://w3id.org/zpid/testgraph/works/14> a works:Work .
+
+<https://w3id.org/zpid/testgraph/works/15> a works:Work .
+
+<https://w3id.org/zpid/testgraph/works/16> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/16#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/17> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/17#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/18> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/18#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/19> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/19#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/2> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/2#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/20> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/20#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/21> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/21#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/22> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/22#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/23> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/23#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/24> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/24#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/25> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/25#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/26> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/26#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/3> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/3#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/4> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/4#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/5> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/5#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/6> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/6#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/7> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/7#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/8> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/8#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/9> a works:Work ;
+    bflc:relationship <https://w3id.org/zpid/testgraph/works/9#TestRelationship> .
+
+<https://w3id.org/zpid/testgraph/works/0#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/0#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/0#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "11334" .
+
+<https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Compound Remote Associate-Worträtsel" .
+
+<https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "CRA" .
+
+<https://w3id.org/zpid/testgraph/works/0#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "6895" .
+
+<https://w3id.org/zpid/testgraph/works/1#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/1#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/1#TestRelationship_test> a bflc:Uncontrolled,
+        pxc:Test ;
+    bf:title <https://w3id.org/zpid/testgraph/works/1#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/1#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "13659" .
+
+<https://w3id.org/zpid/testgraph/works/1#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Alternative Uses Test" .
+
+<https://w3id.org/zpid/testgraph/works/1#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "AUT" .
+
+<https://w3id.org/zpid/testgraph/works/10#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/10#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/10#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "7930" .
+
+<https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Clinician-Administered PTSD Scale" .
+
+<https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "CAPS" .
+
+<https://w3id.org/zpid/testgraph/works/10#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "5201" .
+
+<https://w3id.org/zpid/testgraph/works/11#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/11#TestRelationship_test> ;
+    bflc:relation relations:analyzesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/11#TestRelationship_remark> ;
+    pxp:allItemsInWork true .
+
+<https://w3id.org/zpid/testgraph/works/11#TestRelationship_remark> a bf:Note ;
+    rdfs:label "Betsch C, Schmid P, Heinemeier D, Korn L, Holtmann C, Bo¨hm R (2018) Beyond confidence: Development of a measure assessing the 5C psychological antecedents of vaccination. PLoS ONE 13(12): e0208601. https://doi.org/ 10.1371/journal.pone.0208601" .
+
+<https://w3id.org/zpid/testgraph/works/11#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/11#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/11#TestRelationship_test_longName> ;
+    pxp:uncontrolledTestId "20170" .
+
+<https://w3id.org/zpid/testgraph/works/11#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "5C Scale" .
+
+<https://w3id.org/zpid/testgraph/works/11#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "8404" .
+
+<https://w3id.org/zpid/testgraph/works/12#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/12#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/12#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/12#TestRelationship_remark> a bf:Note ;
+    rdfs:label "deutschsprachiger Test trotz englischen Titels" .
+
+<https://w3id.org/zpid/testgraph/works/12#TestRelationship_test> a bflc:Uncontrolled,
+        pxc:Test ;
+    bf:title <https://w3id.org/zpid/testgraph/works/12#TestRelationship_test_longName> ;
+    pxp:uncontrolledTestId "14300" .
+
+<https://w3id.org/zpid/testgraph/works/12#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Bells Test" .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/16#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/16#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship_remark> a bf:Note ;
+    rdfs:label "Verwendete Variante oder Unterform: DAS-C; Langname verwendete Variante: Skala dysfunktionaler Einstellungen für Kinder" .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "1486" .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Skala Dysfunktionaler Einstellungen" .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "DAS" .
+
+<https://w3id.org/zpid/testgraph/works/16#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "1534" .
+
+<https://w3id.org/zpid/testgraph/works/17#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/17#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/17#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "335" .
+
+<https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Mehrfachwahl-Wortschatz-Intelligenztest" .
+
+<https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "MWT-B" .
+
+<https://w3id.org/zpid/testgraph/works/17#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "0342" .
+
+<https://w3id.org/zpid/testgraph/works/18#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/18#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/18#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "1073" .
+
+<https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Hamilton-Depressions-Skala - Deutsche Fassung" .
+
+<https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "HAMD" .
+
+<https://w3id.org/zpid/testgraph/works/18#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "1102" .
+
+<https://w3id.org/zpid/testgraph/works/19#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/19#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/19#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "2216" .
+
+<https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Neo-Fünf-Faktoren Inventar nach Costa und Mccrae - Deutsche Fassung" .
+
+<https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "NEO-FFI" .
+
+<https://w3id.org/zpid/testgraph/works/19#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "2328" .
+
+<https://w3id.org/zpid/testgraph/works/2#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/2#TestRelationship_test> ;
+    bflc:relation relations:analyzesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/2#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "15671" .
+
+<https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Strukturiertes Klinisches Interview für DSM-IV Achse II (Persönlichkeitsstörungen)" .
+
+<https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "SKID-II" .
+
+<https://w3id.org/zpid/testgraph/works/2#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "3550" .
+
+<https://w3id.org/zpid/testgraph/works/20#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/20#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/20#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "2442" .
+
+<https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Strukturiertes Interview für die Diagnose einer Demenz vom Alzheimer Typ, der Multiinfarkt-Demenz und Demenzen Anderer Ätiologie nach DSM-III-R, DSM-IV und ICD-10" .
+
+<https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "SIDAM" .
+
+<https://w3id.org/zpid/testgraph/works/20#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "2552" .
+
+<https://w3id.org/zpid/testgraph/works/21#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/21#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/21#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "257" .
+
+<https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Kognitiver Fähigkeits-Test für 4. bis 13. Klassen" .
+
+<https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "KFT 4-13+" .
+
+<https://w3id.org/zpid/testgraph/works/21#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "0263" .
+
+<https://w3id.org/zpid/testgraph/works/22#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/22#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/22#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "2305" .
+
+<https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Kaufman-Assessment Battery for Children - Deutschsprachige Fassung" .
+
+<https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "K-ABC" .
+
+<https://w3id.org/zpid/testgraph/works/22#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "2417" .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/23#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/23#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship_remark> a bf:Note ;
+    rdfs:label "deutschsprachiger Test trotz englischen Titels" .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "1264" .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Sporttest: Allgemeiner Sportmotorischer Test Zur Diagnose der Konditionellen und Koordinativen Leistungsfähigkeit" .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "ST-AST 6-11" .
+
+<https://w3id.org/zpid/testgraph/works/23#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "1300" .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/24#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/24#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship_remark> a bf:Note ;
+    rdfs:label "Verwendete Variante oder Unterform: M-WCST; Langname verwendete Variante: Modified Wisconsin Card Sorting Test" .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "1788" .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Wisconsin Card Sorting Test" .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "WCST" .
+
+<https://w3id.org/zpid/testgraph/works/24#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "1848" .
+
+<https://w3id.org/zpid/testgraph/works/25#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/25#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/25#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "11128" .
+
+<https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "HEXACO Persönlichkeitsinventar" .
+
+<https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "HEXACO-PI-R" .
+
+<https://w3id.org/zpid/testgraph/works/25#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "6671" .
+
+<https://w3id.org/zpid/testgraph/works/26#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/26#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/26#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "9964" .
+
+<https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Symptom-Checkliste - Kurzform" .
+
+<https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "SCL-K-9" .
+
+<https://w3id.org/zpid/testgraph/works/26#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "7349" .
+
+<https://w3id.org/zpid/testgraph/works/3#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/3#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/3#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "3830" .
+
+<https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "National Comprehensive Cancer Network Distress Thermometer - deutsche Fassung" .
+
+<https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "NCCN-DT" .
+
+<https://w3id.org/zpid/testgraph/works/3#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "5637" .
+
+<https://w3id.org/zpid/testgraph/works/4#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/4#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/4#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "5060" .
+
+<https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Aggressionsfragebogen von Buss und Perry" .
+
+<https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "AF-BP" .
+
+<https://w3id.org/zpid/testgraph/works/4#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "5065" .
+
+<https://w3id.org/zpid/testgraph/works/5#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/5#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/5#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "2249" .
+
+<https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Fragebogen zu Kompetenz- und Kontrollüberzeugungen" .
+
+<https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "FKK" .
+
+<https://w3id.org/zpid/testgraph/works/5#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "2361" .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/6#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/6#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship_remark> a bf:Note ;
+    rdfs:label "Verwendete Variante oder Unterform: SF-12; Langname verwendete Variante: Kurzform" .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "3413" .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Fragebogen zum Gesundheitszustand" .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "SF-36" .
+
+<https://w3id.org/zpid/testgraph/works/6#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "3482" .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/7#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/7#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship_remark> a bf:Note ;
+    rdfs:label "Verwendete Variante oder Unterform: PHQ-9; Langname verwendete Variante: Depression Module" .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "4539" .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Gesundheitsfragebogen für Patienten" .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "PHQ-D" .
+
+<https://w3id.org/zpid/testgraph/works/7#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "4556" .
+
+<https://w3id.org/zpid/testgraph/works/8#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/8#TestRelationship_test> ;
+    bflc:relation relations:usesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/8#TestRelationship_remark> ;
+    pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/testgraph/works/8#TestRelationship_remark> a bf:Note ;
+    rdfs:label "deutschsprachiger Test trotz englischen Titels" .
+
+<https://w3id.org/zpid/testgraph/works/8#TestRelationship_test> a bflc:Uncontrolled,
+        pxc:Test ;
+    bf:title <https://w3id.org/zpid/testgraph/works/8#TestRelationship_test_longName> .
+
+<https://w3id.org/zpid/testgraph/works/8#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Self-Report Psychopathy Scale III" .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship> a bflc:Relationship,
+        pxc:TestRelationship ;
+    bflc:relatedTo <https://w3id.org/zpid/testgraph/works/9#TestRelationship_test> ;
+    bflc:relation relations:analyzesTest ;
+    bf:note <https://w3id.org/zpid/testgraph/works/9#TestRelationship_remark> ;
+    pxp:allItemsInWork true .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship_remark> a bf:Note ;
+    rdfs:label "This is a test remark" .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship_test> a pxc:Test ;
+    bf:identifiedBy <https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_testId> ;
+    bf:title <https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_longName>,
+        <https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_shortName> ;
+    pxp:uncontrolledTestId "5678" .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_longName> a bf:Title ;
+    bf:mainTitle "Test Name long German" .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_shortName> a bf:AbbreviatedTitle ;
+    bf:mainTitle "TESTG" .
+
+<https://w3id.org/zpid/testgraph/works/9#TestRelationship_test_testId> a pxc:PsytkomTestId ;
+    rdf:value "1234" .
+

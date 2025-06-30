@@ -92,6 +92,66 @@ def get_mainfield(field_fullstring):
         else:
             return None
 
+def title_except(
+    text,
+    exceptions=None
+):
+    if exceptions is None:
+        exceptions = ['und','bis', 'zu', 'zum', 'von', 'der', 'die', 'das', 'des', 'dem', 'einer', 'eines', 'einem', 'einen', 'nach', 'für', 'mit', 'in', 'auf', 'an', 'bei', 'über', 'vor', 'vom','unter', 'zwischen',"and", "for"]
+    allcaps_exceptions = ["WHO", "HEXACO","DSM-III-R", "DSM-IV", "ICD-10", "ICD-11", "III", "D"]
+
+    def capitalize_word(word, is_first):
+        # If the word matches an allcaps exception, return as is
+        if word in allcaps_exceptions:
+            return word
+        # Capitalize if first word or not in exceptions
+        if is_first or word.lower() not in exceptions:
+            return word.title()
+        # Otherwise, return lowercase
+        else:
+            return word.lower()
+
+    def process_token(token, is_first):
+        # If the token matches an allcaps exception, return as is
+        if token in allcaps_exceptions:
+            return token
+        # If the token matches any allcaps exception after splitting on hyphens, return as is
+        for exc in allcaps_exceptions:
+            if token == exc:
+                return exc
+        # If the token contains a hyphen and matches an allcaps exception, return as is
+        if token in allcaps_exceptions:
+            return token
+        # Otherwise, split on hyphens, but preserve allcaps exceptions
+        parts = token.split('-')
+        new_parts = []
+        idx_offset = 0
+        while idx_offset < len(parts):
+            # Try to match the longest possible hyphenated exception
+            matched = False
+            for exc in sorted(allcaps_exceptions, key=len, reverse=True):
+                exc_parts = exc.split('-')
+                if parts[idx_offset:idx_offset+len(exc_parts)] == exc_parts:
+                    new_parts.append(exc)
+                    idx_offset += len(exc_parts)
+                    matched = True
+                    break
+            if not matched:
+                part = parts[idx_offset]
+                new_parts.append(capitalize_word(part, is_first or idx_offset > 0))
+                idx_offset += 1
+            is_first = False  # Only first word in text is True
+        return '-'.join(new_parts)
+
+    words = text.split()
+    title_cased = []
+    for i, word in enumerate(words):
+        # If the word matches an allcaps exception, return as is
+        if word in allcaps_exceptions:
+            title_cased.append(word)
+        else:
+            title_cased.append(process_token(word, i == 0))
+    return " ".join(title_cased)
 
 # ## Function: Guess language of a given string
 # Used for missing language fields or if there are discrepancies between the language field and the language of the title etc.
@@ -103,6 +163,16 @@ import langid
 
 def guess_language(string_in_language):
     return langid.classify(string_in_language)[0]
+
+
+# Define a function to convert a string to camel case
+def camel_case(s):
+    # Use regular expression substitution to replace underscores and hyphens with spaces,
+    # then title case the string (capitalize the first letter of each word), and remove spaces
+    s = re.sub(r"(_|-)+", " ", s).title().replace(" ", "")
+
+    # Join the string, ensuring the first letter is lowercase
+    return "".join([s[0].lower(), s[1:]])
 
 
 # ### Getting URLs and DOIs from a field
@@ -302,3 +372,40 @@ def get_langtag_from_field(langfield):
             return ["zxx", "zxx"]
         case _:
             return ["und", "und"]  # for "undetermined!"
+
+from modules.mappings import geonames_countries
+
+def country_geonames_lookup(country):
+    for case in geonames_countries:
+        if case[0].casefold() == str(country).casefold():
+            return case[0], case[1]
+    return None
+
+def sanitize_country_names(country_name):
+    if country_name == "COSTA":
+        country_name = "Costa Rica"
+    elif country_name == "CZECH":
+        country_name = "Czech Republic"
+    elif country_name == "NEW":
+        country_name = "New Zealand"
+    elif country_name == "SAUDI":
+        country_name = "Saudi Arabia"
+    elif country_name == "PEOPLES":
+        country_name = "People's Republic of China"
+    return country_name
+
+def split_family_and_given_name(name):
+    """Splits a name into family name and given name.
+    Returns a tuple with the family name and given name.
+    If the name cannot be split, returns the name as family name and None as given name
+    """
+    # first, strip any spaces from the name:
+    name = name.strip()
+    # then, split the name at the first comma:
+    parts = name.split(",")
+    if len(parts) == 2:  # if there are two parts, the first is the family name, the second is the given name
+        family_name = parts[0].strip()
+        given_name = parts[1].strip()
+        return family_name, given_name
+    else:  # if there is no comma or only one part, return the whole name as family name and None as given name
+        return name, None

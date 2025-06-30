@@ -1,11 +1,20 @@
 import html
 import logging
 import re
+import json
+from tkinter import N
 
 import requests
+from modules import local_api_lookups
+from modules import contributions
 import requests_cache
 from datetime import timedelta
 from rapidfuzz import fuzz
+import dateparser
+import os
+import sys
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
 
 CROSSREF_FRIENDLY_MAIL = "&mailto=ttr@leibniz-psychology.org"
 # for getting a list of funders from api ():
@@ -226,7 +235,7 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
 
     # add a bflc:Relation (with a label and value) via bflc:relation to the relationship bnode
     # (label and value could be given as a parameter):
-    # print("\tbflc:relation [a bflc:Relation ; rdfs:label 'has research data', rdf:value 'relation:hasResearchData'^^xsd:anyURI] ;")
+    # logging.info("\tbflc:relation [a bflc:Relation ; rdfs:label 'has research data', rdf:value 'relation:hasResearchData'^^xsd:anyURI] ;")
     # relation_bnode = BNode()
     # records_bf.set((relation_bnode, RDF.type, ns.BFLC.Relation))
     # records_bf.add((relation_bnode, RDFS.label, Literal("has research data", lang="en")))
@@ -247,7 +256,7 @@ def build_work_relationship_node(work_uri, graph, relation_type, count=None):
     # records_bf.add((URIRef(GENRES[genre]), RDF.type, ns.BF.GenreForm))
     # attach the work bnode to the relationship bnode with bf:relatedTo
     # (or a subproperty as given as a parameter)):
-    # print("\tbf:relatedTo [a bf:Work ;")
+    # logging.info("\tbf:relatedTo [a bf:Work ;")
     graph.add((relationship_bnode, ns.BF[relatedTo_subprop], related_work_bnode))
     # make a node for the instance:
     related_instance_bnode = URIRef(related_work_bnode + "_instance")
@@ -357,7 +366,7 @@ def get_urlai(work_uri, record, graph):
             url_set.add(helpers.check_for_url_or_doi(urlai_field)[0])
         # if the returned typ is something else "unknown", do nothing with it:
         else:
-            # print("bf:note > bf:Note > rdfs:label: " + urlai_field)
+            # logging.info("bf:note > bf:Note > rdfs:label: " + urlai_field)
             if (
                 urlai_field is not None
                 and helpers.check_for_url_or_doi(urlai_field)[0] is not None
@@ -428,7 +437,7 @@ def get_datac(work_uri, record, graph):
             except:
                 subfield = None
             else:
-                # print(subfield)
+                # logging.info(subfield)
                 # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
                 # as a doi or url:
                 # if it is a doi, run a function to generate a doi identifier node
@@ -448,7 +457,7 @@ def get_datac(work_uri, record, graph):
                     # build_electronic_locator_node(instance, check_for_url_or_doi(subfield)[0])
                     # if the returned typ is something else "unknown", do nothing with it:
                 else:
-                    # print("bf:note > bf:Note > rdfs:label: " + subfield)
+                    # logging.info("bf:note > bf:Note > rdfs:label: " + subfield)
                     if (
                         subfield is not None
                         and helpers.check_for_url_or_doi(subfield)[0] is not None
@@ -560,7 +569,7 @@ def get_bf_preregistrations(work_uri, record, graph):
             except:
                 subfield = None
             else:
-                # print(subfield)
+                # logging.info(subfield)
                 # if the string_type returned [1] is doi or url, treat them accordingly, using the returned string [0]
                 # as a doi or url:
                 # if it is a doi, run a function to generate a doi identifier node
@@ -579,7 +588,7 @@ def get_bf_preregistrations(work_uri, record, graph):
                     # build_electronic_locator_node(instance, check_for_url_or_doi(subfield)[0])
                     # if the returned typ is something else - "unknown", do nothing with it:
                 else:
-                    # print("bf:note > bf:Note > rdfs:label: " + subfield)
+                    # logging.info("bf:note > bf:Note > rdfs:label: " + subfield)
                     # build_note_node(instance, check_for_url_or_doi(subfield)[0])
                     if (
                         subfield is not None
@@ -681,8 +690,8 @@ def add_trials_as_preregs(work_uri, record, graph):
                     [trialreg, match.group(), False]
                 )  # this adds a list with the registry and the trial number to the trialnumber_matches list, and sets a boolean to False to indicate that it has not been added to a node yet.
 
-                # print(match.group() + " matches registry: " + trialreg)
-        # print(trialnumber_matches)
+                # logging.info(match.group() + " matches registry: " + trialreg)
+        # logging.info(trialnumber_matches)
 
         # create a new Preregistration node for each match:
         for trialnumber in trialnumber_matches:
@@ -1016,7 +1025,7 @@ def check_crossref_for_citation_doi(citation_string, similarity_threshold=30):
                 similarity = fuzz.token_sort_ratio(crossref_str, citation_str)
 
                 if similarity >= similarity_threshold:
-                    print(f"✅ Crossref match accepted (similarity={similarity}): {title}")
+                    logging.info(f"✅ Crossref match accepted (similarity={similarity}): {title}")
                     return doi  # Accept match
                 else:
                     crossref_rejections.append({
@@ -1026,7 +1035,7 @@ def check_crossref_for_citation_doi(citation_string, similarity_threshold=30):
                         'crossref_authors': authors,
                         'similarity': similarity
                     })
-                    print(f"⚠️ Crossref match rejected (similarity={similarity}): {title}, saving as plain citation.")
+                    logging.warning(f"⚠️ Crossref match rejected (similarity={similarity}): {title}, saving as plain citation.")
                     return None  # Reject match
     except requests.exceptions.RequestException as e:
         logging.error(f"Error checking Crossref for DOI for {citation_string}: {e}")
@@ -1171,7 +1180,7 @@ def build_rels(record, work_uri, graph):
     if record.find("BN") is not None:
         if record.find("BN").text is not None and record.find("BN").text.startswith("Kumu"):
             compilation_thesis = True
-            print("Found BN field with Kumu, setting compilation_thesis to True.")
+            logging.info("Found BN field with Kumu, setting compilation_thesis to True.")
     # go through all the CM fields and set the flags accordingly:
     for cm_field in record.findall("CM"):
         if cm_field.text is not None:
@@ -1186,7 +1195,7 @@ def build_rels(record, work_uri, graph):
          
         # if the REL field is empty, we can skip it:
         if rel_field is None or rel_field.text is None:
-            print("Skipping REL field because it is empty.")
+            logging.info("Skipping REL field because it is empty.")
             continue
         # if the REL field is not empty, we can process it:
         rel_string = rel_field.text.strip()
@@ -1202,12 +1211,12 @@ def build_rels(record, work_uri, graph):
         rel_string = html.unescape(mappings.replace_encodings(rel_string.strip()))
         # if it starts with |b and there is no other subfield (# count of "|"" symbols is just 1), we can ignore it.
         if rel_string.startswith("|b") and rel_string.count("|") == 1 or rel_string == "":
-            print(f"Skipping REL because empty: {rel_string}")
+            logging.info(f"Skipping REL because empty: {rel_string}")
             return None # stop and return early, since there is nothing to extract here.
         # if it instead starts with a DFK (7-digit number), we can just return that and the relationship type.:
         elif rel_string[:7].isdigit():
             related_work["dfk"] = rel_string[:7]
-            print(f"Found DFK: {related_work['dfk']}")
+            logging.info(f"Found DFK: {related_work['dfk']}")
         else:
             # these are the special cases where there is no DFK, but we still want to extract the relationship type and other information.
             # first, check for a hidden doi anywhere in the string.
@@ -1218,11 +1227,11 @@ def build_rels(record, work_uri, graph):
                 # if the type is doi, we can just set it as the doi for our object:
                 if doi_or_url[1] == "doi":
                     related_work["doi"] = doi_or_url[0]
-                    print(f"Found DOI: {related_work['doi']}")
+                    logging.info(f"Found DOI: {related_work['doi']}")
                 # if the type is url, we can just set it as the url for our object:
                 elif doi_or_url[1] == "url":
                     related_work["url"] = doi_or_url[0]
-                    print(f"Found URL: {related_work['url']}")
+                    logging.info(f"Found URL: {related_work['url']}")
                 else: # if no doi or url, we need to send the title in |t to crossref to get the doi. Use the research_info.validate_doi_against_crossref function.
                     try:
                         title = helpers.get_subfield(rel_string, "t") 
@@ -1260,16 +1269,16 @@ def build_rels(record, work_uri, graph):
                             citation, similarity_threshold=60  # low similarity threshold to get most of the RELs
                         )
                         if related_work["doi"] is not None:
-                            print(f"Found DOI via Crossref: {related_work['doi']}")
+                            logging.info(f"Found DOI via Crossref: {related_work['doi']}")
                         else:
-                            print(f"No DOI found via Crossref for citation: {citation}")
+                            logging.info(f"No DOI found via Crossref for citation: {citation}")
                             related_work["citation"] = citation
-                            print(f"Using citation as fallback: {related_work['citation']}")
+                            logging.info(f"Using citation as fallback: {related_work['citation']}")
                     # if there is an error, we can just use the citation as fallback:
                     except:
-                        print(f"Error checking Crossref for DOI: {citation}")
+                        logging.info(f"Error checking Crossref for DOI: {citation}")
                         related_work["citation"] = citation
-                        print(f"Using citation as fallback: {related_work['citation']}")
+                        logging.info(f"Using citation as fallback: {related_work['citation']}")
         # Now we need to extract the relation type from subfield |b. If there is no |b, we assume "Original", probably?
         # get subfield |b, if it exists:
         try:
@@ -1284,7 +1293,6 @@ def build_rels(record, work_uri, graph):
             if related_work["relationship_type"] == "Original":
                 # if the work is a book, we can replace the relationship type with "hasOlderEdition"
                 related_work["relationship_type"] = "hasOlderEdition"
-            # TODO: what about other relationship types, e.g. when the book is a comment or a reply? Currently, we don't even check for that.
             else:
                 related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
         elif compilation_thesis:
@@ -1310,7 +1318,7 @@ def build_rels(record, work_uri, graph):
         # for any other cm, we have some cases, depending on reltype, as well:
         else:
             related_work["relationship_type"] = handle_other_relations(related_work["relationship_type"])
-        print(f"Found relationship type: {related_work['relationship_type']} in REL field: {rel_string}")
+        logging.info(f"Found relationship type: {related_work['relationship_type']} in REL field: {rel_string}")
         # we now have a related_work dictionary with the extracted information, which we can use to generate a relationship node set. 
         
         # let's build the relationship node for the related work:
@@ -1342,4 +1350,612 @@ def build_rels(record, work_uri, graph):
         # now we can add the relationship node to the work:
         graph.add((work_uri, ns.BFLC.relationship, relationship_node))
 
-            
+##### Linked Tests from TESTG: ######
+
+def lookup_test_id_from_name(long_name):
+    """
+    Looks up the test id from the long name and optional short name in the all_tests.json file using fuzzy matching.
+    Returns the test id if a sufficiently similar name is found (using RapidFuzz token_sort_ratio >= 70), 
+    and skips matches involving significant DSM/ICD number mismatches (e.g., DSM-III vs DSM-IV).
+    """
+    # load the all_tests.json file
+    all_tests_file = os.path.join(project_root, "other_conversions", "testdatabase","simple-json", "all_tests.json")
+    with open(all_tests_file, "r", encoding="utf-8") as f:
+        all_tests = json.load(f)
+    # look for the test in the all_tests.json file
+    for test in all_tests:
+        similarity = fuzz.token_sort_ratio(test["longName"], long_name)
+        if similarity >= 70:
+            if ("DSM-III" in test["longName"] and "DSM-IV" in long_name) or ("DSM-III" in long_name and "DSM-IV" in test["longName"]) or ("DSM-IV" in test["longName"] and "DSM-5" in long_name) or ("ICD-10" in test["longName"] and "ICD-11" in long_name) or ("ICD-11" in test["longName"] and "ICD-10" in long_name):
+                continue  # Skip this pair if you detect that it involves a significant mismatch in numbers
+            logging.info(f"Found test with longName: {long_name} and test_id: {test['id']}")
+            return test["id"]
+    return None
+
+def build_related_tests(record, work_uri, graph):
+    """
+    Builds a dictionary containing information about a related test or measure from a TESTG field.
+
+    This function processes a single TESTG field from a record and extracts relevant information to construct
+    a dictionary with details about the related test or measure. The resulting dictionary can be used to build
+    related test nodes for further processing.
+
+    Args:
+        testg_field (dict or object): The TESTG field data from which to extract related test information.
+
+    Returns:
+        dict: A dictionary with the following keys:
+            - shortName (str or None): Abbreviated title of the test, extracted from the main field.
+            - longName (str or None): Full title of the test, cleaned and case-corrected if necessary.
+            - relationType (str): Type of relation, either "usesTest" or "analyzesTest", based on subfield |z.
+            - test_id (str or None): Identifier for the test, from subfield |c or looked up by longName.
+            - itemsComplete (bool or None): Whether all items are included, based on subfield |v.
+            - remark (str or None): Additional notes, possibly augmented with subfields |u, |f, |d.
+            - uncontrolled (bool or None): Indicates if the test is uncontrolled (i.e., lacks a test_id).
+            - uncontrolled_id (str or None): Identifier for uncontrolled tests, from subfield |n.
+
+    Notes:
+        - The function uses several helper functions (e.g., get_mainfield, get_subfield, title_except, lookup_test_id_from_name)
+          to extract and process subfields.
+        - If the test_id is not found, the function attempts to look it up by longName.
+        - Remarks may be augmented with information from subfields |u (used submodule), |f (used form), and |d (German language flag).
+        - The function handles missing or malformed fields gracefully and logs warnings as needed.
+    """
+    for index,testg_field in enumerate(record.findall("TESTG")):
+        relatedTestOrMeasure = {
+        "shortName": None, # from main field; bf:relatedTo > pxc:Test >> bf:title >> bf:AbbreviatedTitle > bf:mainTitle
+        "longName": None, # from |l; bf:relatedTo > pxc:Test >> bf:title >> bf:Title > bf:mainTitle
+        "relationType": "usesTest", # from |z x -> "zentral" = analyzes, sonst (|z nicht vorhanden oder leer, also ohne x) "uses"
+        "test_id": None, # from |c; bf:relatedTo > pxc:Test >> bf:identifiedBy > pxc:PsytkomTestId >> rdf:value "6300" (no identifiedBy if Test uncontrolled)
+        "itemsComplete": None, # from |v x; Relationship > pxp:allItemsInWork true/false
+        "remark": None, # Relationship > bf:note > bf:Note >> rdfs:label
+        "uncontrolled": None, # true/false?
+        "uncontrolled_id": None, # from |n; bf:relatedTo > pxc:Test >> bf:identifiedBy > pxc:UncontrolledTestId >> rdf:value "1234"
+    }
+        # go through one TESTG field in a record and build a dict with all relevant info which will
+        # be used to build the related test nodes using the build_related_test_nodes function
+        # this function will be called for each TESTG field in a record
+        # get shortName:
+        try:
+            main_field = helpers.get_mainfield(testg_field.text)
+            if main_field is not None and main_field.strip() != "":
+                relatedTestOrMeasure["shortName"] = main_field.strip()
+        except Exception as e:
+            logging.warning(f"Error getting shortName from main field in {testg_field}: {e}")
+            relatedTestOrMeasure["shortName"] = None
+        # get longName:
+        l_field = helpers.get_subfield(testg_field.text, "l")
+        if l_field is not None and l_field.strip() != "":
+            relatedTestOrMeasure["longName"] = l_field.strip()
+            # first, remove "(PSYNDEX Tests Review)" and "(PSYNDEX Tests Info)" and "(PSYNDEX Tests Abstract)" from the longName, if present:
+            relatedTestOrMeasure["longName"] = relatedTestOrMeasure["longName"].replace("(PSYNDEX Tests Review)", "").replace("(PSYNDEX Tests Info)", "").replace("(PSYNDEX Tests Abstract)", "")
+            # if starts with two consecutive capital letters, assume it is a n allcaps name and change case to all lowercase:
+            # check if the name is all uppercase
+            if relatedTestOrMeasure["longName"] and relatedTestOrMeasure["longName"].isupper(): # won't catch things with special characters like ":", "(", ")"
+                # then capitalize the first letter of each word, except for some common articles:
+                relatedTestOrMeasure["longName"] = helpers.title_except(relatedTestOrMeasure["longName"]) # replace with a better case correction function later, using the mapping I made in validate_corrected_lnams.py/lnam_allcaps.csv
+        # get |z to define relationType:
+        try:
+            z_field = helpers.get_subfield(testg_field.text, "z")
+            if z_field is not None:
+                if z_field.strip() == "x":
+                    relatedTestOrMeasure["relationType"] = "analyzesTest"
+
+        except Exception as e:
+            logging.warning(f"Error getting relationType from {testg_field}: {e}")
+        # get test_id:
+        try:
+            c_field = helpers.get_subfield(testg_field.text, "c")
+            if c_field is not None:
+                relatedTestOrMeasure["test_id"] = c_field.strip()
+                relatedTestOrMeasure["uncontrolled"] = False
+            else:
+                relatedTestOrMeasure["uncontrolled"] = True
+        except Exception as e:
+            logging.warning(f"Error getting test_id from {testg_field}: {e}")
+        # get itemsComplete:
+        v_field = helpers.get_subfield(testg_field.text, "v")
+        if v_field is not None and v_field.strip() != "":
+                if v_field.strip() == "x":
+                    relatedTestOrMeasure["itemsComplete"] = True
+                else:
+                    relatedTestOrMeasure["itemsComplete"] = False
+        else:
+            relatedTestOrMeasure["itemsComplete"] = False
+        # get remark:
+        k_field = helpers.get_subfield(testg_field.text, "k")
+        if k_field is not None and k_field.strip() != "":
+            relatedTestOrMeasure["remark"] = k_field.strip()
+        # get values of fields |u, |f and |d:
+        # |u = used submodule, |f = used form, |d = is German despite English title
+        try:
+            u_field = helpers.get_subfield(testg_field.text, "u")
+        except Exception as e:
+            logging.warning(f"Error getting usedSubmodule from {testg_field}: {e}")
+        try:
+            f_field = helpers.get_subfield(testg_field.text, "f")
+        except Exception as e:
+            logging.warning(f"Error getting usedForm from {testg_field}: {e}")
+        try:
+            d_field = helpers.get_subfield(testg_field.text, "d")
+        except Exception as e:
+            logging.warning(f"Error getting isGerman from {testg_field}: {e}")
+        # add u_field, f_field and d_field to remark if they are present:
+        if relatedTestOrMeasure["remark"] is not None:
+            if u_field is not None and u_field.strip() != "":
+                relatedTestOrMeasure["remark"] += f"; Verwendete Variante oder Unterform: {u_field.strip()}"
+            if f_field is not None and f_field.strip() != "":
+                relatedTestOrMeasure["remark"] += f"; Langname verwendete Variante: {f_field.strip()}"
+            if d_field is not None and d_field.strip() == "x":
+                relatedTestOrMeasure["remark"] += "; deutschsprachiger Test trotz englischen Titels"
+        else:
+            relatedTestOrMeasure["remark"] = ""
+            if u_field is not None and u_field.strip() != "":
+                relatedTestOrMeasure["remark"] += f"; Verwendete Variante oder Unterform: {u_field.strip()}"
+            if f_field is not None and f_field.strip() != "":
+                relatedTestOrMeasure["remark"] += f"; Langname verwendete Variante: {f_field.strip()}"
+            if d_field is not None and d_field.strip() == "x":
+                relatedTestOrMeasure["remark"] += "; deutschsprachiger Test trotz englischen Titels"
+        # remove any starting semicolon or whitespace from the remark:
+        if relatedTestOrMeasure["remark"] and relatedTestOrMeasure["remark"].startswith("; "):
+            relatedTestOrMeasure["remark"] = relatedTestOrMeasure["remark"].lstrip("; ").strip()
+        # get uncontrolled_id:
+        n_field = helpers.get_subfield(testg_field.text, "n")
+        if n_field is not None and n_field.strip().isdigit():
+            relatedTestOrMeasure["uncontrolled_id"] = n_field.strip()
+
+        if relatedTestOrMeasure["test_id"] is None: # we have no test_id, then it is an uncontrolled test - that may by now be in the database, so we can look it up by longName
+            # look up the test id from the long name in the all_tests.json file - because it may be in the database by now, but not in the TESTG file.
+            # if the longName is None, we can't look it up, so we skip this
+            if relatedTestOrMeasure["longName"] is not None:
+                # check if the longName is in the all_tests.json file and get the test_id
+                relatedTestOrMeasure["test_id"] = lookup_test_id_from_name(relatedTestOrMeasure["longName"]) # this returns the test_id if found, otherwise None
+                if relatedTestOrMeasure["test_id"] is not None:
+                    relatedTestOrMeasure["uncontrolled"] = False
+                else:
+                    relatedTestOrMeasure["uncontrolled"] = True
+            else:
+                relatedTestOrMeasure["uncontrolled"] = True
+        # let's build the related test node for this related test or measure:
+        build_related_test_nodes(
+            work_uri,
+            graph,
+            relatedTestOrMeasure,
+            index + 1  # use index + 1 to count the related tests
+        )
+
+def build_related_test_nodes(work_uri, graph, relatedTestOrMeasure, index):
+    """
+    Builds RDF nodes and relationships in the given graph to represent a related test or measure for a work.
+
+    This function creates and links several RDF nodes, including a relationship node, a test node, title nodes (long and short names), note nodes, and identifier nodes, according to the provided `relatedTestOrMeasure` dictionary. The structure follows specific ontology classes and properties, handling both controlled and uncontrolled tests, and attaches all relevant information to the graph.
+
+    Args:
+        work_uri (rdflib.term.URIRef): The URI of the work to which the test or measure is related.
+        graph (rdflib.Graph): The RDF graph where nodes and relationships will be added.
+        relatedTestOrMeasure (dict): A dictionary containing information about the related test or measure. Expected keys include:
+            - "shortName" (str or None): Abbreviated name of the test.
+            - "longName" (str or None): Full name of the test.
+            - "uncontrolled" (bool): Whether the test is uncontrolled.
+            - "remark" (str or None): Additional remarks or notes.
+            - "test_id" (str or None): Identifier for the test.
+            - "uncontrolled_id" (str or None): Identifier for uncontrolled tests.
+            - "itemsComplete" (bool or None): Whether all items are included in the work.
+            - "relationType" (str or None): Type of the relationship.
+
+    Returns:
+        None
+
+    Notes:
+        - If both "shortName" and "longName" are missing, the function logs and skips processing.
+        - The function does not use the regular relationship creation function due to the unique structure of test relationships.
+        - Additional fields such as `pxp:allItemsInWork` and `pxc:uncontrolledTestId` are handled specifically for tests.
+    """
+    if relatedTestOrMeasure["shortName"] is None and relatedTestOrMeasure["longName"] is None:
+        logging.info(f"Skipping building test relation for TESTG with shortName & longName both missing, likely not a test: {relatedTestOrMeasure}")
+        return
+    #1. make a Relationship node and attach to the work
+    relationship_uri = URIRef(str(work_uri) + "#TestRelationship" + str(index))
+    graph.add((relationship_uri, RDF.type, ns.BFLC.Relationship))
+    graph.add((relationship_uri, RDF.type, ns.PXC.TestRelationship))
+    # attach to work node
+    graph.add((work_uri, ns.BFLC.relationship, relationship_uri))
+    #2. make a pxc:Test node and attach to the Relationship node, qlso add bflc:Uncontrolled class if the test is uncontrolled
+    test_uri = URIRef(str(relationship_uri) + "_test")
+    graph.add((test_uri, RDF.type, ns.PXC.Test))
+    if relatedTestOrMeasure["uncontrolled"]:
+        graph.add((test_uri, RDF.type, ns.BFLC.Uncontrolled))
+    graph.add((relationship_uri, ns.BFLC.relatedTo, test_uri))
+    #3. make a bf:Title node from "longName" and attach to the pxc:Test node
+    if relatedTestOrMeasure["longName"] is not None:
+        long_name = Literal(relatedTestOrMeasure["longName"])
+        title_uri = URIRef(str(test_uri) + "_longName")
+        graph.add((title_uri, RDF.type, ns.BF.Title))
+        graph.add((title_uri, ns.BF.mainTitle, long_name))
+        graph.add((test_uri, ns.BF.title, title_uri))
+    #4. make a bf:AbbreviatedTitle node from shortName and attach to the pxc:Test node
+    if relatedTestOrMeasure["shortName"] is not None:
+        short_name = Literal(relatedTestOrMeasure["shortName"])
+        abbreviated_title_uri = URIRef(str(test_uri) + "_shortName")
+        graph.add((abbreviated_title_uri, RDF.type, ns.BF.AbbreviatedTitle))
+        graph.add((abbreviated_title_uri, ns.BF.mainTitle, short_name))
+        graph.add((test_uri, ns.BF.title, abbreviated_title_uri))
+    #5. make a bf:Note node and attach to the Relationship node
+    if relatedTestOrMeasure["remark"] is not None and relatedTestOrMeasure["remark"].strip() != "":
+        note_uri = URIRef(str(relationship_uri) + "_remark")
+        graph.add((note_uri, RDF.type, ns.BF.Note))
+        graph.add((note_uri, RDFS.label, Literal(relatedTestOrMeasure["remark"])))
+        graph.add((relationship_uri, ns.BF.note, note_uri))
+    #6. make a pxc:PsytkomTestId node and attach to the pxc:Test node
+    if relatedTestOrMeasure["test_id"] is not None:
+        test_id_uri = URIRef(str(test_uri) + "_testId")
+        graph.add((test_id_uri, RDF.type, ns.PXC.PsytkomTestId))
+        graph.add((test_id_uri, RDF.value, Literal(relatedTestOrMeasure["test_id"])))
+        graph.add((test_uri, ns.BF.identifiedBy, test_id_uri))
+    #7. add uncontrolled test id if available as literal property pxp:uncontrolledTestId
+    if relatedTestOrMeasure["uncontrolled_id"] is not None and relatedTestOrMeasure["uncontrolled_id"].strip() != "0000":
+        # use a simple literal field "pxc:uncontrolledTestId":
+        graph.add((test_uri, ns.PXP.uncontrolledTestId, Literal(relatedTestOrMeasure["uncontrolled_id"])))
+    # add the itemsComplete property to the Relationship node
+    if relatedTestOrMeasure["itemsComplete"] is not None:
+        graph.add((relationship_uri, ns.PXP.allItemsInWork, Literal(relatedTestOrMeasure["itemsComplete"])))
+    # add relation type to the Relationship node
+    if relatedTestOrMeasure["relationType"] is not None:
+        graph.add((relationship_uri, ns.BFLC.relation, URIRef(ns.RELATIONS + relatedTestOrMeasure["relationType"])))
+    # NOTE: we don't use the regular relationship creation function here, because Tests are a little different, with no Work and Instance nodes, but a pxc:Test node instead, and additional fields like pxp:allItemsInWork and pxp:uncontrolledTestId.
+
+### ----------- ###
+
+## Thesis information and node generation:
+
+def get_thesis_info(record):
+    """
+    Extracts thesis information from the given record.
+
+    Args:
+        record: A record with fields relevant for generating thesis information.
+
+    Returns:
+        dict: A dictionary with extracted thesis information. If the record does not represent a thesis, all values in the dictionary will be None.
+    """
+    thesis_infos = {
+    "degreeGranted": None,
+    "institute": None, # including place, should be written in Affiliation of first author, if not already there
+    # we need to get the ror id and from there, especially if not in Affiliation:
+    "institute_ror_id": None, # ror id of the institute, if available
+    "institute_country": None, # country of the institute, if available
+    "institute_country_geonames": None, # country of the institute, if available, as geonames id
+    "thesisAdvisor": None, # first supervisor, optional, but at most one should be present
+    "thesisReviewers": [], # second supervisor, optional, but can also be several
+    "dateDegreeGranted": None, # date of the PhD thesis, optional?
+    }
+
+    # get BE field from the thesis record:
+    try:
+        be_field = record.find("BE").text.strip()
+    except AttributeError:
+        be_field = None  # if BE field is not present, set to None
+    # get DT and DT2:
+    try:
+        dt_field = record.find("DT").text.strip()
+    except AttributeError:
+        dt_field = None
+    try:
+        dt2_field = record.find("DT2").text.strip()
+    except AttributeError:
+        dt2_field = None
+    # check if this is a thesis, based on BE, DT and DT2:#
+
+    if be_field == "SH" or dt_field == "61" or dt2_field == "61":
+
+        # get dfk for logging purposes:
+        try:
+            dfk = record.find("DFK").text.strip()
+        except AttributeError:
+            dfk = None
+        
+        logging.info(f"\n{dfk} is a thesis; processing it...")
+
+        # get GRAD field:
+        try:
+            grad_field = record.find("GRAD").text.strip()
+        except AttributeError:
+            grad_field = None  # if GRAD field is not present, set to None
+        # get PD field:
+        try:
+            pd_field = record.find("PD").text.strip()
+        except AttributeError:
+            pd_field = None  # if PD field is not present, set to None
+        # get first AUP field:
+        try:
+            aup_field = record.find("AUP").text.strip() # gets the first AUP field, which is the first author.
+        except AttributeError:
+            aup_field = None
+        # get INST field:
+        try:
+            inst_field = record.find("INST").text.strip()
+        except AttributeError:
+            inst_field = None  # if INST field is not present, set to None
+        # get ORT field:
+        try:
+            ort_field = record.find("ORT").text.strip()
+        except AttributeError:
+            ort_field = None
+        # get HRF field:
+        try:
+            hrf_field = record.find("HRF").text.strip()
+        except AttributeError:
+            hrf_field = None
+        # get KRFs as a list:
+        try:
+            krf_fields = [krf.text.strip() for krf in record.findall("KRF")]
+        except AttributeError:
+            krf_fields = []
+
+        # get degree granted:
+        if grad_field is not None:
+            thesis_infos["degreeGranted"] = grad_field
+            #logging.info("Degree granted: {}".format(thesis_infos["degreeGranted"]))
+        else:
+            logging.warning("No degree found.")
+
+        # check AUP affiliation for institute and place, otherwise concatenate INST and ORT:
+        if aup_field is not None: # we can only add the institute as an affiliation if there is a first author (first AUP), so no need to check for AUPs with no first author.
+        # it contains a pipe |i, which is the subfield for institute:
+            if "|i" in aup_field:
+            # get subfield i:
+                try:
+                    # use helpers.get_subfield(field, i):
+                    thesis_infos["institute"] = helpers.get_subfield(aup_field, "i").strip()
+                    logging.info("Institute from AUP: {}".format(thesis_infos["institute"]))
+                except KeyError:
+                    logging.info("No institute found in AUP.")
+            else:
+                logging.info(f"No institute found in AUP, trying INST + ORT instead: {aup_field}, INST: {inst_field}, ORT: {ort_field}")
+                # if no institute found in AUP, try INST + ORT:
+                if inst_field is not None and ort_field is not None: 
+                    logging.info(f"Found INST and ORT fields, trying to concatenate them: {inst_field} + {ort_field}")
+                    # try to concatenate sensibly: first check INST if it has a comma, than insert ORT before the comma:
+                    if "," in inst_field:
+                        # split INST at the comma, take the first part and add ORT and then the rest of INST:
+                        # logging.info("Found comma in INST field, concatenating with ORT.")
+                        # split INST at the comma:
+                        # we assume that the first part is the institute name and the second part is the city:
+                        # e.g. "University of Example, Example City"
+                        # so we take the first part and add ORT to it:
+                        thesis_infos["institute"] = inst_field.split(",")[0].strip() + " " + ort_field.strip() + ", " + inst_field.split(",")[1].strip()
+                    else:
+                        # just concatenate INST and ORT:
+                        thesis_infos["institute"] = inst_field.strip() + " " + ort_field.strip()
+                    # logging.info("Institute from INST + ORT: {}".format(thesis_infos["institute"]))
+                elif inst_field is not None and ort_field is None:
+                    # if only INST is present, use that:
+                    thesis_infos["institute"] = inst_field.strip()
+                elif inst_field is None and ort_field is not None:
+                    # if only ORT is present, use that:
+                    thesis_infos["institute"] = ort_field.strip()
+                else:
+                    logging.warning("No institute found in AUP, INST or ORT.")
+            # if we have an institute, get the ror-id from the api, as well as the country:
+            if thesis_infos["institute"]:
+                # get the ror-id and country from the api;
+                # use get_ror_id_from_api in main program:
+                try:
+                    ror_id = local_api_lookups.get_ror_id_from_api(thesis_infos["institute"])
+                    thesis_infos["institute_ror_id"] = ror_id
+                    # logging.info("ROR ID: {}".format(thesis_infos["institute_ror_id"]))
+                    # if we have a ror id, get the country from the api:
+                    try:
+                        institute_country = local_api_lookups.get_ror_org_country(ror_id)
+                        thesis_infos["institute_country"] = institute_country
+                        # logging.info("Institute country: {}".format(thesis_infos["institute_country"]))
+                        # look up geonames id for the country in mappings.geonames_countries -
+                        # format is for each country in that table: ("Germany", "2921044", "DE")
+                        # if thesis_infos["institute_country"]:
+                        #     try:
+                        #         # use funtion helpers.country_geonames_lookup
+                        #         geonames_id = helpers.country_geonames_lookup(thesis_infos["institute_country"])
+                        #         thesis_infos["institute_country_geonames"] = geonames_id[1]
+                        #         logging.info("Institute country geonames id: {}".format(thesis_infos["institute_country_geonames"]))
+                        #     except Exception as e:
+                        #         logging.info(f"Error getting geonames id for country {thesis_infos['institute_country']}: {e}")
+                    except Exception as e:
+                        logging.warning(f"Error getting institute country: {e}")
+                except Exception as e:
+                    logging.warning(f"Error getting ROR ID: {e}")
+            else:
+                logging.warning("No institute found, cannot get ROR ID or country.")
+
+        # get HRF:
+        if hrf_field is not None:
+            # split into given and family name, if possible
+            thesis_infos["thesisAdvisor"] = helpers.split_family_and_given_name(hrf_field)
+            # logging.info("Hauptreferent: {}".format(thesis_infos["thesisAdvisor"]))
+        else:
+            logging.info("No HRF found.")
+        
+        # get KRFs:
+        if krf_fields is not None and len(krf_fields) > 0:
+            for count,krf in enumerate(krf_fields):
+                thesis_infos["thesisReviewers"].append(helpers.split_family_and_given_name(krf.strip()))
+                # logging.info("Nebenreferent {}: {}".format(count+1,thesis_infos["thesisReviewers"][-1]))
+        else:
+            logging.info("No KRFs found.")
+        # getting a date of the thesis:
+        try:
+            dateDegreeGranted =  pd_field  # PD is the date of the thesis, if it exists
+            # check if this really contains any digits, otherwise, this won't be a date (e.g. "N. N."):
+            if not re.match(r"^\d", dateDegreeGranted):
+                raise ValueError(f"Invalid date format: {dateDegreeGranted}")
+                # and move on to the exception handling below
+                
+            # parse the date: it is usally formatted like "08.06.2021", but sometimes we have just the year "1999" or an abbreviated year "11.12.99"
+            # parse and convert this to the yyyy-mm-dd format:
+            dateDegreeGranted = dateparser.parse(dateDegreeGranted, settings={'PREFER_DATES_FROM': 'past','PREFER_DAY_OF_MONTH': 'first','PREFER_MONTH_OF_YEAR': 'first'}).strftime("%Y-%m-%d")
+            logging.info(f"Parsed date: {dateDegreeGranted}")
+            # write into thesis_infos:
+            thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+        except:
+            logging.info(
+                f"parsedate: couldn't parse {str(dateDegreeGranted)} for {dfk}! Trying to use PROMY instead!"
+            )
+            try:
+                # get PROMY field
+                try:
+                    promy_field = record.find("PROMY").text.strip()
+                except AttributeError:
+                    promy_field = None  # if PROMY field is not present, set to None
+                dateDegreeGranted =  promy_field  # PROMY is the year of the thesis, if it exists
+                logging.info(f"Using PROMY for {dfk}: {dateDegreeGranted}")
+                # write into thesis_infos:
+                thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+            except:
+                logging.info(
+                    f"no PROMY found for {dfk}! Using PY instead!"
+                )
+                try:
+                    # get PY field
+                    py_field = record.find("PY").text.strip()
+                    dateDegreeGranted = py_field  # PY is the year of the thesis, if it exists
+                    logging.info(f"Using PY for {dfk}: {dateDegreeGranted}")
+                    # write into thesis_infos:
+                    thesis_infos["dateDegreeGranted"] = dateDegreeGranted
+                except AttributeError:
+                    logging.warning(f"No PY field found for {dfk}, setting dateDegreeGranted to None.")
+                    dateDegreeGranted = None
+    return thesis_infos
+
+def build_thesis_nodes(work_uri,graph,thesis_info):
+    """
+    Builds RDF nodes for the thesis information and adds them to the provided graph in place.
+
+    Args:
+        thesis_info (dict): A dictionary with extracted thesis information.
+
+    Side Effects:
+        Modifies the provided RDF graph in place by adding thesis-related nodes and triples.
+
+    Returns:
+        None
+    """
+    # At least one of 'degreeGranted' or 'dateDegreeGranted' must be present to create thesis nodes;
+    # if both are missing, there is not enough information to generate a thesis node, so return early.
+    if not (thesis_info["degreeGranted"] or thesis_info["dateDegreeGranted"]):
+        return
+
+    # add a dissertation node to the work:
+    # create the node with type bf:Dissertation:
+    # give it a unique URI:
+    dissertation_uri = URIRef(
+        str(work_uri) + "#dissertation")
+    graph.add((dissertation_uri, RDF.type, ns.BF.Dissertation))
+    graph.add((work_uri, ns.BF.dissertation, dissertation_uri))
+    # add degreeGranted to the dissertation node:
+    if thesis_info["degreeGranted"]:
+        graph.add((dissertation_uri, ns.BF.degree, Literal(thesis_info["degreeGranted"])))
+    # add dateDegreeGranted to the dissertation node:
+    if thesis_info["dateDegreeGranted"]:
+        graph.add((dissertation_uri, ns.BF.date, Literal(thesis_info["dateDegreeGranted"])))
+    # add thesis advisor to the work:
+    if thesis_info["thesisAdvisor"] is not None:
+        if (
+            thesis_info["thesisAdvisor"] is None
+            or not isinstance(thesis_info["thesisAdvisor"], (list, tuple))
+            or len(thesis_info["thesisAdvisor"]) != 2
+        ):
+            logging.warning(f"Thesis advisor {thesis_info['thesisAdvisor']} is not a valid name tuple, skipping.")
+        else:
+            # create a URI for the thesis advisor:
+            contribution_uri = URIRef(
+                str(work_uri) + "#thesis_advisor")
+            graph.add((contribution_uri, RDF.type, ns.BF.Contribution))
+            graph.add((contribution_uri, RDF.type, ns.BF.ThesisAdvisory))
+            graph.add((work_uri, ns.BF.contribution, contribution_uri))
+            # add a node for the advisor agent, a Person:
+            advisor_uri = URIRef(str(contribution_uri) + "_person")
+            graph.add((advisor_uri, RDF.type, ns.BF.Person))
+            # add the advisor to the contribution:
+            graph.add((contribution_uri, ns.BF.agent, advisor_uri))
+            # add the family and given name to the advisor:
+            graph.add((advisor_uri, ns.SCHEMA.familyName, Literal(thesis_info["thesisAdvisor"][0])))
+            graph.add((advisor_uri, ns.SCHEMA.givenName, Literal(thesis_info["thesisAdvisor"][1])))
+            # add role to the advisor:
+            graph.add((contribution_uri, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/ths")))  # ths = thesis supervisor
+
+        ## add thesis reviewers:
+        for reviewer_index,reviewer in enumerate(thesis_info["thesisReviewers"]):
+            # create a URI for the thesis reviewer:
+            contribution_uri = URIRef(
+                str(work_uri) + "#thesis_reviewer_" + str(reviewer_index+1))
+            graph.add((contribution_uri, RDF.type, ns.BF.Contribution))
+            graph.add((contribution_uri, RDF.type, ns.BF.ThesisReview))
+            graph.add((work_uri, ns.BF.contribution, contribution_uri))
+            # add a node for the reviewer agent, a Person:
+            reviewer_uri = URIRef(str(contribution_uri) + "_person")
+            graph.add((reviewer_uri, RDF.type, ns.BF.Person))
+            # add the reviewer to the contribution:
+            graph.add((contribution_uri, ns.BF.agent, reviewer_uri))
+            # add the names of the reviewer:
+            # first, make sure the reviewer is a list or tuple with exactly two elements (family and given name):
+            if not isinstance(reviewer, (list, tuple)) or len(reviewer) != 2:
+                logging.warning(f"Reviewer {reviewer} is not a valid name tuple, skipping.")
+                continue
+            graph.add((reviewer_uri, ns.SCHEMA.familyName, Literal(reviewer[0])))
+            graph.add((reviewer_uri, ns.SCHEMA.givenName, Literal(reviewer[1])))
+            # add role to the reviewer:
+            graph.add((contribution_uri, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/dgc")))  # dgc = degree committee member
+
+        # finally, add the institute information to the first contribution node (usually the first author):
+        add_thesis_info_to_first_contributon(work_uri, graph, thesis_info)
+
+
+def add_thesis_info_to_first_contributon(work_uri, graph, thesis_info):
+    # this will add the institute (usually from ORT and INST) as an affiliation to the first author of the work. 
+    # also adds the institute ror id, country and country's geonames id to the affiliation.
+    # For this, it needs to go through the subgraph of the work_uri after adding the author nodes, and find the first author node.
+    # it will then add the affiliation to the first author node, if it doesn't exist already. (MAybe we can reuse existing functions to add all these at once, I think we have an add_affilition function that does this already.)
+    # also adds a second role "dissertant" in addition to AU.
+    # the thesis supervisor and reviewers will be added as further contributions to the work, but not here.
+    
+    # if there is a CS field, add the affiliation to the first contribution node:
+    if thesis_info["institute"] is not None:
+    # and thesis_info["institute_country"] is not None:
+        # get the first contribution node:
+        for contribution in graph.objects(work_uri, ns.BF.contribution):
+            agent_node = graph.value(
+                contribution, ns.BF.agent
+            )  
+            # get the position of the contribution:
+            position = graph.value(contribution, ns.PXP.contributionPosition)
+            if (
+                int(position) == 1
+                and graph.value(agent_node, RDF.type) == ns.BF.Person
+            ):
+                # add the affiliation to the contribution node using the function we already have for it:
+                logging.info(f"Adding dissertant role to first contribution node")
+                # add dissertant role to the contribution node:
+                graph.add(
+                    (contribution, ns.BF.role, URIRef("https://id.loc.gov/vocabulary/relators/dis")))  # dis = dissertant
+                # if there is no affiliation node yet, we can build one:
+                if not graph.value(
+                    contribution, ns.MADS.hasAffiliation
+                ):
+                    logging.info("Adding thesis institute as affiliation to first contribution node")
+                    # build the affiliation node:
+                    affiliation = contributions.build_affiliation_nodes(graph, agent_node, thesis_info["institute"], thesis_info["institute_country"])
+                    # add the affiliation to the contribution node:
+                    graph.add(
+                        (contribution, ns.MADS.hasAffiliation, affiliation)
+                    )
+                else:
+                    logging.info("Affiliation already exists for first contribution node, skipping.")
+
+                # graph.add(
+                #     (
+                #         contribution,
+                #         ns.MADS.hasAffiliation,
+                #         build_affiliation_nodes(agent_node, affiliation, country),
+                #     )
+                # )
+                break
+

@@ -1,5 +1,6 @@
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
 @prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix contenttypes: <http://id.loc.gov/vocabulary/contentTypes/> .
 @prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
 @prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
 @prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
@@ -21,34 +22,283 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-# diss mit Link zu den Einzelartikeln?
-# Artikel mit REPLIC 
+# Dissertation kumulativ, mit Link zu den Einzelartikeln -> auch Related Works im Beispiel
 
-works:xyz_work a bf:Work, pxc:MainWork ;
-    #...
-    bflc:relationship works:xyz_work#workrel1 ;
-.
+works:0390336_work a bf:Text,
+        bf:Work,
+        pxc:MainWork ;
+    bflc:demographicGroup <https://w3id.org/zpid/vocabs/age/adulthood> ;
+    # Die related Works sind in diesem Fall die in Zeitschriften publizierten Einzelartikel, die "Teil" der Dissertation sind (alle drei sind per DFK verlinkt:
+    bflc:relationship <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1>,
+        <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2>,
+        <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3> ;
+    bf:classification <https://w3id.org/zpid/resources/works/0390336_work#controlledmethod1>,
+        <https://w3id.org/zpid/resources/works/0390336_work#subjectheading1>,
+        <https://w3id.org/zpid/resources/works/0390336_work#subjectheading2>,
+        <https://w3id.org/zpid/resources/works/0390336_work#subjectheading3> ;
+    bf:content contenttypes:text ;
+    bf:contribution <https://w3id.org/zpid/resources/works/0390336_work#contribution1>,
+        # HRF - Hauptreferent der Dissertation:
+        <https://w3id.org/zpid/resources/works/0390336_work#thesis_advisor>,
+        # KRF - Neben-/Korreferent(en) der Dissertation:
+        <https://w3id.org/zpid/resources/works/0390336_work#thesis_reviewer_1> ;
+    # Angaben zum Abschluss der Dissertation - Grad und Datum:
+    bf:dissertation <https://w3id.org/zpid/resources/works/0390336_work#dissertation> ;
+    bf:genreForm genres:CompilationThesisDoctoral ;
+    bf:hasInstance <https://w3id.org/zpid/resources/instances/0390336#1> ;
+    bf:language lang:eng ;
+    bf:subject <https://w3id.org/zpid/resources/works/0390336_work#topic1>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic10>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic11>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic2>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic3>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic4>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic5>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic6>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic7>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic8>,
+        <https://w3id.org/zpid/resources/works/0390336_work#topic9> ;
+    bf:summary <https://w3id.org/zpid/resources/works/0390336_work#abstract>,
+        <https://w3id.org/zpid/resources/works/0390336_work#secondaryabstract> ;
+    bf:tableOfContents <https://w3id.org/zpid/resources/works/0390336_work#toc> ;
+    pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0390336> .
 
-works:xyz_work#workrel1 a bflc:Relationship ;
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1> a pxc:RelatedWorkRelationship ;
     bflc:relation relations:hasArticlePartOfCompilationThesis ;
-    bf:relatedTo works:xyz_work#workrel1_work ; # the article's work
-.
+    bf:relatedTo <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work> .
 
-works:xyz_work#workrel1_work a bf:Work ;
-    pxp:hasInstanceBundle works:xyz_work#workrel1_instancebundle ; # the article's instancebundle
-.
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work_instance> .
 
-works:xyz_work#workrel1_instancebundle a pxc:InstanceBundle ;
-    bf:identifiedBy works:xyz_work#workrel1_instancebundle_id ;
-.
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work_instance_dfk> .
 
-bf:identifiedBy works:xyz_work#workrel1_instancebundle_id a pxc:DFK ;
-    rdf:value "0331107" ;
-.
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship1_work_instance_dfk> a pxc:DFK ;
+    rdf:value "0337876" .
 
-# Priorität: wenn DFK vorhanden, diese migrieren, 
-    # wenn nicht, dann DOI aus REL |q -> "doi:...", 
-        # wenn nicht, dann Citation aus |a (Auotorenliste) + |t (Titel) + |j (Jahr), + |q 
-        # oder vorher mal Crossref fragen nach einer DOI
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2> a pxc:RelatedWorkRelationship ;
+    bflc:relation relations:hasArticlePartOfCompilationThesis ;
+    bf:relatedTo <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work_instance> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work_instance_dfk> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship2_work_instance_dfk> a pxc:DFK ;
+    rdf:value "0338668" .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3> a pxc:RelatedWorkRelationship ;
+    bflc:relation relations:hasArticlePartOfCompilationThesis ;
+    bf:relatedTo <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work> a bf:Text,
+        bf:Work ;
+    bf:hasInstance <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work_instance> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work_instance> a bf:Instance ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work_instance_dfk> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#RelatedWorkRelationship3_work_instance_dfk> a pxc:DFK ;
+    rdf:value "0339470" .
+
+<https://w3id.org/zpid/resources/works/0390336_work#abstract> a pxc:Abstract ;
+    rdfs:label "There is increasing evidence that placebos can modulate specific affective and visual perceptual processes. However, corresponding knowledge about effects of the opposite phenomenon, known as nocebo effect (sham treatment combined with negative suggestions), is very limited. The three studies presented in this thesis tried to elucidate neural underpinnings of emotion-specific nocebo effects with functional magnetic resonance imaging (fMRI; study I and II) and investigate effects of a nocebo on pseudo-neglect with eye-tracking (study III). In study I and II, 38 healthy participants passively viewed disgusting, fear-inducing, and neutral pictures once with and once without a nocebo (odorless stimulus together with the suggestion of a disgust-eliciting odor). The majority of the participants (76%) reported perceiving an aversive odor. In these nocebo responders, the nocebo increased subjective disgust ratings and enhanced activity/connectivity in a placebo/nocebo-related affective/evaluative network (e.g., orbitofrontal cortex, insula), in regions associated with odor processing (piriform cortex) and in structures involved in visual attention processes (e.g., fusiform gyrus, V1). These observed activity patterns were specific for the emotion of disgust. The idea that nocebos are able to modulate visual attention was pursued in study III. In this study, 52 healthy participants completed a visual searching task once with and once without a nocebo. The nocebo was a sham transcranial magnetic stimulation (TMS) applied together with the suggestion that this stimulation would elicit temporary left-sided attentional deficits. Interestingly, the nocebo increased left-side searching behavior (number of fixations, dwell time) and performance in participants reporting left-sided attention deficits. This paradoxical nocebo effect indicates a fascinating positive side of nocebos which may be relevant for clinical approaches. Practical implications are discussed."@en ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390336_work#abstract_source> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#abstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1> a bflc:PrimaryContribution,
+        bf:Contribution ;
+    bf:agent <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent> ;
+    bf:qualifier "first" ;
+    bf:role <https://id.loc.gov/vocabulary/relators/dis>,
+        roles:AU ;
+    mads:hasAffiliation <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1> ;
+    pxp:contributionPosition 1 .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent> a bf:Person ;
+    rdfs:label "Höfler, Carina Maria" ;
+    schema:familyName "Höfler" ;
+    schema:givenName "Carina Maria" .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1> a mads:Affiliation ;
+    mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address> ;
+    mads:organization <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address> a mads:Address ;
+    mads:country <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+    rdfs:label "Austria" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+    rdf:value "2782113" .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+    rdfs:label "Universität Graz, Naturwissenschaftliche Fakultät" ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#contribution1_personagent_affiliation1_organization_rorid> a locid:ror ;
+    rdf:value "https://ror.org/01faaaf77" .
+
+<https://w3id.org/zpid/resources/works/0390336_work#controlledmethod1> a pxc:ControlledMethod,
+        pxc:ControlledMethodWeighted ;
+    rdfs:label "experimental study" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/methods/10110> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#dissertation> a bf:Dissertation ;
+    bf:date "2018" ;
+    bf:degree "Dr. rer. nat." .
+
+<https://w3id.org/zpid/resources/works/0390336_work#secondaryabstract> a pxc:Abstract,
+        pxc:SecondaryAbstract ;
+    rdfs:label "Es gibt zunehmend Hinweise, dass Placebos spezifische affektive und visuelle Wahrnehmungsprozesse modulieren können. Entsprechendes Wissen über das gegenteilige Phänomen, den Nocebo-Effekt (Scheinbehandlung kombiniert mit negativer Suggestion), ist jedoch sehr begrenzt. In den drei vorgestellten Studien wurde versucht die neuronale Basis emotionsspezifischer Nocebo-Effekte mittels funktioneller Magnetresonanztomographie (Studie I und II) aufzuklären und die Effekte eines Nocebos auf visuellen Pseudo-Neglect mittels Eye-Tracking (Studie III) zu untersuchen. In Studie I und II betrachteten 38 Teilnehmerinnen Ekel-, Angst- und neutrale Bilder einmal mit und einmal ohne ein Nocebo (geruchloser Reiz mit der Suggestion eines ekelerregenden Geruchs). Die Mehrheit der Teilnehmerinnen (76 %) berichtete, einen aversiven Geruch wahrzunehmen. Bei diesen Nocebo-Respondern erhöhte das Nocebo das Ekelerleben und steigerte die Aktivität/Konnektivität in einem Placebo/Nocebo-relevanten affektiven/bewertenden Netzwerk (u. a. orbitofrontaler Kortex, Insula), in Regionen, die mit Geruchsverarbeitung assoziiert sind (piriformer Kortex) und in Strukturen, die an visuellen Aufmerksamkeitsprozessen beteiligt sind (u. a. fusiformer Gyrus, V1). Dieser Effekt zeigte sich spezifisch für die Emotion Ekel. In Studie III führten 52 Probandinnen eine visuelle Suchaufgabe einmal mit und einmal ohne ein Nocebo durch. In der Nocebo-Bedingung wurde eine fingierte transkranielle Magnetstimulation durchgeführt, zusammen mit der Suggestion, dass diese Prozedur transiente linksseitige Aufmerksamkeitsdefizite auslöse. Interessanterweise erhöhte das Nocebo jedoch das linksseitige Suchverhalten (Fixationszahl, Verweildauer) und die Leistung bei jenen, die über linksseitige Aufmerksamkeitsdefizite berichteten. Dieser paradoxe Nocebo-Effekt weist auf eine faszinierende positive Seite des Nocebos hin, die für klinische Ansätze relevant sein könnte. Praktische Anwendungsmöglichkeiten werden diskutiert."@de ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/works/0390336_work#secondaryabstract_source> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#secondaryabstract_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "Original" ;
+    pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0390336_work#subjectheading1> a pxc:SubjectHeading,
+        pxc:SubjectHeadingWeighted ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/2346> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#subjectheading2> a pxc:SubjectHeading ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/2560> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#subjectheading3> a pxc:SubjectHeading ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/class/2520> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#thesis_advisor> a bf:Contribution,
+        bf:ThesisAdvisory ;
+    bf:agent <https://w3id.org/zpid/resources/works/0390336_work#thesis_advisor_person> ;
+    bf:role <https://id.loc.gov/vocabulary/relators/ths> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#thesis_advisor_person> a bf:Person ;
+    schema:familyName "Schienle" ;
+    schema:givenName "A." .
+
+<https://w3id.org/zpid/resources/works/0390336_work#thesis_reviewer_1> a bf:Contribution,
+        bf:ThesisReview ;
+    bf:agent <https://w3id.org/zpid/resources/works/0390336_work#thesis_reviewer_1_person> ;
+    bf:role <https://id.loc.gov/vocabulary/relators/dgc> .
+
+<https://w3id.org/zpid/resources/works/0390336_work#thesis_reviewer_1_person> a bf:Person ;
+    schema:familyName "Schwerdtfeger" ;
+    schema:givenName "A." .
+
+<https://w3id.org/zpid/resources/works/0390336_work#toc> a bf:TableOfContents ;
+    rdfs:label "(1) Schienle, A., Höfler, C., Übel, S. & Wabnegger, A. (2018). Emotion-specific nocebo effects: An fMRI study. Brain Imaging and Behavior, 12, 180-187. DOI: 10.1007/s11682-017-9675-1 (2) Höfler, C., Wabnegger, A. & Schienle, A. (2018). Investigating visual effects of a disgust nocebo with fMRI. Journal of Integrative Neuroscience, 17, 83-88. DOI: 10.31083/JIN-170041 (3) Höfler, C., Gremsl, A. & Schienle, A. (2018). Nocebo and pseudo-neglect: Paradoxical effects detected with eye-tracking. International Journal of Psychophysiology, 125, 29-34. DOI: 10.1016/j.ijpsycho.2018.01.014"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic1> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Placebo" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/39020> ;
+    skos:prefLabel "Placebo"@de,
+        "Placebo"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic10> a bf:Topic ;
+    rdfs:label "Prefrontal Cortex" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/40035> ;
+    skos:prefLabel "Präfrontaler Kortex"@de,
+        "Prefrontal Cortex"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic11> a bf:Topic ;
+    rdfs:label "Temporal Lobe" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/52010> ;
+    skos:prefLabel "Temporallappen (Gehirn)"@de,
+        "Temporal Lobe"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic2> a bf:Topic ;
+    rdfs:label "Expectations" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/18460> ;
+    skos:prefLabel "Erwartungen"@de,
+        "Expectations"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic3> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Visual Perception" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/55980> ;
+    skos:prefLabel "Visuelle Wahrnehmung"@de,
+        "Visual Perception"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic4> a bf:Topic,
+        pxc:WeightedTopic ;
+    rdfs:label "Visual Attention" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/58080> ;
+    skos:prefLabel "Visuelle Aufmerksamkeit"@de,
+        "Visual Attention"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic5> a bf:Topic ;
+    rdfs:label "Visual Search" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/55987> ;
+    skos:prefLabel "Visuelle Suchprozesse"@de,
+        "Visual Search"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic6> a bf:Topic ;
+    rdfs:label "Cognitive Processes" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/10130> ;
+    skos:prefLabel "Kognitive Prozesse"@de,
+        "Cognitive Processes"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic7> a bf:Topic ;
+    rdfs:label "Olfactory Perception" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/35280> ;
+    skos:prefLabel "Geruchswahrnehmung"@de,
+        "Olfactory Perception"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic8> a bf:Topic ;
+    rdfs:label "Functional Magnetic Resonance Imaging" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/60539> ;
+    skos:prefLabel "Funktionelle Magnetresonanztomographie"@de,
+        "Functional Magnetic Resonance Imaging"@en .
+
+<https://w3id.org/zpid/resources/works/0390336_work#topic9> a bf:Topic ;
+    rdfs:label "Cerebral Blood Flow" ;
+    owl:sameAs <https://w3id.org/zpid/vocabs/terms/08217> ;
+    skos:prefLabel "Zerebrale Durchblutung"@de,
+        "Cerebral Blood Flow"@en .
+
+<https://w3id.org/zpid/resources/instances/0390336#1> a bf:Electronic,
+        bf:Instance ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/cr> ;
+    bf:identifiedBy <urn:nbn:at:at-ubg:1-131599> ;
+    bf:instanceOf works:0390336_work ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/c> ;
+    pxp:mediaCarrier pmt:Online .
 
 
+<https://w3id.org/zpid/resources/instancebundles/0390336> a pxc:InstanceBundle ;
+    bf:hasPart <https://w3id.org/zpid/resources/instances/0390336#1> ;
+    bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0390336_dfk> ;
+    bf:provisionActivity <https://w3id.org/zpid/resources/instancebundles/0390336_publication> ;
+    bf:title <https://w3id.org/zpid/resources/instancebundles/0390336#title>,
+        <https://w3id.org/zpid/resources/instancebundles/0390336#translatedtitle> ;
+    bf:usageAndAccessPolicy licenses:AUTH ;
+    pxp:issuanceType issuances:GrayLiterature .
+
+<https://w3id.org/zpid/resources/instancebundles/0390336#title> a bf:Title ;
+    rdfs:label "Nocebo effects in visual attention" ;
+    bf:mainTitle "Nocebo effects in visual attention"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0390336#translatedtitle> a pxc:TranslatedTitle ;
+    rdfs:label "Nocebo-Effekte bei der visuellen Aufmerksamkeit" ;
+    bf:adminMetadata <https://w3id.org/zpid/resources/instancebundles/0390336#translatedtitle_source> ;
+    bf:mainTitle "Nocebo-Effekte bei der visuellen Aufmerksamkeit"@de .
+
+<https://w3id.org/zpid/resources/instancebundles/0390336#translatedtitle_source> a bf:AdminMetadata ;
+    bflc:metadataLicensor "DeepL" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390336_dfk> a pxc:DFK ;
+    rdf:value "0390336" .
+
+<https://w3id.org/zpid/resources/instancebundles/0390336_publication> a bf:Publication ;
+    bflc:simpleDate "2018" ;
+    bf:date "2018"^^xsd:gYear .

@@ -288,12 +288,12 @@ def add_work_studytypes(record, dfk, work_node, instance_bundle_node, graph):
                 )
             )
 
-        ## if both ScholarlyWork AND ResearchPaper are added due to this conversion, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
-        # So: check if the new_genres List contains both ScholarlyWork and ResearchPaper, and if so, remove ScholarlyWork.
+        ## if both ScholarlyWork AND ScholarlyPaper are added due to this conversion, only keep the ScholarlyPaper (the subconcept), since ScholarlyPaper is a more specific subconcept of ScholarlyWork.
+        # So: check if the new_genres List contains both ScholarlyWork and ScholarlyPaper, and if so, remove ScholarlyWork.
 
-        if "ScholarlyWork" in new_genres and "ResearchPaper" in new_genres:
+        if "ScholarlyWork" in new_genres and "ScholarlyPaper" in new_genres:
             logging.info(
-                "removed ScholarlyWork genre from ResearchPaper work " + work_node
+                "removed ScholarlyWork genre from ScholarlyPaper work " + work_node
             )
             new_genres.remove("ScholarlyWork")
         for genre in new_genres:
@@ -392,7 +392,7 @@ def add_work_genres(work_uri, record, dfk, records_bf):
             genres.append("CompilationThesisHabilitation")
         else:
             genres.append("ThesisHabilitation")
-    # if any method _starts with_  "|c 10" add "ResearchPaper" to genres
+    # if any method _starts with_  "|c 10" add "ScholarlyPaper" to genres
     # remeber it has to start with "|c 10" and not just contain it:
     # or if it is exactly one of the following: 11100 (method. study),12100 (theor. study), 13100 (literature review),13110 (systematic review)
     # if any(notation.startswith("101") for notation in methods) or any(
@@ -400,14 +400,14 @@ def add_work_genres(work_uri, record, dfk, records_bf):
     # ):
     #     # but only if it isn't already a thesis:
     #     if "ThesisDoctoral" not in genres and "ThesisHabilitation" not in genres:
-    #         genres.append("ResearchPaper")
+    #         genres.append("ScholarlyPaper")
 
-    # if any are 11200 or 11300 and also bibliographic level is "UZ", also add ResearchPaper:
+    # if any are 11200 or 11300 and also bibliographic level is "UZ", also add ScholarlyPaper:
     # if (
     #     any(notation in ["11200", "11300"] for notation in methods)
     #     and bibliographic_level == "UZ"
     # ):
-    #     genres.append("ResearchPaper")
+    #     genres.append("ScholarlyPaper")
 
     # for any that are 18650 (workshop) and also have specific DFKs, treat them before, then go through the rest to make them ~~either MeetingReport or~~ CourseMaterial:
     if any(notation in ["18650"] for notation in methods):
@@ -479,7 +479,7 @@ def add_work_genres(work_uri, record, dfk, records_bf):
 
 
 def clean_up_genres(work_uri, graph):
-    # remove any genres:ResearchPaper node when the work already has a variation of genre:Thesis:
+    # remove any genres:ScholarlyPaper node when the work already has a variation of genre:Thesis:
     if (
         (
             work_uri,
@@ -507,13 +507,13 @@ def clean_up_genres(work_uri, graph):
         in graph
     ):
         logging.info("we have a thesis!")
-        if ((work_uri, ns.BF.genreForm, URIRef(ns.GENRES["ResearchPaper"]))) in graph:
-            # print("removed ResearchPaper genre from Thesis work " + work_uri)
+        if ((work_uri, ns.BF.genreForm, URIRef(ns.GENRES["ScholarlyPaper"]))) in graph:
+            # print("removed ScholarlyPaper genre from Thesis work " + work_uri)
             graph.remove(
                 (
                     work_uri,
                     ns.BF.genreForm,
-                    URIRef(ns.GENRES["ResearchPaper"]),
+                    URIRef(ns.GENRES["ScholarlyPaper"]),
                 )
             )
         if ((work_uri, ns.BF.genreForm, URIRef(ns.GENRES["ScholarlyWork"]))) in graph:
@@ -525,11 +525,11 @@ def clean_up_genres(work_uri, graph):
                     URIRef(ns.GENRES["ScholarlyWork"]),
                 )
             )
-    # also, if both ScholarlyWork AND ResearchPaper exist, only keep the ResearchPaper (the subconcept), since ResearchPaper is a more specific subconcept of ScholarlyWork.
+    # also, if both ScholarlyWork AND ScholarlyPaper exist, only keep the ScholarlyPaper (the subconcept), since ScholarlyPaper is a more specific subconcept of ScholarlyWork.
     # if (
     #     work_uri,
     #     BF.genreForm,
-    #     URIRef(GENRES["ResearchPaper"]),
+    #     URIRef(GENRES["ScholarlyPaper"]),
     # ) in graph and (
     #     work_uri,
     #     BF.genreForm,

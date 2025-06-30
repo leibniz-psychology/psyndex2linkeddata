@@ -93,13 +93,13 @@ def build_dfk_identifier_node(instancebundle, dfk, graph):
     # print(f"bf:identifiedBy > pxc:DFK > rdf:value: {dfk}.")
     # There is only ever one DFK per instance, 
     # make node for the identifier:
-    identifier_node = URIRef(instancebundle + "_dfk")
+    identifier_node = URIRef(str(instancebundle) + "_dfk")
     # give it class pxc:DFK:
     graph.add((identifier_node, RDF.type, ns.PXC.DFK))
     # give it the dfk as a literal value:
     graph.add((identifier_node, RDF.value, Literal(dfk)))
     # attach it to the instance with bf:identifiedBy:
-    graph.set((instancebundle, ns.BF.identifiedBy, identifier_node))
+    graph.add((instancebundle, ns.BF.identifiedBy, identifier_node))
 
 
 # def make_identifier_node(resource_uri, type_prefix="BF", identifier_type="Identifier", identifier_value, identifier_node_name):
