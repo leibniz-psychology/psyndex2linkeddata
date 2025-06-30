@@ -1,9 +1,5 @@
-from calendar import c
-import datetime
-from itertools import count
-import logging
 import dateparser
-import html
+
 
 import re
 import sys
