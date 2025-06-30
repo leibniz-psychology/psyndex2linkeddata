@@ -170,37 +170,37 @@ def add_instance_license(resource_uri, record):
             # license_uri = URIRef(LICENSES + license_code)
             # several cases and the different uris for the licenses:
             if license_code == "CC":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "C00_1_0")
             elif license_code == "PDM":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "PDM_1_0")
             # CC BY 4.0
             elif license_code == "CC BY 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY_4_0")
             # CC BY-SA 4.0
             elif license_code == "CC BY-SA 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-SA_4_0")
             # CC BY-NC-ND 3.0
             elif license_code == "CC BY-NC-ND 3.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_3_0")
             # CC BY-NC-ND 4.0
             elif license_code == "CC BY-NC-ND 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_4_0")
             elif license_code == "CC BY-NC 1.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_1_0")
             elif license_code == "CC BY-NC 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC_4_0")
                 # CC BY-NC-ND 2.5
             elif license_code == "CC BY-NC-ND 2.5":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2.5")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-ND_2_5")
                 # CC BY-NC-SA 4.0
             elif license_code == "CC BY-NC-SA 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-NC-SA_4_0")
                 # CC BY-ND 4.0
             elif license_code == "CC BY-ND 4.0":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4.0")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_4_0")
                 # CC BY-ND 2.5
             elif license_code == "CC BY-ND 2.5":
-                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2.5")
+                license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY-ND_2_5")
                 # CC BY (unknown version)
             elif license_code == "CC BY":
                 license_uri = URIRef(SKOSMOS_LICENSES_PREFIX + "CC_BY")
@@ -1305,8 +1305,7 @@ def process_record(record):
     # Add the RELs and TESTs from the record to the work:
     research_info.build_rels(record=record, work_uri=work_uri, graph=records_bf)
 
-    ## TODO
-    # research_info.build_tests(record=record, work_uri=work_uri, graph=records_bf)
+    research_info.build_related_tests(record=record, work_uri=work_uri, graph=records_bf)
 
     ## ==== InstanceBundle ==== ##
 
