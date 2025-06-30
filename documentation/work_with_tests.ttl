@@ -1,0 +1,906 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix pxc: <https://w3id.org/zpid/ontology/classes/> .
+@prefix pxp: <https://w3id.org/zpid/ontology/properties/> .
+@prefix roles: <https://w3id.org/zpid/vocabs/roles/> .
+@prefix works: <https://w3id.org/zpid/resources/works/> .
+@prefix relations: <https://w3id.org/zpid/vocabs/relations/> .
+@prefix mads: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix contenttypes: <http://id.loc.gov/vocabulary/contentTypes/> .
+@prefix genres: <https://w3id.org/zpid/vocabs/genres/> .
+@prefix issuances: <https://w3id.org/zpid/vocabs/issuances/> .
+@prefix lang: <http://id.loc.gov/vocabulary/iso639-2/> .
+@prefix licenses: <https://w3id.org/zpid/vocabs/licenses/> .
+@prefix locid: <http://id.loc.gov/vocabulary/identifiers/> .
+@prefix pmt: <https://w3id.org/zpid/vocabs/mediacarriers/> .
+
+works:0350746_work a bf:Text, bf:Work, pxc:MainWork ;
+	bflc:demographicGroup <https://w3id.org/zpid/vocabs/age/adulthood> ;
+	bflc:relationship <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6> ;
+	bf:classification <https://w3id.org/zpid/resources/works/0350746_work#controlledmethod1>, <https://w3id.org/zpid/resources/works/0350746_work#subjectheading1>, <https://w3id.org/zpid/resources/works/0350746_work#subjectheading2>, <https://w3id.org/zpid/resources/works/0350746_work#subjectheading3> ;
+	bf:content contenttypes:text ;
+	bf:contribution <https://w3id.org/zpid/resources/works/0350746_work#contribution1>, <https://w3id.org/zpid/resources/works/0350746_work#contribution10>, <https://w3id.org/zpid/resources/works/0350746_work#contribution11>, <https://w3id.org/zpid/resources/works/0350746_work#contribution12>, <https://w3id.org/zpid/resources/works/0350746_work#contribution13>, <https://w3id.org/zpid/resources/works/0350746_work#contribution14>, <https://w3id.org/zpid/resources/works/0350746_work#contribution15>, <https://w3id.org/zpid/resources/works/0350746_work#contribution16>, <https://w3id.org/zpid/resources/works/0350746_work#contribution17>, <https://w3id.org/zpid/resources/works/0350746_work#contribution18>, <https://w3id.org/zpid/resources/works/0350746_work#contribution19>, <https://w3id.org/zpid/resources/works/0350746_work#contribution2>, <https://w3id.org/zpid/resources/works/0350746_work#contribution3>, <https://w3id.org/zpid/resources/works/0350746_work#contribution4>, <https://w3id.org/zpid/resources/works/0350746_work#contribution5>, <https://w3id.org/zpid/resources/works/0350746_work#contribution6>, <https://w3id.org/zpid/resources/works/0350746_work#contribution7>, <https://w3id.org/zpid/resources/works/0350746_work#contribution8>, <https://w3id.org/zpid/resources/works/0350746_work#contribution9> ;
+	bf:genreForm genres:ScholarlyPaper ;
+	bf:hasInstance <https://w3id.org/zpid/resources/instances/0350746#1>, <https://w3id.org/zpid/resources/instances/0350746#2> ;
+	bf:language lang:eng ;
+	bf:subject <https://w3id.org/zpid/resources/works/0350746_work#topic1>, <https://w3id.org/zpid/resources/works/0350746_work#topic10>, <https://w3id.org/zpid/resources/works/0350746_work#topic11>, <https://w3id.org/zpid/resources/works/0350746_work#topic12>, <https://w3id.org/zpid/resources/works/0350746_work#topic2>, <https://w3id.org/zpid/resources/works/0350746_work#topic3>, <https://w3id.org/zpid/resources/works/0350746_work#topic4>, <https://w3id.org/zpid/resources/works/0350746_work#topic5>, <https://w3id.org/zpid/resources/works/0350746_work#topic6>, <https://w3id.org/zpid/resources/works/0350746_work#topic7>, <https://w3id.org/zpid/resources/works/0350746_work#topic8>, <https://w3id.org/zpid/resources/works/0350746_work#topic9> ;
+	bf:summary <https://w3id.org/zpid/resources/works/0350746_work#abstract>, <https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract> ;
+	pxp:hasInstanceBundle <https://w3id.org/zpid/resources/instancebundles/0350746> .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746> a pxc:InstanceBundle ;
+	bflc:relationship <https://w3id.org/zpid/resources/instancebundles/0350746#journalrel> ;
+	bf:hasPart <https://w3id.org/zpid/resources/instances/0350746#1>, <https://w3id.org/zpid/resources/instances/0350746#2> ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0350746_dfk> ;
+	bf:provisionActivity <https://w3id.org/zpid/resources/instancebundles/0350746_publication> ;
+	bf:seriesStatement "Psycho-Oncology" ;
+	bf:title <https://w3id.org/zpid/resources/instancebundles/0350746#title>, <https://w3id.org/zpid/resources/instancebundles/0350746#translatedtitle> ;
+	bf:usageAndAccessPolicy licenses:PUBL ;
+	pxp:issuanceType issuances:JournalArticle .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#journalrel> a bflc:Relationship ;
+	bf:relatedTo <https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal> ;
+	bf:seriesEnumeration "27(12), p. 2847-2854" ;
+	pxp:inIssue "12" ;
+	pxp:inVolume "27" ;
+	pxp:pageEnd "2854" ;
+	pxp:pageStart "2847" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal> a bf:Hub, bf:Serial ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_issnonline>, <https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_issnprint> ;
+	bf:title <https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_title> .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_issnonline> a bf:Issn ;
+	bf:qualifier "online" ;
+	rdf:value "1099-1611" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_issnprint> a bf:Issn ;
+	bf:qualifier "print" ;
+	rdf:value "1057-9249" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#journalrel_journal_title> a bf:Title ;
+	bf:mainTitle "Psycho-Oncology" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#title> a bf:Title ;
+	rdfs:label "Psychosocial distress and utilization of professional psychological care in cancer patients: An observational study in National Comprehensive Cancer Centers (CCCs) in Germany" ;
+	bf:mainTitle "Psychosocial distress and utilization of professional psychological care in cancer patients: An observational study in National Comprehensive Cancer Centers (CCCs) in Germany"@en .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#translatedtitle> a pxc:TranslatedTitle ;
+	rdfs:label "Psychosoziale emotionale Belastung und Inanspruchnahme professioneller psychologischer Betreuung bei Krebspatienten: Eine Beobachtungsstudie in nationalen Onkologischen Spitzenzentren (CCCs) in Deutschland" ;
+	bf:adminMetadata <https://w3id.org/zpid/resources/instancebundles/0350746#translatedtitle_source> ;
+	bf:mainTitle "Psychosoziale emotionale Belastung und Inanspruchnahme professioneller psychologischer Betreuung bei Krebspatienten: Eine Beobachtungsstudie in nationalen Onkologischen Spitzenzentren (CCCs) in Deutschland"@de .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746#translatedtitle_source> a bf:AdminMetadata ;
+	bflc:metadataLicensor "ZPID" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746_dfk> a pxc:DFK ;
+	rdf:value "0350746" .
+
+<https://w3id.org/zpid/resources/instancebundles/0350746_publication> a bf:Publication ;
+	bflc:simpleDate "2018" ;
+	bf:date "2018"^^xsd:gYear .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test> ;
+	bflc:relation relations:usesTest ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_shortName> ;
+	pxp:uncontrolledTestId "3830" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_longName> a bf:Title ;
+	bf:mainTitle "National Comprehensive Cancer Network Distress Thermometer - deutsche Fassung" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "NCCN-DT" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship1_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "5637" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test> ;
+	bflc:relation relations:usesTest ;
+	bf:note <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_remark> ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_remark> a bf:Note ;
+	rdfs:label "Verwendete Variante oder Unterform: PHQ-9; Langname verwendete Variante: Depression Module" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_shortName> ;
+	pxp:uncontrolledTestId "4539" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_longName> a bf:Title ;
+	bf:mainTitle "Gesundheitsfragebogen für Patienten" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "PHQ-D" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship2_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "4556" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test> ;
+	bflc:relation relations:usesTest ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_shortName> ;
+	pxp:uncontrolledTestId "11322" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_longName> a bf:Title ;
+	bf:mainTitle "Generalized Anxiety Disorder Screener - deutsche Fassung" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "GAD-7" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship3_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "6871" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test> ;
+	bflc:relation relations:usesTest ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_shortName> ;
+	pxp:uncontrolledTestId "9180" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_longName> a bf:Title ;
+	bf:mainTitle "Hospital Anxiety and Depression Scale - Deutsche Version (3. aktualisierte und neu normierte Auflage)" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "HADS-D (2011)" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship4_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "6447" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test> ;
+	bflc:relation relations:usesTest ;
+	bf:note <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_remark> ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_remark> a bf:Note ;
+	rdfs:label "Verwendete Variante oder Unterform: SF-12; Langname verwendete Variante: Kurzform" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_shortName> ;
+	pxp:uncontrolledTestId "3413" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_longName> a bf:Title ;
+	bf:mainTitle "Fragebogen zum Gesundheitszustand" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "SF-36" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship5_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "3482" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6> a bflc:Relationship, pxc:TestRelationship ;
+	bflc:relatedTo <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test> ;
+	bflc:relation relations:usesTest ;
+	pxp:allItemsInWork false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test> a pxc:Test ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_testId> ;
+	bf:title <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_longName>, <https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_shortName> ;
+	pxp:uncontrolledTestId "4853" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_longName> a bf:Title ;
+	bf:mainTitle "Skalen zur Sozialen Unterstützung bei Krankheit" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_shortName> a bf:AbbreviatedTitle ;
+	bf:mainTitle "SSUK" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#TestRelationship6_test_testId> a pxc:PsytkomTestId ;
+	rdf:value "4856" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#abstract> a pxc:Abstract ;
+	rdfs:label "Objective: The study aimed to assess cancer patients' use of psychological care and its correlates in a large sample of cancer patients in Comprehensive Cancer Centers (CCCs) in Germany. Methods: In a multicenter study in Germany, cancer patients with various diagnoses were evaluated for self-reported use of psychological support. We measured psychological distress, depression and anxiety, quality of life, and social support with standardized questionnaires and analyzed its association with the utilization of psychological care using multivariable logistic regression. This paper focuses on a cross-sectional analysis of the data assessed during inpatient care. Results: Three thousand fifty-four (50%) of hospitalized patients were asked for participation, and n = 1632 (53.6%) participated. We were able to analyze n = 1,398 (45.9%) patients. Three hundred ninety-seven (28.4%) of the sample utilized psychological support. Users of psychological care were significantly younger than nonusers (odds ratio [OR]: 0.967, P < 0.001) and were more often female (OR: 1.878, P < 0.001), whereas educational level was not associated with the use of psychological care. In the multivariable analysis, effects on the use of psychological care were observed for Hospital Anxiety and Depression Scale (HADS) anxiety (OR: 1.106, P = 0.001) and both subscales of the 12-item Short Form Health Survey (SF-12) quality of life measure (mental, OR: 0.97, P = 0.002; physical, OR: 0.97, P = 0.002). Conclusion: Psychological distress and anxiety are higher, and quality of life is lower in users of psychological care in comparison with nonusers during inpatient cancer treatment. Although psychooncological services should be provided to all patients who need them, special efforts should be made to reach populations that report low utilization."@en ;
+	bf:adminMetadata <https://w3id.org/zpid/resources/works/0350746_work#abstract_source> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#abstract_source> a bf:AdminMetadata ;
+	bflc:metadataLicensor "Original" ;
+	pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1> a bflc:PrimaryContribution, bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent> ;
+	bf:qualifier "first" ;
+	bf:role roles:AU ;
+	mads:email <mailto:joachim.weis@uniklinik-freiburg.de> ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1> ;
+	pxp:contributionPosition 1 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1> ;
+	pxp:contributionPosition 10 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent> a bf:Person ;
+	rdfs:label "Erim, Yesim" ;
+	schema:familyName "Erim" ;
+	schema:givenName "Yesim" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution10_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine, University Clinic Centre Erlangen" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1> ;
+	pxp:contributionPosition 11 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent> a bf:Person ;
+	rdfs:label "Geiser, Franziska" ;
+	schema:familyName "Geiser" ;
+	schema:givenName "Franziska" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution11_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine, University Clinic Centre Bonn" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1> ;
+	pxp:contributionPosition 12 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent> a bf:Person ;
+	rdfs:label "Niecke, Alexander" ;
+	schema:familyName "Niecke" ;
+	schema:givenName "Alexander" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution12_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine & Centre Psychooncology (CePO), University Clinic Centre Cologne" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1> ;
+	pxp:contributionPosition 13 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent> a bf:Person ;
+	rdfs:label "Senf, Bianca" ;
+	schema:familyName "Senf" ;
+	schema:givenName "Bianca" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "University Clinic Centre Frankfurt University Cancer Center, Frankfurt" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution13_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/02msan859" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1> ;
+	pxp:contributionPosition 14 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent> a bf:Person ;
+	rdfs:label "Wickert, Martin" ;
+	schema:familyName "Wickert" ;
+	schema:givenName "Martin" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Comprehensive Cancer Centre, University Clinic Centre Tübingen" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution14_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/05kx2e072" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1> ;
+	pxp:contributionPosition 15 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent> a bf:Person ;
+	rdfs:label "Schmoor, Claudia" ;
+	schema:familyName "Schmoor" ;
+	schema:givenName "Claudia" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution15_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Clinical Trials Unit, Faculty of Medicine and Medical Center University of Freiburg" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1> ;
+	pxp:contributionPosition 16 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent> a bf:Person ;
+	rdfs:label "Gerlach, Angelika" ;
+	schema:familyName "Gerlach" ;
+	schema:givenName "Angelika" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution16_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Clinical Trials Unit, Faculty of Medicine and Medical Center University of Freiburg" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1> ;
+	pxp:contributionPosition 17 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent> a bf:Person ;
+	rdfs:label "Schellberg, Dieter" ;
+	schema:familyName "Schellberg" ;
+	schema:givenName "Dieter" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution17_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Internal Medicine and Psychosomatics, University Clinic Centre Heidelberg" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1> ;
+	pxp:contributionPosition 18 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent> a bf:Person ;
+	rdfs:label "Büttner‐Teleaga, Antje" ;
+	schema:familyName "Büttner‐Teleaga" ;
+	schema:givenName "Antje" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "South Korea" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "1835841" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Institute of Cognitive Science, Woosuk University, Wanju‐gun, Jeonbuk" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution18_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/00emz0366" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent> ;
+	bf:qualifier "last" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1> ;
+	pxp:contributionPosition 19 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent> a bf:Person ;
+	rdfs:label "Schieber, Katharina" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_orcid> ;
+	schema:familyName "Schieber" ;
+	schema:givenName "Katharina" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine, University Clinic Centre Erlangen" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution19_personagent_orcid> a locid:orcid ;
+	rdf:value "0000-0001-9366-5893" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent> a bf:Person ;
+	rdfs:label "Weis, Joachim" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_orcid> ;
+	schema:familyName "Weis" ;
+	schema:givenName "Joachim" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Comprehensive Cancer Center, Department of Self-Help Research; Faculty of Medicine and Medical Center University of Freiburg; Freiburg Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/0245cg223" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution1_personagent_orcid> a locid:orcid ;
+	rdf:value "0000-0002-8646-6607" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1> ;
+	pxp:contributionPosition 2 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent> a bf:Person ;
+	rdfs:label "Hönig, Klaus" ;
+	schema:familyName "Hönig" ;
+	schema:givenName "Klaus" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Ulm University Clinic Department of Psychosomatic Medicine and Psychotherapy, Comprehensive Cancer Center Ulm (CCCU)" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution2_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/032000t02" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1> ;
+	pxp:contributionPosition 3 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent> a bf:Person ;
+	rdfs:label "Bergelt, Corinna" ;
+	schema:familyName "Bergelt" ;
+	schema:givenName "Corinna" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "University Clinic Centre, Hubertus Wald, University Cancer Center (CCC), Hamburg" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution3_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/035zrb927" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1> ;
+	pxp:contributionPosition 4 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent> a bf:Person ;
+	rdfs:label "Faller, Hermann" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_orcid> ;
+	schema:familyName "Faller" ;
+	schema:givenName "Hermann" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Medical Psychology and Psychotherapy, Comprehensive Cancer Center Mainfranken, University of Würzburg" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/00fbnyb24" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution4_personagent_orcid> a locid:orcid ;
+	rdf:value "0000-0001-9092-0908" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1> ;
+	pxp:contributionPosition 5 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent> a bf:Person ;
+	rdfs:label "Brechtel, Anette" ;
+	schema:familyName "Brechtel" ;
+	schema:givenName "Anette" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution5_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Internal Medicine and Psychosomatics, University Clinic Centre Heidelberg" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1> ;
+	pxp:contributionPosition 6 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent> a bf:Person ;
+	rdfs:label "Hornemann, Beate" ;
+	schema:familyName "Hornemann" ;
+	schema:givenName "Beate" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution6_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Comprehensive Cancer Center, University Clinic Centre Dresden" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1> ;
+	pxp:contributionPosition 7 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent> a bf:Person ;
+	rdfs:label "Stein, Barbara" ;
+	schema:familyName "Stein" ;
+	schema:givenName "Barbara" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine and Psychotherapy, Paracelsus Medical University, General Hospital Nuremberg" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution7_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/03z3mg085" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1> ;
+	pxp:contributionPosition 8 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent> a bf:Person ;
+	rdfs:label "Teufel, Martin" ;
+	schema:familyName "Teufel" ;
+	schema:givenName "Martin" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Department of Psychosomatic Medicine and Psychotherapy, Comprehensive Cancer Center Essen (WTZ), University of Duisburg‐Essen, Essen," ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution8_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/04mz5ra38" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9> a bf:Contribution ;
+	bf:agent <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent> ;
+	bf:qualifier "middle" ;
+	bf:role roles:AU ;
+	mads:hasAffiliation <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1> ;
+	pxp:contributionPosition 9 .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent> a bf:Person ;
+	rdfs:label "Goerling, Ute" ;
+	schema:familyName "Goerling" ;
+	schema:givenName "Ute" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1> a mads:Affiliation ;
+	mads:hasAffiliationAddress <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address> ;
+	mads:organization <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_organization> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address> a mads:Address ;
+	mads:country <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address_country> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address_country> a mads:Country ;
+	rdfs:label "Germany" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address_country_geonamesid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_address_country_geonamesid> a locid:geonames ;
+	rdf:value "2921044" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_organization> a bf:Organization ;
+	rdfs:label "Charité Universitätsmedizin Berlin" ;
+	bf:identifiedBy <https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_organization_rorid> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#contribution9_personagent_affiliation1_organization_rorid> a locid:ror ;
+	rdf:value "https://ror.org/001w7jn25" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#controlledmethod1> a pxc:ControlledMethod, pxc:ControlledMethodWeighted ;
+	rdfs:label "empirical study" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/methods/10000> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract> a pxc:Abstract, pxc:SecondaryAbstract ;
+	rdfs:label "Ziel: Ziel der Studie war es, die psychologische Betreuung von Krebspatienten zu bewerten und ihre Korrelate in einer großen Stichprobe von Krebspatienten in Comprehensive Cancer Centers (CCCs) in Deutschland zu untersuchen. Methoden: In einer multizentrischen Studie in Deutschland wurden Krebspatienten mit verschiedenen Diagnosen für den selbstberichteten Einsatz von psychologischer Unterstützung evaluiert. Wir haben psychische Belastung, Depressionen und Ängste, Lebensqualität und soziale Unterstützung mit standardisierten Fragebögen gemessen und deren Zusammenhang mit der Inanspruchnahme psychologischer Versorgung mittels multivariabler logistischer Regression analysiert. Dieses Papier konzentriert sich auf eine Querschnittsanalyse der Daten, die während der stationären Versorgung erhoben werden. Ergebnisse: Dreitausendvierundfünfzig (50%) der stationären Patienten wurden um Teilnahme gebeten, und n = 1632 (53,6%) nahmen teil. Wir konnten n = 1.398 (45,9%) Patienten analysieren. Dreihundert siebenundneunzig (28,4%) der Stichprobe nutzten psychologische Unterstützung. Die Nutzer psychologischer Betreuung waren deutlich jünger als die Nicht-Nutzer (Quotenverhältnis[OR]: 0,967, P < 0,001) und waren häufiger weiblich (OR: 1,878, P < 0,001), während das Bildungsniveau nicht mit der Inanspruchnahme psychologischer Betreuung verbunden war. In der multivariablen Analyse wurden Auswirkungen auf die Inanspruchnahme psychologischer Betreuung auf die Angst vor Hospital Anxiety and Depression Scale (HADS) (OR: 1,106, P = 0,001) und beide Subskalen der 12-Punkte-Kurzzeitumfrage (SF-12) zur Messung der Lebensqualität (mental, OR: 0,97, P = 0,002; physisch, OR: 0,97, P = 0,002) beobachtet. Fazit: Psychische Belastungen und Ängste sind höher, und die Lebensqualität ist bei den Nutzern der psychologischen Betreuung geringer als bei Nichtnutzern während der stationären Krebsbehandlung. Obwohl psychoonkologische Dienstleistungen für alle Patienten, die sie benötigen, angeboten werden sollten, sollten besondere Anstrengungen unternommen werden, um Bevölkerungsgruppen zu erreichen, die eine geringe Auslastung aufweisen."@de ;
+	bf:adminMetadata <https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract_source> ;
+	bf:usageAndAccessPolicy <https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract_license> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract_license> a bf:UsageAndAccessPolicy ;
+	rdfs:label "translated by DeepL" .
+
+<https://w3id.org/zpid/resources/works/0350746_work#secondaryabstract_source> a bf:AdminMetadata ;
+	bflc:metadataLicensor "DeepL" ;
+	pxp:blockedAbstract false .
+
+<https://w3id.org/zpid/resources/works/0350746_work#subjectheading1> a pxc:SubjectHeading, pxc:SubjectHeadingWeighted ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/class/3293> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#subjectheading2> a pxc:SubjectHeading ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/class/3361> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#subjectheading3> a pxc:SubjectHeading ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/class/3310> .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic1> a bf:Topic ;
+	rdfs:label "Needs Assessment" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/33185> ;
+	skos:prefLabel "Bedarfsanalyse"@de, "Needs Assessment"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic10> a bf:Topic ;
+	rdfs:label "Depression (Emotion)" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/13650> ;
+	skos:prefLabel "Depressive Stimmung"@de, "Depression (Emotion)"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic11> a bf:Topic ;
+	rdfs:label "Health Related Quality of Life" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/65029> ;
+	skos:prefLabel "Gesundheitsbezogene Lebensqualität"@de, "Health Related Quality of Life"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic12> a bf:Topic ;
+	rdfs:label "Social Support" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/48416> ;
+	skos:prefLabel "Soziale Unterstützung"@de, "Social Support"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic2> a bf:Topic, pxc:WeightedTopic ;
+	rdfs:label "Health Care Utilization" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/22397> ;
+	skos:prefLabel "Inanspruchnahme von Gesundheitseinrichtungen"@de, "Health Care Utilization"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic3> a bf:Topic ;
+	rdfs:label "Health Service Needs" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/22432> ;
+	skos:prefLabel "Gesundheitsversorgungsbedarf"@de, "Health Service Needs"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic4> a bf:Topic ;
+	rdfs:label "Mental Health Services" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/30825> ;
+	skos:prefLabel "Psychosoziale Dienste"@de, "Mental Health Services"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic5> a bf:Topic, pxc:WeightedTopic ;
+	rdfs:label "Oncology" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/60111> ;
+	skos:prefLabel "Onkologie"@de, "Oncology"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic6> a bf:Topic ;
+	rdfs:label "Neoplasms" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/33370> ;
+	skos:prefLabel "Krebskrankheit"@de, "Neoplasms"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic7> a bf:Topic ;
+	rdfs:label "Psychotherapeutic Counseling" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/42000> ;
+	skos:prefLabel "Psychotherapeutische Beratung"@de, "Psychotherapeutic Counseling"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic8> a bf:Topic, pxc:WeightedTopic ;
+	rdfs:label "Distress" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/14670> ;
+	skos:prefLabel "Emotionale Belastung"@de, "Distress"@en .
+
+<https://w3id.org/zpid/resources/works/0350746_work#topic9> a bf:Topic ;
+	rdfs:label "Anxiety" ;
+	owl:sameAs <https://w3id.org/zpid/vocabs/terms/03310> ;
+	skos:prefLabel "Angst"@de, "Anxiety"@en .
+
